@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>Appareil Photo</title>
+<style>
+  :root{
+    --amber:#ffb703;
+    --bg:#0a0a0a;
+    --pill:rgba(20,20,20,0.55);
+    --mono:'SF Mono','Roboto Mono',Consolas,'Courier New',monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;}
+  html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);font-family:var(--sans);touch-action:manipulation;}
+  button{font-family:inherit;cursor:pointer;touch-action:manipulation;}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:0.02em;}
+
+  #app{position:relative;width:100vw;height:100vh;height:100dvh;background:var(--bg);}
+
+  /* ---------- Aperçu caméra ---------- */
+  #cameraView{position:relative;width:100%;height:100%;overflow:hidden;}
+  #video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000;}
+  #canvas{display:none;}
+
+  /* Grille de composition (règle des tiers) */
+  .grid-overlay{position:absolute;inset:0;display:none;pointer-events:none;z-index:5;
+    background-image:linear-gradient(to right, rgba(255,255,255,0.35) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255,255,255,0.35) 1px, transparent 1px);
+    background-size:33.333% 33.333%;}
+  .grid-overlay.active{display:block;}
+
+  /* Repères de viseur — élément signature */
+  .viewfinder-brackets{position:absolute;top:86px;left:22px;right:22px;bottom:156px;pointer-events:none;z-index:8;}
+  .bracket{position:absolute;width:22px;height:22px;border:2px solid rgba(255,255,255,0.85);transition:all .3s cubic-bezier(.4,0,.2,1);}
+  .bracket.tl{top:0;left:0;border-right:none;border-bottom:none;}
+  .bracket.tr{top:0;right:0;border-left:none;border-bottom:none;}
+  .bracket.bl{bottom:0;left:0;border-right:none;border-top:none;}
+  .bracket.br{bottom:0;right:0;border-left:none;border-top:none;}
+  .viewfinder-brackets.snap .bracket{transform:scale(0.82);border-color:var(--amber);}
+
+  /* Flash de capture */
+  .flash-effect{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:90;}
+  .flash-effect.active{animation:flashPulse .22s ease-out;}
+  @keyframes flashPulse{0%{opacity:.9;}100%{opacity:0;}}
+
+  /* Compte à rebours du retardateur */
+  .countdown{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    font-size:130px;font-weight:200;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,0.6);pointer-events:none;z-index:45;}
+  .countdown.active{display:flex;}
+
+  /* ---------- Barres de contrôle ---------- */
+  .top-bar{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;
+    gap:8px;padding:14px 16px;padding-top:max(14px, env(safe-area-inset-top));
+    background:linear-gradient(rgba(0,0,0,0.5), transparent);z-index:40;}
+
+  .bottom-bar{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;
+    padding:22px 30px;padding-bottom:max(22px, env(safe-area-inset-bottom));
+    background:linear-gradient(transparent, rgba(0,0,0,0.5));z-index:40;}
+
+  .icon-btn{height:40px;min-width:40px;padding:0 12px;border-radius:20px;background:var(--pill);
+    border:none;color:#fff;display:flex;align-items:center;justify-content:center;gap:5px;
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);font-size:12px;font-weight:600;}
+  .icon-btn svg{width:20px;height:20px;flex-shrink:0;}
+  .icon-btn.active{color:var(--amber);}
+
+  /* Curseur de zoom */
+  .zoom-wrap{position:absolute;bottom:148px;left:50%;transform:translateX(-50%);display:none;
+    align-items:center;gap:10px;background:var(--pill);padding:8px 16px;border-radius:22px;
+    z-index:40;width:68%;max-width:280px;backdrop-filter:blur(6px);}
+  .zoom-wrap input[type="range"]{flex:1;accent-color:var(--amber);height:20px;}
+  #zoomLabel{color:#fff;font-size:12px;min-width:38px;text-align:right;}
+
+  /* Miniature galerie */
+  .thumb-btn{width:48px;height:48px;border-radius:12px;border:2px solid rgba(255,255,255,0.85);
+    background-color:rgba(255,255,255,0.08);background-size:cover;background-position:center;
+    position:relative;overflow:hidden;flex-shrink:0;}
+  .thumb-btn #photoCount{position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,0.65);color:#fff;
+    font-size:10px;padding:1px 5px;border-radius:5px;min-width:14px;}
+
+  /* Bouton déclencheur */
+  .shutter-btn{width:76px;height:76px;border-radius:50%;border:4px solid #fff;background:transparent;
+    display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;}
+  .shutter-inner{width:60px;height:60px;border-radius:50%;background:#fff;transition:transform .15s ease,background .15s ease;}
+  .shutter-btn:active .shutter-inner{transform:scale(0.85);}
+  .shutter-btn:disabled .shutter-inner{background:#8a8a8a;}
+
+  .switch-btn{width:48px;height:48px;border-radius:50%;background:var(--pill);border:none;color:#fff;
+    display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);flex-shrink:0;}
+  .switch-btn svg{width:22px;height:22px;}
+
+  /* ---------- État d'erreur ---------- */
+  .error-state{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+    gap:14px;padding:32px;text-align:center;background:var(--bg);z-index:80;}
+  .error-icon{font-size:46px;opacity:.55;}
+  .error-state p{font-size:15px;line-height:1.55;color:rgba(255,255,255,0.82);max-width:300px;}
+  .error-state button{background:var(--amber);color:#000;border:none;padding:12px 30px;border-radius:24px;
+    font-size:15px;font-weight:700;}
+
+  /* ---------- Galerie ---------- */
+  .gallery-modal{position:fixed;inset:0;background:var(--bg);z-index:200;display:none;flex-direction:column;}
+  .gallery-header{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;
+    padding-top:max(16px, env(safe-area-inset-top));color:#fff;font-size:16px;font-weight:700;}
+  .gallery-header .icon-btn{height:36px;min-width:36px;}
+  .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;flex:1;overflow-y:auto;
+    padding:2px;touch-action:pan-y;align-content:start;}
+  .gallery-item{aspect-ratio:1;background-size:cover;background-position:center;position:relative;}
+  .empty-gallery{flex:1;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.45);
+    font-size:14px;padding:0 40px;text-align:center;}
+
+  /* ---------- Visionneuse photo ---------- */
+  .photo-viewer{position:fixed;inset:0;background:#000;z-index:300;display:none;flex-direction:column;
+    align-items:center;justify-content:center;}
+  .photo-viewer img{max-width:100%;max-height:100%;object-fit:contain;}
+  .viewer-topbar{position:absolute;top:0;left:0;right:0;padding:14px 16px;padding-top:max(14px, env(safe-area-inset-top));z-index:2;}
+  .viewer-controls{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-around;
+    padding:20px;padding-bottom:max(20px, env(safe-area-inset-bottom));
+    background:linear-gradient(transparent, rgba(0,0,0,0.7));}
+  .viewer-controls button{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;
+    border:none;color:#fff;font-size:11px;font-weight:600;}
+  .viewer-controls button svg{width:24px;height:24px;}
+  .viewer-controls .delete-action{color:#ff6b6b;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div id="cameraView">
+    <video id="video" autoplay playsinline muted></video>
+    <canvas id="canvas"></canvas>
+
+    <div class="grid-overlay" id="gridOverlay"></div>
+
+    <div class="viewfinder-brackets" id="brackets">
+      <div class="bracket tl"></div><div class="bracket tr"></div>
+      <div class="bracket bl"></div><div class="bracket br"></div>
+    </div>
+
+    <div class="flash-effect" id="flashEffect"></div>
+    <div class="countdown mono" id="countdown"></div>
+
+    <!-- Barre du haut : options -->
+    <div class="top-bar">
+      <button class="icon-btn" id="flashBtn" style="display:none" aria-label="Flash">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </button>
+      <button class="icon-btn" id="timerBtn" aria-label="Retardateur">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>
+        <span id="timerLabel" class="mono">OFF</span>
+      </button>
+      <button class="icon-btn" id="gridBtn" aria-label="Grille">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+      </button>
+      <button class="icon-btn mono" id="qualityBtn" aria-label="Qualité">HD</button>
+    </div>
+
+    <!-- Curseur de zoom -->
+    <div class="zoom-wrap" id="zoomWrap">
+      <input type="range" id="zoomSlider" min="1" max="5" step="0.1" value="1">
+      <span id="zoomLabel" class="mono">1.0×</span>
+    </div>
+
+    <!-- Barre du bas : capture -->
+    <div class="bottom-bar">
+      <button class="thumb-btn" id="galleryThumb" aria-label="Galerie">
+        <span id="photoCount" class="mono">0</span>
+      </button>
+      <button class="shutter-btn" id="shutterBtn" aria-label="Prendre une photo">
+        <span class="shutter-inner"></span>
+      </button>
+      <button class="switch-btn" id="switchBtn" style="display:none" aria-label="Changer de caméra">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+
+    <!-- État d'erreur -->
+    <div class="error-state" id="errorState">
+      <div class="error-icon">📷</div>
+      <p id="errorMessage"></p>
+      <button id="retryBtn">Réessayer</button>
+    </div>
+  </div>
+
+  <!-- Galerie -->
+  <div class="gallery-modal" id="galleryModal">
+    <div class="gallery-header">
+      <span>Galerie · <span id="galleryCount" class="mono">0</span></span>
+      <button class="icon-btn" id="closeGallery" aria-label="Fermer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+    <p class="empty-gallery" id="emptyGallery">Aucune photo pour le moment.<br>Vos photos capturées apparaîtront ici.</p>
+  </div>
+
+  <!-- Visionneuse -->
+  <div class="photo-viewer" id="photoViewer">
+    <div class="viewer-topbar">
+      <button class="icon-btn" id="viewerClose" aria-label="Fermer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <img id="viewerImage" src="" alt="Photo">
+    <div class="viewer-controls">
+      <button id="viewerDownload">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Télécharger
+      </button>
+      <button id="viewerDelete" class="delete-action">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        Supprimer
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ---------- Références DOM ----------
+  var video = document.getElementById('video');
+  var canvas = document.getElementById('canvas');
+  var shutterBtn = document.getElementById('shutterBtn');
+  var switchBtn = document.getElementById('switchBtn');
+  var flashBtn = document.getElementById('flashBtn');
+  var gridBtn = document.getElementById('gridBtn');
+  var timerBtn = document.getElementById('timerBtn');
+  var timerLabel = document.getElementById('timerLabel');
+  var qualityBtn = document.getElementById('qualityBtn');
+  var zoomWrap = document.getElementById('zoomWrap');
+  var zoomSlider = document.getElementById('zoomSlider');
+  var zoomLabel = document.getElementById('zoomLabel');
+  var gridOverlay = document.getElementById('gridOverlay');
+  var brackets = document.getElementById('brackets');
+  var flashEffect = document.getElementById('flashEffect');
+  var countdownEl = document.getElementById('countdown');
+  var galleryThumb = document.getElementById('galleryThumb');
+  var photoCountEl = document.getElementById('photoCount');
+  var galleryModal = document.getElementById('galleryModal');
+  var galleryGrid = document.getElementById('galleryGrid');
+  var galleryCount = document.getElementById('galleryCount');
+  var emptyGallery = document.getElementById('emptyGallery');
+  var closeGalleryBtn = document.getElementById('closeGallery');
+  var photoViewer = document.getElementById('photoViewer');
+  var viewerImage = document.getElementById('viewerImage');
+  var viewerClose = document.getElementById('viewerClose');
+  var viewerDownload = document.getElementById('viewerDownload');
+  var viewerDelete = document.getElementById('viewerDelete');
+  var errorState = document.getElementById('errorState');
+  var errorMessage = document.getElementById('errorMessage');
+  var retryBtn = document.getElementById('retryBtn');
+
+  // ---------- État ----------
+  var currentStream = null;
+  var currentTrack = null;
+  var facingMode = 'environment';
+  var photos = [];              // { dataUrl, date }
+  var flashMode = 'off';
+  var gridActive = false;
+  var timerMode = 0;            // 0, 3, 10
+  var qualityMode = 'hd';       // sd, hd, fhd
+  var viewerIndex = -1;
+  var hasMultipleCameras = false;
+
+  var qualityPresets = {
+    sd:  { width: 640,  height: 480,  label: 'SD'  },
+    hd:  { width: 1280, height: 720,  label: 'HD'  },
+    fhd: { width: 1920, height: 1080, label: 'FHD' }
+  };
+
+  // ---------- Initialisation caméra ----------
+  function initCamera(){
+    hideError();
+    try{
+      if(!window.isSecureContext){ throw { code:'INSECURE' }; }
+      if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ throw { code:'UNSUPPORTED' }; }
+    }catch(e){ handleCameraError(e); return; }
+
+    if(currentStream){
+      currentStream.getTracks().forEach(function(t){ t.stop(); });
+    }
+
+    var preset = qualityPresets[qualityMode];
+    var constraints = {
+      video: {
+        facingMode: { ideal: facingMode },
+        width: { ideal: preset.width },
+        height: { ideal: preset.height }
+      },
+      audio: false
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints).then(function(stream){
+      currentStream = stream;
+      video.srcObject = stream;
+      video.play().catch(function(){});
+      currentTrack = stream.getVideoTracks()[0];
+      video.style.transform = (facingMode === 'user') ? 'scaleX(-1)' : 'scaleX(1)';
+      return checkCameraCount();
+    }).then(function(){
+      checkCapabilities();
+    }).catch(function(err){
+      handleCameraError(err);
+    });
+  }
+
+  function checkCameraCount(){
+    if(!navigator.mediaDevices.enumerateDevices){ return Promise.resolve(); }
+    return navigator.mediaDevices.enumerateDevices().then(function(devices){
+      var cams = devices.filter(function(d){ return d.kind === 'videoinput'; });
+      hasMultipleCameras = cams.length > 1;
+      switchBtn.style.display = hasMultipleCameras ? '' : 'none';
+    }).catch(function(){});
+  }
+
+  function checkCapabilities(){
+    if(!currentTrack || !currentTrack.getCapabilities){
+      flashBtn.style.display = 'none';
+      zoomWrap.style.display = 'none';
+      return;
+    }
+    var caps = currentTrack.getCapabilities();
+
+    if(caps.torch){
+      flashBtn.style.display = '';
+    }else{
+      flashBtn.style.display = 'none';
+      flashMode = 'off';
+      flashBtn.classList.remove('active');
+    }
+
+    if(caps.zoom && caps.zoom.max > caps.zoom.min){
+      zoomWrap.style.display = 'flex';
+      zoomSlider.min = caps.zoom.min;
+      zoomSlider.max = caps.zoom.max;
+      zoomSlider.step = caps.zoom.step || 0.1;
+      zoomSlider.value = currentTrack.getSettings().zoom || caps.zoom.min;
+      zoomLabel.textContent = parseFloat(zoomSlider.value).toFixed(1) + '×';
+    }else{
+      zoomWrap.style.display = 'none';
+    }
+  }
+
+  function handleCameraError(err){
+    var msg = "Impossible d'accéder à la caméra.";
+    var code = err && (err.code || err.name);
+    if(code === 'INSECURE'){
+      msg = "La caméra nécessite une connexion sécurisée (HTTPS).";
+    }else if(code === 'UNSUPPORTED'){
+      msg = "Ce navigateur ne supporte pas l'accès à la caméra.";
+    }else if(code === 'NotAllowedError'){
+      msg = "Accès à la caméra refusé. Autorisez la caméra dans les paramètres de l'application.";
+    }else if(code === 'NotFoundError'){
+      msg = "Aucune caméra détectée sur cet appareil.";
+    }else if(code === 'NotReadableError'){
+      msg = "La caméra est déjà utilisée par une autre application.";
+    }else if(code === 'OverconstrainedError'){
+      msg = "Les réglages demandés ne sont pas supportés par cette caméra.";
+    }
+    errorMessage.textContent = msg;
+    errorState.style.display = 'flex';
+  }
+
+  function hideError(){
+    errorState.style.display = 'none';
+  }
+
+  // ---------- Capture ----------
+  function capturePhoto(){
+    if(!video.videoWidth){ return; }
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    var ctx = canvas.getContext('2d');
+
+    // Pour la caméra avant, l'image est retournée pour correspondre à l'aperçu miroir.
+    // Pour garder l'orientation réelle (ex: texte lisible), supprimez les 2 lignes ci-dessous.
+    if(facingMode === 'user'){
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+    }
+
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    var dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+    photos.unshift({ dataUrl: dataUrl, date: new Date() });
+
+    updateGalleryUI();
+    playCaptureEffect();
+  }
+
+  function playCaptureEffect(){
+    flashEffect.classList.add('active');
+    brackets.classList.add('snap');
+    setTimeout(function(){
+      flashEffect.classList.remove('active');
+      brackets.classList.remove('snap');
+    }, 220);
+    playShutterSound();
+  }
+
+  function playShutterSound(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      var ctx = new Ctx();
+      var now = ctx.currentTime;
+      function click(time, freq, dur){
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.15, time);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + dur);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(time);
+        osc.stop(time + dur);
+      }
+      click(now, 1000, 0.03);
+      click(now + 0.05, 600, 0.05);
+    }catch(e){}
+  }
+
+  // ---------- Galerie ----------
+  function updateGalleryUI(){
+    var hasPhotos = photos.length > 0;
+    photoCountEl.textContent = photos.length;
+    galleryCount.textContent = photos.length;
+    galleryThumb.style.backgroundImage = hasPhotos ? 'url(' + photos[0].dataUrl + ')' : 'none';
+
+    galleryGrid.style.display = hasPhotos ? 'grid' : 'none';
+    emptyGallery.style.display = hasPhotos ? 'none' : 'flex';
+
+    galleryGrid.innerHTML = '';
+    photos.forEach(function(photo, i){
+      var item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.style.backgroundImage = 'url(' + photo.dataUrl + ')';
+      item.addEventListener('click', function(){ openViewer(i); });
+      galleryGrid.appendChild(item);
+    });
+  }
+
+  function openGallery(){ galleryModal.style.display = 'flex'; }
+  function closeGallery(){ galleryModal.style.display = 'none'; }
+
+  function openViewer(index){
+    viewerIndex = index;
+    viewerImage.src = photos[index].dataUrl;
+    photoViewer.style.display = 'flex';
+  }
+  function closeViewer(){
+    photoViewer.style.display = 'none';
+    viewerIndex = -1;
+  }
+
+  function formatFilename(date){
+    function pad(n){ return String(n).padStart(2, '0'); }
+    return 'Photo_' + date.getFullYear() + pad(date.getMonth()+1) + pad(date.getDate()) +
+           '_' + pad(date.getHours()) + pad(date.getMinutes()) + pad(date.getSeconds()) + '.jpg';
+  }
+
+  function downloadCurrentPhoto(){
+    if(viewerIndex < 0){ return; }
+    var photo = photos[viewerIndex];
+    var link = document.createElement('a');
+    link.href = photo.dataUrl;
+    link.download = formatFilename(photo.date);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function deleteCurrentPhoto(){
+    if(viewerIndex < 0){ return; }
+    photos.splice(viewerIndex, 1);
+    updateGalleryUI();
+    closeViewer();
+  }
+
+  // ---------- Contrôles ----------
+  function switchCamera(){
+    facingMode = (facingMode === 'environment') ? 'user' : 'environment';
+    initCamera();
+  }
+
+  function toggleFlash(){
+    flashMode = (flashMode === 'off') ? 'on' : 'off';
+    flashBtn.classList.toggle('active', flashMode === 'on');
+    if(currentTrack && currentTrack.getCapabilities && currentTrack.getCapabilities().torch){
+      currentTrack.applyConstraints({ advanced: [{ torch: flashMode === 'on' }] }).catch(function(){});
+    }
+  }
+
+  function toggleGrid(){
+    gridActive = !gridActive;
+    gridOverlay.classList.toggle('active', gridActive);
+    gridBtn.classList.toggle('active', gridActive);
+  }
+
+  function cycleTimer(){
+    var modes = [0, 3, 10];
+    var idx = modes.indexOf(timerMode);
+    timerMode = modes[(idx + 1) % modes.length];
+    timerLabel.textContent = (timerMode === 0) ? 'OFF' : timerMode + 's';
+    timerBtn.classList.toggle('active', timerMode !== 0);
+  }
+
+  function cycleQuality(){
+    var modes = ['sd', 'hd', 'fhd'];
+    var idx = modes.indexOf(qualityMode);
+    qualityMode = modes[(idx + 1) % modes.length];
+    qualityBtn.textContent = qualityPresets[qualityMode].label;
+    initCamera();
+  }
+
+  function handleShutterPress(){
+    if(timerMode > 0){
+      runCountdown(timerMode, capturePhoto);
+    }else{
+      capturePhoto();
+    }
+  }
+
+  function runCountdown(seconds, callback){
+    shutterBtn.disabled = true;
+    var remaining = seconds;
+    countdownEl.textContent = remaining;
+    countdownEl.classList.add('active');
+
+    var interval = setInterval(function(){
+      remaining--;
+      if(remaining > 0){
+        countdownEl.textContent = remaining;
+      }else{
+        clearInterval(interval);
+        countdownEl.classList.remove('active');
+        shutterBtn.disabled = false;
+        callback();
+      }
+    }, 1000);
+  }
+
+  // ---------- Écouteurs d'événements ----------
+  shutterBtn.addEventListener('click', handleShutterPress);
+  switchBtn.addEventListener('click', switchCamera);
+  flashBtn.addEventListener('click', toggleFlash);
+  gridBtn.addEventListener('click', toggleGrid);
+  timerBtn.addEventListener('click', cycleTimer);
+  qualityBtn.addEventListener('click', cycleQuality);
+
+  galleryThumb.addEventListener('click', openGallery);
+  closeGalleryBtn.addEventListener('click', closeGallery);
+
+  viewerClose.addEventListener('click', closeViewer);
+  viewerDownload.addEventListener('click', downloadCurrentPhoto);
+  viewerDelete.addEventListener('click', deleteCurrentPhoto);
+
+  retryBtn.addEventListener('click', initCamera);
+
+  zoomSlider.addEventListener('input', function(){
+    var val = parseFloat(zoomSlider.value);
+    zoomLabel.textContent = val.toFixed(1) + '×';
+    if(currentTrack){
+      currentTrack.applyConstraints({ advanced: [{ zoom: val }] }).catch(function(){});
+    }
+  });
+
+  window.addEventListener('beforeunload', function(){
+    if(currentStream){
+      currentStream.getTracks().forEach(function(t){ t.stop(); });
+    }
+  });
+
+  // ---------- Démarrage ----------
+  updateGalleryUI();
+  initCamera();
+
+})();
+</script>
+</body>
+</html>
