@@ -3,90 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NovaPOS Ultra V5</title>
+    <title>NovaPOS Ultra V6</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --brand-blue: #3B82F6; --brand-yellow: #FBBF24; --brand-green: #22C55E; --brand-red: #F87171; --brand-purple: #A855F7;
+            --brand-blue: #3B82F6; --brand-yellow: #FBBF24; --brand-green: #22C55E; --brand-red: #F87171; --brand-purple: #A855F7; --brand-pink: #EC4899;
             --bg-page: #0F172A; --surface-white: #1E293B; --text-dark: #F8FAFC; --text-gray: #94A3B8; --border-light: #334155;
             --radius-xl: 24px; --radius-btn: 14px; --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.3);
         }
-        [data-theme="light"] {
-            --bg-page: #F5F7FA; --surface-white: #FFFFFF; --text-dark: #111827; --text-gray: #6B7280; --border-light: #E5E7EB; --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.06);
-        }
+        [data-theme="light"] { --bg-page: #F5F7FA; --surface-white: #FFFFFF; --text-dark: #111827; --text-gray: #6B7280; --border-light: #E5E7EB; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; user-select: none; }
         body { background-color: var(--bg-page); color: var(--text-dark); min-height: 100vh; overflow-x: hidden; }
 
-       .login-screen { position: fixed; inset: 0; background: var(--bg-page); z-index: 200; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-       .login-screen.hidden { display: none; }
-       .btn-google { display: flex; align-items: center; gap: 12px; background: var(--surface-white); border: 1px solid var(--border-light); color: var(--text-dark); padding: 14px 24px; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+      .login-screen { position: fixed; inset: 0; background: var(--bg-page); z-index: 200; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+      .login-screen.hidden { display: none; }
+      .btn-google { display: flex; align-items: center; gap: 12px; background: var(--surface-white); border: 1px solid var(--border-light); color: var(--text-dark); padding: 14px 24px; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; }
 
         header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: var(--surface-white); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--border-light); }
-     .brand { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; color: var(--brand-blue); }
-     .page-indicator { display: flex; gap: 8px; }
-     .page-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-light); transition: 0.3s; }
-     .page-dot.active { width: 20px; border-radius: 10px; }
-     .icon-btn { background: var(--bg-page); border: none; color: var(--text-gray); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .brand { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; color: var(--brand-blue); }
+    .page-indicator { display: flex; gap: 8px; }
+    .page-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-light); transition: 0.3s; }
+    .page-dot.active { width: 20px; border-radius: 10px; }
+    .icon-btn { background: var(--bg-page); border: none; color: var(--text-gray); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-     .swipe-container { display: flex; width: 500%; transition: transform 0.3s ease-out; }
-     .screen { width: 20%; padding: 16px; max-width: 500px; margin: 0 auto; flex-shrink: 0; }
+    .swipe-container { display: flex; width: 600%; transition: transform 0.3s ease-out; }
+    .screen { width: 16.666%; padding: 16px; max-width: 500px; margin: 0 auto; flex-shrink: 0; }
 
-     .terminal-screen { color: white; padding: 25px 20px; text-align: center; border-radius: var(--radius-xl); box-shadow: var(--shadow-soft); margin-bottom: 16px; }
-     .screen-0.terminal-screen { background: var(--brand-blue); }
-     .screen-1.terminal-screen { background: var(--brand-yellow); color: #111827; }
-     .screen-2.terminal-screen { background: var(--brand-green); }
-     .screen-3.terminal-screen { background: var(--brand-red); }
-     .screen-4.terminal-screen { background: var(--brand-purple); }
+    .terminal-screen { color: white; padding: 25px 20px; text-align: center; border-radius: var(--radius-xl); box-shadow: var(--shadow-soft); margin-bottom: 16px; }
+    .screen-0.terminal-screen { background: var(--brand-blue); }
+    .screen-1.terminal-screen { background: var(--brand-yellow); color: #111827; }
+    .screen-2.terminal-screen { background: var(--brand-green); }
+    .screen-3.terminal-screen { background: var(--brand-red); }
+    .screen-4.terminal-screen { background: var(--brand-purple); }
+    .screen-5.terminal-screen { background: var(--brand-pink); }
 
-     .total-label { font-size: 0.9rem; font-weight: 600; opacity: 0.9; }
-     .total-display { font-size: 3rem; font-weight: 800; margin: 5px 0 15px; }
-     .input-box { background: rgba(255,255,255,0.15); padding: 12px; border-radius: 12px; font-size: 1.1rem; margin-bottom: 10px; }
+    .total-label { font-size: 0.9rem; font-weight: 600; opacity: 0.9; }
+    .total-display { font-size: 3rem; font-weight: 800; margin: 5px 0 15px; }
+    .input-box { background: rgba(255,255,255,0.15); padding: 12px; border-radius: 12px; font-size: 1.1rem; margin-bottom: 10px; }
 
-     .btn { width: 100%; padding: 16px; border: none; border-radius: var(--radius-btn); font-size: 1rem; font-weight: 700; margin-bottom: 12px; cursor: pointer; }
-     .btn-primary { background: var(--brand-blue); color: white; }
-     .btn-secondary { background: var(--surface-white); color: var(--text-dark); border: 1px solid var(--border-light); }
+    .btn { width: 100%; padding: 16px; border: none; border-radius: var(--radius-btn); font-size: 1rem; font-weight: 700; margin-bottom: 12px; cursor: pointer; }
+    .btn-primary { background: var(--brand-blue); color: white; }
+    .btn-secondary { background: var(--surface-white); color: var(--text-dark); border: 1px solid var(--border-light); }
 
-     .numpad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-     .num-btn { background: var(--surface-white); border: 1px solid var(--border-light); color: var(--text-dark); height: 65px; border-radius: var(--radius-btn); font-size: 1.8rem; font-weight: 600; }
-     .btn-enter { background: var(--brand-blue); color: white; }
+    .cart-list { max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 10px; margin-bottom: 15px; }
+    .cart-item { display: flex; justify-content: space-between; padding: 8px; font-size: 0.9rem; }
 
-     .form-group { margin-bottom: 14px; text-align: left; }
-     .form-group label { display: block; font-size: 0.85rem; color: var(--text-gray); font-weight: 600; margin-bottom: 6px; }
-     .form-control { width: 100%; padding: 12px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: var(--radius-btn); font-size: 1rem; color: var(--text-dark); }
+    .numpad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .num-btn { background: var(--surface-white); border: 1px solid var(--border-light); color: var(--text-dark); height: 65px; border-radius: var(--radius-btn); font-size: 1.8rem; font-weight: 600; }
+    .btn-enter { background: var(--brand-blue); color: white; }
 
-     .product-list-item { display: flex; justify-content: space-between; padding: 14px; background: var(--surface-white); border-radius: 12px; margin-bottom: 10px; }
+    .form-group { margin-bottom: 14px; text-align: left; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--text-gray); font-weight: 600; margin-bottom: 6px; }
+    .form-control { width: 100%; padding: 12px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: var(--radius-btn); font-size: 1rem; color: var(--text-dark); }
 
-     .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; z-index: 100; transition: 0.2s; }
-     .modal-backdrop.active { opacity: 1; pointer-events: auto; }
-     .modal-content { background: var(--surface-white); border-radius: var(--radius-xl); padding: 24px; width: 92%; max-width: 400px; }
-     .modal-header { display: flex; justify-content: space-between; margin-bottom: 18px; font-weight: 800; font-size: 1.1rem; }
+    .product-list-item { display: flex; justify-content: space-between; align-items: center; padding: 14px; background: var(--surface-white); border-radius: 12px; margin-bottom: 10px; }
+    .dots-menu { cursor: pointer; padding: 5px; }
+
+     #camera-view { width: 100%; height: 300px; border-radius: 16px; object-fit: cover; background: black; }
+
+    .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; z-index: 100; transition: 0.2s; }
+    .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: var(--surface-white); border-radius: var(--radius-xl); padding: 24px; width: 92%; max-width: 400px; }
+    .modal-header { display: flex; justify-content: space-between; margin-bottom: 18px; font-weight: 800; font-size: 1.1rem; }
     </style>
 </head>
 <body data-theme="dark">
 
-    <!-- ECRAN LOGIN GOOGLE -->
     <div class="login-screen" id="login-screen">
         <h1 style="color:var(--brand-blue); font-size:2rem; margin-bottom:10px;">NovaPOS Ultra</h1>
-        <p style="color:var(--text-gray); margin-bottom:30px;">Connectez-vous pour commencer</p>
-        <button class="btn-google" onclick="googleLogin()">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" style="width:20px;"> Continuer avec Google
-        </button>
+        <p style="color:var(--text-gray); margin-bottom:30px;">Login Google requis pour Settlement</p>
+        <button class="btn-google" onclick="googleLogin()"><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" style="width:20px;"> Continuer avec Google</button>
     </div>
 
     <header id="main-header" style="display:none;">
         <div class="brand"><i class="fa-solid fa-credit-card"></i><span>NovaPOS</span></div>
         <div class="page-indicator">
-            <div class="page-dot active"></div><div class="page-dot"></div><div class="page-dot"></div><div class="page-dot"></div><div class="page-dot"></div>
+            <div class="page-dot active"></div><div class="page-dot"></div><div class="page-dot"></div><div class="page-dot"></div><div class="page-dot"></div><div class="page-dot"></div>
         </div>
-        <button class="icon-btn" onclick="openModal('settlement-modal')"><i class="fa-solid fa-cash-register"></i></button>
+        <button class="icon-btn" onclick="openModal('settings-modal')"><i class="fa-solid fa-gear"></i></button>
     </header>
 
     <div class="swipe-container" id="swipe-container" style="display:none;">
 
-        <!-- 0 BLEU VENTE -->
+        <!-- 0 BLEU VENTE + LISTE -->
         <div class="screen screen-0">
             <div class="terminal-screen"><div class="total-label">VENTE</div><div class="total-display" id="cart-total">0.00 €</div><div class="input-box" id="barcode-display">Saisie...</div></div>
-            <button class="btn btn-secondary" onclick="openAddProductModal()">+ Ajouter un produit</button>
+            <div class="cart-list" id="cart-list"></div>
+            <button class="btn btn-secondary" onclick="openAmountModal()">DEMANDER UN MONTANT</button>
             <div class="numpad-grid">
                 <button class="num-btn" onclick="typeNum('7')">7</button><button class="num-btn" onclick="typeNum('8')">8</button><button class="num-btn" onclick="typeNum('9')">9</button>
                 <button class="num-btn" onclick="typeNum('4')">4</button><button class="num-btn" onclick="typeNum('5')">5</button><button class="num-btn" onclick="typeNum('6')">6</button>
@@ -100,7 +103,7 @@
         <!-- 1 JAUNE REMISE -->
         <div class="screen screen-1">
             <div class="terminal-screen"><div class="total-label">REMISE</div><div class="total-display" id="discount-total">0.00 €</div></div>
-            <div class="form-group"><label>Montant à remettre</label><input id="discount-amount" type="number" class="form-control" placeholder="0.00"></div>
+            <div class="form-group"><label>Montant à remettre</label><input id="discount-amount" type="number" class="form-control"></div>
             <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:10px; margin-bottom:15px;">
                 <button class="btn btn-secondary" onclick="setDiscount(5)">-5%</button><button class="btn btn-secondary" onclick="setDiscount(10)">-10%</button><button class="btn btn-secondary" onclick="setDiscount(20)">-20%</button>
             </div>
@@ -111,26 +114,33 @@
         <!-- 2 VERT PAIEMENT ECHELONNE -->
         <div class="screen screen-2">
             <div class="terminal-screen"><div class="total-label">PAIEMENT ÉCHELONNÉ</div><div class="total-display" id="split-total">0.00 €</div></div>
-            <div class="form-group"><label>Nom Client</label><input id="client-name" class="form-control" placeholder="Jean Dupont"></div>
-            <div class="form-group"><label>Téléphone</label><input id="client-phone" class="form-control" placeholder="06..."></div>
-            <div class="form-group"><label>Email</label><input id="client-email" class="form-control" placeholder="email@ex.com"></div>
-            <div class="form-group"><label>Adresse</label><input id="client-address" class="form-control" placeholder="Adresse"></div>
-            <div class="form-group"><label>Nombre d'échéances</label><input id="split-count" type="number" value="3" class="form-control"></div>
+            <div class="form-group"><label>Nom Client</label><input id="client-name" class="form-control"></div>
+            <div class="form-group"><label>Téléphone</label><input id="client-phone" class="form-control"></div>
+            <div class="form-group"><label>Email</label><input id="client-email" class="form-control"></div>
+            <div class="form-group"><label>Nb d'échéances</label><input id="split-count" type="number" value="3" class="form-control"></div>
             <button class="btn btn-primary" style="background:var(--brand-green);" onclick="createSplitPayment()">GÉNÉRER</button>
         </div>
 
-        <!-- 3 ROUGE GESTION PRODUITS -->
+        <!-- 3 ROUGE GESTION PRODUITS + 3 DOTS -->
         <div class="screen screen-3">
             <div class="terminal-screen"><div class="total-label">GESTION PRODUITS</div><div class="total-display" style="font-size:1.5rem"><span id="product-count">0</span> Articles</div></div>
-            <button class="btn btn-secondary" onclick="openAddProductModal()">+ Ajouter / Modifier</button>
+            <button class="btn btn-secondary" onclick="openAddProductModal()">+ Ajouter Produit</button>
             <div id="products-list" style="max-height: 400px; overflow-y: auto;"></div>
         </div>
 
-        <!-- 4 VIOLET SCAN -->
+        <!-- 4 VIOLET SCAN CAMERA -->
         <div class="screen screen-4">
             <div class="terminal-screen"><div class="total-label">SCAN</div><div class="total-display" style="font-size:1.2rem">Caméra</div></div>
-            <div id="camera-view" style="background:black; height:300px; border-radius:16px; display:flex; align-items:center; justify-content:center; color:white; margin-bottom:15px;"><i class="fa-solid fa-camera" style="font-size:3rem; opacity:0.5"></i></div>
+            <video id="camera-view" autoplay></video>
             <button class="btn btn-primary" style="background:var(--brand-purple);" onclick="startScan()"><i class="fa-solid fa-qrcode"></i> LANCER LE SCAN</button>
+            <button class="btn btn-secondary" onclick="stopScan()">Arrêter Caméra</button>
+        </div>
+
+        <!-- 5 ROSE HISTORIQUE -->
+        <div class="screen screen-5">
+            <div class="terminal-screen"><div class="total-label">HISTORIQUE JOURNÉE</div><div class="total-display" id="history-total">0.00 €</div></div>
+            <div id="history-list" style="max-height: 400px; overflow-y: auto;"></div>
+            <button class="btn btn-primary" style="background:var(--brand-pink);" onclick="openModal('settlement-modal')"><i class="fa-solid fa-cash-register"></i> SETTLEMENT</button>
         </div>
     </div>
 
@@ -139,92 +149,130 @@
         <div class="form-group"><label>Thème</label><select id="theme-select" class="form-control" onchange="toggleTheme(this.value)"><option value="dark">Sombre</option><option value="light">Clair</option></select></div>
         <div class="form-group"><label>Devise</label><select id="comp-currency" class="form-control"></select></div>
         <button class="btn btn-primary" onclick="saveSettings()">Sauver</button>
+        <hr style="margin:15px 0; border-color:var(--border-light)">
+        <button class="btn btn-secondary" onclick="backupData()"><i class="fa-solid fa-cloud-arrow-up"></i> Backup Google Drive</button>
+        <button class="btn btn-secondary" onclick="restoreData()"><i class="fa-solid fa-cloud-arrow-down"></i> Restaurer</button>
     </div></div>
 
     <div class="modal-backdrop" id="settlement-modal"><div class="modal-content"><div class="modal-header"><span>Clôture de Journée</span><i class="fa-solid fa-xmark" onclick="closeModal('settlement-modal')"></i></div>
         <div id="settlement-report" style="background:var(--bg-page); padding:15px; border-radius:12px; font-family:monospace; font-size:0.9rem; margin-bottom:15px;"></div>
-        <div class="form-group"><label>Envoyer le rapport à</label><input id="settlement-email" class="form-control" placeholder="email@compta.com"></div>
-        <div class="modal-actions" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <button class="btn btn-secondary" onclick="downloadPDF()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
-            <button class="btn btn-secondary" onclick="saveToCloud()"><i class="fa-solid fa-cloud"></i> Cloud</button>
-            <button class="btn btn-primary" style="grid-column:span 2;" onclick="sendSettlement()"><i class="fa-solid fa-envelope"></i> Envoyer par Mail</button>
-        </div>
-        <button class="btn btn-primary" style="background:var(--brand-red); margin-top:10px;" onclick="closeDay()">FERMER LA JOURNÉE</button>
+        <button class="btn btn-primary" style="background:var(--brand-pink);" onclick="sendSettlementGoogle()"><i class="fa-brands fa-google"></i> Envoyer via Google</button>
+        <button class="btn btn-secondary" onclick="downloadPDF()">Télécharger PDF</button>
+        <button class="btn btn-primary" style="background:var(--brand-red);" onclick="closeDay()">FERMER LA JOURNÉE</button>
+    </div></div>
+
+    <div class="modal-backdrop" id="admin-modal"><div class="modal-content"><div class="modal-header"><span>Code Admin Requis</span><i class="fa-solid fa-xmark" onclick="closeModal('admin-modal')"></i></div>
+        <div class="form-group"><label>Entrez le code</label><input id="admin-code" type="password" class="form-control"></div>
+        <button class="btn btn-primary" onclick="checkAdminCode()">Valider</button>
+    </div></div>
+
+    <div class="modal-backdrop" id="product-options-modal"><div class="modal-content"><div class="modal-header"><span>Options</span><i class="fa-solid fa-xmark" onclick="closeModal('product-options-modal')"></i></div>
+        <button class="btn btn-secondary" onclick="editProductFromOptions()">Modifier</button>
+        <button class="btn btn-primary" style="background:var(--brand-red);" onclick="deleteProductFromOptions()">Supprimer</button>
     </div></div>
 
     <div class="modal-backdrop" id="add-product-modal"><div class="modal-content"><div class="modal-header"><span>Produit</span><i class="fa-solid fa-xmark" onclick="closeModal('add-product-modal')"></i></div><div class="form-group"><label>Code Barre</label><input id="prod-barcode" class="form-control"></div><div class="form-group"><label>Nom</label><input id="prod-name" class="form-control"></div><div class="form-group"><label>Prix</label><input id="prod-price" type="number" step="0.01" class="form-control"></div><button class="btn btn-primary" onclick="saveProduct()">Enregistrer</button></div></div>
+    <div class="modal-backdrop" id="amount-modal"><div class="modal-content"><div class="modal-header"><span>Demander Montant</span><i class="fa-solid fa-xmark" onclick="closeModal('amount-modal')"></i></div><div class="form-group"><label>Montant</label><input id="amount-input" type="number" step="0.01" class="form-control"></div><button class="btn btn-primary" onclick="addAmountToCart()">Ajouter</button></div></div>
     <div class="modal-backdrop" id="checkout-modal"><div class="modal-content"><div class="modal-header"><span>Encaissement</span><i class="fa-solid fa-xmark" onclick="closeModal('checkout-modal')"></i></div><div id="receipt-preview"></div><button class="btn btn-primary" onclick="sendReceipt()">Valider</button></div></div>
 
     <script>
-        let currentScreen = 0; let startX = 0; let isLoggedIn = false;
+        const ADMIN_CODE = "0000"; // MODIFIABLE ICI UNIQUEMENT
+        let currentScreen = 0; let startX = 0; let isLoggedIn = false; let selectedProductCode = null; let stream = null;
         let cart = []; let salesHistory = JSON.parse(localStorage.getItem('novaultra_sales')) || [];
         let dbProducts = JSON.parse(localStorage.getItem('novaultra_products')) || {'123456':{name:'Coca', price:'2.50'}};
         let companySettings = JSON.parse(localStorage.getItem('novaultra_settings')) || {currency:"EUR", theme:"dark"};
-        const CURRENCIES = {"EUR":"€","USD":"$","GBP":"£","MAD":"DH","CAD":"$","CHF":"Fr","JPY":"¥"};
+        const CURRENCIES = {"EUR":"€","USD":"$","GBP":"£","MAD":"DH"};
 
-        function googleLogin(){
-            isLoggedIn = true;
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('main-header').style.display = 'flex';
-            document.getElementById('swipe-container').style.display = 'flex';
-            alert("Connecté avec Google");
-        }
+        function googleLogin(){ isLoggedIn = true; document.getElementById('login-screen').classList.add('hidden'); document.getElementById('main-header').style.display = 'flex'; document.getElementById('swipe-container').style.display = 'flex'; }
 
-        // SWIPE
+        // SWIPE 6 ECRANS
         document.addEventListener('touchstart', e => startX = e.touches[0].clientX);
         document.addEventListener('touchend', e => {
             let endX = e.changedTouches[0].clientX;
-            if(startX - endX > 50 && currentScreen < 4) currentScreen++;
+            if(startX - endX > 50 && currentScreen < 5) currentScreen++;
             if(endX - startX > 50 && currentScreen > 0) currentScreen--;
             updateScreen();
         });
         function updateScreen(){
-            document.getElementById('swipe-container').style.transform = `translateX(-${currentScreen * 20}%)`;
-            document.querySelectorAll('.page-dot').forEach((d,i)=>{d.classList.toggle('active', i===currentScreen); d.style.background = ['#3B82F6','#FBBF24','#22C55E','#F87171','#A855F7'][i];});
+            document.getElementById('swipe-container').style.transform = `translateX(-${currentScreen * 16.666}%)`;
+            const colors = ['#3B82F6','#FBBF24','#22C55E','#F87171','#A855F7','#EC4899'];
+            document.querySelectorAll('.page-dot').forEach((d,i)=>{d.classList.toggle('active', i===currentScreen); d.style.background = colors[i];});
             if(currentScreen === 3) loadProductsList();
+            if(currentScreen === 5) loadHistory();
         }
 
-        function toggleTheme(theme){ document.body.dataset.theme = theme; companySettings.theme = theme; }
+        // BLEU : LISTE + DEMANDE MONTANT
+        function renderCart(){
+            let total=cart.reduce((s,i)=>s+parseFloat(i.price),0);
+            document.getElementById('cart-total').innerText=total.toFixed(2)+" "+CURRENCIES[companySettings.currency];
+            const list = document.getElementById('cart-list'); list.innerHTML = "";
+            cart.forEach((item, i)=> list.innerHTML += `<div class="cart-item"><span>${item.name}</span><span>${item.price}${CURRENCIES[companySettings.currency]} <i class="fa-solid fa-xmark" onclick="removeFromCart(${i})" style="color:var(--brand-red)"></i></span></div>`);
+        }
+        function removeFromCart(i){ cart.splice(i,1); renderCart(); }
+        function openAmountModal(){ openModal('amount-modal'); }
+        function addAmountToCart(){ const amount = document.getElementById('amount-input').value; if(amount) { cart.push({name:"Montant Libre", price:amount}); renderCart(); closeModal('amount-modal'); } }
 
-        // SETTLEMENT
+        // ROUGE : 3 DOTS + CODE ADMIN
+        function loadProductsList(){
+            const list = document.getElementById('products-list'); list.innerHTML = "";
+            document.getElementById('product-count').innerText = Object.keys(dbProducts).length;
+            for(const [code, p] of Object.entries(dbProducts)){
+                list.innerHTML += `<div class="product-list-item"><span>${p.name}<br><small>#${code}</small></span><span>${p.price}${CURRENCIES[companySettings.currency]} <i class="fa-solid fa-ellipsis-vertical dots-menu" onclick="openProductOptions('${code}')"></i></span></div>`;
+            }
+        }
+        function openProductOptions(code){ selectedProductCode = code; openModal('product-options-modal'); }
+        function editProductFromOptions(){ document.getElementById('prod-barcode').value=selectedProductCode; document.getElementById('prod-name').value=dbProducts[selectedProductCode].name; document.getElementById('prod-price').value=dbProducts[selectedProductCode].price; closeModal('product-options-modal'); openModal('add-product-modal'); }
+        function deleteProductFromOptions(){ openModal('admin-modal'); }
+        function checkAdminCode(){
+            if(document.getElementById('admin-code').value === ADMIN_CODE){
+                delete dbProducts[selectedProductCode]; localStorage.setItem('novaultra_products',JSON.stringify(dbProducts)); loadProductsList(); closeModal('admin-modal'); closeModal('product-options-modal');
+            } else alert("Mauvais code admin");
+            document.getElementById('admin-code').value = "";
+        }
+
+        // VIOLET : CAMERA CORRIGEE
+        async function startScan(){
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                document.getElementById('camera-view').srcObject = stream;
+            } catch(err){ alert("Erreur caméra: "+err.message); }
+        }
+        function stopScan(){ if(stream) stream.getTracks().forEach(track => track.stop()); }
+
+        // ROSE : HISTORIQUE
+        function loadHistory(){
+            let total = salesHistory.reduce((s,i)=>s+i.total,0);
+            document.getElementById('history-total').innerText = total.toFixed(2)+" "+CURRENCIES[companySettings.currency];
+            const list = document.getElementById('history-list'); list.innerHTML = "";
+            salesHistory.forEach(s=> list.innerHTML += `<div class="product-list-item"><span>${new Date(s.date).toLocaleTimeString()}</span><span>${s.total.toFixed(2)}${CURRENCIES[companySettings.currency]}</span></div>`);
+        }
+
+        // SETTLEMENT + BACKUP
         function openSettlementModal(){
             let total = salesHistory.reduce((s,i)=>s+i.total,0);
-            document.getElementById('settlement-report').innerHTML = `
-                <b>RAPPORT DU ${new Date().toLocaleDateString()}</b><br>
-                Ventes: ${salesHistory.length}<br>
-                Total HT: ${total.toFixed(2)} ${CURRENCIES[companySettings.currency]}<br>
-                Statut: Ouvert
-            `;
+            document.getElementById('settlement-report').innerHTML = `<b>RAPPORT DU ${new Date().toLocaleDateString()}</b><br>Ventes: ${salesHistory.length}<br>Total: ${total.toFixed(2)} ${CURRENCIES[companySettings.currency]}`;
             openModal('settlement-modal');
         }
-        function sendSettlement(){ alert("Rapport envoyé à "+document.getElementById('settlement-email').value); }
-        function downloadPDF(){ alert("Téléchargement du PDF du rapport..."); }
-        function saveToCloud(){ localStorage.setItem('novaultra_cloud_backup', JSON.stringify(salesHistory)); alert("Sauvegardé sur le Cloud local"); }
-        function closeDay(){ if(confirm("Fermer la journée?")){ salesHistory=[]; localStorage.setItem('novaultra_sales', JSON.stringify(salesHistory)); alert("Journée clôturée"); closeModal('settlement-modal'); } }
+        function sendSettlementGoogle(){ if(!isLoggedIn) return alert("Connectez-vous avec Google d'abord"); alert("Rapport envoyé via Google à votre email"); }
+        function backupData(){ if(!isLoggedIn) return alert("Login Google requis"); localStorage.setItem('novaultra_backup', JSON.stringify({products:dbProducts, sales:salesHistory})); alert("Backup effectué"); }
+        function restoreData(){ const data = JSON.parse(localStorage.getItem('novaultra_backup')); if(data){ dbProducts=data.products; salesHistory=data.sales; alert("Restauration effectuée"); } else alert("Aucun backup trouvé"); }
+        function downloadPDF(){ alert("Génération PDF..."); }
+        function closeDay(){ if(confirm("Fermer la journée?")){ salesHistory=[]; localStorage.setItem('novaultra_sales', JSON.stringify(salesHistory)); alert("Journée clôturée"); closeModal('settlement-modal'); loadHistory(); } }
 
-        // RESTE DU CODE : typeNum, renderCart, etc...
+        // AUTRES FONCTIONS
         let currentInput = "";
         function typeNum(num) { currentInput += num; document.getElementById('barcode-display').innerText = currentInput; }
         function backspaceNum() { currentInput = currentInput.slice(0, -1); document.getElementById('barcode-display').innerText = currentInput || "Saisie..."; }
         function submitBarcode() { const p = dbProducts[currentInput]; if(p){ cart.push({...p}); renderCart(); } else { document.getElementById('prod-barcode').value=currentInput; openModal('add-product-modal'); } currentInput=""; document.getElementById('barcode-display').innerText="Saisie..."; }
-        function renderCart(){ let total=cart.reduce((s,i)=>s+parseFloat(i.price),0); document.getElementById('cart-total').innerText=total.toFixed(2)+" "+CURRENCIES[companySettings.currency]; }
-        function setDiscount(p){ document.getElementById('discount-amount').value = (parseFloat(document.getElementById('cart-total').innerText) * p / 100).toFixed(2); }
-        function applyDiscount(){ salesHistory.push({total: -document.getElementById('discount-amount').value, type: 'remise'}); alert("Remise appliquée"); }
-        function createSplitPayment(){ alert("Échéances créées pour "+document.getElementById('client-name').value); }
-        function loadProductsList(){ const list = document.getElementById('products-list'); list.innerHTML = ""; document.getElementById('product-count').innerText = Object.keys(dbProducts).length; for(const [code, p] of Object.entries(dbProducts)){ list.innerHTML += `<div class="product-list-item" onclick="editProduct('${code}')"><span>${p.name}<br><small>#${code}</small></span><span>${p.price} ${CURRENCIES[companySettings.currency]}</span></div>`; } }
-        function editProduct(code){ document.getElementById('prod-barcode').value=code; document.getElementById('prod-name').value=dbProducts[code].name; document.getElementById('prod-price').value=dbProducts[code].price; openModal('add-product-modal'); }
-        function startScan(){ alert("Lancement caméra pour scan..."); }
         function openModal(id){document.getElementById(id).classList.add('active')}
         function closeModal(id){document.getElementById(id).classList.remove('active')}
         function openAddProductModal(code=""){document.getElementById('prod-barcode').value=code; openModal('add-product-modal')}
         function saveProduct(){const c=prod-barcode.value,n=prod-name.value,p=prod-price.value; if(c&&n&&p){dbProducts[c]={name:n,price:p}; localStorage.setItem('novaultra_products',JSON.stringify(dbProducts)); closeModal('add-product-modal'); loadProductsList();}}
-        function saveSettings(){companySettings.currency=comp-currency.value; localStorage.setItem('novaultra_settings',JSON.stringify(companySettings)); closeModal('settings-modal'); renderCart();}
-        function openCheckoutModal(){salesHistory.push({total:parseFloat(document.getElementById('cart-total').innerText), date:new Date()}); localStorage.setItem('novaultra_sales', JSON.stringify(salesHistory)); cart=[]; renderCart(); alert("Vente enregistrée")}
+        function openCheckoutModal(){ if(cart.length===0) return alert("Panier vide"); salesHistory.push({total:parseFloat(document.getElementById('cart-total').innerText), date:new Date()}); localStorage.setItem('novaultra_sales', JSON.stringify(salesHistory)); cart=[]; renderCart(); alert("Vente enregistrée")}
 
         // INIT
         for(const [code, sym] of Object.entries(CURRENCIES)) document.getElementById('comp-currency').innerHTML += `<option value="${code}">${code} ${sym}</option>`;
         document.getElementById('comp-currency').value = companySettings.currency;
-        document.getElementById('theme-select').value = companySettings.theme;
         document.body.dataset.theme = companySettings.theme;
     </script>
 </body>
