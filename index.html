@@ -3,227 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NovaPOS 2026 • Professional Edition</title>
+    <title>NovaPOS • myPOS Style Edition</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --bg-base: #0f172a; /* Slate 900 */
-            --bg-surface: #1e293b; /* Slate 800 */
-            --bg-surface-light: #334155; /* Slate 700 */
-            --accent: #0ea5e9; /* Sky Blue */
-            --accent-hover: #0284c7; 
-            --accent-glow: 0 0 15px rgba(14, 165, 233, 0.3);
-            --success: #10B981;
+            /* Palette inspirée de myPOS / Terminaux modernes */
+            --brand-blue: #0066FF; /* Bleu électrique */
+            --bg-page: #F3F4F6; /* Gris très clair pour le fond de page */
+            --surface-white: #FFFFFF;
+            --text-dark: #111827;
+            --text-gray: #6B7280;
+            --border-light: #E5E7EB;
             --danger: #EF4444;
-            --text-main: #F8FAFC;
-            --text-muted: #94A3B8;
-            --border: rgba(255, 255, 255, 0.1);
+            --success: #10B981;
+            
+            --dot-blue: #4285F4;
+            --dot-yellow: #FBBC05;
+            --dot-green: #34A853;
+            --dot-red: #EA4335;
+            
+            --radius-xl: 24px;
             --radius-lg: 16px;
-            --radius-md: 12px;
+            --radius-btn: 12px;
+            --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.05);
+            --shadow-btn: 0 2px 4px rgba(0, 0, 0, 0.02);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', system-ui, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg-base);
-            color: var(--text-main);
+            background-color: var(--bg-page);
+            color: var(--text-dark);
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        /* Header Compact */
+        /* En-tête */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 20px;
-            background: var(--bg-surface);
-            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            background: var(--surface-white);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            z-index: 10;
         }
 
         .brand {
-            display: flex; align-items: center; gap: 10px;
-            font-size: 1.1rem; font-weight: 700;
+            display: flex; align-items: center; gap: 8px;
+            font-size: 1.2rem; font-weight: 800; color: var(--brand-blue);
+            letter-spacing: -0.5px;
         }
-        .brand i { color: var(--accent); }
 
-        .header-actions { display: flex; gap: 10px; align-items: center; }
+        .header-actions { display: flex; gap: 12px; align-items: center; }
 
         .btn-google {
             display: flex; align-items: center; gap: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 6px 14px;
+            background: var(--surface-white);
+            border: 1px solid var(--border-light);
+            color: var(--text-dark);
+            padding: 8px 16px;
             border-radius: 50px;
             cursor: pointer; font-size: 0.85rem; font-weight: 600;
+            box-shadow: var(--shadow-btn);
+            transition: 0.2s;
         }
+        .btn-google:active { background: var(--bg-page); }
         .btn-google img { width: 16px; }
 
         .icon-btn {
-            background: var(--bg-surface-light);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--surface-white);
+            border: 1px solid var(--border-light);
+            color: var(--text-gray);
+            width: 40px; height: 40px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center; cursor: pointer;
+            box-shadow: var(--shadow-btn);
+            transition: 0.2s;
         }
+        .icon-btn:active { background: var(--brand-blue); color: white; border-color: var(--brand-blue); }
 
-        /* Layout Principal */
+        /* Conteneur Principal */
         .app-container {
-            display: flex; flex: 1; padding: 10px; gap: 10px;
-            overflow: hidden;
+            display: flex; flex: 1; padding: 20px; gap: 20px;
+            overflow: hidden; max-width: 1200px; margin: 0 auto; width: 100%;
         }
 
-        /* Panier */
+        /* --- Section Panier (Gauche) --- */
         .cart-area {
-            flex: 1.2;
-            background: var(--bg-surface);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
+            flex: 1;
+            background: var(--surface-white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-soft);
             display: flex; flex-direction: column;
             overflow: hidden;
+            border: 1px solid var(--border-light);
         }
 
         .cart-header {
-            padding: 15px; font-weight: 600; font-size: 0.9rem;
-            border-bottom: 1px solid var(--border);
-            display: flex; justify-content: space-between;
+            padding: 20px; font-weight: 700; font-size: 1rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        .badge-count {
+            background: var(--bg-page); color: var(--brand-blue);
+            padding: 4px 10px; border-radius: 20px; font-size: 0.8rem;
         }
 
         .cart-list {
-            flex: 1; overflow-y: auto; padding: 10px;
+            flex: 1; overflow-y: auto; padding: 15px;
         }
 
         .cart-item {
-            background: var(--bg-surface-light);
-            border-radius: var(--radius-md);
-            padding: 12px; margin-bottom: 8px;
+            background: var(--surface-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-btn);
+            padding: 16px; margin-bottom: 10px;
             display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
 
-        .item-info h4 { font-size: 0.95rem; margin-bottom: 2px; }
-        .item-info p { color: var(--text-muted); font-size: 0.75rem; }
-        .item-price { font-weight: bold; color: var(--accent); }
+        .item-info h4 { font-size: 0.95rem; margin-bottom: 4px; color: var(--text-dark); }
+        .item-info p { color: var(--text-gray); font-size: 0.8rem; }
+        .item-price { font-weight: 800; color: var(--text-dark); font-size: 1.1rem; }
 
-        .cart-footer {
-            padding: 15px; background: var(--bg-surface-light);
-            border-top: 1px solid var(--border);
-        }
-
-        .total-display {
-            font-size: 2rem; font-weight: 800; text-align: right; margin-bottom: 10px;
-        }
-
-        .btn-checkout {
-            width: 100%; background: var(--accent); color: white;
-            border: none; padding: 14px; border-radius: 50px;
-            font-size: 1.1rem; font-weight: bold; cursor: pointer;
-        }
-
-        /* Clavier Numérique (Numpad) */
-        .numpad-area {
+        /* --- Section Terminal / Numpad (Droite) --- */
+        .terminal-area {
             flex: 0.8;
-            display: flex; flex-direction: column; gap: 10px;
+            background: var(--surface-white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-soft);
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            position: relative;
         }
 
+        /* Écran Bleu façon myPOS */
+        .terminal-screen {
+            background: var(--brand-blue);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 10px 20px rgba(0, 102, 255, 0.15);
+            display: flex; flex-direction: column; align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .total-label { font-size: 0.9rem; font-weight: 500; opacity: 0.9; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .total-display { font-size: 3.5rem; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+        
         .barcode-display {
-            background: var(--bg-surface);
-            border: 1px solid var(--border); border-radius: var(--radius-lg);
-            padding: 15px; text-align: center; font-size: 1.2rem;
-            font-family: monospace; letter-spacing: 2px; color: var(--accent);
-            min-height: 50px; display: flex; align-items: center; justify-content: center;
+            margin-top: 15px;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 16px; border-radius: 50px;
+            font-family: monospace; font-size: 1.1rem; letter-spacing: 2px;
+            min-height: 38px;
         }
 
+        /* Décoration : 4 points colorés */
+        .color-dots {
+            display: flex; gap: 8px; margin-top: 25px;
+        }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-1 { background-color: var(--dot-blue); }
+        .dot-2 { background-color: var(--dot-yellow); }
+        .dot-3 { background-color: var(--dot-green); }
+        .dot-4 { background-color: var(--dot-red); }
+
+        /* Clavier Blanc */
         .numpad-grid {
-            background: var(--bg-surface);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
-            padding: 15px;
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            flex: 1; align-items: center; justify-items: center;
+            padding: 25px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+            flex: 1; align-content: center;
         }
 
         .num-btn {
-            width: 100%; max-width: 70px; height: 60px;
-            border-radius: 12px;
-            background: var(--bg-surface-light);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            font-size: 1.5rem; font-weight: 600; cursor: pointer;
+            background: var(--surface-white);
+            border: 1px solid var(--border-light);
+            color: var(--text-dark);
+            height: 65px; border-radius: var(--radius-btn);
+            font-size: 1.6rem; font-weight: 600; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: all 0.1s;
         }
-        .num-btn:active { background: var(--accent); transform: scale(0.95); }
+        .num-btn:active { background: var(--bg-page); transform: scale(0.95); border-color: #D1D5DB; }
 
         .btn-action-add {
-            grid-column: span 3; width: 100%; max-width: none;
-            height: 45px; border-radius: 20px; font-size: 1rem;
-            background: rgba(14, 165, 233, 0.1); color: var(--accent);
-            border-color: rgba(14, 165, 233, 0.3);
+            grid-column: span 3;
+            height: 50px; font-size: 1rem; font-weight: 700;
+            background: #F0FDF4; color: var(--success);
+            border: 1px dashed var(--success);
         }
+        .btn-action-add:active { background: var(--success); color: white; }
         
-        .btn-enter { background: var(--accent); color: white; border-color: var(--accent); }
-        .btn-clear { color: var(--danger); font-size: 1.2rem; }
+        .btn-enter { background: var(--brand-blue); color: white; border: none; box-shadow: 0 4px 12px rgba(0,102,255,0.3); }
+        .btn-enter:active { background: #0052cc; }
+        .btn-clear { color: var(--danger); font-size: 1.3rem; }
 
-        /* Modales */
+        .btn-checkout {
+            margin: 0 25px 25px 25px;
+            background: var(--text-dark); color: white;
+            border: none; padding: 18px; border-radius: var(--radius-btn);
+            font-size: 1.1rem; font-weight: 800; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.1s;
+        }
+        .btn-checkout:active { transform: scale(0.97); }
+
+        /* --- Modales --- */
         .modal-backdrop {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
+            background: rgba(17, 24, 39, 0.6); backdrop-filter: blur(4px);
             display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; z-index: 100;
+            opacity: 0; pointer-events: none; z-index: 100; transition: opacity 0.2s;
         }
         .modal-backdrop.active { opacity: 1; pointer-events: auto; }
         
         .modal-content {
-            background: var(--bg-surface); border: 1px solid var(--border);
-            border-radius: var(--radius-lg); padding: 20px;
-            width: 95%; max-width: 400px; max-height: 90vh; overflow-y: auto;
+            background: var(--surface-white); border-radius: var(--radius-xl);
+            padding: 25px; width: 95%; max-width: 420px; max-height: 90vh; overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        .modal-backdrop.active .modal-content { transform: translateY(0); }
 
-        .modal-header { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: bold; }
+        .modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: 800; font-size: 1.2rem; }
         
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.85rem; color: var(--text-gray); font-weight: 600; margin-bottom: 6px; }
         .form-control {
-            width: 100%; padding: 10px; background: var(--bg-base);
-            border: 1px solid var(--border); border-radius: 8px; color: white; outline: none;
+            width: 100%; padding: 12px 14px; background: var(--bg-page);
+            border: 1px solid var(--border-light); border-radius: var(--radius-btn);
+            color: var(--text-dark); outline: none; font-size: 1rem; font-weight: 500;
         }
+        .form-control:focus { border-color: var(--brand-blue); background: var(--surface-white); }
 
-        .modal-actions { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-modal { flex: 1; padding: 10px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; }
-        .btn-cancel { background: var(--bg-surface-light); color: white; }
-        .btn-save { background: var(--accent); color: white; }
+        .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
+        .btn-modal { flex: 1; padding: 14px; border-radius: var(--radius-btn); border: none; font-weight: 700; cursor: pointer; }
+        .btn-cancel { background: var(--bg-page); color: var(--text-dark); }
+        .btn-save { background: var(--brand-blue); color: white; }
 
         .receipt-preview {
-            background: white; color: black; padding: 15px; border-radius: 8px;
-            font-family: monospace; font-size: 0.8rem; margin-bottom: 15px;
-            max-height: 150px; overflow-y: auto; text-align: center;
+            background: #FAFAFA; color: #333; padding: 20px; border-radius: var(--radius-btn);
+            border: 1px dashed #CCC; font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem; margin-bottom: 20px; max-height: 200px; overflow-y: auto; text-align: center;
         }
 
-        /* Mobile Scroll Fix */
-        @media (max-width: 768px) {
+        /* --- Responsive Mobile --- */
+        @media (max-width: 850px) {
             body { height: auto; min-height: 100vh; overflow-y: auto; }
-            .app-container { flex-direction: column; overflow: visible; }
-            .numpad-area { order: -1; }
-            .cart-area { min-height: 400px; }
-            .numpad-grid { padding: 10px; }
+            .app-container { flex-direction: column; overflow: visible; padding: 10px; }
+            .terminal-area { order: -1; } /* Place le terminal en haut sur mobile */
+            .cart-area { min-height: 350px; }
+            .total-display { font-size: 3rem; }
+            .num-btn { height: 55px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Header -->
     <header>
         <div class="brand">
-            <i class="fa-solid fa-cube"></i>
-            <span>NovaPOS</span>
+            <i class="fa-solid fa-credit-card"></i>
+            <span>NovaPOS Ultra</span>
         </div>
         <div class="header-actions">
             <button class="btn-google" onclick="mockGoogleLogin()" id="google-btn">
@@ -235,23 +291,38 @@
     </header>
 
     <div class="app-container">
+        
+        <!-- Section Panier (Gauche) -->
         <div class="cart-area">
             <div class="cart-header">
-                <span>Ticket en cours</span>
-                <span id="cart-count">0 article</span>
+                <span>Articles scannés</span>
+                <span class="badge-count" id="cart-count">0</span>
             </div>
-            <div class="cart-list" id="cart-list"></div>
-            <div class="cart-footer">
-                <div class="total-display" id="cart-total">0.00 €</div>
-                <button class="btn-checkout" onclick="openCheckoutModal()">ENCAISSER</button>
+            <div class="cart-list" id="cart-list">
+                <!-- Les articles apparaissent ici -->
             </div>
         </div>
 
-        <div class="numpad-area">
-            <div class="barcode-display" id="barcode-display">...</div>
+        <!-- Section Terminal / Numpad (Droite) -->
+        <div class="terminal-area">
             
+            <!-- Écran Bleu -->
+            <div class="terminal-screen">
+                <div class="total-label">Montant Total</div>
+                <div class="total-display" id="cart-total">0.00 €</div>
+                <div class="barcode-display" id="barcode-display">Saisie...</div>
+                
+                <div class="color-dots">
+                    <div class="dot dot-1"></div>
+                    <div class="dot dot-2"></div>
+                    <div class="dot dot-3"></div>
+                    <div class="dot dot-4"></div>
+                </div>
+            </div>
+            
+            <!-- Clavier Blanc -->
             <div class="numpad-grid">
-                <button class="num-btn btn-action-add" onclick="openAddProductModal()">+ Ajouter</button>
+                <button class="num-btn btn-action-add" onclick="openAddProductModal()">+ Ajouter un produit</button>
                 
                 <button class="num-btn" onclick="typeNum('7')">7</button>
                 <button class="num-btn" onclick="typeNum('8')">8</button>
@@ -267,83 +338,91 @@
                 
                 <button class="num-btn btn-clear" onclick="backspaceNum()"><i class="fa-solid fa-delete-left"></i></button>
                 <button class="num-btn" onclick="typeNum('0')">0</button>
-                <button class="num-btn btn-enter" onclick="submitBarcode()"><i class="fa-solid fa-arrow-turn-down fa-rotate-90"></i></button>
+                <button class="num-btn btn-enter" onclick="submitBarcode()"><i class="fa-solid fa-check"></i></button>
             </div>
+
+            <button class="btn-checkout" onclick="openCheckoutModal()">ENCAISSER</button>
         </div>
     </div>
 
+    <!-- Modale : Paramètres Entreprise -->
     <div class="modal-backdrop" id="settings-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <span>Paramètres Entreprise</span>
-                <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="closeModal('settings-modal')"></i>
+                <span>Configuration</span>
+                <i class="fa-solid fa-xmark" style="cursor:pointer; color:var(--text-gray);" onclick="closeModal('settings-modal')"></i>
             </div>
             <div class="form-group"><label>Nom de l'entreprise</label><input type="text" class="form-control" id="comp-name"></div>
-            <div class="form-group"><label>SIRET</label><input type="text" class="form-control" id="comp-siret"></div>
+            <div class="form-group"><label>SIRET / Business ID</label><input type="text" class="form-control" id="comp-siret"></div>
             <div class="form-group"><label>TVA (%)</label><input type="number" class="form-control" id="comp-tva"></div>
-            <div class="form-group"><label>Adresse</label><input type="text" class="form-control" id="comp-address"></div>
-            <div class="form-group"><label>Contact</label><input type="text" class="form-control" id="comp-contact"></div>
+            <div class="form-group"><label>Adresse Postale</label><input type="text" class="form-control" id="comp-address"></div>
+            <div class="form-group"><label>Contact (Tel / Email)</label><input type="text" class="form-control" id="comp-contact"></div>
             <div class="modal-actions">
-                <button class="btn-modal btn-cancel" onclick="closeModal('settings-modal')">Fermer</button>
+                <button class="btn-modal btn-cancel" onclick="closeModal('settings-modal')">Annuler</button>
                 <button class="btn-modal btn-save" onclick="saveSettings()">Sauvegarder</button>
             </div>
         </div>
     </div>
 
+    <!-- Modale : Nouveau Produit -->
     <div class="modal-backdrop" id="add-product-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <span>Nouveau Produit</span>
-                <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="closeModal('add-product-modal')"></i>
+                <span>Créer Produit</span>
+                <i class="fa-solid fa-xmark" style="cursor:pointer; color:var(--text-gray);" onclick="closeModal('add-product-modal')"></i>
             </div>
             <div class="form-group"><label>Code Barre</label><input type="text" class="form-control" id="prod-barcode"></div>
-            <div class="form-group"><label>Nom</label><input type="text" class="form-control" id="prod-name"></div>
-            <div class="form-group"><label>Détails</label><input type="text" class="form-control" id="prod-specs"></div>
-            <div class="form-group"><label>Prix (€)</label><input type="number" step="0.01" class="form-control" id="prod-price"></div>
+            <div class="form-group"><label>Nom de l'article</label><input type="text" class="form-control" id="prod-name"></div>
+            <div class="form-group"><label>Spécifications (Optionnel)</label><input type="text" class="form-control" id="prod-specs"></div>
+            <div class="form-group"><label>Prix Unitaire (€)</label><input type="number" step="0.01" class="form-control" id="prod-price"></div>
             <div class="modal-actions">
                 <button class="btn-modal btn-cancel" onclick="closeModal('add-product-modal')">Annuler</button>
-                <button class="btn-modal btn-save" onclick="saveProduct()">Sauvegarder</button>
+                <button class="btn-modal btn-save" onclick="saveProduct()">Ajouter au Cloud</button>
             </div>
         </div>
     </div>
 
+    <!-- Modale : Encaissement & Reçu -->
     <div class="modal-backdrop" id="checkout-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <span>Finaliser la vente</span>
-                <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="closeModal('checkout-modal')"></i>
+                <span>Validation du Ticket</span>
+                <i class="fa-solid fa-xmark" style="cursor:pointer; color:var(--text-gray);" onclick="closeModal('checkout-modal')"></i>
             </div>
             
             <div class="form-group">
-                <label>Statut du paiement</label>
+                <label>Mode de règlement</label>
                 <select class="form-control" id="pay-status" onchange="buildReceiptPreview()">
-                    <option value="PAYÉ (Totalité)">Payé (Totalité)</option>
+                    <option value="PAYÉ (Totalité)">Payé en totalité</option>
                     <option value="PAYÉ (Plusieurs fois)">Paiement en plusieurs fois</option>
                 </select>
             </div>
 
+            <!-- Aperçu du ticket -->
             <div class="receipt-preview" id="receipt-preview"></div>
 
             <div class="form-group">
-                <label>Contact client (Email / SMS)</label>
-                <input type="text" class="form-control" id="client-contact" placeholder="Email ou Numéro">
+                <label>Envoyer le ticket à (Email / Tel)</label>
+                <input type="text" class="form-control" id="client-contact" placeholder="Saisir un contact...">
             </div>
 
             <div class="modal-actions">
-                <button class="btn-modal btn-cancel" onclick="sendReceipt('sms')" style="background: #F59E0B;"><i class="fa-solid fa-mobile-screen"></i> SMS</button>
+                <button class="btn-modal" onclick="sendReceipt('sms')" style="background: var(--text-dark); color:white;"><i class="fa-solid fa-comment-sms"></i> SMS</button>
                 <button class="btn-modal btn-save" onclick="sendReceipt('email')"><i class="fa-solid fa-envelope"></i> Email</button>
             </div>
         </div>
     </div>
 
     <script>
+        // --- LOGIQUE JAVASCRIPT ---
         let currentInput = "";
         let cart = [];
-        let dbProducts = JSON.parse(localStorage.getItem('nova2026_products')) || {};
-        let companySettings = JSON.parse(localStorage.getItem('nova2026_settings')) || {
-            name: "Ma Boutique", siret: "", tva: "20", address: "", contact: ""
+        let dbProducts = JSON.parse(localStorage.getItem('novaultra_products')) || {};
+        let companySettings = JSON.parse(localStorage.getItem('novaultra_settings')) || {
+            name: "Mon Entreprise", siret: "", tva: "20", address: "", contact: ""
         };
 
+        // Clavier Numérique
         function typeNum(num) {
             if (currentInput.length < 15) {
                 currentInput += num;
@@ -351,10 +430,9 @@
             }
         }
 
-        // --- BACKSPACE FIX ---
         function backspaceNum() {
             currentInput = currentInput.slice(0, -1);
-            document.getElementById('barcode-display').innerText = currentInput || "...";
+            document.getElementById('barcode-display').innerText = currentInput || "Saisie...";
         }
 
         function submitBarcode() {
@@ -363,12 +441,13 @@
             if (product) {
                 addToCart(currentInput, product);
                 currentInput = "";
-                document.getElementById('barcode-display').innerText = "...";
+                document.getElementById('barcode-display').innerText = "Saisie...";
             } else {
                 openAddProductModal(currentInput);
             }
         }
 
+        // Panier
         function addToCart(code, product) {
             cart.push({ ...product, code });
             renderCart();
@@ -390,23 +469,27 @@
                     <div class="cart-item">
                         <div class="item-info">
                             <h4>${item.name}</h4>
-                            <p>${item.specs ? item.specs + ' | ' : ''}Code: ${item.code}</p>
+                            <p>${item.specs ? item.specs + ' | ' : ''}Ref: ${item.code}</p>
                         </div>
-                        <div style="display:flex; align-items:center; gap:10px;">
+                        <div style="display:flex; align-items:center; gap:12px;">
                             <span class="item-price">${parseFloat(item.price).toFixed(2)} €</span>
-                            <i class="fa-solid fa-xmark" style="color:var(--danger); cursor:pointer;" onclick="removeFromCart(${index})"></i>
+                            <div class="icon-btn" style="width:28px; height:28px; border:none; background:#FEE2E2; color:var(--danger);" onclick="removeFromCart(${index})">
+                                <i class="fa-solid fa-xmark"></i>
+                            </div>
                         </div>
                     </div>
                 `;
             });
 
             document.getElementById('cart-total').innerText = total.toFixed(2) + " €";
-            document.getElementById('cart-count').innerText = cart.length + " article(s)";
+            document.getElementById('cart-count').innerText = cart.length;
         }
 
+        // Gestion des Modales
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
+        // Produit
         function openAddProductModal(code = "") {
             document.getElementById('prod-barcode').value = code || currentInput || Math.floor(Math.random() * 1000000000).toString();
             document.getElementById('prod-name').value = "";
@@ -423,13 +506,14 @@
 
             if (code && name && price) {
                 dbProducts[code] = { name, specs, price };
-                localStorage.setItem('nova2026_products', JSON.stringify(dbProducts));
+                localStorage.setItem('novaultra_products', JSON.stringify(dbProducts));
                 closeModal('add-product-modal');
                 currentInput = "";
-                document.getElementById('barcode-display').innerText = "...";
+                document.getElementById('barcode-display').innerText = "Saisie...";
             }
         }
 
+        // Entreprise
         function loadSettingsToForm() {
             document.getElementById('comp-name').value = companySettings.name;
             document.getElementById('comp-siret').value = companySettings.siret;
@@ -446,13 +530,13 @@
                 address: document.getElementById('comp-address').value,
                 contact: document.getElementById('comp-contact').value
             };
-            localStorage.setItem('nova2026_settings', JSON.stringify(companySettings));
+            localStorage.setItem('novaultra_settings', JSON.stringify(companySettings));
             closeModal('settings-modal');
         }
 
-        // --- RECEIPT BUILDER (With payment status) ---
+        // Encaissement & Création du Ticket
         function openCheckoutModal() {
-            if (cart.length === 0) return;
+            if (cart.length === 0) return alert("Le panier est vide.");
             buildReceiptPreview();
             document.getElementById('client-contact').value = "";
             openModal('checkout-modal');
@@ -463,16 +547,17 @@
             const status = document.getElementById('pay-status').value;
             
             let html = `
-                <div style="font-weight:bold; font-size:1.1rem;">${companySettings.name}</div>
+                <div style="font-weight:bold; font-size:1.2rem; margin-bottom:5px;">${companySettings.name}</div>
                 <div>${companySettings.address}</div>
-                <div>SIRET: ${companySettings.siret || "N/A"} | ${companySettings.contact}</div>
-                <hr style="margin:8px 0;">
+                <div>SIRET: ${companySettings.siret || "N/A"}</div>
+                <div>${companySettings.contact}</div>
+                <div style="border-top:1px dashed #999; margin:10px 0;"></div>
             `;
 
             cart.forEach(item => {
                 const p = parseFloat(item.price);
                 totalHT += p;
-                html += `<div style="display:flex; justify-content:space-between;"><span>${item.name}</span><span>${p.toFixed(2)} €</span></div>`;
+                html += `<div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span>${item.name}</span><span>${p.toFixed(2)} €</span></div>`;
             });
 
             const tvaRate = parseFloat(companySettings.tva) || 0;
@@ -480,13 +565,13 @@
             const totalTTC = totalHT + tvaAmount;
 
             html += `
-                <hr style="margin:8px 0;">
-                <div style="display:flex; justify-content:space-between;"><span>Total HT</span><span>${totalHT.toFixed(2)} €</span></div>
-                <div style="display:flex; justify-content:space-between;"><span>TVA (${tvaRate}%)</span><span>${tvaAmount.toFixed(2)} €</span></div>
-                <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1rem; margin-top:5px;"><span>NET À PAYER</span><span>${totalTTC.toFixed(2)} €</span></div>
+                <div style="border-top:1px dashed #999; margin:10px 0;"></div>
+                <div style="display:flex; justify-content:space-between; color:#666;"><span>Total HT</span><span>${totalHT.toFixed(2)} €</span></div>
+                <div style="display:flex; justify-content:space-between; color:#666;"><span>TVA (${tvaRate}%)</span><span>${tvaAmount.toFixed(2)} €</span></div>
+                <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.1rem; margin-top:8px;"><span>NET À PAYER</span><span>${totalTTC.toFixed(2)} €</span></div>
                 
-                <div style="margin-top:10px; padding:5px; border:1px dashed black; font-weight:bold; text-transform:uppercase;">
-                    *** ${status} ***
+                <div style="margin-top:15px; padding:8px; border:2px solid #333; border-radius:4px; font-weight:bold; font-size:1rem; text-transform:uppercase;">
+                    ${status}
                 </div>
             `;
             document.getElementById('receipt-preview').innerHTML = html;
@@ -494,20 +579,23 @@
 
         function sendReceipt(method) {
             const contact = document.getElementById('client-contact').value;
-            if (!contact) return alert("Entrez un contact.");
-            alert(`Ticket envoyé par ${method} à ${contact}`);
+            if (!contact) return alert("Veuillez saisir l'email ou le numéro du client.");
+            alert(`Ticket envoyé avec succès par ${method.toUpperCase()} à : ${contact}`);
             cart = [];
             renderCart();
             closeModal('checkout-modal');
         }
 
+        // Mock Cloud Google Login
         function mockGoogleLogin() {
             const btn = document.getElementById('google-btn');
-            btn.innerHTML = `<img src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff&rounded=true" style="width:16px;"> <span>Connecté</span>`;
-            btn.style.borderColor = "var(--success)";
-            btn.style.color = "var(--success)";
+            btn.innerHTML = `<img src="https://ui-avatars.com/api/?name=Utilisateur&background=0066FF&color=fff&rounded=true" style="width:20px;"> <span>Compte Google Connecté</span>`;
+            btn.style.borderColor = "var(--brand-blue)";
+            btn.style.color = "var(--brand-blue)";
+            btn.style.backgroundColor = "#EFF6FF";
         }
 
+        // Initialisation
         loadSettingsToForm();
     </script>
 </body>
