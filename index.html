@@ -3,252 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NovaPOS • Ultra Edition</title>
+    <title>NovaPOS Ultra V3</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --brand-blue: #0066FF; --bg-page: #F3F4F6; --surface-white: #FFFFFF;
+            /* Thème par défaut BLEU */
+            --brand-blue: #0066FF; --bg-page: #F5F7FA; --surface-white: #FFFFFF;
             --text-dark: #111827; --text-gray: #6B7280; --border-light: #E5E7EB;
             --danger: #EF4444; --success: #10B981; --warning: #F59E0B; --purple: #8B5CF6;
-            --dot-blue: #4285F4; --dot-yellow: #FBBC05; --dot-green: #34A853; --dot-red: #EA4335; --dot-purple: #A855F7;
-            --radius-xl: 24px; --radius-lg: 16px; --radius-btn: 12px;
-            --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.05); --shadow-btn: 0 2px 4px rgba(0, 0, 0, 0.02);
+            --radius-xl: 24px; --radius-btn: 14px; --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.06);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-page); color: var(--text-dark); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        [data-theme="dark"] {
+            --bg-page: #0F172A; --surface-white: #1E293B; --text-dark: #F1F5F9;
+            --text-gray: #94A3B8; --border-light: #334155; --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; user-select: none; transition: background 0.3s, color 0.3s; }
+        body { background-color: var(--bg-page); color: var(--text-dark); min-height: 100vh; padding-bottom: 20px; }
 
-        header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: var(--surface-white); box-shadow: 0 1px 3px rgba(0,0,0,0.05); z-index: 10; }
-       .brand { display: flex; align-items: center; gap: 8px; font-size: 1.2rem; font-weight: 800; color: var(--brand-blue); }
-       .header-actions { display: flex; gap: 12px; align-items: center; }
-       .btn-google { display: flex; align-items: center; gap: 8px; background: var(--surface-white); border: 1px solid var(--border-light); color: var(--text-dark); padding: 8px 16px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 600; box-shadow: var(--shadow-btn); }
-       .btn-google img { width: 16px; }
-       .icon-btn { background: var(--surface-white); border: 1px solid var(--border-light); color: var(--text-gray); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-btn); }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: var(--surface-white); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--border-light); }
+       .brand { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; color: var(--brand-blue); }
+       .badge-connected { display: flex; align-items: center; gap: 6px; background: var(--bg-page); padding: 6px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; }
+       .badge-connected.us { width: 20px; height: 20px; border-radius: 50%; background: var(--brand-blue); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+       .icon-btn { background: var(--bg-page); border: none; color: var(--text-gray); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 
-       .app-container { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; max-width: 1200px; margin: 0 auto; width: 100%; }
+       .app-container { padding: 16px; max-width: 500px; margin: 0 auto; }
 
-       .cart-area { flex: 1; background: var(--surface-white); border-radius: var(--radius-xl); box-shadow: var(--shadow-soft); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-light); }
-       .cart-header { padding: 20px; font-weight: 700; font-size: 1rem; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; }
-       .badge-count { background: var(--bg-page); color: var(--brand-blue); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; }
-       .cart-list { flex: 1; overflow-y: auto; padding: 15px; }
-       .cart-item { background: var(--surface-white); border: 1px solid var(--border-light); border-radius: var(--radius-btn); padding: 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-       .item-info h4 { font-size: 0.95rem; margin-bottom: 4px; }
-       .item-info p { color: var(--text-gray); font-size: 0.8rem; }
-       .item-price { font-weight: 800; font-size: 1.1rem; }
+       .terminal-screen { background: var(--brand-blue); color: white; padding: 25px 20px; text-align: center; border-radius: var(--radius-xl); box-shadow: var(--shadow-soft); margin-bottom: 16px; position: relative; overflow: hidden; transition: background 0.4s; }
+       .terminal-deco { position: absolute; opacity: 0.1; font-size: 4rem; }
+       .deco-left { left: 10px; top: 20px; }
+       .deco-right { right: 10px; top: 20px; }
+       .total-label { font-size: 0.9rem; font-weight: 600; opacity: 0.9; margin-bottom: 4px; }
+       .total-display { font-size: 3.2rem; font-weight: 800; }
+       .barcode-display { margin: 16px auto 0; background: rgba(255,255,255,0.18); padding: 10px 20px; border-radius: 50px; font-family: monospace; font-size: 1.1rem; min-height: 40px; display: inline-block; min-width: 180px; }
+       .color-dots { display: flex; gap: 14px; margin-top: 20px; justify-content: center; }
+       .dot { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; position: relative; border: 2px solid rgba(255,255,255,0.3); }
+       .dot.active { transform: scale(1.3); border-color: white; }
+       .dot-1 { background-color: #4285F4; }.dot-2 { background-color: #FBBC05; }
+       .dot-3 { background-color: #34A853; }.dot-4 { background-color: #EA4335; }
+       .dot-5 { background-color: #A855F7; }.dot-6 { background-color: #EC4899; }
+       .dot-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 0.55rem; opacity: 0.9; white-space: nowrap; }
 
-       .terminal-area { flex: 0.8; background: var(--surface-white); border-radius: var(--radius-xl); box-shadow: var(--shadow-soft); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-light); }
-       .terminal-screen { background: var(--brand-blue); color: white; padding: 35px 20px; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 10px 20px rgba(0, 102, 255, 0.15); display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; }
-       .total-label { font-size: 0.9rem; font-weight: 500; opacity: 0.9; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-       .total-display { font-size: 3.5rem; font-weight: 800; letter-spacing: -1px; line-height: 1; }
-       .barcode-display { margin-top: 15px; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 50px; font-family: monospace; font-size: 1.2rem; letter-spacing: 2px; min-height: 38px; min-width: 180px; }
-       .color-dots { display: flex; gap: 12px; margin-top: 25px; }
-       .dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; transition: transform 0.1s; }
-       .dot:active { transform: scale(0.8); }
-       .dot-1 { background-color: var(--dot-blue); }.dot-2 { background-color: var(--dot-yellow); }
-       .dot-3 { background-color: var(--dot-green); }.dot-4 { background-color: var(--dot-red); }.dot-5 { background-color: var(--dot-purple); }
+       .btn-add-product { width: 100%; padding: 16px; background: var(--success); color: white; border: none; border-radius: var(--radius-btn); font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
 
-       .numpad-grid { padding: 20px 25px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; flex: 1; align-content: center; }
-       .num-btn { background: var(--surface-white); border: 1px solid var(--border-light); color: var(--text-dark); height: 60px; border-radius: var(--radius-btn); font-size: 1.6rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-       .num-btn:active { background: var(--bg-page); transform: scale(0.95); }
-       .btn-action-add { grid-column: span 3; height: 50px; font-size: 1rem; font-weight: 700; background: #F0FDF4; color: var(--success); border: 1px dashed var(--success); }
+       .numpad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+       .num-btn { background: var(--surface-white); border: 1px solid var(--border-light); color: var(--text-dark); height: 65px; border-radius: var(--radius-btn); font-size: 1.8rem; font-weight: 600; cursor: pointer; }
+       .num-btn:active { transform: scale(0.96); }
        .btn-enter { background: var(--brand-blue); color: white; border: none; }
-       .btn-clear { color: var(--danger); font-size: 1.3rem; }
-       .btn-checkout { margin: 0 25px 12px 25px; background: var(--text-dark); color: white; border: none; padding: 18px; border-radius: var(--radius-btn); font-size: 1.1rem; font-weight: 800; cursor: pointer; }
-       .btn-paymentlink { margin: 0 25px 25px 25px; background: var(--brand-blue); color: white; border: none; padding: 15px; border-radius: var(--radius-btn); font-size: 1rem; font-weight: 700; cursor: pointer; }
+       .btn-clear { color: var(--danger); }
+        
+       .btn-checkout { width: 100%; background: var(--text-dark); color: var(--surface-white); border: none; padding: 18px; border-radius: var(--radius-btn); font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; }
+       .btn-paymentlink { width: 100%; background: var(--brand-blue); color: white; border: none; padding: 16px; border-radius: var(--radius-btn); font-size: 1rem; font-weight: 700; }
 
-       .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(17, 24, 39, 0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; z-index: 100; transition: opacity 0.2s; }
+       .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; z-index: 100; transition: 0.2s; }
        .modal-backdrop.active { opacity: 1; pointer-events: auto; }
-       .modal-content { background: var(--surface-white); border-radius: var(--radius-xl); padding: 25px; width: 95%; max-width: 420px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); transform: translateY(20px); transition: transform 0.3s; }
-       .modal-backdrop.active.modal-content { transform: translateY(0); }
-       .modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: 800; font-size: 1.2rem; }
-       .form-group { margin-bottom: 15px; }
+       .modal-content { background: var(--surface-white); border-radius: var(--radius-xl); padding: 24px; width: 92%; max-width: 400px; max-height: 80vh; overflow-y: auto; }
+       .modal-header { display: flex; justify-content: space-between; margin-bottom: 18px; font-weight: 800; font-size: 1.1rem; }
+       .form-group { margin-bottom: 14px; }
        .form-group label { display: block; font-size: 0.85rem; color: var(--text-gray); font-weight: 600; margin-bottom: 6px; }
-       .form-control { width: 100%; padding: 12px 14px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: var(--radius-btn); color: var(--text-dark); outline: none; font-size: 1rem; font-weight: 500; }
-       .form-control:focus { border-color: var(--brand-blue); background: var(--surface-white); }
-       .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
+       .form-control { width: 100%; padding: 12px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: var(--radius-btn); font-size: 1rem; color: var(--text-dark); }
+       .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
        .btn-modal { flex: 1; padding: 14px; border-radius: var(--radius-btn); border: none; font-weight: 700; cursor: pointer; }
-       .btn-cancel { background: var(--bg-page); color: var(--text-dark); }
        .btn-save { background: var(--brand-blue); color: white; }
-       .receipt-preview { background: #FAFAFA; color: #333; padding: 20px; border-radius: var(--radius-btn); border: 1px dashed #CCC; font-family: 'Courier New'; font-size: 0.85rem; margin-bottom: 20px; max-height: 200px; overflow-y: auto; text-align: center; }
+       .btn-cancel { background: var(--bg-page); color: var(--text-dark); }
 
-        @media (max-width: 850px) { body { height: auto; min-height: 100vh; overflow-y: auto; }.app-container { flex-direction: column; overflow: visible; padding: 10px; }.terminal-area { order: -1; }.cart-area { min-height: 350px; }.total-display { font-size: 3rem; }.num-btn { height: 55px; } }
+       .product-list-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--border-light); }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
     <header>
         <div class="brand"><i class="fa-solid fa-credit-card"></i><span>NovaPOS Ultra</span></div>
-        <div class="header-actions">
-            <button class="btn-google" onclick="mockGoogleLogin()" id="google-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G"><span>Login</span>
-            </button>
+        <div style="display:flex; gap:8px;">
+            <button class="icon-btn" onclick="toggleTheme()"><i class="fa-solid fa-moon" id="theme-icon"></i></button>
+            <button class="icon-btn" onclick="openModal('products-modal')"><i class="fa-solid fa-box"></i></button>
             <button class="icon-btn" onclick="openModal('settings-modal')"><i class="fa-solid fa-gear"></i></button>
-            <button class="icon-btn" onclick="openModal('history-modal')"><i class="fa-solid fa-clock-rotate-left"></i></button>
         </div>
     </header>
 
     <div class="app-container">
-        <div class="cart-area">
-            <div class="cart-header"><span>Articles scannés</span><span class="badge-count" id="cart-count">0</span></div>
-            <div class="cart-list" id="cart-list"></div>
+        <div class="terminal-screen" id="terminal-screen">
+            <i class="fa-solid fa-bolt terminal-deco deco-left"></i>
+            <i class="fa-solid fa-wifi terminal-deco deco-right"></i>
+            <div class="total-label">MONTANT TOTAL</div>
+            <div class="total-display" id="cart-total">0.00 €</div>
+            <div class="barcode-display" id="barcode-display">Saisie...</div>
+            <div class="color-dots">
+                <div class="dot dot-1" onclick="setScreenMode(1)"><span class="dot-label">Vente</span></div>
+                <div class="dot dot-2" onclick="setScreenMode(2)"><span class="dot-label">Remise</span></div>
+                <div class="dot dot-3" onclick="setScreenMode(3)"><span class="dot-label">Rapide</span></div>
+                <div class="dot dot-4" onclick="setScreenMode(4)"><span class="dot-label">Annuler</span></div>
+                <div class="dot dot-5" onclick="setScreenMode(5)"><span class="dot-label">Paiement</span></div>
+                <div class="dot dot-6" onclick="setScreenMode(6)"><span class="dot-label">Produits</span></div>
+            </div>
         </div>
 
-        <div class="terminal-area">
-            <div class="terminal-screen">
-                <div class="total-label">Montant Total</div>
-                <div class="total-display" id="cart-total">0.00 €</div>
-                <div class="barcode-display" id="barcode-display">Saisie...</div>
-                <div class="color-dots">
-                    <div class="dot dot-1" onclick="applyDiscount()" title="Remise -10%"></div>
-                    <div class="dot dot-2" onclick="simulateScan()" title="Scanner"></div>
-                    <div class="dot dot-3" onclick="addQuickProduct()" title="Produit Rapide"></div>
-                    <div class="dot dot-4" onclick="clearCart()" title="Annuler Panier"></div>
-                    <div class="dot dot-5" onclick="openPaymentLinkModal()" title="Lien de Paiement"></div>
-                </div>
-            </div>
+        <button class="btn-add-product" onclick="openAddProductModal()">+ Ajouter un produit</button>
 
-            <div class="numpad-grid">
-                <button class="num-btn btn-action-add" onclick="openAddProductModal()">+ Ajouter un produit</button>
-                <button class="num-btn" onclick="typeNum('7')">7</button><button class="num-btn" onclick="typeNum('8')">8</button><button class="num-btn" onclick="typeNum('9')">9</button>
-                <button class="num-btn" onclick="typeNum('4')">4</button><button class="num-btn" onclick="typeNum('5')">5</button><button class="num-btn" onclick="typeNum('6')">6</button>
-                <button class="num-btn" onclick="typeNum('1')">1</button><button class="num-btn" onclick="typeNum('2')">2</button><button class="num-btn" onclick="typeNum('3')">3</button>
-                <button class="num-btn btn-clear" onclick="backspaceNum()"><i class="fa-solid fa-delete-left"></i></button>
-                <button class="num-btn" onclick="typeNum('0')">0</button>
-                <button class="num-btn btn-enter" onclick="submitBarcode()"><i class="fa-solid fa-check"></i></button>
-            </div>
-            <button class="btn-checkout" onclick="openCheckoutModal()">ENCAISSER</button>
-            <button class="btn-paymentlink" onclick="openPaymentLinkModal()"><i class="fa-solid fa-link"></i> DEMANDER UN PAIEMENT</button>
+        <div class="numpad-grid">
+            <button class="num-btn" onclick="typeNum('7')">7</button><button class="num-btn" onclick="typeNum('8')">8</button><button class="num-btn" onclick="typeNum('9')">9</button>
+            <button class="num-btn" onclick="typeNum('4')">4</button><button class="num-btn" onclick="typeNum('5')">5</button><button class="num-btn" onclick="typeNum('6')">6</button>
+            <button class="num-btn" onclick="typeNum('1')">1</button><button class="num-btn" onclick="typeNum('2')">2</button><button class="num-btn" onclick="typeNum('3')">3</button>
+            <button class="num-btn btn-clear" onclick="backspaceNum()"><i class="fa-solid fa-delete-left"></i></button>
+            <button class="num-btn" onclick="typeNum('0')">0</button>
+            <button class="num-btn btn-enter" onclick="submitBarcode()"><i class="fa-solid fa-check"></i></button>
         </div>
+
+        <button class="btn-checkout" onclick="openCheckoutModal()">ENCAISSER</button>
+        <button class="btn-paymentlink" onclick="openPaymentLinkModal()"><i class="fa-solid fa-link"></i> DEMANDER UN PAIEMENT</button>
     </div>
 
-    <!-- Modales -->
-    <div class="modal-backdrop" id="settings-modal"><div class="modal-content">
-        <div class="modal-header"><span>Configuration</span><i class="fa-solid fa-xmark" onclick="closeModal('settings-modal')"></i></div>
-        <div class="form-group"><label>Nom de l'entreprise</label><input type="text" class="form-control" id="comp-name"></div>
-        <div class="form-group"><label>SIRET / Business ID</label><input type="text" class="form-control" id="comp-siret"></div>
-        <div class="form-group"><label>TVA (%)</label><input type="number" class="form-control" id="comp-tva"></div>
-        <div class="form-group"><label>Devise</label><select class="form-control" id="comp-currency"><option value="€">Euro €</option><option value="MAD">Dirham MAD</option></select></div>
-        <div class="form-group"><label>Nom Marchand pour Paiement</label><input type="text" class="form-control" id="comp-merchant"></div>
-        <div class="modal-actions"><button class="btn-modal btn-cancel" onclick="closeModal('settings-modal')">Annuler</button><button class="btn-modal btn-save" onclick="saveSettings()">Sauvegarder</button></div>
+    <!-- MODALES -->
+    <div class="modal-backdrop" id="settings-modal"><div class="modal-content"><div class="modal-header"><span>Configuration</span><i class="fa-solid fa-xmark" onclick="closeModal('settings-modal')"></i></div>
+        <div class="form-group"><label>Nom Entreprise</label><input id="comp-name" class="form-control"></div>
+        <div class="form-group"><label>TVA %</label><input id="comp-tva" type="number" class="form-control"></div>
+        <div class="form-group"><label>Devise</label><select id="comp-currency" class="form-control"></select></div>
+        <div class="modal-actions"><button class="btn-modal btn-cancel" onclick="closeModal('settings-modal')">Annuler</button><button class="btn-modal btn-save" onclick="saveSettings()">Sauver</button></div>
     </div></div>
 
-    <div class="modal-backdrop" id="add-product-modal"><div class="modal-content">
-        <div class="modal-header"><span>Créer Produit</span><i class="fa-solid fa-xmark" onclick="closeModal('add-product-modal')"></i></div>
-        <div class="form-group"><label>Code Barre</label><input type="text" class="form-control" id="prod-barcode"></div>
-        <div class="form-group"><label>Nom de l'article</label><input type="text" class="form-control" id="prod-name"></div>
-        <div class="form-group"><label>Prix Unitaire (€)</label><input type="number" step="0.01" class="form-control" id="prod-price"></div>
-        <div class="modal-actions"><button class="btn-modal btn-cancel" onclick="closeModal('add-product-modal')">Annuler</button><button class="btn-modal btn-save" onclick="saveProduct()">Ajouter</button></div>
-    </div></div>
-
-    <div class="modal-backdrop" id="checkout-modal"><div class="modal-content">
-        <div class="modal-header"><span>Validation du Ticket</span><i class="fa-solid fa-xmark" onclick="closeModal('checkout-modal')"></i></div>
-        <div class="form-group"><label>Mode de règlement</label><select class="form-control" id="pay-status"><option value="PAYÉ">Payé en totalité</option></select></div>
-        <div class="receipt-preview" id="receipt-preview"></div>
-        <div class="form-group"><label>Envoyer le ticket à</label><input type="text" class="form-control" id="client-contact"></div>
-        <div class="modal-actions"><button class="btn-modal" onclick="sendReceipt('sms')" style="background: var(--text-dark); color:white;">SMS</button><button class="btn-modal btn-save" onclick="sendReceipt('email')">Email</button></div>
-    </div></div>
-
-    <div class="modal-backdrop" id="paymentlink-modal"><div class="modal-content">
-        <div class="modal-header"><span>Lien de Paiement</span><i class="fa-solid fa-xmark" onclick="closeModal('paymentlink-modal')"></i></div>
-        <div class="form-group"><label>Montant à demander</label><input type="number" step="0.01" class="form-control" id="payment-amount"></div>
-        <div class="form-group"><label>Description</label><input type="text" class="form-control" id="payment-desc"></div>
-        <div class="form-group"><label>Envoyer à Tel/Email</label><input type="text" class="form-control" id="payment-contact"></div>
-        <div style="background:var(--bg-page); padding:15px; border-radius:var(--radius-btn); text-align:center; margin-bottom:15px;">
-          <div style="font-size:0.9rem; color:var(--text-gray)">Lien généré</div>
-          <div id="generated-link" style="font-weight:700; color:var(--brand-blue); word-break:break-all;"></div>
-        </div>
-        <div class="modal-actions">
-          <button class="btn-modal" onclick="sendPaymentLink('whatsapp')" style="background:#25D366; color:white;"><i class="fa-brands fa-whatsapp"></i></button>
-          <button class="btn-modal" onclick="sendPaymentLink('sms')" style="background:var(--text-dark); color:white;"><i class="fa-solid fa-comment-sms"></i></button>
-          <button class="btn-modal btn-save" onclick="sendPaymentLink('email')"><i class="fa-solid fa-envelope"></i></button>
-        </div>
-    </div></div>
-
-    <div class="modal-backdrop" id="history-modal"><div class="modal-content">
-        <div class="modal-header"><span>Historique du jour</span><i class="fa-solid fa-xmark" onclick="closeModal('history-modal')"></i></div>
-        <div id="history-list" style="font-size:0.9rem;">Aucune vente enregistrée</div>
-    </div></div>
+    <div class="modal-backdrop" id="products-modal"><div class="modal-content"><div class="modal-header"><span>Produits enregistrés</span><i class="fa-solid fa-xmark" onclick="closeModal('products-modal')"></i></div><div id="products-list"></div></div></div>
+    
+    <div class="modal-backdrop" id="add-product-modal"><div class="modal-content"><div class="modal-header"><span>Nouveau Produit</span><i class="fa-solid fa-xmark" onclick="closeModal('add-product-modal')"></i></div><div class="form-group"><label>Code Barre</label><input id="prod-barcode" class="form-control"></div><div class="form-group"><label>Nom</label><input id="prod-name" class="form-control"></div><div class="form-group"><label>Prix</label><input id="prod-price" type="number" step="0.01" class="form-control"></div><div class="modal-actions"><button class="btn-modal btn-cancel" onclick="closeModal('add-product-modal')">Annuler</button><button class="btn-modal btn-save" onclick="saveProduct()">Ajouter</button></div></div></div>
+    
+    <div class="modal-backdrop" id="checkout-modal"><div class="modal-content"><div class="modal-header"><span>Encaissement</span><i class="fa-solid fa-xmark" onclick="closeModal('checkout-modal')"></i></div><div id="receipt-preview" style="background:var(--bg-page); padding:15px; border-radius:12px; font-family:monospace; font-size:0.85rem; margin-bottom:15px;"></div><div class="form-group"><label>Email/Tel Client</label><input id="client-contact" class="form-control"></div><div class="modal-actions"><button class="btn-modal btn-save" onclick="sendReceipt()">Envoyer Ticket</button></div></div></div>
+    
+    <div class="modal-backdrop" id="paymentlink-modal"><div class="modal-content"><div class="modal-header"><span>Lien de Paiement</span><i class="fa-solid fa-xmark" onclick="closeModal('paymentlink-modal')"></i></div><div class="form-group"><label>Montant</label><input id="payment-amount" type="number" step="0.01" class="form-control"></div><div class="form-group"><label>Envoyer à</label><input id="payment-contact" placeholder="06... ou email" class="form-control"></div><div style="background:var(--bg-page); padding:12px; border-radius:12px; font-size:0.85rem; word-break:break-all; margin-bottom:15px;" id="generated-link"></div><div class="modal-actions"><button class="btn-modal" style="background:#25D366; color:white" onclick="sendPaymentLink('whatsapp')">WhatsApp</button><button class="btn-modal btn-save" onclick="sendPaymentLink('sms')">SMS</button></div></div></div>
 
     <script>
-        let currentInput = "";
-        let cart = [];
-        let salesHistory = JSON.parse(localStorage.getItem('novaultra_sales')) || [];
-        let dbProducts = JSON.parse(localStorage.getItem('novaultra_products')) || {};
-        let companySettings = JSON.parse(localStorage.getItem('novaultra_settings')) || { name: "Mon Entreprise", siret: "", tva: "20", currency: "€", merchant: "NovaPOS" };
+        let currentInput = ""; let cart = []; let currentMode = 1;
+        let dbProducts = JSON.parse(localStorage.getItem('novaultra_products')) || {'123456':{name:'Coca 33cl', price:'2.50'}, '789012':{name:'Pain', price:'1.20'}};
+        let companySettings = JSON.parse(localStorage.getItem('novaultra_settings')) || {name:"NovaPOS", tva:"20", currency:"EUR"};
 
-        function typeNum(num) {
-            if (currentInput.length < 15) {
-                currentInput += num;
-                document.getElementById('barcode-display').innerText = currentInput; // CORRIGÉ: "Saisie..." disparaît
+        const CURRENCIES = {
+            "EUR":"€ Euro","USD":"$ Dollar US","GBP":"£ Livre","JPY":"¥ Yen","CAD":"$ Dollar CA","AUD":"$ Dollar AU","CHF":"Fr Franc CH",
+            "CNY":"¥ Yuan","INR":"₹ Roupie","BRL":"R$ Real","RUB":"₽ Rouble","KRW":"₩ Won","MXN":"$ Peso MX","SGD":"$ Dollar SG",
+            "HKD":"$ Dollar HK","NZD":"$ Dollar NZ","TRY":"₺ Livre TR","ZAR":"R Rand","SEK":"kr Couronne","NOK":"kr Couronne NO",
+            "DKK":"kr Couronne DK","PLN":"zł Zloty","THB":"฿ Baht","IDR":"Rp Roupie ID","HUF":"Ft Forint","CZK":"Kč Couronne CZ",
+            "ILS":"₪ Shekel","CLP":"$ Peso CL","PHP":"₱ Peso PH","AED":"د.إ Dirham","COP":"$ Peso CO","SAR":"﷼ Riyal","MYR":"RM Ringgit",
+            "RON":"lei Leu","MAD":"د.م Dirham MA","NGN":"₦ Naira","BDT":"৳ Taka","PKR":"₨ Roupie PK","VND":"₫ Dong","UAH":"₴ Hryvnia"
+        };
+
+        function setScreenMode(mode){
+            currentMode = mode;
+            document.querySelectorAll('.dot').forEach(d=>d.classList.remove('active'));
+            document.querySelector(`.dot-${mode}`).classList.add('active');
+            
+            const colors = {1:'#0066FF', 2:'#F59E0B', 3:'#10B981', 4:'#EF4444', 5:'#8B5CF6', 6:'#EC4899'};
+            document.getElementById('terminal-screen').style.background = colors[mode];
+            document.querySelector('.btn-paymentlink').style.background = colors[mode];
+            document.querySelector('.btn-enter').style.background = colors[mode];
+            document.documentElement.style.setProperty('--brand-blue', colors[mode]);
+
+            if(mode === 6) openModal('products-modal');
+            if(mode === 4) clearCart();
+            if(mode === 5) openPaymentLinkModal();
+        }
+
+        function toggleTheme(){
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            if(body.dataset.theme === 'light'){ body.dataset.theme = 'dark'; icon.className = 'fa-solid fa-sun'; }
+            else { body.dataset.theme = 'light'; icon.className = 'fa-solid fa-moon'; }
+        }
+
+        function loadCurrencies(){
+            const select = document.getElementById('comp-currency');
+            for(const [code, name] of Object.entries(CURRENCIES)){
+                select.innerHTML += `<option value="${code}">${name}</option>`;
+            }
+            select.value = companySettings.currency;
+        }
+
+        function getCurrencySymbol(){ return CURRENCIES[companySettings.currency].split(' ')[0]; }
+
+        function typeNum(num) { currentInput += num; document.getElementById('barcode-display').innerText = currentInput; }
+        function backspaceNum() { currentInput = currentInput.slice(0, -1); document.getElementById('barcode-display').innerText = currentInput || "Saisie..."; }
+        function submitBarcode() {
+            if(!currentInput) return;
+            if(currentMode === 2){ applyDiscount(currentInput); } // Remise
+            else {
+                const p = dbProducts[currentInput];
+                if(p){ cart.push({...p, code:currentInput}); renderCart(); }
+                else{ document.getElementById('prod-barcode').value=currentInput; openModal('add-product-modal'); }
+            }
+            currentInput=""; document.getElementById('barcode-display').innerText="Saisie...";
+        }
+        function renderCart(){ let total=cart.reduce((s,i)=>s+parseFloat(i.price),0); document.getElementById('cart-total').innerText=total.toFixed(2)+" "+getCurrencySymbol(); }
+        
+        function applyDiscount(code){ const p=dbProducts[code]; if(p) { p.price = (p.price*0.9).toFixed(2); alert(`-10% sur ${p.name}`); } else alert("Produit non trouvé"); }
+        function addQuickProduct(){ const p=prompt("Prix produit rapide?"); if(p) {cart.push({name:"Produit Rapide", price:p, code:"RAPIDE"}); renderCart();} }
+        function clearCart(){ if(confirm("Vider le panier?")){cart=[]; renderCart();} }
+
+        function openModal(id){document.getElementById(id).classList.add('active'); if(id==='products-modal') loadProductsList();}
+        function closeModal(id){document.getElementById(id).classList.remove('active')}
+        
+        function loadProductsList(){
+            const list = document.getElementById('products-list'); list.innerHTML = "";
+            for(const [code, p] of Object.entries(dbProducts)){
+                list.innerHTML += `<div class="product-list-item"><span>${p.name} <small style="color:var(--text-gray)">#${code}</small></span><span>${p.price} ${getCurrencySymbol()}</span></div>`;
             }
         }
-        function backspaceNum() {
-            currentInput = currentInput.slice(0, -1);
-            document.getElementById('barcode-display').innerText = currentInput || "Saisie...";
-        }
-        function submitBarcode() {
-            if (!currentInput) return;
-            const product = dbProducts[currentInput];
-            if (product) { addToCart(currentInput, product); currentInput = ""; document.getElementById('barcode-display').innerText = "Saisie..."; }
-            else { openAddProductModal(currentInput); }
-        }
-        function addToCart(code, product) { cart.push({...product, code }); renderCart(); }
-        function removeFromCart(index) { cart.splice(index, 1); renderCart(); }
-        function renderCart() {
-            const list = document.getElementById('cart-list'); list.innerHTML = ""; let total = 0;
-            cart.forEach((item, index) => {
-                total += parseFloat(item.price);
-                list.innerHTML += `<div class="cart-item"><div class="item-info"><h4>${item.name}</h4><p>Ref: ${item.code}</p></div><div style="display:flex; align-items:center; gap:12px;"><span class="item-price">${parseFloat(item.price).toFixed(2)} ${companySettings.currency}</span><div class="icon-btn" style="width:28px; height:28px; border:none; background:#FEE2E2; color:var(--danger);" onclick="removeFromCart(${index})"><i class="fa-solid fa-xmark"></i></div></div></div>`;
-            });
-            document.getElementById('cart-total').innerText = total.toFixed(2) + " " + companySettings.currency;
-            document.getElementById('cart-count').innerText = cart.length;
-        }
 
-        // FONCTIONS DES 5 COULEURS
-        function applyDiscount() { if(cart.length===0) return alert("Panier vide"); cart.forEach(i => i.price = (parseFloat(i.price) * 0.9).toFixed(2)); renderCart(); alert("Remise -10% appliquée"); }
-        function simulateScan() { const codes = Object.keys(dbProducts); if(codes.length>0) { const randomCode = codes[Math.floor(Math.random()*codes.length)]; addToCart(randomCode, dbProducts[randomCode]); } else alert("Ajoute d'abord des produits"); }
-        function addQuickProduct() { const price = prompt("Prix du produit rapide?"); if(price) addToCart("RAPIDE"+Date.now(), {name:"Produit Rapide", price:price}); }
-        function clearCart() { if(confirm("Vider le panier?")) { cart=[]; renderCart(); } }
+        function openAddProductModal(code=""){document.getElementById('prod-barcode').value=code||Date.now().toString().slice(-6); openModal('add-product-modal')}
+        function saveProduct(){const c=prod-barcode.value,n=prod-name.value,p=prod-price.value; if(c&&n&&p){dbProducts[c]={name:n,price:p}; localStorage.setItem('novaultra_products',JSON.stringify(dbProducts)); closeModal('add-product-modal');}}
+        function saveSettings(){companySettings={name:comp-name.value,tva:comp-tva.value,currency:comp-currency.value}; localStorage.setItem('novaultra_settings',JSON.stringify(companySettings)); closeModal('settings-modal'); renderCart();}
+        
+        function openCheckoutModal(){ if(!cart.length) return alert("Panier vide"); let html=`<b>${companySettings.name}</b><br>`; cart.forEach(i=>html+=`${i.name}...${i.price}${getCurrencySymbol()}<br>`); html+=`<b>Total: ${document.getElementById('cart-total').innerText}</b>`; document.getElementById('receipt-preview').innerHTML=html; openModal('checkout-modal');}
+        function sendReceipt(){alert("Ticket envoyé"); cart=[]; renderCart(); closeModal('checkout-modal');}
+        
+        function openPaymentLinkModal(){document.getElementById('payment-amount').value=parseFloat(document.getElementById('cart-total').innerText)||''; generateLink(); openModal('paymentlink-modal')}
+        function generateLink(){const a=payment-amount.value; document.getElementById('generated-link').innerText=`https://novapos.link/pay/${Math.random().toString(36).slice(2,7)}?amount=${a}&cur=${companySettings.currency}`}
+        function sendPaymentLink(m){const l=generated-link.innerText,c=payment-contact.value; window.open(`https://wa.me/${c}?text=${encodeURIComponent(l)}`); closeModal('paymentlink-modal')}
 
-        function openModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-        function openAddProductModal(code = "") { document.getElementById('prod-barcode').value = code || currentInput || Date.now().toString().slice(-8); openModal('add-product-modal'); }
-        function saveProduct() {
-            const code = document.getElementById('prod-barcode').value; const name = document.getElementById('prod-name').value; const price = document.getElementById('prod-price').value;
-            if (code && name && price) { dbProducts[code] = { name, price }; localStorage.setItem('novaultra_products', JSON.stringify(dbProducts)); closeModal('add-product-modal'); currentInput = ""; document.getElementById('barcode-display').innerText = "Saisie..."; }
-        }
-        function loadSettingsToForm() { for(let key in companySettings) document.getElementById('comp-'+key).value = companySettings[key]; }
-        function saveSettings() {
-            companySettings = { name: comp-name.value, siret: comp-siret.value, tva: comp-tva.value, currency: comp-currency.value, merchant: comp-merchant.value };
-            localStorage.setItem('novaultra_settings', JSON.stringify(companySettings)); closeModal('settings-modal'); renderCart();
-        }
-
-        function openCheckoutModal() {
-            if (cart.length === 0) return alert("Le panier est vide."); buildReceiptPreview(); openModal('checkout-modal');
-        }
-        function buildReceiptPreview() {
-            let totalHT = cart.reduce((sum, item) => sum + parseFloat(item.price), 0); let html = `<div style="font-weight:bold;">${companySettings.name}</div><div>SIRET: ${companySettings.siret}</div><hr style="margin:10px 0; border-style:dashed;">`;
-            cart.forEach(item => { html += `<div style="display:flex; justify-content:space-between;"><span>${item.name}</span><span>${parseFloat(item.price).toFixed(2)} ${companySettings.currency}</span></div>`; });
-            const tva = totalHT * (parseFloat(companySettings.tva)/100); const totalTTC = totalHT + tva;
-            html += `<hr style="margin:10px 0; border-style:dashed;"><div style="display:flex; justify-content:space-between; font-weight:bold;"><span>TOTAL TTC</span><span>${totalTTC.toFixed(2)} ${companySettings.currency}</span></div>`;
-            document.getElementById('receipt-preview').innerHTML = html;
-        }
-        function sendReceipt(method) {
-            const contact = document.getElementById('client-contact').value; if (!contact) return alert("Saisir un contact.");
-            salesHistory.push({date: new Date().toLocaleString(), total: document.getElementById('cart-total').innerText, items: cart.length});
-            localStorage.setItem('novaultra_sales', JSON.stringify(salesHistory)); alert(`Ticket envoyé par ${method} à ${contact}`); cart = []; renderCart(); closeModal('checkout-modal');
-        }
-
-        function openPaymentLinkModal() {
-            const total = parseFloat(document.getElementById('cart-total').innerText); document.getElementById('payment-amount').value = total > 0? total : '';
-            document.getElementById('payment-desc').value = `Ticket NovaPOS - ${cart.length} articles`; generateLink(); openModal('paymentlink-modal');
-        }
-        function generateLink() { const amount = document.getElementById('payment-amount').value; const id = Math.random().toString(36).substring(2,8); document.getElementById('generated-link').innerText = `https://novapos.link/pay/${id}?amount=${amount}&to=${companySettings.merchant}`; }
-        function sendPaymentLink(method) { const link = document.getElementById('generated-link').innerText; const amount = document.getElementById('payment-amount').value; const contact = document.getElementById('payment-contact').value; const message = `${companySettings.merchant} vous demande ${amount}${companySettings.currency}\nPayer ici: ${link}`; if(method === 'whatsapp') window.open(`https://wa.me/${contact}?text=${encodeURIComponent(message)}`); if(method === 'sms') window.open(`sms:${contact}?body=${encodeURIComponent(message)}`); if(method === 'email') window.open(`mailto:${contact}?subject=Paiement&body=${encodeURIComponent(message)}`); closeModal('paymentlink-modal'); }
-        document.getElementById('payment-amount').addEventListener('input', generateLink);
-        function mockGoogleLogin() { document.getElementById('google-btn').innerHTML = `<img src="https://ui-avatars.com/api/?name=User&background=0066FF&color=fff&rounded=true" style="width:20px;"> <span>Connecté</span>`; }
-
-        loadSettingsToForm();
+        // INIT
+        loadCurrencies();
+        document.getElementById('comp-name').value=companySettings.name; 
+        document.getElementById('comp-tva').value=companySettings.tva;
+        setScreenMode(1); // Mode vente par défaut
     </script>
 </body>
 </html>
