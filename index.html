@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>NOVA POS Ultra V6.3</title>
+    <title>NOVA POS Ultra V6.4</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -22,7 +22,8 @@
         
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
         
-        body { background-color: var(--bg-page); color: var(--text-dark); height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
+        /* CORRECTION 1 : Fixation stricte de la hauteur pour éviter le scroll de la page entière */
+        body { background-color: var(--bg-page); color: var(--text-dark); height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
 
         header { display: flex; justify-content: space-between; align-items: center; padding: 0 16px; background: var(--surface-white); border-bottom: 1px solid var(--border-light); height: 60px; flex-shrink: 0; }
         .brand { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 800; color: var(--text-dark); }
@@ -34,9 +35,10 @@
         
         .icon-btn { background: var(--bg-page); border: none; color: var(--text-gray); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;}
 
-        .swipe-container { display: flex; width: 600%; flex: 1; transition: transform 0.3s ease-out; overflow: hidden; }
+        .swipe-container { display: flex; width: 600%; flex: 1; transition: transform 0.3s ease-out; min-height: 0; }
         
-        .screen { width: 16.666%; padding: 12px; max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; height: 100%; }
+        /* CORRECTION 2 : Ajout d'un padding-bottom pour contrer la barre de navigation Android */
+        .screen { width: 16.666%; padding: 12px; padding-bottom: 24px; display: flex; flex-direction: column; height: 100%; min-height: 0;}
 
         /* Écrans Terminaux (Haut) */
         .terminal-screen { color: white; padding: 15px; border-radius: var(--radius-xl); box-shadow: var(--shadow-soft); display: flex; flex-direction: column; flex-shrink: 0;}
@@ -66,16 +68,20 @@
         .num-btn:active { background: var(--border-light); transform: scale(0.95); }
         .btn-enter { background: var(--brand-blue); color: white; border: none; }
 
-        /* Correction Boutons "Géants" */
-        .action-row { display: flex; gap: 8px; margin-bottom: 5px;}
-        .btn { flex-shrink: 0; padding: 12px 14px; border: none; border-radius: var(--radius-btn); font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: 0.1s; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; width: 100%; margin-bottom: 10px; }
+        /* CORRECTION 3 : Architecture des boutons réparée */
+        .btn { padding: 14px 10px; border: none; border-radius: var(--radius-btn); font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: 0.1s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn:active { transform: scale(0.97); }
         .btn-primary { background: var(--brand-blue); color: white; }
         .btn-secondary { background: var(--surface-white); color: var(--text-dark); border: 1px solid var(--border-light); }
-        .mt-auto { margin-top: auto; } /* Pousse le bouton vers le bas sans l'étirer */
+        
+        .btn-block { width: 100%; } /* Pour les boutons seuls (ex: Historique, Remise) */
+        .action-row { display: flex; gap: 10px; width: 100%; } /* Pour les boutons côte à côte */
+        .action-row .btn { flex: 1; }
+        
+        .mt-auto { margin-top: auto; } /* Pousse proprement le bloc d'action vers le bas */
 
         /* Formulaires & Listes */
-        .scrollable-content { flex: 1; overflow-y: auto; margin-bottom: 10px; }
+        .scrollable-content { flex: 1; overflow-y: auto; margin-bottom: 10px; min-height: 0; }
         .form-group { margin-bottom: 12px; text-align: left;}
         .form-group label { display: block; font-size: 0.8rem; color: var(--text-gray); font-weight: 600; margin-bottom: 4px; }
         .form-control { width: 100%; padding: 10px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: var(--radius-btn); font-size: 1rem; color: var(--text-dark); outline: none; }
@@ -89,7 +95,8 @@
         .dots-menu { cursor: pointer; padding: 10px; color: var(--text-gray); font-size: 1.2rem;}
 
         /* Scanner */
-        #reader { width: 100%; border-radius: 16px; overflow: hidden; margin-bottom: 10px; background: black; }
+        .scanner-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 15px;}
+        #reader { width: 100%; min-height: 250px; border-radius: 16px; overflow: hidden; background: #000; border: 2px dashed var(--border-light); display: flex; align-items: center; justify-content: center; color: var(--text-gray);}
 
         /* Modales */
         .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; z-index: 100; transition: 0.2s; }
@@ -152,14 +159,16 @@
             <div class="terminal-screen"><div class="total-label">REMISE</div><div class="total-display" id="discount-total">0.00 €</div></div>
             <div class="scrollable-content">
                 <div class="form-group"><label>Montant de la remise</label><input id="discount-amount" type="number" class="form-control" placeholder="Ex: 5.00"></div>
-                <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:10px; margin-bottom:15px;">
-                    <button class="btn btn-secondary" style="margin:0;" onclick="setDiscountCalc(5)">-5%</button>
-                    <button class="btn btn-secondary" style="margin:0;" onclick="setDiscountCalc(10)">-10%</button>
-                    <button class="btn btn-secondary" style="margin:0;" onclick="setDiscountCalc(20)">-20%</button>
+                <div class="action-row" style="margin-bottom:15px;">
+                    <button class="btn btn-secondary" onclick="setDiscountCalc(5)">-5%</button>
+                    <button class="btn btn-secondary" onclick="setDiscountCalc(10)">-10%</button>
+                    <button class="btn btn-secondary" onclick="setDiscountCalc(20)">-20%</button>
                 </div>
                 <div class="form-group"><label>Raison (Optionnel)</label><input id="discount-comment" class="form-control" placeholder="Geste commercial..."></div>
             </div>
-            <button class="btn btn-primary mt-auto" style="background:var(--brand-yellow); color:#111827;" onclick="applyDiscount()">APPLIQUER LA REMISE</button>
+            <div class="mt-auto">
+                <button class="btn btn-primary btn-block" style="background:var(--brand-yellow); color:#111827;" onclick="applyDiscount()">APPLIQUER LA REMISE</button>
+            </div>
         </div>
 
         <div class="screen screen-2">
@@ -168,19 +177,23 @@
                 <div class="form-group"><label>Nom du Client</label><input id="client-name" class="form-control" placeholder="Nom Prénom"></div>
                 <div class="form-group"><label>Nombre d'échéances</label><input id="split-count" type="number" value="3" class="form-control"></div>
             </div>
-            <button class="btn btn-primary mt-auto" style="background:var(--brand-green);" onclick="createSplitPayment()">CRÉER L'ÉCHÉANCIER</button>
+            <div class="mt-auto">
+                <button class="btn btn-primary btn-block" style="background:var(--brand-green);" onclick="createSplitPayment()">CRÉER L'ÉCHÉANCIER</button>
+            </div>
         </div>
 
         <div class="screen screen-3">
             <div class="terminal-screen"><div class="total-label">INVENTAIRE</div><div class="total-display" style="font-size:1.8rem"><span id="product-count">0</span> Réf.</div></div>
             <div id="products-list" class="scrollable-content"></div>
-            <button class="btn btn-secondary mt-auto" onclick="openAddProductModal()">+ Créer un Produit</button>
+            <div class="mt-auto">
+                <button class="btn btn-secondary btn-block" onclick="openAddProductModal()">+ Créer un Produit</button>
+            </div>
         </div>
 
         <div class="screen screen-4">
             <div class="terminal-screen"><div class="total-label">SCANNEUR</div><div class="total-display" style="font-size:1.5rem">Caméra</div></div>
-            <div class="scrollable-content">
-                <div id="reader"></div>
+            <div class="scanner-container">
+                <div id="reader"><i class="fa-solid fa-camera fa-3x"></i></div>
             </div>
             <div class="action-row mt-auto">
                 <button class="btn btn-secondary" onclick="stopScanner()">Arrêter</button>
@@ -191,7 +204,9 @@
         <div class="screen screen-5">
             <div class="terminal-screen"><div class="total-label">RECETTES DU JOUR</div><div class="total-display" id="history-total">0.00 €</div></div>
             <div id="history-list" class="scrollable-content"></div>
-            <button class="btn btn-primary mt-auto" style="background:var(--brand-pink);" onclick="openSettlementModal()"><i class="fa-solid fa-file-invoice"></i> CLÔTURE (SETTLEMENT)</button>
+            <div class="mt-auto">
+                <button class="btn btn-primary btn-block" style="background:var(--brand-pink);" onclick="openSettlementModal()"><i class="fa-solid fa-file-invoice"></i> CLÔTURE (SETTLEMENT)</button>
+            </div>
         </div>
     </div>
 
@@ -210,7 +225,7 @@
                     <button class="btn-toggle" data-method="whatsapp" onclick="setLinkMethod('whatsapp')"><i class="fa-brands fa-whatsapp"></i></button>
                 </div>
                 <div class="form-group" id="contact-input-group">
-                    <input id="payment-contact" class="form-control" placeholder="Numéro ou Email..." style="text-align:center;">
+                    <input id="payment-contact" class="form-control" placeholder="Numéro de téléphone..." style="text-align:center;">
                 </div>
                 <button class="btn-send-link" onclick="sendPaymentLink()"><i class="fa-regular fa-paper-plane"></i> ENVOYER</button>
             </div>
@@ -223,44 +238,44 @@
                 <span>Fiche Produit</span>
                 <i class="fa-solid fa-xmark" onclick="closeModal('add-product-modal')"></i>
             </div>
-            <div class="form-group"><label>Code Barre</label><input id="prod-barcode" class="form-control" placeholder="Ex: 123456789"></div>
+            <div class="form-group"><label>Code Barre (Optionnel)</label><input id="prod-barcode" class="form-control" placeholder="Ex: 123456789"></div>
             <div class="form-group"><label>Nom du Produit</label><input id="prod-name" class="form-control"></div>
             <div class="form-group"><label>Description / Détails</label><input id="prod-details" class="form-control" placeholder="Couleur, taille, info..."></div>
             <div class="action-row">
                 <div class="form-group" style="flex:1;"><label>Prix Unitaire</label><input id="prod-price" type="number" step="0.01" class="form-control"></div>
                 <div class="form-group" style="flex:1;"><label>Stock Initial</label><input id="prod-stock" type="number" value="10" class="form-control"></div>
             </div>
-            <button class="btn btn-primary" onclick="saveProduct()">Enregistrer</button>
+            <button class="btn btn-primary btn-block" onclick="saveProduct()">Enregistrer le produit</button>
         </div>
     </div>
 
     <div class="modal-backdrop" id="settings-modal"><div class="modal-content"><div class="modal-header"><span>Paramètres</span><i class="fa-solid fa-xmark" onclick="closeModal('settings-modal')"></i></div>
         <div class="form-group"><label>Thème</label><select id="theme-select" class="form-control"><option value="light">Clair</option><option value="dark">Sombre</option></select></div>
         <div class="form-group"><label>Devise</label><select id="comp-currency" class="form-control"></select></div>
-        <button class="btn btn-primary" style="margin-bottom:20px;" onclick="saveSettings()">Sauvegarder Apparence</button>
+        <button class="btn btn-primary btn-block" style="margin-bottom:20px;" onclick="saveSettings()">Sauvegarder Apparence</button>
         <p style="font-size:0.8rem; color:var(--text-gray); margin-bottom:10px; font-weight:bold;">SAUVEGARDE & RESTAURATION</p>
-        <button class="btn btn-secondary" onclick="backupData()"><i class="fa-solid fa-download"></i> Backup vers Téléphone</button>
-        <button class="btn btn-secondary" onclick="triggerRestore()"><i class="fa-solid fa-upload"></i> Restaurer Backup</button>
+        <button class="btn btn-secondary btn-block" style="margin-bottom:10px;" onclick="backupData()"><i class="fa-solid fa-download"></i> Backup vers Téléphone</button>
+        <button class="btn btn-secondary btn-block" onclick="triggerRestore()"><i class="fa-solid fa-upload"></i> Restaurer Backup</button>
     </div></div>
 
     <div class="modal-backdrop" id="settlement-modal"><div class="modal-content"><div class="modal-header"><span>Rapport de Caisse</span><i class="fa-solid fa-xmark" onclick="closeModal('settlement-modal')"></i></div>
         <div id="settlement-report" style="background:white; color:black; padding:15px; border-radius:8px; font-family:monospace; font-size:0.85rem; margin-bottom:15px; border:1px dashed #CCC;"></div>
-        <div class="action-row">
-            <button class="btn btn-secondary" style="color:var(--brand-blue);" onclick="downloadPDF()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
-            <button class="btn btn-secondary" style="color:var(--brand-green);" onclick="sendSettlementEmail()"><i class="fa-regular fa-envelope"></i> Mail</button>
+        <div class="action-row" style="margin-bottom:10px;">
+            <button class="btn btn-secondary" style="color:var(--brand-blue);" onclick="downloadPDF()"><i class="fa-solid fa-file-pdf"></i> Générer PDF</button>
+            <button class="btn btn-secondary" style="color:var(--brand-green);" onclick="sendSettlementEmail()"><i class="fa-regular fa-envelope"></i> Envoi Mail</button>
         </div>
-        <button class="btn btn-primary" style="background:var(--brand-red);" onclick="closeDay()"><i class="fa-solid fa-power-off"></i> CLÔTURER CAISSE</button>
+        <button class="btn btn-primary btn-block" style="background:var(--brand-red);" onclick="closeDay()"><i class="fa-solid fa-power-off"></i> CLÔTURER CAISSE</button>
     </div></div>
 
     <div class="modal-backdrop" id="admin-modal"><div class="modal-content"><div class="modal-header"><span>Sécurité</span><i class="fa-solid fa-xmark" onclick="closeModal('admin-modal')"></i></div>
         <div class="form-group"><label>Code Admin</label><input id="admin-code" type="password" class="form-control"></div>
-        <button class="btn btn-primary" onclick="checkAdminCode()">Valider</button>
+        <button class="btn btn-primary btn-block" onclick="checkAdminCode()">Valider</button>
     </div></div>
 
     <div class="modal-backdrop" id="product-options-modal"><div class="modal-content"><div class="modal-header"><span>Action</span><i class="fa-solid fa-xmark" onclick="closeModal('product-options-modal')"></i></div>
-        <button class="btn btn-primary" onclick="addProductToCartFromList()">Ajouter au Panier</button>
-        <button class="btn btn-secondary" onclick="editProductFromOptions()">Modifier la fiche</button>
-        <button class="btn btn-secondary" style="color:var(--brand-red);" onclick="deleteProductFromOptions()">Supprimer du catalogue</button>
+        <button class="btn btn-primary btn-block" style="margin-bottom:10px;" onclick="addProductToCartFromList()">Ajouter au Panier</button>
+        <button class="btn btn-secondary btn-block" style="margin-bottom:10px;" onclick="editProductFromOptions()">Modifier la fiche</button>
+        <button class="btn btn-secondary btn-block" style="color:var(--brand-red);" onclick="deleteProductFromOptions()">Supprimer du catalogue</button>
     </div></div>
 
     <script>
@@ -269,7 +284,7 @@
         let html5QrcodeScanner = null;
         
         // Base de données
-        let cart = []; // Mémorise: {code, name, price, qty}
+        let cart = []; 
         let salesHistory = JSON.parse(localStorage.getItem('novaultra_sales')) || [];
         let dbProducts = JSON.parse(localStorage.getItem('novaultra_products')) || {
             '1111':{name:'Service A', price:'15.00', stock: 100, details: 'Base'}, 
@@ -328,8 +343,7 @@
             if(p){ 
                 addToCartLogic(currentInput, p);
             } else { 
-                // Code inconnu -> On propose de l'ajouter
-                let choice = confirm("Code inconnu. Voulez-vous créer ce produit ?\n(Annuler pour utiliser comme montant libre)");
+                let choice = confirm("Code inconnu. Voulez-vous créer ce produit ?\n(Annulez pour utiliser en montant libre)");
                 if(choice) {
                     openAddProductModal(currentInput);
                 } else {
@@ -523,6 +537,7 @@
 
         // --- SCANNER CAMERA ---
         function startScanner() {
+            document.getElementById('reader').innerHTML = ''; // Nettoyer l'icône
             if(html5QrcodeScanner == null) html5QrcodeScanner = new Html5Qrcode("reader");
             html5QrcodeScanner.start(
                 { facingMode: "environment" }, { fps: 10, qrbox: {width: 250, height: 250} },
@@ -537,9 +552,14 @@
                     }
                 },
                 (err) => {}
-            ).catch(err => alert("Erreur d'accès à la caméra."));
+            ).catch(err => alert("Erreur d'accès à la caméra. Vérifiez les permissions."));
         }
-        function stopScanner() { if(html5QrcodeScanner) html5QrcodeScanner.stop().catch(err => console.log(err)); }
+        function stopScanner() { 
+            if(html5QrcodeScanner) {
+                html5QrcodeScanner.stop().catch(err => console.log(err));
+                document.getElementById('reader').innerHTML = '<i class="fa-solid fa-camera fa-3x"></i>';
+            }
+        }
 
         // --- SETTLEMENT & PDF ---
         function loadHistory(){
@@ -559,7 +579,7 @@
                 <div>Date : ${new Date().toLocaleDateString()}</div>
                 <div>Heure : ${new Date().toLocaleTimeString()}</div>
                 <hr style="border:1px dashed #333; margin:10px 0;">
-                <div>Nombre de Transactions : ${salesHistory.length}</div>
+                <div>Transactions du jour : ${salesHistory.length}</div>
                 <div style="font-size:1.1rem; font-weight:bold; margin-top:10px;">CA TOTAL : ${total.toFixed(2)} ${CURRENCIES[companySettings.currency]}</div>
                 <hr style="border:1px dashed #333; margin:10px 0;">
                 <div style="text-align:center; font-size:0.8rem;">Généré par NovaPOS Ultra</div>
