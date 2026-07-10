@@ -5,137 +5,422 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>NOVA POS Ultra V6.5</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        :root { --brand-blue: #0066FF; --brand-yellow: #FBBF24; --brand-green: #22C55E; --brand-red: #EF4444; --brand-purple: #A855F7; --brand-pink: #EC4899; --bg-page: #0F172A; --surface-white: #1E293B; --text-dark: #F8FAFC; --text-gray: #94A3B8; --border-light: #334155; }
-        [data-theme="light"] { --bg-page: #F3F4F6; --surface-white: #FFFFFF; --text-dark: #111827; --text-gray: #6B7280; --border-light: #E5E7EB; }
+        :root {
+            --brand-blue: #0066FF; --brand-yellow: #FBBF24; --brand-green: #22C55E; 
+            --brand-red: #EF4444; --brand-purple: #A855F7; --brand-pink: #EC4899;
+            --bg-page: #0F172A; --surface-white: #1E293B; --text-dark: #F8FAFC; 
+            --text-gray: #94A3B8; --border-light: #334155;
+            --radius-xl: 20px; --radius-btn: 12px; --shadow-soft: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        [data-theme="light"] { 
+            --bg-page: #F3F4F6; --surface-white: #FFFFFF; --text-dark: #111827; 
+            --text-gray: #6B7280; --border-light: #E5E7EB; 
+        }
         
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; user-select: none; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
+        
         body { background-color: var(--bg-page); color: var(--text-dark); height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
-        
+
         header { display: flex; justify-content: space-between; align-items: center; padding: 0 16px; background: var(--surface-white); border-bottom: 1px solid var(--border-light); height: 60px; flex-shrink: 0; }
-        .brand { font-size: 1.1rem; font-weight: 800; }
-        .icon-btn { background: var(--bg-page); border: none; color: var(--text-gray); width: 38px; height: 38px; border-radius: 50%; cursor: pointer;}
+        .brand { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 800; color: var(--text-dark); }
+        .brand i { color: var(--brand-blue); font-size: 1.3rem;}
+        .brand-logo { width: 30px; height: 30px; border-radius: 8px; object-fit: cover; display: none; }
+        .brand-logo.active { display: block; }
         
-        .swipe-container { display: flex; width: 600%; flex: 1; transition: transform 0.3s ease-out; overflow: hidden; }
-        .screen { width: 16.666%; padding: 12px; display: flex; flex-direction: column; height: 100%; }
+        .page-indicator { display: flex; gap: 6px; }
+        .page-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-light); transition: 0.3s; }
+        .page-dot.active { width: 18px; border-radius: 10px; }
         
-        .terminal-screen { color: white; padding: 15px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); margin-bottom: 10px; }
-        .total-display { font-size: 2.2rem; font-weight: 800; text-align: center; }
+        .icon-btn { background: var(--bg-page); border: none; color: var(--text-gray); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;}
+
+        .swipe-container { display: flex; width: 600%; flex: 1; transition: transform 0.3s ease-out; min-height: 0; }
         
-        .cart-list-blue { flex: 1; overflow-y: auto; background: rgba(0,0,0,0.1); border-radius: 12px; padding: 10px; font-size: 0.9rem; }
-        .numpad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-        .num-btn { background: var(--surface-white); border: 1px solid var(--border-light); height: 45px; border-radius: 8px; font-size: 1.2rem; cursor: pointer; }
+        .screen { width: 16.666%; padding: 12px; padding-bottom: 24px; display: flex; flex-direction: column; height: 100%; min-height: 0;}
+
+        /* Écrans Terminaux (Haut) */
+        .terminal-screen { color: white; padding: 15px; border-radius: var(--radius-xl); box-shadow: var(--shadow-soft); display: flex; flex-direction: column; flex-shrink: 0;}
+        .screen-0 .terminal-screen { background: var(--brand-blue); flex: 1; min-height: 0; margin-bottom: 10px; }
+        .screen-1 .terminal-screen { background: var(--brand-yellow); color: #111827; margin-bottom: 15px;}
+        .screen-2 .terminal-screen { background: var(--brand-green); margin-bottom: 15px;}
+        .screen-3 .terminal-screen { background: var(--brand-red); margin-bottom: 15px;}
+        .screen-4 .terminal-screen { background: var(--brand-purple); margin-bottom: 15px;}
+        .screen-5 .terminal-screen { background: var(--brand-pink); margin-bottom: 15px;}
+
+        .total-label { font-size: 0.8rem; font-weight: 600; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; text-align: center;}
+        .total-display { font-size: 2.8rem; font-weight: 800; margin: 2px 0 8px; line-height: 1; text-align: center;}
+        .input-box { background: rgba(255,255,255,0.15); padding: 8px; border-radius: 10px; font-size: 1rem; letter-spacing: 2px; text-align: center; font-family: monospace;}
+
+        /* Panier DANS le Bleu */
+        .cart-list-blue { flex: 1; overflow-y: auto; margin-top: 10px; background: rgba(0,0,0,0.1); border-radius: 12px; padding: 5px; }
+        .cart-item-blue { display: flex; justify-content: space-between; align-items: center; padding: 10px; font-size: 0.9rem; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .cart-item-blue:last-child { border-bottom: none; }
+        .cart-qty-badge { background: white; color: var(--brand-blue); padding: 2px 6px; border-radius: 6px; font-size: 0.75rem; margin-right: 8px;}
+        .cart-item-blue span:last-child { display: flex; align-items: center; gap: 10px; }
+        .cart-item-blue i { padding: 5px; cursor: pointer; color: rgba(255,255,255,0.6); font-size: 1.1rem; }
+
+        /* Numpad & Actions */
+        .bottom-actions { flex-shrink: 0; }
+        .numpad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+        .num-btn { background: var(--surface-white); border: 1px solid var(--border-light); color: var(--text-dark); height: 50px; border-radius: var(--radius-btn); font-size: 1.3rem; font-weight: 600; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .num-btn:active { background: var(--border-light); transform: scale(0.95); }
         .btn-enter { background: var(--brand-blue); color: white; border: none; }
+
+        .btn { padding: 14px 10px; border: none; border-radius: var(--radius-btn); font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: 0.1s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: var(--brand-blue); color: white; }
+        .btn-secondary { background: var(--surface-white); color: var(--text-dark); border: 1px solid var(--border-light); }
         
-        .action-row { display: flex; gap: 8px; margin-top: 8px; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-block { width: 100%; }
+        .action-row { display: flex; gap: 10px; width: 100%; }
+        .action-row .btn { flex: 1; }
         
-        .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; z-index: 100; }
+        .mt-auto { margin-top: auto; }
+
+        /* Formulaires & Listes */
+        .scrollable-content { flex: 1; overflow-y: auto; margin-bottom: 10px; min-height: 0; }
+        .form-group { margin-bottom: 12px; text-align: left;}
+        .form-group label { display: block; font-size: 0.8rem; color: var(--text-gray); font-weight: 600; margin-bottom: 4px; }
+        .form-control { width: 100%; padding: 10px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: var(--radius-btn); font-size: 1rem; color: var(--text-dark); outline: none; }
+        .form-control:focus { border-color: var(--brand-blue); }
+
+        /* Inventaire Cliquable */
+        .product-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--surface-white); border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--border-light); cursor: pointer;}
+        .product-list-item:active { background: var(--border-light); }
+        .stock-badge { font-size: 0.75rem; background: var(--bg-page); color: var(--text-gray); padding: 2px 6px; border-radius: 4px; margin-left: 6px; }
+        .stock-red { color: white; background: var(--brand-red); font-weight: bold; }
+        .stock-green { color: white; background: var(--brand-green); font-weight: bold; }
+        .dots-menu { cursor: pointer; padding: 10px; color: var(--text-gray); font-size: 1.2rem;}
+
+        /* Scanner */
+        .scanner-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 15px;}
+        #reader { width: 100%; min-height: 250px; border-radius: 16px; overflow: hidden; background: #000; border: 2px dashed var(--border-light); display: flex; align-items: center; justify-content: center; color: var(--text-gray);}
+
+        /* Modales */
+        .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; z-index: 100; transition: 0.2s; }
         .modal-backdrop.active { opacity: 1; pointer-events: auto; }
-        .modal-content { background: var(--surface-white); padding: 20px; width: 90%; max-width: 400px; border-radius: 20px; max-height: 90vh; overflow-y: auto; }
-        .form-group { margin-bottom: 10px; text-align: left; }
-        .form-control { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-light); background: var(--bg-page); color: var(--text-dark); }
+        .modal-content { background: var(--surface-white); border-radius: var(--radius-xl); padding: 20px; width: 90%; max-width: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); transform: translateY(20px); transition: 0.3s; max-height: 90dvh; overflow-y: auto;}
+        .modal-backdrop.active .modal-content { transform: translateY(0); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-weight: 800; font-size: 1.1rem; }
         
-        .stock-indicator { padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; color: white; }
-        .bg-red { background: var(--brand-red); }
-        .bg-orange { background: var(--brand-yellow); }
-        .bg-green { background: var(--brand-green); }
+        /* Lien de Paiement */
+        .payment-link-card { background: var(--bg-page); border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 15px; border: 1px solid var(--border-light); }
+        .payment-link-amount { font-size: 2.5rem; font-weight: 800; margin: 5px 0 20px; color: var(--text-dark); }
+        .toggle-methods { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .btn-toggle { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--border-light); color: var(--text-gray); font-size: 1.3rem; background: var(--surface-white); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .btn-toggle[data-method="sms"].active { border-color: var(--brand-blue); color: var(--brand-blue); background: rgba(0, 102, 255, 0.1); }
+        .btn-toggle[data-method="email"].active { border-color: var(--brand-red); color: var(--brand-red); background: rgba(239, 68, 68, 0.1); }
+        .btn-toggle[data-method="whatsapp"].active { border-color: var(--brand-green); color: var(--brand-green); background: rgba(34, 197, 94, 0.1); }
+        .btn-send-link { background: var(--brand-blue); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-size: 1.1rem; cursor: pointer; font-weight: bold; }
+
+        /* Backup rename */
+        .backup-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg-page); border-radius: 8px; margin-bottom: 8px; }
+        .backup-item button { margin-left: 10px; padding: 5px 10px; border: none; border-radius: 6px; cursor: pointer; }
     </style>
 </head>
 <body data-theme="light">
 
-    <!-- Header -->
+    <input type="file" id="restore-file" accept=".json" style="display: none;">
+
     <header>
-        <div class="brand"><i class="fa-solid fa-cube" style="color:var(--brand-blue)"></i> NOVA POS</div>
+        <div class="brand">
+            <img class="brand-logo" id="header-logo" src="" alt="Logo">
+            <i class="fa-solid fa-cube" id="header-icon"></i>
+            <span id="header-company-name">NOVA POS</span>
+        </div>
+        <div class="page-indicator">
+            <div class="page-dot active"></div><div class="page-dot"></div><div class="page-dot"></div><div class="page-dot"></div><div class="page-dot"></div><div class="page-dot"></div>
+        </div>
         <button class="icon-btn" onclick="openModal('settings-modal')"><i class="fa-solid fa-gear"></i></button>
     </header>
 
     <div class="swipe-container" id="swipe-container">
-        <!-- VENTE (BLEU) -->
-        <div class="screen" style="background:var(--brand-blue)">
-            <div class="terminal-screen" style="background:rgba(0,0,0,0.2)">
+
+        <!-- ÉCRAN 0: VENTE -->
+        <div class="screen screen-0">
+            <div class="terminal-screen">
+                <div class="total-label">À ENCAISSER</div>
                 <div class="total-display" id="cart-total">0.00 €</div>
+                <div class="input-box" id="barcode-display">Saisie...</div>
                 <div class="cart-list-blue" id="cart-list"></div>
             </div>
-            <!-- Form Client -->
-            <div class="action-row">
-                <input id="client-info" class="form-control" placeholder="Nom Client / Tel / Adresse">
-            </div>
-            <div class="numpad-grid" style="margin-top:10px">
-                <button class="num-btn" onclick="typeNum('7')">7</button><button class="num-btn" onclick="typeNum('8')">8</button><button class="num-btn" onclick="typeNum('9')">9</button>
-                <button class="num-btn" onclick="typeNum('4')">4</button><button class="num-btn" onclick="typeNum('5')">5</button><button class="num-btn" onclick="typeNum('6')">6</button>
-                <button class="num-btn" onclick="typeNum('1')">1</button><button class="num-btn" onclick="typeNum('2')">2</button><button class="num-btn" onclick="typeNum('3')">3</button>
-                <button class="num-btn" onclick="backspaceNum()"><i class="fa-solid fa-backspace"></i></button>
-                <button class="num-btn" onclick="typeNum('0')">0</button>
-                <button class="num-btn btn-enter" onclick="submitBarcode()">+</button>
-            </div>
-            <div class="action-row">
-                <button class="btn" onclick="openPaymentLink()">Lien</button>
-                <button class="btn btn-enter" onclick="processCheckout('CS')">ENCAISSER (CS)</button>
+            
+            <div class="bottom-actions">
+                <div class="numpad-grid">
+                    <button class="num-btn" onclick="typeNum('7')">7</button><button class="num-btn" onclick="typeNum('8')">8</button><button class="num-btn" onclick="typeNum('9')">9</button>
+                    <button class="num-btn" onclick="typeNum('4')">4</button><button class="num-btn" onclick="typeNum('5')">5</button><button class="num-btn" onclick="typeNum('6')">6</button>
+                    <button class="num-btn" onclick="typeNum('1')">1</button><button class="num-btn" onclick="typeNum('2')">2</button><button class="num-btn" onclick="typeNum('3')">3</button>
+                    <button class="num-btn" onclick="backspaceNum()"><i class="fa-solid fa-delete-left" style="color:var(--brand-red);"></i></button>
+                    <button class="num-btn" onclick="typeNum('0')">0</button>
+                    <button class="num-btn btn-enter" onclick="submitBarcode()"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                
+                <div class="action-row">
+                    <button class="btn btn-secondary" onclick="openPaymentLink()"><i class="fa-solid fa-link" style="color:var(--brand-blue);"></i> Demande</button>
+                    <button class="btn btn-primary" onclick="processCheckout()"><i class="fa-solid fa-cash-register"></i> ENCAISSER</button>
+                </div>
             </div>
         </div>
-        <!-- (Les autres écrans suivent la même logique...) -->
+
+        <!-- ÉCRAN 1: REMISE -->
+        <div class="screen screen-1">
+            <div class="terminal-screen"><div class="total-label">REMISE</div><div class="total-display" id="discount-total">0.00 €</div></div>
+            <div class="scrollable-content">
+                <div class="form-group"><label>Montant de la remise</label><input id="discount-amount" type="number" class="form-control" placeholder="Ex: 5.00"></div>
+                <div class="action-row" style="margin-bottom:15px;">
+                    <button class="btn btn-secondary" onclick="setDiscountCalc(5)">-5%</button>
+                    <button class="btn btn-secondary" onclick="setDiscountCalc(10)">-10%</button>
+                    <button class="btn btn-secondary" onclick="setDiscountCalc(20)">-20%</button>
+                </div>
+                <div class="form-group"><label>Raison (Optionnel)</label><input id="discount-comment" class="form-control" placeholder="Geste commercial..."></div>
+            </div>
+            <div class="mt-auto">
+                <button class="btn btn-primary btn-block" style="background:var(--brand-yellow); color:#111827;" onclick="applyDiscount()">APPLIQUER LA REMISE</button>
+            </div>
+        </div>
+
+        <!-- ÉCRAN 2: PAIEMENT ÉCHELONNÉ -->
+        <div class="screen screen-2">
+            <div class="terminal-screen"><div class="total-label">ÉCHELONNÉ</div><div class="total-display" id="split-total">0.00 €</div></div>
+            <div class="scrollable-content">
+                <div class="form-group"><label>Nom du Client</label><input id="client-name" class="form-control" placeholder="Nom Prénom"></div>
+                <div class="form-group"><label>Adresse</label><input id="client-address" class="form-control" placeholder="Adresse complète"></div>
+                <div class="form-group"><label>Téléphone</label><input id="client-phone" class="form-control" placeholder="Numéro de téléphone"></div>
+                <div class="form-group"><label>Email</label><input id="client-email" class="form-control" placeholder="Email du client"></div>
+                <div class="form-group"><label>Nombre d'échéances</label><input id="split-count" type="number" value="3" class="form-control"></div>
+                <div class="form-group"><label>Référence de vente échelonnée</label>
+                    <select id="sale-type" class="form-control" onchange="updateReferenceNumber()">
+                        <option value="CR">CR - Crédit</option>
+                        <option value="CS">CS - Cash Sales</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Numéro de référence (6 chiffres)</label>
+                    <input id="reference-number" class="form-control" placeholder="000000" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,6)">
+                </div>
+            </div>
+            <div class="mt-auto">
+                <button class="btn btn-primary btn-block" style="background:var(--brand-green);" onclick="createSplitPayment()">CRÉER L'ÉCHÉANCIER</button>
+            </div>
+        </div>
+
+        <!-- ÉCRAN 3: INVENTAIRE -->
+        <div class="screen screen-3">
+            <div class="terminal-screen"><div class="total-label">INVENTAIRE</div><div class="total-display" style="font-size:1.8rem"><span id="product-count">0</span> Réf.</div></div>
+            <div id="products-list" class="scrollable-content"></div>
+            <div class="mt-auto">
+                <button class="btn btn-secondary btn-block" onclick="openAddProductModal()">+ Créer un Produit</button>
+            </div>
+        </div>
+
+        <!-- ÉCRAN 4: SCANNEUR -->
+        <div class="screen screen-4">
+            <div class="terminal-screen"><div class="total-label">SCANNEUR</div><div class="total-display" style="font-size:1.5rem">Caméra</div></div>
+            <div class="scanner-container">
+                <div id="reader"><i class="fa-solid fa-camera fa-3x"></i></div>
+            </div>
+            <div class="action-row mt-auto">
+                <button class="btn btn-secondary" onclick="stopScanner()">Arrêter</button>
+                <button class="btn btn-primary" style="background:var(--brand-purple);" onclick="startScanner()"><i class="fa-solid fa-qrcode"></i> DÉMARRER</button>
+            </div>
+        </div>
+
+        <!-- ÉCRAN 5: HISTORIQUE -->
+        <div class="screen screen-5">
+            <div class="terminal-screen"><div class="total-label">RECETTES DU JOUR</div><div class="total-display" id="history-total">0.00 €</div></div>
+            <div id="history-list" class="scrollable-content"></div>
+            <div class="mt-auto">
+                <button class="btn btn-primary btn-block" style="background:var(--brand-pink);" onclick="openSettlementModal()"><i class="fa-solid fa-file-invoice"></i> CLÔTURE (SETTLEMENT)</button>
+            </div>
+        </div>
     </div>
 
-    <!-- Modale Settings (Entreprise) -->
+    <!-- MODALES -->
+    <div class="modal-backdrop" id="payment-link-modal">
+        <div class="modal-content" style="text-align: center;">
+            <div class="modal-header">
+                <span>Demande de Paiement</span>
+                <i class="fa-solid fa-xmark" style="cursor:pointer; color:var(--text-gray);" onclick="closeModal('payment-link-modal')"></i>
+            </div>
+            <div class="payment-link-card">
+                <div style="font-weight: 600; font-size: 0.9rem; color:var(--text-gray);">MONTANT</div>
+                <div class="payment-link-amount" id="link-amount-display">0.00 €</div>
+                <div class="toggle-methods">
+                    <button class="btn-toggle active" data-method="sms" onclick="setLinkMethod('sms')"><i class="fa-solid fa-comment-sms"></i></button>
+                    <button class="btn-toggle" data-method="email" onclick="setLinkMethod('email')"><i class="fa-solid fa-envelope"></i></button>
+                    <button class="btn-toggle" data-method="whatsapp" onclick="setLinkMethod('whatsapp')"><i class="fa-brands fa-whatsapp"></i></button>
+                </div>
+                <div class="form-group" id="contact-input-group">
+                    <input id="payment-contact" class="form-control" placeholder="Numéro de téléphone..." style="text-align:center;">
+                </div>
+                <button class="btn-send-link" onclick="sendPaymentLink()"><i class="fa-regular fa-paper-plane"></i> ENVOYER</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="add-product-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Fiche Produit</span>
+                <i class="fa-solid fa-xmark" onclick="closeModal('add-product-modal')"></i>
+            </div>
+            <div class="form-group"><label>Code Barre (Optionnel)</label><input id="prod-barcode" class="form-control" placeholder="Ex: 123456789"></div>
+            <div class="form-group"><label>Nom du Produit</label><input id="prod-name" class="form-control"></div>
+            <div class="form-group"><label>Description / Détails</label><input id="prod-details" class="form-control" placeholder="Couleur, taille, info..."></div>
+            <div class="action-row">
+                <div class="form-group" style="flex:1;"><label>Prix Unitaire</label><input id="prod-price" type="number" step="0.01" class="form-control"></div>
+                <div class="form-group" style="flex:1;"><label>Stock Initial</label><input id="prod-stock" type="number" value="10" class="form-control"></div>
+            </div>
+            <button class="btn btn-primary btn-block" onclick="saveProduct()">Enregistrer le produit</button>
+        </div>
+    </div>
+
     <div class="modal-backdrop" id="settings-modal">
         <div class="modal-content">
-            <h3>Paramètres Entreprise</h3>
-            <div class="form-group"><label>Nom Entreprise</label><input id="set-name" class="form-control"></div>
-            <div class="form-group"><label>Adresse</label><input id="set-addr" class="form-control"></div>
-            <div class="form-group"><label>Tel / WhatsApp</label><input id="set-tel" class="form-control"></div>
-            <div class="form-group"><label>Email</label><input id="set-mail" class="form-control"></div>
-            <div class="form-group"><label>Nom du Backup</label><input id="set-backup-name" class="form-control" value="Backup_NovaPOS"></div>
-            <button class="btn btn-enter" onclick="saveCompanySettings()">Sauvegarder</button>
+            <div class="modal-header"><span>Paramètres</span><i class="fa-solid fa-xmark" onclick="closeModal('settings-modal')"></i></div>
+            
+            <!-- Paramètres entreprise -->
+            <div class="form-group"><label>Nom de l'entreprise</label><input id="comp-name" class="form-control" placeholder="Nom de l'entreprise"></div>
+            <div class="form-group"><label>Adresse</label><input id="comp-address" class="form-control" placeholder="Adresse"></div>
+            <div class="form-group"><label>Téléphone Office / WhatsApp</label><input id="comp-phone" class="form-control" placeholder="Téléphone"></div>
+            <div class="form-group"><label>Email</label><input id="comp-email" class="form-control" placeholder="Email"></div>
+            <div class="form-group"><label>Logo URL</label><input id="comp-logo" class="form-control" placeholder="URL du logo"></div>
+            
+            <div class="form-group"><label>Thème</label><select id="theme-select" class="form-control"><option value="light">Clair</option><option value="dark">Sombre</option></select></div>
+            <div class="form-group"><label>Devise</label><select id="comp-currency" class="form-control"></select></div>
+            <button class="btn btn-primary btn-block" style="margin-bottom:20px;" onclick="saveSettings()">Sauvegarder Paramètres</button>
+            
+            <p style="font-size:0.8rem; color:var(--text-gray); margin-bottom:10px; font-weight:bold;">SAUVEGARDE & RESTAURATION</p>
+            <div class="form-group"><label>Nom du backup</label><input id="backup-name" class="form-control" placeholder="Nom personnalisé"></div>
+            <button class="btn btn-secondary btn-block" style="margin-bottom:10px;" onclick="backupData()"><i class="fa-solid fa-download"></i> Backup vers Téléphone</button>
+            <button class="btn btn-secondary btn-block" style="margin-bottom:10px;" onclick="triggerRestore()"><i class="fa-solid fa-upload"></i> Restaurer Backup</button>
+            
+            <p style="font-size:0.8rem; color:var(--text-gray); margin:15px 0 10px; font-weight:bold;">BACKUPS EXISTANTS</p>
+            <div id="backup-list" class="scrollable-content" style="max-height: 200px;"></div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="settlement-modal">
+        <div class="modal-content">
+            <div class="modal-header"><span>Rapport de Caisse</span><i class="fa-solid fa-xmark" onclick="closeModal('settlement-modal')"></i></div>
+            <div id="settlement-report" style="background:white; color:black; padding:15px; border-radius:8px; font-family:monospace; font-size:0.85rem; margin-bottom:15px; border:1px dashed #CCC;"></div>
+            <div class="action-row" style="margin-bottom:10px;">
+                <button class="btn btn-secondary" style="color:var(--brand-blue);" onclick="downloadPDF()"><i class="fa-solid fa-file-pdf"></i> Générer PDF</button>
+                <button class="btn btn-secondary" style="color:var(--brand-green);" onclick="sendSettlementEmail()"><i class="fa-regular fa-envelope"></i> Envoi Mail</button>
+            </div>
+            <button class="btn btn-primary btn-block" style="background:var(--brand-red);" onclick="closeDay()"><i class="fa-solid fa-power-off"></i> CLÔTURER CAISSE</button>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="admin-modal">
+        <div class="modal-content">
+            <div class="modal-header"><span>Sécurité</span><i class="fa-solid fa-xmark" onclick="closeModal('admin-modal')"></i></div>
+            <div class="form-group"><label>Code Admin</label><input id="admin-code" type="password" class="form-control"></div>
+            <button class="btn btn-primary btn-block" onclick="checkAdminCode()">Valider</button>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="product-options-modal">
+        <div class="modal-content">
+            <div class="modal-header"><span>Action</span><i class="fa-solid fa-xmark" onclick="closeModal('product-options-modal')"></i></div>
+            <button class="btn btn-primary btn-block" style="margin-bottom:10px;" onclick="addProductToCartFromList()">Ajouter au Panier</button>
+            <button class="btn btn-secondary btn-block" style="margin-bottom:10px;" onclick="editProductFromOptions()">Modifier la fiche</button>
+            <button class="btn btn-secondary btn-block" style="color:var(--brand-red);" onclick="deleteProductFromOptions()">Supprimer du catalogue</button>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="client-modal">
+        <div class="modal-content">
+            <div class="modal-header"><span>Information Client</span><i class="fa-solid fa-xmark" onclick="closeModal('client-modal')"></i></div>
+            <div class="form-group"><label>Nom du Client</label><input id="client-info-name" class="form-control" placeholder="Nom complet"></div>
+            <div class="form-group"><label>Adresse</label><input id="client-info-address" class="form-control" placeholder="Adresse"></div>
+            <div class="form-group"><label>Téléphone</label><input id="client-info-phone" class="form-control" placeholder="Téléphone"></div>
+            <div class="form-group"><label>Email</label><input id="client-info-email" class="form-control" placeholder="Email"></div>
+            <button class="btn btn-primary btn-block" onclick="saveClientInfo()">Enregistrer & Continuer</button>
         </div>
     </div>
 
     <script>
-        // Data & State
-        let dbProducts = JSON.parse(localStorage.getItem('novaultra_products')) || {'1111':{name:'Prod A', price:'10', stock:12}};
-        let company = JSON.parse(localStorage.getItem('novaultra_company')) || {name:'', addr:'', tel:'', mail:''};
-        let cart = [];
+        const ADMIN_CODE = "0000"; 
+        let currentScreen = 0; let startX = 0; let selectedProductCode = null;
+        let html5QrcodeScanner = null;
+        let currentClientInfo = { name: '', address: '', phone: '', email: '' };
+        
+        // Base de données
+        let cart = []; 
+        let salesHistory = JSON.parse(localStorage.getItem('novaultra_sales')) || [];
+        let dbProducts = JSON.parse(localStorage.getItem('novaultra_products')) || {
+            '1111':{name:'Service A', price:'15.00', stock: 100, details: 'Base'}, 
+            '2222':{name:'Produit B', price:'25.00', stock: 5, details: 'Premium'}
+        };
+        let companySettings = JSON.parse(localStorage.getItem('novaultra_settings')) || {
+            currency:"EUR", 
+            theme:"light",
+            companyName: "NOVA POS",
+            address: "",
+            phone: "",
+            email: "",
+            logo: ""
+        };
+        let backups = JSON.parse(localStorage.getItem('novaultra_backups')) || {};
+        
+        const CURRENCIES = {"EUR":"€","USD":"$","GBP":"£","MAD":"DH","CHF":"CHF"};
+        let currentLinkMethod = 'sms';
 
-        function saveCompanySettings() {
-            company = {
-                name: document.getElementById('set-name').value,
-                addr: document.getElementById('set-addr').value,
-                tel: document.getElementById('set-tel').value,
-                mail: document.getElementById('set-mail').value
-            };
-            localStorage.setItem('novaultra_company', JSON.stringify(company));
-            alert("Sauvegardé !"); closeModal('settings-modal');
+        // Initialisation
+        function init() {
+            // Peupler la liste des devises
+            for(const [code, sym] of Object.entries(CURRENCIES)) {
+                document.getElementById('comp-currency').innerHTML += `<option value="${code}">${code} (${sym})</option>`;
+            }
+            
+            // Charger les paramètres
+            document.getElementById('comp-currency').value = companySettings.currency;
+            document.getElementById('theme-select').value = companySettings.theme;
+            document.getElementById('comp-name').value = companySettings.companyName || '';
+            document.getElementById('comp-address').value = companySettings.address || '';
+            document.getElementById('comp-phone').value = companySettings.phone || '';
+            document.getElementById('comp-email').value = companySettings.email || '';
+            document.getElementById('comp-logo').value = companySettings.logo || '';
+            
+            document.body.dataset.theme = companySettings.theme;
+            updateCompanyHeader();
+            
+            renderCart(); 
+            updateScreen();
+            loadBackupList();
         }
 
-        function processCheckout(type) {
-            let ref = type + "-" + Math.floor(100000 + Math.random() * 900000);
-            let client = document.getElementById('client-info').value;
-            // Enregistrement de la vente avec la réf, le type (CS/CR) et les infos client...
-            alert("Vente enregistrée avec ref: " + ref);
-            // ... logique d'encaissement
+        function updateCompanyHeader() {
+            const logo = document.getElementById('header-logo');
+            const icon = document.getElementById('header-icon');
+            const name = document.getElementById('header-company-name');
+            
+            name.textContent = companySettings.companyName || 'NOVA POS';
+            
+            if (companySettings.logo) {
+                logo.src = companySettings.logo;
+                logo.classList.add('active');
+                icon.style.display = 'none';
+            } else {
+                logo.classList.remove('active');
+                icon.style.display = 'inline';
+            }
         }
 
-        // Logique Stock
-        function getStockClass(stock) {
-            if (stock <= 0) return 'bg-red';
-            if (stock < 10) return 'bg-orange';
-            return 'bg-green';
-        }
+        // SWIPE LOGIC
+        document.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+        document.addEventListener('touchend', e => {
+            let endX = e.changedTouches[0].clientX;
+            if(e.target.closest('.modal-backdrop') || e.target.closest('.scrollable-content') || e.target.closest('.cart-list-blue')) return;
+            if(startX - endX > 50 && currentScreen < 5) currentScreen++;
+            if(endX - startX > 50 && currentScreen > 0) currentScreen--;
+            updateScreen();
+        });
 
-        // Logic Backup avec nom
-        function backupData() {
-            let name = document.getElementById('set-backup-name').value || 'Backup';
-            // ... export JSON avec le nom choisi
-        }
-
-        // Utils
-        function openModal(id){document.getElementById(id).classList.add('active')}
-        function closeModal(id){document.getElementById(id).classList.remove('active')}
-        function typeNum(n) { /* ... */ }
-        function backspaceNum() { /* ... */ }
-        function submitBarcode() { /* ... */ }
-    </script>
-</body>
-</html>
+        function updateScreen(){
+            document.getElementById('swipe-container').style.transform = `translateX(-${currentScreen * 16.666}%)`;
+            const colors = ['#0066FF','#FBBF24','#22C55E','#EF4444','#A855F7','#EC4899'];
+            document.querySelectorAll('.page-dot').forEach((d,i)=>{
+                d.classList.toggle('active', i===currentScreen
