@@ -508,6 +508,7 @@
             <div class="input-group"><div class="input-label">Phone / WhatsApp</div><input type="text" id="set-tel" class="input-field"></div>
             <div class="input-group"><div class="input-label">Email</div><input type="email" id="set-email" class="input-field"></div>
             <div class="input-group"><div class="input-label">PayPal.Me Username</div><input type="text" id="set-paypal" class="input-field" placeholder="ex: MyCompany"></div>
+            <div class="input-group"><div class="input-label">Receipt Message</div><input type="text" id="set-receipt-msg" class="input-field" placeholder="Thank you for your visit!"></div>
             <div class="input-group"><div class="input-label">Logo URL</div><input type="text" id="set-logo" class="input-field" placeholder="https://..."></div>
             <div class="input-group"><div class="input-label">Language</div>
                 <select id="set-lang" class="input-field">
@@ -592,7 +593,7 @@
         </div>
     </div>
 
-    <!-- Receipt Selection Modal (NEW) -->
+    <!-- Receipt Selection Modal -->
     <div class="modal-overlay" id="modal-receipt-action">
         <div class="modal-dialog" style="text-align:center;">
             <div class="modal-header">
@@ -671,7 +672,6 @@
         let popupScanInstance = null;
         let selProdCode = null;
         
-        // Nouvelle variable pour stocker la dernière transaction
         let lastSale = null;
 
         let products = JSON.parse(localStorage.getItem('nv_products')) || {
@@ -688,6 +688,7 @@
             phone: '',
             email: '',
             paypalLink: '',
+            receiptMessage: 'Thank you for your visit!',
             logo: '',
             lang: 'en',
             currency: 'EUR',
@@ -730,6 +731,7 @@
             document.getElementById('set-tel').value = settings.phone;
             document.getElementById('set-email').value = settings.email;
             document.getElementById('set-paypal').value = settings.paypalLink || '';
+            document.getElementById('set-receipt-msg').value = settings.receiptMessage || '';
             document.getElementById('set-logo').value = settings.logo;
             document.getElementById('set-lang').value = settings.lang;
             document.getElementById('set-currency').value = settings.currency;
@@ -897,7 +899,6 @@
         function doCheckout(client) {
             let tot = cartTotal();
             
-            // Mise à jour de l'inventaire
             cart.forEach(it => {
                 if (it.code !== 'FREE' && products[it.code]) {
                     products[it.code].stock = Math.max(0, (products[it.code].stock || 0) - it.qty);
@@ -905,21 +906,17 @@
             });
             localStorage.setItem('nv_products', JSON.stringify(products));
             
-            // Création de l'enregistrement de vente
             const saleRecord = { total: tot, items: [...cart], date: new Date().toISOString(), client: client };
             sales.push(saleRecord);
             localStorage.setItem('nv_sales', JSON.stringify(sales));
             
-            // Sauvegarder pour le reçu
             lastSale = saleRecord;
             
-            // Reset de la caisse
             cart = [];
             inputBuf = '';
             renderCart();
             updateAll();
             
-            // Préparer et afficher la fenêtre du reçu
             document.getElementById('receipt-action-total').textContent = fmt(tot);
             document.getElementById('receipt-phone').value = client ? (client.phone || '') : '';
             document.getElementById('receipt-email').value = client ? (client.email || '') : '';
@@ -944,7 +941,13 @@
             txt += `------------------------\n`;
             txt += `TOTAL: ${fmt(lastSale.total)}\n`;
             txt += `------------------------\n`;
-            txt += `Thank you for your visit!`;
+            
+            // USE THE CUSTOM MESSAGE FROM SETTINGS
+            if (settings.receiptMessage && settings.receiptMessage.trim() !== '') {
+                txt += `${settings.receiptMessage}`;
+            } else {
+                txt += `Thank you for your visit!`;
+            }
             
             return txt;
         }
@@ -1267,6 +1270,7 @@
             document.getElementById('set-tel').value = settings.phone;
             document.getElementById('set-email').value = settings.email;
             document.getElementById('set-paypal').value = settings.paypalLink || '';
+            document.getElementById('set-receipt-msg').value = settings.receiptMessage || '';
             document.getElementById('set-logo').value = settings.logo;
             document.getElementById('set-lang').value = settings.lang;
             document.getElementById('set-currency').value = settings.currency;
@@ -1281,6 +1285,7 @@
             settings.phone = document.getElementById('set-tel').value;
             settings.email = document.getElementById('set-email').value;
             settings.paypalLink = document.getElementById('set-paypal').value;
+            settings.receiptMessage = document.getElementById('set-receipt-msg').value;
             settings.logo = document.getElementById('set-logo').value;
             settings.lang = document.getElementById('set-lang').value;
             settings.currency = document.getElementById('set-currency').value;
