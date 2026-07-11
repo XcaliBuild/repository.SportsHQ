@@ -39,14 +39,12 @@
         .swipe-wrapper { flex: 1; overflow: hidden; position: relative; touch-action: pan-y; }
         .swipe-container { display: flex; width: 700%; height: 100%; transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
         
-        /* ADAPTATION RESPONSIVE & BOUTONS SURÉLEVÉS */
         .screen { width: 14.285%; padding: 12px; display: flex; flex-direction: column; overflow-y: auto; padding-bottom: max(20px, env(safe-area-inset-bottom)); }
 
         .terminal-box { color: white; padding: 14px; border-radius: 16px; text-align: center; margin-bottom: 10px; flex-shrink: 0; }
         .terminal-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.9; }
         .terminal-amount { font-size: 2rem; font-weight: 800; margin: 4px 0; }
 
-        /* THEME ECRAN 0 COHÉRENT & FONT LED */
         .screen-0 { background: transparent; color: var(--text-dark); }
         .screen-0 .terminal-box { background: #0A0A0A; border: 2px solid var(--border-light); }
         #cash-total { font-family: 'Share Tech Mono', monospace; font-size: 2.7rem; color: var(--brand-cyan); text-shadow: 0 0 10px rgba(6,182,212,0.4); }
@@ -94,7 +92,6 @@
         
         .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 1000; }
         .modal-overlay.active { display: flex; }
-        /* Modal Responsive Bottom Safe Area */
         .modal-dialog { background: var(--surface-white); border-radius: 20px; padding: 20px; width: 92%; max-width: 400px; max-height: 85vh; overflow-y: auto; margin-bottom: env(safe-area-inset-bottom); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 1.1rem; margin-bottom: 15px; }
         .modal-close { cursor: pointer; color: var(--text-gray); font-size: 1.3rem; padding: 5px; }
@@ -103,7 +100,6 @@
         .method-btn { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--border-light); background: var(--surface-white); color: var(--text-gray); font-size: 1.2rem; }
         .method-btn.active { border-color: var(--brand-blue); color: var(--brand-blue); background: rgba(0, 102, 255, 0.1); }
         #scanner-view, #popup-scanner-view { width: 100%; min-height: 250px; border-radius: 12px; background: #000; display: flex; align-items: center; justify-content: center; border: 2px dashed var(--border-light); }
-        .receipt-logo { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; margin: 0 auto 5px; display: block; }
     </style>
 </head>
 <body data-theme="dark">
@@ -115,7 +111,8 @@
         </div>
     </div>
 
-    <input type="file" id="restore-file-input" accept=".json" style="display: none;">
+    <!-- J'ai retiré le "accept" strict pour que tu puisses choisir ton fichier sur n'importe quel appareil -->
+    <input type="file" id="restore-file-input" style="display: none;">
 
     <header>
         <div class="logo-container">
@@ -220,7 +217,7 @@
 
     <!-- ===== MODALS ===== -->
     
-    <!-- SCANNER POPUP FIX -->
+    <!-- SCANNER POPUP -->
     <div class="modal-overlay" id="modal-scanner-popup" style="z-index: 1050;">
         <div class="modal-dialog">
             <div class="modal-header"><span>📷 Scan Code</span><i class="fa-solid fa-xmark modal-close" onclick="stopPopupScan()"></i></div>
@@ -233,7 +230,15 @@
     <div class="modal-overlay" id="modal-settings">
         <div class="modal-dialog">
             <div class="modal-header"><span>⚙️ Settings</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settings')"></i></div>
+            
             <div class="input-group"><div class="input-label">Company</div><input type="text" id="set-name" class="input-field"></div>
+            
+            <!-- NOUVEAU : AUTH KEY -->
+            <div class="input-group">
+                <div class="input-label" style="color:var(--brand-pink);"><i class="fa-solid fa-lock"></i> Auth Key (Security)</div>
+                <input type="password" id="set-auth-key" class="input-field" placeholder="Secret key to protect backups">
+            </div>
+
             <div class="action-row">
                 <div class="input-group flex-1"><div class="input-label">Phone</div><input type="text" id="set-tel" class="input-field"></div>
                 <div class="input-group flex-1"><div class="input-label">Currency</div><select id="set-currency" class="input-field"></select></div>
@@ -242,10 +247,12 @@
             <div class="input-group"><div class="input-label">Receipt Msg</div><input type="text" id="set-receipt-msg" class="input-field"></div>
             <div class="input-group"><div class="input-label">Theme</div><select id="set-theme" class="input-field"><option value="dark">AMOLED Dark</option><option value="light">Light</option></select></div>
             <button class="btn btn-blue btn-block" onclick="saveSettings()" style="margin-bottom:15px;">Save Config</button>
-            <div style="font-weight:700; margin:15px 0 8px;">💾 DATA BACKUP</div>
-            <input type="text" id="bk-name" class="input-field" placeholder="Backup name" style="margin-bottom:8px;">
-            <div class="action-row"><button class="btn btn-green flex-1" onclick="doBackup()">Save</button><button class="btn btn-white flex-1" onclick="document.getElementById('restore-file-input').click()">Load</button></div>
-            <div id="bk-list" style="margin-top:10px; max-height:100px; overflow-y:auto;"></div>
+            
+            <div style="font-weight:700; margin:15px 0 8px;">💾 DATA EXPORT & IMPORT</div>
+            <div class="action-row">
+                <button class="btn btn-green flex-1" onclick="doBackup()"><i class="fa-solid fa-download"></i> Backup (.nvp)</button>
+                <button class="btn btn-white flex-1" onclick="document.getElementById('restore-file-input').click()"><i class="fa-solid fa-upload"></i> Restore</button>
+            </div>
         </div>
     </div>
 
@@ -338,8 +345,9 @@
         let products = JSON.parse(localStorage.getItem('nv_products')) || {};
         let clients = JSON.parse(localStorage.getItem('nv_clients')) || {};
         let sales = JSON.parse(localStorage.getItem('nv_sales')) || [];
-        let settings = JSON.parse(localStorage.getItem('nv_settings')) || { companyName: 'NOVA POS', phone: '', paypalLink: '', receiptMessage: 'Thank you!', lang: 'en', currency: 'EUR', theme: 'dark' };
-        let backups = JSON.parse(localStorage.getItem('nv_backups')) || {};
+        
+        // Ajout de "authKey" dans les settings par défaut
+        let settings = JSON.parse(localStorage.getItem('nv_settings')) || { companyName: 'NOVA POS', authKey: '', phone: '', paypalLink: '', receiptMessage: 'Thank you!', lang: 'en', currency: 'EUR', theme: 'dark' };
 
         const CURRENCIES = { "EUR":"€", "USD":"$", "GBP":"£", "CHF":"CHF", "CAD":"CA$", "AUD":"A$", "MAD":"DH", "XOF":"CFA", "MUR":"Rs" };
 
@@ -351,11 +359,15 @@
         function init() {
             const curSel = document.getElementById('set-currency'); curSel.innerHTML = '';
             for (let [c, l] of Object.entries(CURRENCIES)) curSel.innerHTML += `<option value="${c}">${c} ${l}</option>`;
-            document.getElementById('set-name').value = settings.companyName; document.getElementById('set-tel').value = settings.phone;
-            document.getElementById('set-paypal').value = settings.paypalLink; document.getElementById('set-receipt-msg').value = settings.receiptMessage;
-            document.getElementById('set-currency').value = settings.currency; document.getElementById('set-theme').value = settings.theme;
+            document.getElementById('set-name').value = settings.companyName; 
+            document.getElementById('set-auth-key').value = settings.authKey || ''; // Init auth key
+            document.getElementById('set-tel').value = settings.phone;
+            document.getElementById('set-paypal').value = settings.paypalLink; 
+            document.getElementById('set-receipt-msg').value = settings.receiptMessage;
+            document.getElementById('set-currency').value = settings.currency; 
+            document.getElementById('set-theme').value = settings.theme;
             document.body.dataset.theme = settings.theme;
-            updateAll(); loadInv(); loadCli(); loadHist(); loadBkList();
+            updateAll(); loadInv(); loadCli(); loadHist();
         }
 
         function updateAll() {
@@ -476,7 +488,6 @@
         }
         function openAddProd(c='') { ['pr-code','pr-name','pr-price'].forEach(id=>document.getElementById(id).value=''); document.getElementById('pr-code').value=c; document.getElementById('pr-stock').value='10'; openModal('modal-product'); }
         
-        // CORRECTION BUG SCANNER / SAVE
         function saveProd() {
             let c = document.getElementById('pr-code').value || 'SKU'+Date.now().toString().slice(-4), n = document.getElementById('pr-name').value, pr = document.getElementById('pr-price').value;
             if(!n || !pr) return alert('⚠️ Name & Price required!');
@@ -529,21 +540,80 @@
         }
 
         function openSettings() { init(); openModal('modal-settings'); }
+        
         function saveSettings() {
-            settings = { companyName:document.getElementById('set-name').value, phone:document.getElementById('set-tel').value, paypalLink:document.getElementById('set-paypal').value, receiptMessage:document.getElementById('set-receipt-msg').value, lang:document.getElementById('set-lang').value, currency:document.getElementById('set-currency').value, theme:document.getElementById('set-theme').value };
-            localStorage.setItem('nv_settings', JSON.stringify(settings)); document.body.dataset.theme = settings.theme; updateAll(); closeModal('modal-settings'); alert('✅ Saved');
+            settings = { 
+                companyName: document.getElementById('set-name').value, 
+                authKey: document.getElementById('set-auth-key').value, // Sauvegarde de la clé
+                phone: document.getElementById('set-tel').value, 
+                paypalLink: document.getElementById('set-paypal').value, 
+                receiptMessage: document.getElementById('set-receipt-msg').value, 
+                lang: document.getElementById('set-lang').value, 
+                currency: document.getElementById('set-currency').value, 
+                theme: document.getElementById('set-theme').value 
+            };
+            localStorage.setItem('nv_settings', JSON.stringify(settings)); 
+            document.body.dataset.theme = settings.theme; 
+            updateAll(); 
+            closeModal('modal-settings'); 
+            alert('✅ Configuration Saved');
         }
+        
+        // NOUVELLE FONCTION DE BACKUP
         function doBackup() {
-            let n = document.getElementById('bk-name').value || 'backup_'+Date.now(); backups[n] = {products, clients, sales, settings, date:new Date()}; localStorage.setItem('nv_backups', JSON.stringify(backups));
-            let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(backups[n])])); a.download = n+'.json'; a.click(); loadBkList();
-        }
-        function loadBkList() {
-            document.getElementById('bk-list').innerHTML = Object.keys(backups).map(n => `<div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg-page);margin-bottom:4px;"><span>${n}</span><button onclick="if(confirm('Restore?')){products=backups['${n}'].products;clients=backups['${n}'].clients;localStorage.setItem('nv_products',JSON.stringify(products));localStorage.setItem('nv_clients',JSON.stringify(clients));location.reload();}" style="background:var(--brand-blue);color:white;border:none;padding:4px;">Restore</button></div>`).join('');
+            const d = new Date();
+            // Format: DD-MM-YYYY
+            const dateStr = d.toLocaleDateString('fr-FR').replace(/\//g, '-');
+            // Format: HHhMM
+            const timeStr = d.getHours().toString().padStart(2, '0') + 'h' + d.getMinutes().toString().padStart(2, '0');
+            
+            // Format custom demandé : backup(12-07-2026@01h08).nvp
+            const name = `backup(${dateStr}@${timeStr})`;
+            
+            // On intègre l'Auth Key dans le fichier
+            const data = { products, clients, sales, settings, authKey: settings.authKey, date: d.toISOString() };
+            
+            const blob = new Blob([JSON.stringify(data)], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = name + '.nvp'; // Nouvelle extension !
+            a.click();
+            
+            alert(`💾 Backup exported to Downloads folder as:\n\n${name}.nvp`);
         }
 
+        // NOUVELLE FONCTION DE RESTORE (Sécurisée & Sans restriction d'extension)
         document.getElementById('restore-file-input').addEventListener('change', e => {
-            let r = new FileReader(); r.onload = ev => { try { let d = JSON.parse(ev.target.result); if(confirm('Restore?')) { ['products','clients','sales','settings'].forEach(k => { if(d[k]) { window[k] = d[k]; localStorage.setItem('nv_'+k, JSON.stringify(d[k])); } }); location.reload(); } } catch(err) { alert('Error'); } };
-            if(e.target.files[0]) r.readAsText(e.target.files[0]);
+            let f = e.target.files[0];
+            if(!f) return;
+            
+            let r = new FileReader(); 
+            r.onload = ev => { 
+                try { 
+                    let d = JSON.parse(ev.target.result); 
+                    
+                    // VÉRIFICATION DE SÉCURITÉ AUTH KEY
+                    // Si l'appareil a une clé, et que le fichier a une clé différente = ON BLOQUE
+                    if (settings.authKey && settings.authKey.trim() !== '') {
+                        if (d.authKey !== settings.authKey) {
+                            alert('❌ ACCESS DENIED: Authentication Key mismatch! You are not authorized to restore this backup.');
+                            return;
+                        }
+                    }
+
+                    if(confirm('Restore this backup? Current data will be replaced.')) { 
+                        ['products','clients','sales','settings'].forEach(k => { 
+                            if(d[k]) { window[k] = d[k]; localStorage.setItem('nv_'+k, JSON.stringify(d[k])); } 
+                        }); 
+                        alert('✅ Successfully Restored');
+                        location.reload(); 
+                    } 
+                } catch(err) { 
+                    alert('❌ Invalid Backup File. Make sure it is a valid .nvp file.'); 
+                } 
+            };
+            r.readAsText(f);
+            e.target.value = ''; // Reset l'input pour pouvoir re-sélectionner le même fichier si besoin
         });
 
         init(); renderCart(); goScreen();
