@@ -9,7 +9,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            --brand-cyan: #06B6D4; /* Cyan pour NOVA */
             --brand-blue: #0066FF;
             --brand-green: #22C55E;
             --brand-yellow: #FBBF24;
@@ -24,7 +23,8 @@
             --text-gray: #A1A1AA;
             --border-light: #27272A;
             
-            /* Couleurs inversées pour le logo GO */
+            /* Couleurs inversées pour le logo NOVA et GO */
+            --nova-text-color: #FFFFFF;
             --go-bg: #FFFFFF;
             --go-text: #000000;
             
@@ -38,9 +38,9 @@
             --text-dark: #111827;
             --text-gray: #6B7280;
             --border-light: #E5E7EB;
-            --brand-cyan: #0891B2; /* Cyan un peu plus foncé pour lire sur fond blanc */
             
-            /* Couleurs inversées pour le logo GO en thème clair */
+            /* Couleurs inversées pour le logo NOVA et GO en thème clair */
+            --nova-text-color: #000000;
             --go-bg: #000000;
             --go-text: #FFFFFF;
         }
@@ -107,7 +107,7 @@
         .nova-logo .nova-text {
             font-size: 1.25rem;
             font-weight: 900;
-            color: var(--brand-cyan);
+            color: var(--nova-text-color);
             letter-spacing: 2px;
         }
 
@@ -234,7 +234,7 @@
             border: 1px solid var(--border-light); border-radius: 10px;
             font-size: 0.9rem; color: var(--text-dark); outline: none;
         }
-        .input-field:focus { border-color: var(--brand-cyan); box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1); }
+        .input-field:focus { border-color: var(--brand-blue); box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1); }
         select.input-field { cursor: pointer; }
 
         /* ===== INVENTORY ===== */
@@ -260,7 +260,7 @@
         .client-color-2 { border-left-color: var(--brand-yellow); }
         .client-color-3 { border-left-color: var(--brand-red); }
         .client-color-4 { border-left-color: var(--brand-purple); }
-        .client-color-5 { border-left-color: var(--brand-cyan); }
+        .client-color-5 { border-left-color: var(--brand-pink); }
 
         /* ===== MODAL ===== */
         .modal-overlay {
@@ -276,7 +276,6 @@
         .modal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 1.1rem; margin-bottom: 15px; }
         .modal-close { cursor: pointer; color: var(--text-gray); font-size: 1.2rem; padding: 5px; }
 
-        /* Fix spécifique pour le Popup Scanner (pour qu'il soit bien au-dessus) */
         #modal-scanner-popup { z-index: 1050; }
 
         /* ===== PAYMENT LINK ===== */
@@ -571,14 +570,26 @@
         </div>
     </div>
 
-    <!-- Client Checkout -->
+    <!-- Client Checkout (MODIFIÉ AVEC SÉLECTION) -->
     <div class="modal-overlay" id="modal-checkout-client">
         <div class="modal-dialog">
-            <div class="modal-header"><span>👤 Transaction Client</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-checkout-client')"></i></div>
-            <div class="input-group"><div class="input-label">Name</div><input type="text" id="co-name" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Address</div><input type="text" id="co-addr" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Phone</div><input type="tel" id="co-tel" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Email</div><input type="email" id="co-email" class="input-field"></div>
+            <div class="modal-header"><span>👤 Checkout</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-checkout-client')"></i></div>
+            
+            <div class="input-group">
+                <div class="input-label">Select Client</div>
+                <select id="co-client-select" class="input-field" onchange="coClientChange()">
+                    <!-- Options populated by JS -->
+                </select>
+            </div>
+
+            <!-- Affiché uniquement si "Create New Client" est sélectionné -->
+            <div id="co-new-client-fields" style="display:none;">
+                <div class="input-group"><div class="input-label">Name</div><input type="text" id="co-name" class="input-field"></div>
+                <div class="input-group"><div class="input-label">Address</div><input type="text" id="co-addr" class="input-field"></div>
+                <div class="input-group"><div class="input-label">Phone</div><input type="tel" id="co-tel" class="input-field"></div>
+                <div class="input-group"><div class="input-label">Email</div><input type="email" id="co-email" class="input-field"></div>
+            </div>
+
             <button class="btn btn-blue btn-block" onclick="finalizeCheckout()">Validate & Checkout</button>
         </div>
     </div>
@@ -798,6 +809,7 @@
             updateAll();
         }
 
+        // PROCESS CHECKOUT (AVEC SÉLECTION DE CLIENT)
         function processCheckout() {
             if (!cart.length && !inputBuf) { alert('🛒 Empty cart'); return; }
             let tot = cartTotal();
@@ -805,27 +817,56 @@
                 tot = parseFloat(inputBuf);
                 cart.push({ code: 'FREE', name: 'Quick Entry', price: tot.toFixed(2), qty: 1 });
             }
+
+            // Remplir le select des clients
+            const sel = document.getElementById('co-client-select');
+            sel.innerHTML = '<option value="">-- Walk-in (No Client) --</option><option value="NEW">+ Create New Client</option>';
+            Object.entries(clients).forEach(([id, c]) => {
+                sel.innerHTML += `<option value="${id}">${c.name}</option>`;
+            });
+            sel.value = ""; // Par défaut: sans client
+            coClientChange(); // Mettre à jour l'affichage des champs
+
+            // Vider les champs
             document.getElementById('co-name').value = '';
             document.getElementById('co-addr').value = '';
             document.getElementById('co-tel').value = '';
             document.getElementById('co-email').value = '';
+
             openModal('modal-checkout-client');
         }
 
+        // Afficher/Masquer les champs de nouveau client
+        function coClientChange() {
+            const val = document.getElementById('co-client-select').value;
+            document.getElementById('co-new-client-fields').style.display = (val === 'NEW') ? 'block' : 'none';
+        }
+
         function finalizeCheckout() {
-            const client = {
-                name: document.getElementById('co-name').value || 'Client',
-                address: document.getElementById('co-addr').value || '',
-                phone: document.getElementById('co-tel').value || '',
-                email: document.getElementById('co-email').value || ''
-            };
-            if (client.name !== 'Client' || client.phone || client.email) {
+            const selVal = document.getElementById('co-client-select').value;
+            let finalClient = null;
+
+            if (selVal === 'NEW') {
+                const name = document.getElementById('co-name').value;
+                if(!name) { alert("Name required to create client"); return; }
+                
+                const client = {
+                    name: name,
+                    address: document.getElementById('co-addr').value || '',
+                    phone: document.getElementById('co-tel').value || '',
+                    email: document.getElementById('co-email').value || '',
+                    createdAt: new Date().toISOString()
+                };
                 const cid = 'CLI' + Date.now().toString(36).toUpperCase();
-                clients[cid] = { ...client, createdAt: new Date().toISOString() };
+                clients[cid] = client;
                 localStorage.setItem('nv_clients', JSON.stringify(clients));
+                finalClient = client;
+            } else if (selVal !== '') {
+                finalClient = clients[selVal]; // Un client existant a été choisi
             }
+
             closeModal('modal-checkout-client');
-            doCheckout(client);
+            doCheckout(finalClient);
         }
 
         function doCheckout(client) {
@@ -1028,9 +1069,8 @@
             if (scanInstance) { scanInstance.stop().catch(() => {}); document.getElementById('scanner-view').innerHTML = '<i class="fa-solid fa-camera fa-3x"></i>'; }
         }
 
-        // Popup Scanner (For adding product code) FIX
         function startPopupScan() {
-            document.getElementById('modal-product').style.display = 'none'; // Masquer modale produit temporairement
+            document.getElementById('modal-product').style.display = 'none';
             openModal('modal-scanner-popup');
             
             if(!popupScanInstance) popupScanInstance = new Html5Qrcode('popup-scanner-view');
@@ -1045,7 +1085,7 @@
         function stopPopupScan() {
             if(popupScanInstance) popupScanInstance.stop().catch(()=>{});
             closeModal('modal-scanner-popup');
-            document.getElementById('modal-product').style.display = 'flex'; // Faire revenir modale produit
+            document.getElementById('modal-product').style.display = 'flex';
         }
 
         // ==================== HISTORIQUE ====================
@@ -1103,6 +1143,7 @@
             document.getElementById('link-contact').placeholder = m === 'email' ? 'Email...' : 'Phone...';
         }
 
+        // FIX LIEN WHATSAPP
         function sendLink() {
             const contact = document.getElementById('link-contact').value;
             if (!contact) { alert('Contact required'); return; }
@@ -1110,16 +1151,28 @@
             if (tot === 0 && inputBuf) tot = parseFloat(inputBuf) || 0;
             
             let paymentStr = '';
-            if (settings.paypalLink) {
-                let ppUser = settings.paypalLink.replace('https://paypal.me/', '').replace('/', '');
+            // On vérifie que tu as bien mis ton pseudo dans les réglages
+            if (settings.paypalLink && settings.paypalLink.trim() !== '') {
+                // Nettoyage au cas où tu as copié-collé toute l'URL au lieu du pseudo
+                let ppUser = settings.paypalLink.replace(/https?:\/\/(www\.)?paypal\.me\//gi, '').replace(/^\//, '').split('/')[0];
                 paymentStr = `\n\nPay online here:\nhttps://paypal.me/${ppUser}/${tot.toFixed(2)}`;
             }
 
             const msg = `💳 Payment request ${fmt(tot)} - ${settings.companyName || 'NOVA POS'}\n${settings.phone ? '📞 '+settings.phone : ''}${paymentStr}`;
             
-            if (linkMethod === 'whatsapp') window.open(`https://wa.me/${contact.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`);
-            else if (linkMethod === 'sms') window.open(`sms:${contact}?body=${encodeURIComponent(msg)}`);
-            else window.open(`mailto:${contact}?subject=Payment ${settings.companyName || 'NOVA POS'}&body=${encodeURIComponent(msg)}`);
+            // Formatage de l'URL pour éviter les bugs WhatsApp
+            let encodedMsg = encodeURIComponent(msg);
+            
+            if (linkMethod === 'whatsapp') {
+                let waNumber = contact.replace(/\D/g,'');
+                window.open(`https://wa.me/${waNumber}?text=${encodedMsg}`);
+            }
+            else if (linkMethod === 'sms') {
+                window.open(`sms:${contact}?body=${encodedMsg}`);
+            }
+            else {
+                window.open(`mailto:${contact}?subject=Payment ${settings.companyName || 'NOVA POS'}&body=${encodedMsg}`);
+            }
             
             closeModal('modal-link');
             cart = [];
