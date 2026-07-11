@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -15,11 +15,14 @@
             --brand-red: #EF4444;
             --brand-purple: #A855F7;
             --brand-pink: #EC4899;
-            --bg-page: #0F172A;
-            --surface-white: #1E293B;
-            --text-dark: #F8FAFC;
-            --text-gray: #94A3B8;
-            --border-light: #334155;
+            
+            /* AMOLED DARK THEME BY DEFAULT */
+            --bg-page: #000000;
+            --surface-white: #121212;
+            --text-dark: #FFFFFF;
+            --text-gray: #A1A1AA;
+            --border-light: #27272A;
+            
             --radius-xl: 20px;
             --radius-btn: 12px;
         }
@@ -52,7 +55,20 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* ===== HEADER ===== */
+        /* ===== BOOTSCREEN ===== */
+        #bootscreen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-page);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        /* ===== HEADER & LOGO ===== */
         header {
             display: flex;
             justify-content: space-between;
@@ -68,7 +84,7 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 2px;
         }
 
         .nova-logo {
@@ -81,501 +97,204 @@
         .nova-logo .nova-text {
             font-size: 1.2rem;
             font-weight: 900;
-            color: #0066FF;
+            color: var(--brand-blue);
             letter-spacing: 2px;
         }
 
         .nova-logo .pos-text {
             font-size: 0.55rem;
             font-weight: 700;
-            color: #94A3B8;
+            color: var(--text-gray);
             letter-spacing: 3px;
             margin-top: -2px;
         }
 
         .go-badge {
-            background: #22C55E;
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 0.7rem;
-            margin-left: 6px;
-            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
-        }
-
-        .company-name-header {
-            font-size: 0.85rem;
-            font-weight: 600;
             color: var(--text-dark);
-            margin-left: 8px;
-            max-width: 120px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            font-weight: 900;
+            font-size: 1.1rem;
+            margin-left: 2px;
+            margin-top: -8px;
         }
 
-        .page-indicator {
-            display: flex;
-            gap: 5px;
-        }
-
+        .page-indicator { display: flex; gap: 5px; }
         .page-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--border-light);
-            transition: all 0.3s;
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--border-light); transition: all 0.3s;
         }
-
-        .page-dot.active {
-            width: 20px;
-            border-radius: 10px;
-        }
+        .page-dot.active { width: 20px; border-radius: 10px; }
 
         .header-btn {
             background: var(--bg-page);
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            color: var(--text-gray);
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border: none; width: 36px; height: 36px;
+            border-radius: 50%; cursor: pointer;
+            color: var(--text-gray); font-size: 1.1rem;
+            display: flex; align-items: center; justify-content: center;
         }
 
         /* ===== SWIPE CONTAINER ===== */
         .swipe-wrapper {
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-            touch-action: pan-y;
+            flex: 1; overflow: hidden; position: relative; touch-action: pan-y;
         }
-
         .swipe-container {
-            display: flex;
-            width: 700%;
-            height: 100%;
+            display: flex; width: 700%; height: 100%;
             transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-
         .screen {
-            width: 14.285%;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
+            width: 14.285%; padding: 10px; display: flex;
+            flex-direction: column; overflow-y: auto;
             -webkit-overflow-scrolling: touch;
         }
 
         /* ===== TERMINAL HEADER ===== */
         .terminal-box {
-            color: white;
-            padding: 14px;
-            border-radius: 16px;
-            text-align: center;
-            margin-bottom: 10px;
-            flex-shrink: 0;
+            color: white; padding: 14px; border-radius: 16px;
+            text-align: center; margin-bottom: 10px; flex-shrink: 0;
         }
-
-        .terminal-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            opacity: 0.9;
-        }
-
-        .terminal-amount {
-            font-size: 2rem;
-            font-weight: 800;
-            margin: 4px 0;
-        }
+        .terminal-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.9; }
+        .terminal-amount { font-size: 2rem; font-weight: 800; margin: 4px 0; }
 
         /* ===== SCREEN 0 - VENTE ===== */
-        .screen-0 {
-            background: linear-gradient(180deg, #0066FF 0%, #0052CC 100%);
-            color: white;
-        }
-
-        .screen-0 .terminal-box {
-            background: transparent;
-            padding: 8px;
-        }
-
+        .screen-0 { background: linear-gradient(180deg, #0066FF 0%, #0052CC 100%); color: white; }
+        .screen-0 .terminal-box { background: transparent; padding: 8px; }
         .cart-area {
-            flex: 1;
-            overflow-y: auto;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 6px;
-            margin-bottom: 8px;
-            min-height: 80px;
+            flex: 1; overflow-y: auto; background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px; padding: 6px; margin-bottom: 8px; min-height: 80px;
         }
-
         .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 6px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            font-size: 0.82rem;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.82rem;
         }
-
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-
+        .cart-item:last-child { border-bottom: none; }
         .qty-tag {
-            background: white;
-            color: #0066FF;
-            padding: 1px 6px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            margin-right: 4px;
+            background: white; color: #0066FF; padding: 1px 6px;
+            border-radius: 4px; font-size: 0.7rem; font-weight: 700; margin-right: 4px;
         }
-
         .barcode-display {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 7px;
-            border-radius: 8px;
-            font-family: monospace;
-            letter-spacing: 3px;
-            text-align: center;
-            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.2); padding: 7px; border-radius: 8px;
+            font-family: monospace; letter-spacing: 3px; text-align: center; font-size: 0.9rem;
         }
-
-        .numpad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin-bottom: 8px;
-        }
-
+        .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 8px; }
         .num-key {
-            background: rgba(255, 255, 255, 0.95);
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            color: #111827;
+            background: rgba(255, 255, 255, 0.95); border: none; padding: 12px;
+            border-radius: 10px; font-size: 1.2rem; font-weight: 700; cursor: pointer; color: #111827;
         }
-
-        .num-key:active {
-            background: rgba(255, 255, 255, 0.7);
-            transform: scale(0.95);
-        }
-
-        .num-key.enter-key {
-            background: #0044CC;
-            color: white;
-        }
-
-        .action-row {
-            display: flex;
-            gap: 8px;
-        }
-
+        .num-key:active { background: rgba(255, 255, 255, 0.7); transform: scale(0.95); }
+        .num-key.enter-key { background: #0044CC; color: white; }
+        .action-row { display: flex; gap: 8px; }
         .btn {
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: 0.15s;
+            padding: 12px; border: none; border-radius: 10px; font-size: 0.85rem;
+            font-weight: 700; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; gap: 6px; transition: 0.15s;
         }
-
-        .btn:active {
-            transform: scale(0.96);
-        }
-
-        .btn-white {
-            background: white;
-            color: #111827;
-        }
-
-        .btn-blue {
-            background: #0066FF;
-            color: white;
-        }
-
-        .btn-green {
-            background: #22C55E;
-            color: white;
-        }
-
-        .btn-yellow {
-            background: #FBBF24;
-            color: #111827;
-        }
-
-        .btn-purple {
-            background: #A855F7;
-            color: white;
-        }
-
-        .btn-pink {
-            background: #EC4899;
-            color: white;
-        }
-
-        .btn-red {
-            background: #EF4444;
-            color: white;
-        }
-
-        .btn-block {
-            width: 100%;
-        }
-
-        .flex-1 {
-            flex: 1;
-        }
+        .btn:active { transform: scale(0.96); }
+        .btn-white { background: white; color: #111827; }
+        .btn-blue { background: var(--brand-blue); color: white; }
+        .btn-green { background: var(--brand-green); color: white; }
+        .btn-yellow { background: var(--brand-yellow); color: #111827; }
+        .btn-purple { background: var(--brand-purple); color: white; }
+        .btn-pink { background: var(--brand-pink); color: white; }
+        .btn-red { background: var(--brand-red); color: white; }
+        .btn-block { width: 100%; }
+        .flex-1 { flex: 1; }
 
         /* ===== SCREENS 1-6 ===== */
-        .screen-1 .terminal-box {
-            background: #FBBF24;
-            color: #111827;
-        }
-        .screen-2 .terminal-box {
-            background: #22C55E;
-        }
-        .screen-3 .terminal-box {
-            background: #EF4444;
-        }
-        .screen-4 .terminal-box {
-            background: #A855F7;
-        }
-        .screen-5 .terminal-box {
-            background: #EC4899;
-        }
-        .screen-6 .terminal-box {
-            background: #6366F1;
-        }
+        .screen-1 .terminal-box { background: var(--brand-yellow); color: #111827; }
+        .screen-2 .terminal-box { background: var(--brand-green); }
+        .screen-3 .terminal-box { background: var(--brand-red); }
+        .screen-4 .terminal-box { background: var(--brand-purple); }
+        .screen-5 .terminal-box { background: var(--brand-pink); } /* Rose pour clients */
+        .screen-6 .terminal-box { background: var(--brand-pink); } /* Rose pour recettes */
 
-        .scroll-area {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 8px;
-        }
-
-        .input-group {
-            margin-bottom: 10px;
-        }
-
+        .scroll-area { flex: 1; overflow-y: auto; margin-bottom: 8px; }
+        .input-group { margin-bottom: 10px; }
         .input-label {
-            font-size: 0.72rem;
-            color: var(--text-gray);
-            font-weight: 600;
-            margin-bottom: 3px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 0.72rem; color: var(--text-gray); font-weight: 600;
+            margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.5px;
         }
-
         .input-field {
-            width: 100%;
-            padding: 10px 12px;
-            background: var(--surface-white);
-            border: 1px solid var(--border-light);
-            border-radius: 10px;
-            font-size: 0.9rem;
-            color: var(--text-dark);
-            outline: none;
+            width: 100%; padding: 10px 12px; background: var(--surface-white);
+            border: 1px solid var(--border-light); border-radius: 10px;
+            font-size: 0.9rem; color: var(--text-dark); outline: none;
         }
-
-        .input-field:focus {
-            border-color: #0066FF;
-            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
-        }
-
-        select.input-field {
-            cursor: pointer;
-        }
+        .input-field:focus { border-color: var(--brand-blue); box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1); }
+        select.input-field { cursor: pointer; }
 
         /* ===== INVENTORY ===== */
         .product-row {
-            background: var(--surface-white);
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 6px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid var(--border-light);
-            transition: 0.15s;
+            background: var(--surface-white); padding: 12px; border-radius: 10px;
+            margin-bottom: 6px; cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; border: 1px solid var(--border-light); transition: 0.15s;
         }
-
-        .product-row:active {
-            background: var(--border-light);
-        }
-
-        .stock-badge {
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.68rem;
-            font-weight: 700;
-            display: inline-block;
-        }
-
-        .stock-zero {
-            background: #EF4444;
-            color: white;
-        }
-
-        .stock-low {
-            background: #FBBF24;
-            color: #111827;
-        }
-
-        .stock-good {
-            background: #22C55E;
-            color: white;
-        }
+        .product-row:active { background: var(--border-light); }
+        .stock-badge { padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 700; display: inline-block; }
+        .stock-zero { background: var(--brand-red); color: white; }
+        .stock-low { background: var(--brand-yellow); color: #111827; }
+        .stock-good { background: var(--brand-green); color: white; }
 
         /* ===== CLIENT LIST ===== */
         .client-card {
-            background: var(--surface-white);
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 6px;
-            cursor: pointer;
-            border-left: 4px solid #A855F7;
-            transition: 0.15s;
+            background: var(--surface-white); padding: 12px; border-radius: 10px;
+            margin-bottom: 6px; cursor: pointer; border-left: 4px solid var(--brand-pink); transition: 0.15s;
         }
-
-        .client-card:active {
-            background: var(--border-light);
-        }
-
-        .client-color-0 { border-left-color: #0066FF; }
-        .client-color-1 { border-left-color: #22C55E; }
-        .client-color-2 { border-left-color: #FBBF24; }
-        .client-color-3 { border-left-color: #EF4444; }
-        .client-color-4 { border-left-color: #A855F7; }
-        .client-color-5 { border-left-color: #EC4899; }
+        .client-card:active { background: var(--border-light); }
+        .client-color-0 { border-left-color: var(--brand-blue); }
+        .client-color-1 { border-left-color: var(--brand-green); }
+        .client-color-2 { border-left-color: var(--brand-yellow); }
+        .client-color-3 { border-left-color: var(--brand-red); }
+        .client-color-4 { border-left-color: var(--brand-purple); }
+        .client-color-5 { border-left-color: var(--brand-pink); }
 
         /* ===== MODAL ===== */
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(3px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center; z-index: 1000;
         }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
+        .modal-overlay.active { display: flex; }
         .modal-dialog {
-            background: var(--surface-white);
-            border-radius: 20px;
-            padding: 20px;
-            width: 92%;
-            max-width: 420px;
-            max-height: 85vh;
-            overflow-y: auto;
+            background: var(--surface-white); border-radius: 20px; padding: 20px;
+            width: 92%; max-width: 420px; max-height: 85vh; overflow-y: auto;
         }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 800;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-        }
-
-        .modal-close {
-            cursor: pointer;
-            color: var(--text-gray);
-            font-size: 1.2rem;
-            padding: 5px;
-        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 1.1rem; margin-bottom: 15px; }
+        .modal-close { cursor: pointer; color: var(--text-gray); font-size: 1.2rem; padding: 5px; }
 
         /* ===== PAYMENT LINK ===== */
-        .method-toggle {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 15px 0;
-        }
-
+        .method-toggle { display: flex; justify-content: center; gap: 12px; margin: 15px 0; }
         .method-btn {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border: 2px solid var(--border-light);
-            background: var(--surface-white);
-            color: var(--text-gray);
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: 0.2s;
+            width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--border-light);
+            background: var(--surface-white); color: var(--text-gray); font-size: 1.2rem;
+            cursor: pointer; transition: 0.2s;
         }
-
-        .method-btn.active {
-            border-color: #0066FF;
-            color: #0066FF;
-            background: rgba(0, 102, 255, 0.08);
-        }
+        .method-btn.active { border-color: var(--brand-blue); color: var(--brand-blue); background: rgba(0, 102, 255, 0.08); }
 
         /* ===== SCANNER ===== */
-        #scanner-view {
-            width: 100%;
-            min-height: 250px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-gray);
-            border: 2px dashed var(--border-light);
+        #scanner-view, #popup-scanner-view {
+            width: 100%; min-height: 250px; border-radius: 12px; overflow: hidden;
+            background: #000; display: flex; align-items: center; justify-content: center;
+            color: var(--text-gray); border: 2px dashed var(--border-light);
         }
 
-        /* ===== RECEIPT STYLING ===== */
-        .receipt-logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            object-fit: cover;
-            margin: 0 auto 5px;
-            display: block;
-        }
+        .receipt-logo { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; margin: 0 auto 5px; display: block; }
 
         @media (max-width: 380px) {
-            .terminal-amount {
-                font-size: 1.6rem;
-            }
-            .num-key {
-                padding: 10px;
-                font-size: 1rem;
-            }
+            .terminal-amount { font-size: 1.6rem; }
+            .num-key { padding: 10px; font-size: 1rem; }
         }
     </style>
 </head>
-<body data-theme="light">
+<body data-theme="dark">
+
+    <!-- ===== BOOTSCREEN ===== -->
+    <div id="bootscreen">
+        <div class="logo-container" style="transform: scale(2.5);">
+            <div class="nova-logo">
+                <span class="nova-text">NOVA</span>
+                <span class="pos-text">P.O.S</span>
+            </div>
+            <div class="go-badge">GO</div>
+        </div>
+    </div>
 
     <input type="file" id="restore-file-input" accept=".json" style="display: none;">
 
@@ -587,7 +306,6 @@
                 <span class="pos-text">P.O.S</span>
             </div>
             <div class="go-badge">GO</div>
-            <span class="company-name-header" id="header-company-name">NOVA POS</span>
         </div>
         <div class="page-indicator" id="page-dots">
             <div class="page-dot active"></div>
@@ -607,12 +325,12 @@
     <div class="swipe-wrapper" id="swipe-wrapper">
         <div class="swipe-container" id="swipe-container">
 
-            <!-- ÉCRAN 0 : CAISSE -->
+            <!-- SCREEN 0 : CAISSE -->
             <div class="screen screen-0">
                 <div class="terminal-box">
-                    <div class="terminal-label">TOTAL À ENCAISSER</div>
+                    <div class="terminal-label">TOTAL DUE</div>
                     <div class="terminal-amount" id="cash-total">0.00 €</div>
-                    <div class="barcode-display" id="barcode-show">Saisie code...</div>
+                    <div class="barcode-display" id="barcode-show">Enter code...</div>
                 </div>
                 <div class="cart-area" id="cart-items"></div>
                 <div class="numpad">
@@ -635,23 +353,23 @@
                 </div>
                 <div class="action-row">
                     <button class="btn btn-white flex-1" onclick="openPaymentLink()">
-                        <i class="fa-solid fa-link"></i> Lien
+                        <i class="fa-solid fa-link"></i> Link
                     </button>
                     <button class="btn btn-blue flex-1" onclick="processCheckout()">
-                        <i class="fa-solid fa-cash-register"></i> ENCAISSER
+                        <i class="fa-solid fa-cash-register"></i> CHECKOUT
                     </button>
                 </div>
             </div>
 
-            <!-- ÉCRAN 1 : REMISE -->
+            <!-- SCREEN 1 : REMISE -->
             <div class="screen screen-1">
                 <div class="terminal-box">
-                    <div class="terminal-label">REMISE</div>
+                    <div class="terminal-label">DISCOUNT</div>
                     <div class="terminal-amount" id="disc-total">0.00 €</div>
                 </div>
                 <div class="scroll-area">
                     <div class="input-group">
-                        <div class="input-label">Montant remise</div>
+                        <div class="input-label">Discount amount</div>
                         <input type="number" id="disc-amount" class="input-field" placeholder="5.00" step="0.01">
                     </div>
                     <div class="action-row" style="margin-bottom:10px;">
@@ -660,129 +378,140 @@
                         <button class="btn btn-white flex-1" onclick="quickDisc(20)">-20%</button>
                     </div>
                     <div class="input-group">
-                        <div class="input-label">Raison</div>
-                        <input type="text" id="disc-reason" class="input-field" placeholder="Geste commercial...">
+                        <div class="input-label">Reason</div>
+                        <input type="text" id="disc-reason" class="input-field" placeholder="Commercial gesture...">
                     </div>
                 </div>
                 <button class="btn btn-yellow btn-block" onclick="applyDiscount()">
-                    APPLIQUER REMISE
+                    APPLY DISCOUNT
                 </button>
             </div>
 
-            <!-- ÉCRAN 2 : ÉCHELONNÉ -->
+            <!-- SCREEN 2 : ÉCHELONNÉ -->
             <div class="screen screen-2">
                 <div class="terminal-box">
-                    <div class="terminal-label">PAIEMENT ÉCHELONNÉ</div>
+                    <div class="terminal-label">INSTALLMENT</div>
                     <div class="terminal-amount" id="split-total">0.00 €</div>
                 </div>
                 <div class="scroll-area">
-                    <div class="input-group"><div class="input-label">Nom client</div><input type="text" id="split-name" class="input-field" placeholder="Nom complet"></div>
-                    <div class="input-group"><div class="input-label">Adresse</div><input type="text" id="split-addr" class="input-field" placeholder="Adresse"></div>
-                    <div class="input-group"><div class="input-label">Téléphone</div><input type="tel" id="split-tel" class="input-field" placeholder="Téléphone"></div>
-                    <div class="input-group"><div class="input-label">Nb échéances</div><input type="number" id="split-nb" class="input-field" value="3" min="1" max="24"></div>
-                    <div class="input-group"><div class="input-label">Type vente</div>
+                    <div class="input-group"><div class="input-label">Client name</div><input type="text" id="split-name" class="input-field" placeholder="Full name"></div>
+                    <div class="input-group"><div class="input-label">Address</div><input type="text" id="split-addr" class="input-field" placeholder="Address"></div>
+                    <div class="input-group"><div class="input-label">Phone</div><input type="tel" id="split-tel" class="input-field" placeholder="Phone"></div>
+                    <div class="input-group"><div class="input-label">Installments</div><input type="number" id="split-nb" class="input-field" value="3" min="1" max="24"></div>
+                    <div class="input-group"><div class="input-label">Sale type</div>
                         <select id="split-type" class="input-field" onchange="genRef()">
-                            <option value="CR">CR - Crédit</option>
+                            <option value="CR">CR - Credit</option>
                             <option value="CS">CS - Cash Sales</option>
                         </select>
                     </div>
-                    <div class="input-group"><div class="input-label">Réf (6 chiffres)</div>
+                    <div class="input-group"><div class="input-label">Ref (6 digits)</div>
                         <input type="text" id="split-ref" class="input-field" placeholder="000000" maxlength="6" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,6)">
                     </div>
                 </div>
                 <button class="btn btn-green btn-block" onclick="createSplit()">
-                    CRÉER ÉCHÉANCIER
+                    CREATE INSTALLMENT
                 </button>
             </div>
 
-            <!-- ÉCRAN 3 : INVENTAIRE -->
+            <!-- SCREEN 3 : INVENTAIRE -->
             <div class="screen screen-3">
                 <div class="terminal-box">
-                    <div class="terminal-label">INVENTAIRE</div>
-                    <div class="terminal-amount" style="font-size:1.4rem;" id="inv-count">0 Produits</div>
+                    <div class="terminal-label">INVENTORY</div>
+                    <div class="terminal-amount" style="font-size:1.4rem;" id="inv-count">0 Products</div>
                 </div>
                 <div class="scroll-area" id="inv-list"></div>
-                <button class="btn btn-blue btn-block" onclick="openAddProd()">
-                    + NOUVEAU PRODUIT
+                <button class="btn btn-red btn-block" onclick="openAddProd()">
+                    + NEW PRODUCT
                 </button>
             </div>
 
-            <!-- ÉCRAN 4 : SCAN -->
+            <!-- SCREEN 4 : SCAN -->
             <div class="screen screen-4">
                 <div class="terminal-box">
-                    <div class="terminal-label">SCANNEUR CODE-BARRES</div>
+                    <div class="terminal-label">BARCODE SCANNER</div>
                 </div>
                 <div id="scanner-view"><i class="fa-solid fa-camera fa-3x"></i></div>
                 <div class="action-row" style="margin-top:10px;">
                     <button class="btn btn-white flex-1" onclick="stopScan()">Stop</button>
-                    <button class="btn btn-purple flex-1" onclick="startScan()"><i class="fa-solid fa-qrcode"></i> Scanner</button>
+                    <button class="btn btn-purple flex-1" onclick="startScan()"><i class="fa-solid fa-qrcode"></i> Scan</button>
                 </div>
             </div>
 
-            <!-- ÉCRAN 5 : CLIENTS -->
+            <!-- SCREEN 5 : CLIENTS -->
             <div class="screen screen-5">
                 <div class="terminal-box">
-                    <div class="terminal-label">FICHIER CLIENTS</div>
+                    <div class="terminal-label">CLIENTS</div>
                     <div class="terminal-amount" style="font-size:1.4rem;" id="cli-count">0 Clients</div>
                 </div>
                 <div class="scroll-area" id="cli-list"></div>
-                <button class="btn btn-purple btn-block" onclick="openAddClient()">
-                    + NOUVEAU CLIENT
+                <button class="btn btn-pink btn-block" onclick="openAddClient()">
+                    + NEW CLIENT
                 </button>
             </div>
 
-            <!-- ÉCRAN 6 : HISTORIQUE -->
+            <!-- SCREEN 6 : HISTORIQUE -->
             <div class="screen screen-6">
                 <div class="terminal-box">
-                    <div class="terminal-label">RECETTES</div>
+                    <div class="terminal-label">REVENUE</div>
                     <div class="terminal-amount" id="hist-total">0.00 €</div>
                 </div>
                 <div class="scroll-area" id="hist-list"></div>
                 <button class="btn btn-pink btn-block" onclick="openSettle()">
-                    <i class="fa-solid fa-file-invoice"></i> CLÔTURE
+                    <i class="fa-solid fa-file-invoice"></i> CLOSE
                 </button>
             </div>
         </div>
     </div>
 
     <!-- ===== MODALES ===== -->
+    
+    <!-- Scanner Popup pour Produit -->
+    <div class="modal-overlay" id="modal-scanner-popup">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <span>📷 Scan Barcode</span>
+                <i class="fa-solid fa-xmark modal-close" onclick="stopPopupScan()"></i>
+            </div>
+            <div id="popup-scanner-view"></div>
+            <button class="btn btn-red btn-block" style="margin-top:15px;" onclick="stopPopupScan()">Cancel</button>
+        </div>
+    </div>
+
     <!-- Paramètres -->
     <div class="modal-overlay" id="modal-settings">
         <div class="modal-dialog">
             <div class="modal-header">
-                <span>⚙️ Paramètres</span>
+                <span>⚙️ Settings</span>
                 <i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settings')"></i>
             </div>
-            <div class="input-group"><div class="input-label">Nom entreprise</div><input type="text" id="set-name" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Adresse</div><input type="text" id="set-addr" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Tél / WhatsApp</div><input type="text" id="set-tel" class="input-field"></div>
+            <div class="input-group"><div class="input-label">Company Name</div><input type="text" id="set-name" class="input-field"></div>
+            <div class="input-group"><div class="input-label">Address</div><input type="text" id="set-addr" class="input-field"></div>
+            <div class="input-group"><div class="input-label">Phone / WhatsApp</div><input type="text" id="set-tel" class="input-field"></div>
             <div class="input-group"><div class="input-label">Email</div><input type="email" id="set-email" class="input-field"></div>
             <div class="input-group"><div class="input-label">Logo URL</div><input type="text" id="set-logo" class="input-field" placeholder="https://..."></div>
-            <div class="input-group"><div class="input-label">Langue</div>
+            <div class="input-group"><div class="input-label">Language</div>
                 <select id="set-lang" class="input-field">
-                    <option value="fr">🇫🇷 Français</option>
                     <option value="en">🇬🇧 English</option>
+                    <option value="fr">🇫🇷 Français</option>
                     <option value="es">🇪🇸 Español</option>
-                    <option value="it">🇮🇹 Italiano</option>
-                    <option value="pt">🇵🇹 Português</option>
                     <option value="de">🇩🇪 Deutsch</option>
                 </select>
             </div>
-            <div class="input-group"><div class="input-label">Devise</div>
+            <div class="input-group"><div class="input-label">Currency</div>
                 <select id="set-currency" class="input-field"></select>
             </div>
-            <div class="input-group"><div class="input-label">Thème</div>
+            <div class="input-group"><div class="input-label">Theme</div>
                 <select id="set-theme" class="input-field">
-                    <option value="light">Clair</option>
-                    <option value="dark">Sombre</option>
+                    <option value="dark">Dark (AMOLED)</option>
+                    <option value="light">Light</option>
                 </select>
             </div>
-            <button class="btn btn-blue btn-block" onclick="saveSettings()" style="margin-bottom:15px;">Sauvegarder</button>
+            <button class="btn btn-blue btn-block" onclick="saveSettings()" style="margin-bottom:15px;">Save</button>
             
-            <div style="font-weight:700; margin-bottom:8px;">💾 SAUVEGARDE</div>
-            <div class="input-group"><div class="input-label">Nom backup</div><input type="text" id="bk-name" class="input-field" placeholder="backup_01"></div>
-            <button class="btn btn-green btn-block" onclick="doBackup()" style="margin-bottom:6px;"><i class="fa-solid fa-download"></i> Sauvegarder</button>
-            <button class="btn btn-white btn-block" onclick="triggerRestore()" style="margin-bottom:6px;"><i class="fa-solid fa-upload"></i> Restaurer</button>
+            <div style="font-weight:700; margin-bottom:8px;">💾 BACKUP</div>
+            <div class="input-group"><div class="input-label">Backup Name</div><input type="text" id="bk-name" class="input-field" placeholder="backup_01"></div>
+            <button class="btn btn-green btn-block" onclick="doBackup()" style="margin-bottom:6px;"><i class="fa-solid fa-download"></i> Save Backup</button>
+            <button class="btn btn-white btn-block" onclick="triggerRestore()" style="margin-bottom:6px;"><i class="fa-solid fa-upload"></i> Restore</button>
             <div style="font-weight:700; margin:8px 0;">📂 Backups</div>
             <div id="bk-list" style="max-height:150px;overflow-y:auto;"></div>
         </div>
@@ -791,15 +520,21 @@
     <!-- Produit -->
     <div class="modal-overlay" id="modal-product">
         <div class="modal-dialog">
-            <div class="modal-header"><span>📦 Produit</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-product')"></i></div>
-            <div class="input-group"><div class="input-label">Code</div><input type="text" id="pr-code" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Nom</div><input type="text" id="pr-name" class="input-field"></div>
+            <div class="modal-header"><span>📦 Product</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-product')"></i></div>
+            <div class="input-group">
+                <div class="input-label">Code</div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="pr-code" class="input-field" style="flex: 1;">
+                    <button class="btn btn-purple" onclick="startPopupScan()" style="padding: 0 15px;"><i class="fa-solid fa-barcode"></i></button>
+                </div>
+            </div>
+            <div class="input-group"><div class="input-label">Name</div><input type="text" id="pr-name" class="input-field"></div>
             <div class="input-group"><div class="input-label">Description</div><input type="text" id="pr-desc" class="input-field"></div>
             <div class="action-row">
-                <div class="input-group flex-1"><div class="input-label">Prix</div><input type="number" id="pr-price" class="input-field" step="0.01"></div>
+                <div class="input-group flex-1"><div class="input-label">Price</div><input type="number" id="pr-price" class="input-field" step="0.01"></div>
                 <div class="input-group flex-1"><div class="input-label">Stock</div><input type="number" id="pr-stock" class="input-field" value="10"></div>
             </div>
-            <button class="btn btn-blue btn-block" onclick="saveProd()">Enregistrer</button>
+            <button class="btn btn-blue btn-block" onclick="saveProd()">Save</button>
         </div>
     </div>
 
@@ -807,43 +542,43 @@
     <div class="modal-overlay" id="modal-client">
         <div class="modal-dialog">
             <div class="modal-header"><span>👤 Client</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-client')"></i></div>
-            <div class="input-group"><div class="input-label">Nom</div><input type="text" id="cl-name" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Adresse</div><input type="text" id="cl-addr" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Téléphone</div><input type="tel" id="cl-tel" class="input-field"></div>
+            <div class="input-group"><div class="input-label">Name</div><input type="text" id="cl-name" class="input-field"></div>
+            <div class="input-group"><div class="input-label">Address</div><input type="text" id="cl-addr" class="input-field"></div>
+            <div class="input-group"><div class="input-label">Phone</div><input type="tel" id="cl-tel" class="input-field"></div>
             <div class="input-group"><div class="input-label">Email</div><input type="email" id="cl-email" class="input-field"></div>
-            <button class="btn btn-purple btn-block" onclick="saveClient()">Enregistrer</button>
+            <button class="btn btn-pink btn-block" onclick="saveClient()">Save</button>
         </div>
     </div>
 
     <!-- Client Checkout -->
     <div class="modal-overlay" id="modal-checkout-client">
         <div class="modal-dialog">
-            <div class="modal-header"><span>👤 Client pour transaction</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-checkout-client')"></i></div>
-            <div class="input-group"><div class="input-label">Nom</div><input type="text" id="co-name" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Adresse</div><input type="text" id="co-addr" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Téléphone</div><input type="tel" id="co-tel" class="input-field"></div>
+            <div class="modal-header"><span>👤 Transaction Client</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-checkout-client')"></i></div>
+            <div class="input-group"><div class="input-label">Name</div><input type="text" id="co-name" class="input-field"></div>
+            <div class="input-group"><div class="input-label">Address</div><input type="text" id="co-addr" class="input-field"></div>
+            <div class="input-group"><div class="input-label">Phone</div><input type="tel" id="co-tel" class="input-field"></div>
             <div class="input-group"><div class="input-label">Email</div><input type="email" id="co-email" class="input-field"></div>
-            <button class="btn btn-blue btn-block" onclick="finalizeCheckout()">Valider & Encaisser</button>
+            <button class="btn btn-blue btn-block" onclick="finalizeCheckout()">Validate & Checkout</button>
         </div>
     </div>
 
     <!-- Règlement -->
     <div class="modal-overlay" id="modal-settlement">
         <div class="modal-dialog">
-            <div class="modal-header"><span>📊 Rapport Z</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settlement')"></i></div>
+            <div class="modal-header"><span>📊 Z-Report</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settlement')"></i></div>
             <div id="settle-content" style="background:white;color:black;padding:15px;border-radius:10px;margin-bottom:12px;font-family:monospace;font-size:0.8rem;border:1px dashed #ccc;"></div>
             <div class="action-row" style="margin-bottom:8px;">
                 <button class="btn btn-white flex-1" onclick="dlPdf()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
                 <button class="btn btn-white flex-1" onclick="sendSettleEmail()"><i class="fa-solid fa-envelope"></i> Email</button>
             </div>
-            <button class="btn btn-red btn-block" onclick="closeDay()"><i class="fa-solid fa-power-off"></i> CLÔTURER</button>
+            <button class="btn btn-red btn-block" onclick="closeDay()"><i class="fa-solid fa-power-off"></i> CLOSE DAY</button>
         </div>
     </div>
 
     <!-- Lien paiement -->
     <div class="modal-overlay" id="modal-link">
         <div class="modal-dialog" style="text-align:center;">
-            <div class="modal-header"><span>🔗 Demande Paiement</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-link')"></i></div>
+            <div class="modal-header"><span>🔗 Payment Request</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-link')"></i></div>
             <div style="font-size:2rem;font-weight:800;margin:10px 0;" id="link-amount">0.00 €</div>
             <div class="method-toggle">
                 <button class="method-btn active" data-m="sms" onclick="setMethod('sms')"><i class="fa-solid fa-sms"></i></button>
@@ -851,11 +586,22 @@
                 <button class="method-btn" data-m="whatsapp" onclick="setMethod('whatsapp')"><i class="fa-brands fa-whatsapp"></i></button>
             </div>
             <input type="text" id="link-contact" class="input-field" placeholder="Contact..." style="text-align:center;">
-            <button class="btn btn-blue btn-block" onclick="sendLink()" style="margin-top:10px;"><i class="fa-solid fa-paper-plane"></i> ENVOYER</button>
+            <button class="btn btn-blue btn-block" onclick="sendLink()" style="margin-top:10px;"><i class="fa-solid fa-paper-plane"></i> SEND</button>
         </div>
     </div>
 
     <script>
+        // ==================== STARTUP BOOTSCREEN ====================
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const bs = document.getElementById('bootscreen');
+                if(bs) {
+                    bs.style.opacity = '0';
+                    setTimeout(() => bs.style.display = 'none', 500);
+                }
+            }, 1200);
+        });
+
         // ==================== BASE DE DONNÉES ====================
         let cart = [];
         let inputBuf = '';
@@ -864,92 +610,34 @@
         let touchStartY = 0;
         let linkMethod = 'sms';
         let scanInstance = null;
+        let popupScanInstance = null;
         let selProdCode = null;
 
         let products = JSON.parse(localStorage.getItem('nv_products')) || {
-            '1111': { name: 'Service A', price: '15.00', stock: 100, desc: 'Service standard' },
-            '2222': { name: 'Produit B', price: '25.00', stock: 5, desc: 'Premium' }
+            '1111': { name: 'Service A', price: '15.00', stock: 100, desc: 'Standard service' },
+            '2222': { name: 'Product B', price: '25.00', stock: 5, desc: 'Premium' }
         };
 
         let clients = JSON.parse(localStorage.getItem('nv_clients')) || {};
-
         let sales = JSON.parse(localStorage.getItem('nv_sales')) || [];
 
         let settings = JSON.parse(localStorage.getItem('nv_settings')) || {
-            companyName: 'NOVA POS',
+            companyName: '',
             address: '',
             phone: '',
             email: '',
             logo: '',
-            lang: 'fr',
+            lang: 'en',
             currency: 'EUR',
-            theme: 'light'
+            theme: 'dark'
         };
 
         let backups = JSON.parse(localStorage.getItem('nv_backups')) || {};
 
         const ALL_CURRENCIES = {
-            "EUR": "€ Euro", "USD": "$ US Dollar", "GBP": "£ Livre Sterling", "JPY": "¥ Yen", "CHF": "CHF Franc Suisse",
-            "CAD": "CA$ Dollar Canadien", "AUD": "A$ Dollar Australien", "CNY": "¥ Yuan Chinois", "INR": "₹ Roupie Indienne",
-            "MXN": "MX$ Peso Mexicain", "BRL": "R$ Real Brésilien", "KRW": "₩ Won Coréen", "RUB": "₽ Rouble Russe",
-            "ZAR": "R Rand Sud-Africain", "TRY": "₺ Lire Turque", "SGD": "S$ Dollar Singapour", "NZD": "NZ$ Dollar Néo-Zélandais",
-            "HKD": "HK$ Dollar Hong Kong", "SEK": "kr Couronne Suédoise", "NOK": "kr Couronne Norvégienne",
-            "DKK": "kr Couronne Danoise", "PLN": "zł Zloty Polonais", "THB": "฿ Baht Thaïlandais",
-            "IDR": "Rp Roupie Indonésienne", "MYR": "RM Ringgit Malaisien", "PHP": "₱ Peso Philippin",
-            "CZK": "Kč Couronne Tchèque", "HUF": "Ft Forint Hongrois", "ILS": "₪ Shekel Israélien",
-            "CLP": "CL$ Peso Chilien", "COP": "CO$ Peso Colombien", "ARS": "AR$ Peso Argentin",
-            "PEN": "S/. Sol Péruvien", "NGN": "₦ Naira Nigérian", "KES": "KSh Shilling Kényan",
-            "EGP": "EG£ Livre Égyptienne", "SAR": "SR Riyal Saoudien", "AED": "DH Dirham EAU",
-            "MAD": "DH Dirham Marocain", "DZD": "DA Dinar Algérien", "TND": "DT Dinar Tunisien",
-            "XOF": "F CFA BCEAO", "XAF": "F CFA BEAC", "UAH": "₴ Hryvnia Ukrainienne",
-            "RON": "lei Leu Roumain", "BGN": "лв Lev Bulgare", "ISK": "kr Couronne Islandaise"
+            "EUR": "€ Euro", "USD": "$ US Dollar", "GBP": "£ British Pound", "CHF": "CHF Swiss Franc",
+            "CAD": "CA$ Canadian Dollar", "AUD": "A$ Australian Dollar", "MAD": "DH Moroccan Dirham"
         };
-
-        const TRANSLATIONS = {
-            fr: { total: 'TOTAL À ENCAISSER', discount: 'REMISE', split: 'PAIEMENT ÉCHELONNÉ', inventory: 'INVENTAIRE',
-                scanner: 'SCANNEUR', clients: 'FICHIER CLIENTS', history: 'RECETTES', checkout: 'ENCAISSER',
-                emptyCart: 'Panier vide', enterCode: 'Saisie code...', save: 'Sauvegarder', restore: 'Restaurer',
-                settings: 'Paramètres', backup: 'Sauvegarde', close: 'CLÔTURE', send: 'ENVOYER', apply: 'APPLIQUER',
-                create: 'CRÉER', add: 'AJOUTER', newProduct: 'NOUVEAU PRODUIT', newClient: 'NOUVEAU CLIENT',
-                link: 'Lien', stop: 'Stop', start: 'Démarrer', products: 'Produits', clientsList: 'Clients',
-                companyName: 'Nom entreprise', address: 'Adresse', phone: 'Tél / WhatsApp', email: 'Email',
-                logo: 'Logo URL', lang: 'Langue', currency: 'Devise', theme: 'Thème' },
-            en: { total: 'TOTAL DUE', discount: 'DISCOUNT', split: 'INSTALLMENT', inventory: 'INVENTORY',
-                scanner: 'SCANNER', clients: 'CLIENTS', history: 'REVENUE', checkout: 'CHECKOUT',
-                emptyCart: 'Empty cart', enterCode: 'Enter code...', save: 'Save', restore: 'Restore',
-                settings: 'Settings', backup: 'Backup', close: 'CLOSE', send: 'SEND', apply: 'APPLY',
-                create: 'CREATE', add: 'ADD', newProduct: 'NEW PRODUCT', newClient: 'NEW CLIENT',
-                link: 'Link', stop: 'Stop', start: 'Start', products: 'Products', clientsList: 'Clients' },
-            es: { total: 'TOTAL A COBRAR', discount: 'DESCUENTO', split: 'A PLAZOS', inventory: 'INVENTARIO',
-                scanner: 'ESCÁNER', clients: 'CLIENTES', history: 'INGRESOS', checkout: 'COBRAR',
-                emptyCart: 'Carrito vacío', enterCode: 'Código...', save: 'Guardar', restore: 'Restaurar',
-                settings: 'Configuración', backup: 'Copia', close: 'CIERRE', send: 'ENVIAR', apply: 'APLICAR',
-                create: 'CREAR', add: 'AÑADIR', newProduct: 'NUEVO PRODUCTO', newClient: 'NUEVO CLIENTE',
-                link: 'Enlace', stop: 'Parar', start: 'Iniciar', products: 'Productos', clientsList: 'Clientes' },
-            it: { total: 'TOTALE DA INCASSARE', discount: 'SCONTO', split: 'RATEIZZAZIONE', inventory: 'INVENTARIO',
-                scanner: 'SCANNER', clients: 'CLIENTI', history: 'INCASSI', checkout: 'INCASSA',
-                emptyCart: 'Carrello vuoto', enterCode: 'Codice...', save: 'Salva', restore: 'Ripristina',
-                settings: 'Impostazioni', backup: 'Backup', close: 'CHIUDI', send: 'INVIA', apply: 'APPLICA',
-                create: 'CREA', add: 'AGGIUNGI', newProduct: 'NUOVO PRODOTTO', newClient: 'NUOVO CLIENTE',
-                link: 'Link', stop: 'Ferma', start: 'Avvia', products: 'Prodotti', clientsList: 'Clienti' },
-            pt: { total: 'TOTAL A RECEBER', discount: 'DESCONTO', split: 'PARCELADO', inventory: 'INVENTÁRIO',
-                scanner: 'SCANNER', clients: 'CLIENTES', history: 'RECEITAS', checkout: 'RECEBER',
-                emptyCart: 'Carrinho vazio', enterCode: 'Código...', save: 'Salvar', restore: 'Restaurar',
-                settings: 'Configurações', backup: 'Backup', close: 'FECHO', send: 'ENVIAR', apply: 'APLICAR',
-                create: 'CRIAR', add: 'ADICIONAR', newProduct: 'NOVO PRODUTO', newClient: 'NOVO CLIENTE',
-                link: 'Link', stop: 'Parar', start: 'Iniciar', products: 'Produtos', clientsList: 'Clientes' },
-            de: { total: 'GESAMT ZU KASSIEREN', discount: 'RABATT', split: 'RATENZAHLUNG', inventory: 'INVENTAR',
-                scanner: 'SCANNER', clients: 'KUNDEN', history: 'EINNAHMEN', checkout: 'KASSIEREN',
-                emptyCart: 'Warenkorb leer', enterCode: 'Code...', save: 'Speichern', restore: 'Wiederherstellen',
-                settings: 'Einstellungen', backup: 'Sicherung', close: 'ABSCHLUSS', send: 'SENDEN', apply: 'ANWENDEN',
-                create: 'ERSTELLEN', add: 'HINZUFÜGEN', newProduct: 'NEUES PRODUKT', newClient: 'NEUER KUNDE',
-                link: 'Link', stop: 'Stopp', start: 'Start', products: 'Produkte', clientsList: 'Kunden' }
-        };
-
-        function t(key) {
-            const lang = settings.lang || 'fr';
-            return (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) || (TRANSLATIONS['fr'][key] || key);
-        }
 
         function getSym() {
             const code = settings.currency || 'EUR';
@@ -969,7 +657,6 @@
 
         // ==================== INIT ====================
         function init() {
-            // Remplir devise
             const curSel = document.getElementById('set-currency');
             curSel.innerHTML = '';
             for (let [code, label] of Object.entries(ALL_CURRENCIES)) {
@@ -985,16 +672,12 @@
             document.getElementById('set-currency').value = settings.currency;
             document.getElementById('set-theme').value = settings.theme;
             document.body.dataset.theme = settings.theme;
-            updateHeader();
+            
             updateAll();
             loadInv();
             loadCli();
             loadHist();
             loadBkList();
-        }
-
-        function updateHeader() {
-            document.getElementById('header-company-name').textContent = settings.companyName || 'NOVA POS';
         }
 
         function updateAll() {
@@ -1003,7 +686,7 @@
             document.getElementById('cash-total').textContent = fmt(tot);
             document.getElementById('disc-total').textContent = fmt(tot);
             document.getElementById('split-total').textContent = fmt(tot);
-            document.getElementById('barcode-show').textContent = inputBuf || t('enterCode');
+            document.getElementById('barcode-show').textContent = inputBuf || 'Enter code...';
         }
 
         // ==================== SWIPE ====================
@@ -1030,7 +713,7 @@
 
         function goScreen() {
             document.getElementById('swipe-container').style.transform = `translateX(-${screenIdx * 14.285}%)`;
-            const colors = ['#0066FF', '#FBBF24', '#22C55E', '#EF4444', '#A855F7', '#EC4899', '#6366F1'];
+            const colors = ['#0066FF', '#FBBF24', '#22C55E', '#EF4444', '#A855F7', '#EC4899', '#EC4899'];
             document.querySelectorAll('.page-dot').forEach((d, i) => {
                 d.classList.toggle('active', i === screenIdx);
                 if (i === screenIdx) d.style.background = colors[i];
@@ -1051,10 +734,10 @@
             const code = inputBuf;
             const prod = products[code];
             if (prod) {
-                if (prod.stock <= 0) { alert('❌ Rupture de stock'); return; }
+                if (prod.stock <= 0) { alert('❌ Out of stock'); return; }
                 let ex = cart.find(i => i.code === code);
                 if (ex) {
-                    if (ex.qty >= prod.stock) { alert('⚠️ Stock max'); return; }
+                    if (ex.qty >= prod.stock) { alert('⚠️ Max stock reached'); return; }
                     ex.qty++;
                 } else {
                     cart.push({ code, name: prod.name, price: prod.price, qty: 1 });
@@ -1062,11 +745,11 @@
             } else {
                 let p = parseFloat(code);
                 if (isNaN(p) || p <= 0) {
-                    let c = confirm('Code inconnu. Créer produit ?');
+                    let c = confirm('Unknown code. Create new product?');
                     if (c) { openAddProd(code); inputBuf = ''; updateAll(); return; }
-                    else { alert('❌ Code invalide'); inputBuf = ''; updateAll(); return; }
+                    else { alert('❌ Invalid code'); inputBuf = ''; updateAll(); return; }
                 }
-                cart.push({ code: 'FREE', name: 'Saisie libre', price: p.toFixed(2), qty: 1 });
+                cart.push({ code: 'FREE', name: 'Manual Entry', price: p.toFixed(2), qty: 1 });
             }
             inputBuf = '';
             renderCart();
@@ -1076,7 +759,7 @@
         function renderCart() {
             const el = document.getElementById('cart-items');
             el.innerHTML = '';
-            if (!cart.length) { el.innerHTML = `<div style="text-align:center;padding:20px;opacity:0.5;">${t('emptyCart')}</div>`; return; }
+            if (!cart.length) { el.innerHTML = `<div style="text-align:center;padding:20px;opacity:0.5;">Empty cart</div>`; return; }
             cart.forEach((it, idx) => {
                 el.innerHTML += `<div class="cart-item">
                     <span>${it.qty > 1 ? '<span class="qty-tag">x'+it.qty+'</span>' : ''}${it.name}</span>
@@ -1093,11 +776,11 @@
         }
 
         function processCheckout() {
-            if (!cart.length && !inputBuf) { alert('🛒 ' + t('emptyCart')); return; }
+            if (!cart.length && !inputBuf) { alert('🛒 Empty cart'); return; }
             let tot = cartTotal();
             if (tot === 0 && inputBuf) {
                 tot = parseFloat(inputBuf);
-                cart.push({ code: 'FREE', name: 'Saisie rapide', price: tot.toFixed(2), qty: 1 });
+                cart.push({ code: 'FREE', name: 'Quick Entry', price: tot.toFixed(2), qty: 1 });
             }
             document.getElementById('co-name').value = '';
             document.getElementById('co-addr').value = '';
@@ -1136,23 +819,23 @@
             inputBuf = '';
             renderCart();
             updateAll();
-            alert('✅ Paiement encaissé !');
+            alert('✅ Payment successful!');
         }
 
         // ==================== REMISE ====================
         function quickDisc(pct) {
             let tot = cartTotal();
             if (tot === 0 && inputBuf) tot = parseFloat(inputBuf) || 0;
-            if (!tot) { alert('Ajoutez des articles'); return; }
+            if (!tot) { alert('Add items first'); return; }
             document.getElementById('disc-amount').value = (tot * pct / 100).toFixed(2);
         }
 
         function applyDiscount() {
             let amt = parseFloat(document.getElementById('disc-amount').value);
-            if (!amt || amt <= 0) { alert('Montant invalide'); return; }
+            if (!amt || amt <= 0) { alert('Invalid amount'); return; }
             let tot = cartTotal();
-            if (amt > tot) { alert('Remise > total'); return; }
-            cart.push({ code: 'DISC', name: 'Remise: ' + (document.getElementById('disc-reason').value || 'Geste'), price: (-amt).toFixed(2), qty: 1 });
+            if (amt > tot) { alert('Discount > total'); return; }
+            cart.push({ code: 'DISC', name: 'Discount: ' + (document.getElementById('disc-reason').value || 'Promo'), price: (-amt).toFixed(2), qty: 1 });
             document.getElementById('disc-amount').value = '';
             document.getElementById('disc-reason').value = '';
             renderCart();
@@ -1170,7 +853,7 @@
         function createSplit() {
             let tot = cartTotal();
             if (tot === 0 && inputBuf) tot = parseFloat(inputBuf) || 0;
-            if (!tot) { alert('Aucun montant'); return; }
+            if (!tot) { alert('No amount'); return; }
             const name = document.getElementById('split-name').value || 'Client';
             const addr = document.getElementById('split-addr').value || '';
             const tel = document.getElementById('split-tel').value || '';
@@ -1179,7 +862,7 @@
             const ref = document.getElementById('split-ref').value || '000000';
             const monthly = tot / nb;
             const fullRef = `${typ}-${ref}`;
-            alert(`✅ Échéancier ${fullRef}\nClient: ${name}\nAdresse: ${addr}\nTél: ${tel}\n${nb}x ${fmt(monthly)}`);
+            alert(`✅ Installment created ${fullRef}\nClient: ${name}\n${nb}x ${fmt(monthly)}`);
             cart = [{ code: 'SPLIT', name: `1/${nb} - ${name} (${fullRef})`, price: monthly.toFixed(2), qty: 1 }];
             ['split-name','split-addr','split-tel','split-ref'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('split-nb').value = '3';
@@ -1193,7 +876,7 @@
         function loadInv() {
             const el = document.getElementById('inv-list');
             const arr = Object.entries(products);
-            document.getElementById('inv-count').textContent = arr.length + ' ' + t('products');
+            document.getElementById('inv-count').textContent = arr.length + ' Products';
             el.innerHTML = '';
             arr.forEach(([code, p]) => {
                 let cls = 'stock-good';
@@ -1208,7 +891,7 @@
         function selProd(code) {
             selProdCode = code;
             const p = products[code];
-            let act = prompt(`${p.name}\n${fmt(p.price)} | Stock: ${p.stock||0}\n\n1: Ajouter panier\n2: Modifier\n3: Supprimer`, '1');
+            let act = prompt(`${p.name}\n${fmt(p.price)} | Stock: ${p.stock||0}\n\n1: Add to cart\n2: Edit\n3: Delete`, '1');
             if (act === '1') {
                 cart.push({ code, name: p.name, price: p.price, qty: 1 });
                 renderCart();
@@ -1218,7 +901,7 @@
             } else if (act === '2') {
                 editProd(code);
             } else if (act === '3') {
-                if (confirm('Supprimer ?')) { delete products[code]; localStorage.setItem('nv_products', JSON.stringify(products)); loadInv(); }
+                if (confirm('Delete this product?')) { delete products[code]; localStorage.setItem('nv_products', JSON.stringify(products)); loadInv(); }
             }
         }
 
@@ -1247,7 +930,7 @@
             const desc = document.getElementById('pr-desc').value;
             const price = document.getElementById('pr-price').value;
             const stock = parseInt(document.getElementById('pr-stock').value) || 0;
-            if (!name || !price) { alert('Nom + prix requis'); return; }
+            if (!name || !price) { alert('Name & price required'); return; }
             products[code] = { name, price, stock, desc };
             localStorage.setItem('nv_products', JSON.stringify(products));
             closeModal('modal-product');
@@ -1258,7 +941,7 @@
         function loadCli() {
             const el = document.getElementById('cli-list');
             const arr = Object.entries(clients);
-            document.getElementById('cli-count').textContent = arr.length + ' ' + t('clientsList');
+            document.getElementById('cli-count').textContent = arr.length + ' Clients';
             el.innerHTML = '';
             const colors = ['client-color-0','client-color-1','client-color-2','client-color-3','client-color-4','client-color-5'];
             arr.forEach(([id, c], i) => {
@@ -1285,7 +968,7 @@
 
         function saveClient() {
             const name = document.getElementById('cl-name').value;
-            if (!name) { alert('Nom requis'); return; }
+            if (!name) { alert('Name required'); return; }
             const id = 'CLI' + Date.now().toString(36).toUpperCase();
             clients[id] = {
                 name,
@@ -1307,14 +990,36 @@
             scanInstance.start({ facingMode: 'environment' }, { fps: 10, qrbox: { width: 250, height: 250 } },
                 (text) => {
                     if (navigator.vibrate) navigator.vibrate(100);
-                    if (products[text]) { inputBuf = text; addToCart(); stopScan(); screenIdx = 0; goScreen(); }
-                    else { alert('Code: ' + text + '\nNon trouvé'); stopScan(); }
+                    if (products[text]) { 
+                        inputBuf = text; addToCart(); stopScan(); screenIdx = 0; goScreen(); 
+                    } else { 
+                        stopScan(); 
+                        let c = confirm('Unknown code: ' + text + '\nCreate new product?');
+                        if (c) openAddProd(text);
+                    }
                 }, () => {})
-            .catch(e => alert('Erreur caméra: ' + e));
+            .catch(e => alert('Camera error: ' + e));
         }
 
         function stopScan() {
             if (scanInstance) { scanInstance.stop().catch(() => {}); document.getElementById('scanner-view').innerHTML = '<i class="fa-solid fa-camera fa-3x"></i>'; }
+        }
+
+        // Popup Scanner (For adding product code)
+        function startPopupScan() {
+            openModal('modal-scanner-popup');
+            if(!popupScanInstance) popupScanInstance = new Html5Qrcode('popup-scanner-view');
+            popupScanInstance.start({ facingMode: 'environment' }, { fps: 10, qrbox: { width: 250, height: 250 } },
+                (text) => {
+                    if (navigator.vibrate) navigator.vibrate(100);
+                    document.getElementById('pr-code').value = text;
+                    stopPopupScan();
+                }, () => {}
+            ).catch(e => { alert('Camera error: ' + e); stopPopupScan(); });
+        }
+        function stopPopupScan() {
+            if(popupScanInstance) popupScanInstance.stop().catch(()=>{});
+            closeModal('modal-scanner-popup');
         }
 
         // ==================== HISTORIQUE ====================
@@ -1327,7 +1032,7 @@
                 const d = new Date(s.date);
                 el.innerHTML += `<div class="product-row" style="cursor:default;">
                     <div><strong>${d.toLocaleDateString()} ${d.toLocaleTimeString()}</strong><br>
-                    <small>${s.items.length} art. ${s.client ? '| '+s.client.name : ''}</small></div>
+                    <small>${s.items.length} items ${s.client ? '| '+s.client.name : ''}</small></div>
                     <strong>${fmt(s.total)}</strong></div>`;
             });
         }
@@ -1335,30 +1040,30 @@
         function openSettle() {
             let tot = sales.reduce((s, x) => s + x.total, 0);
             let logoHtml = settings.logo ? `<img src="${settings.logo}" class="receipt-logo" alt="Logo">` : '';
-            let html = `<div style="text-align:center;">${logoHtml}<strong>${settings.companyName}</strong><br>${settings.address||''}<br>${settings.phone?'Tél: '+settings.phone+'<br>':''}${settings.email||''}<hr><strong>RAPPORT Z</strong><br>${new Date().toLocaleDateString()}<hr>Transactions: ${sales.length}<br><strong style="font-size:1.2rem;">TOTAL: ${fmt(tot)}</strong><hr><small>NOVA POS GO</small></div>`;
+            let html = `<div style="text-align:center;">${logoHtml}<strong>${settings.companyName || 'NOVA POS'}</strong><br>${settings.address||''}<br>${settings.phone?'Tel: '+settings.phone+'<br>':''}${settings.email||''}<hr><strong>Z-REPORT</strong><br>${new Date().toLocaleDateString()}<hr>Transactions: ${sales.length}<br><strong style="font-size:1.2rem;">TOTAL: ${fmt(tot)}</strong><hr><small>NOVA POS GO</small></div>`;
             document.getElementById('settle-content').innerHTML = html;
             openModal('modal-settlement');
         }
 
         function dlPdf() {
-            html2pdf().set({ margin: 8, filename: 'Rapport_Z.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' } }).from(document.getElementById('settle-content')).save();
+            html2pdf().set({ margin: 8, filename: 'Z-Report.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' } }).from(document.getElementById('settle-content')).save();
         }
 
         function sendSettleEmail() {
             let tot = sales.reduce((s, x) => s + x.total, 0);
-            let body = `Rapport Z - ${settings.companyName}%0A%0ADate: ${new Date().toLocaleDateString()}%0ATransactions: ${sales.length}%0ATotal: ${fmt(tot)}%0A%0ANOVA POS GO`;
-            window.open(`mailto:${settings.email}?subject=Rapport de Caisse&body=${body}`);
+            let body = `Z-Report - ${settings.companyName || 'NOVA POS'}%0A%0ADate: ${new Date().toLocaleDateString()}%0ATransactions: ${sales.length}%0ATotal: ${fmt(tot)}%0A%0ANOVA POS GO`;
+            window.open(`mailto:${settings.email}?subject=Z-Report&body=${body}`);
         }
 
         function closeDay() {
-            if (confirm('Clôturer ? Historique effacé.')) { sales = []; localStorage.setItem('nv_sales', JSON.stringify(sales)); closeModal('modal-settlement'); loadHist(); alert('✅ Caisse clôturée'); }
+            if (confirm('Close day? History will be erased.')) { sales = []; localStorage.setItem('nv_sales', JSON.stringify(sales)); closeModal('modal-settlement'); loadHist(); alert('✅ Day closed'); }
         }
 
         // ==================== LIEN PAIEMENT ====================
         function openPaymentLink() {
             let tot = cartTotal();
             if (tot === 0 && inputBuf) tot = parseFloat(inputBuf) || 0;
-            if (!tot) { alert('Aucun montant'); return; }
+            if (!tot) { alert('No amount'); return; }
             document.getElementById('link-amount').textContent = fmt(tot);
             document.getElementById('link-contact').value = '';
             setMethod('sms');
@@ -1369,18 +1074,18 @@
             linkMethod = m;
             document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
             document.querySelector(`.method-btn[data-m="${m}"]`).classList.add('active');
-            document.getElementById('link-contact').placeholder = m === 'email' ? 'Email...' : 'Téléphone...';
+            document.getElementById('link-contact').placeholder = m === 'email' ? 'Email...' : 'Phone...';
         }
 
         function sendLink() {
             const contact = document.getElementById('link-contact').value;
-            if (!contact) { alert('Contact requis'); return; }
+            if (!contact) { alert('Contact required'); return; }
             let tot = cartTotal();
             if (tot === 0 && inputBuf) tot = parseFloat(inputBuf) || 0;
-            const msg = `💳 Paiement ${fmt(tot)} - ${settings.companyName}\n${settings.phone ? '📞 '+settings.phone : ''}`;
+            const msg = `💳 Payment request ${fmt(tot)} - ${settings.companyName || 'NOVA POS'}\n${settings.phone ? '📞 '+settings.phone : ''}`;
             if (linkMethod === 'whatsapp') window.open(`https://wa.me/${contact.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`);
             else if (linkMethod === 'sms') window.open(`sms:${contact}?body=${encodeURIComponent(msg)}`);
-            else window.open(`mailto:${contact}?subject=Paiement ${settings.companyName}&body=${encodeURIComponent(msg)}`);
+            else window.open(`mailto:${contact}?subject=Payment ${settings.companyName || 'NOVA POS'}&body=${encodeURIComponent(msg)}`);
             closeModal('modal-link');
             cart = [];
             inputBuf = '';
@@ -1403,7 +1108,7 @@
         }
 
         function saveSettings() {
-            settings.companyName = document.getElementById('set-name').value || 'NOVA POS';
+            settings.companyName = document.getElementById('set-name').value;
             settings.address = document.getElementById('set-addr').value;
             settings.phone = document.getElementById('set-tel').value;
             settings.email = document.getElementById('set-email').value;
@@ -1413,10 +1118,9 @@
             settings.theme = document.getElementById('set-theme').value;
             localStorage.setItem('nv_settings', JSON.stringify(settings));
             document.body.dataset.theme = settings.theme;
-            updateHeader();
             updateAll();
             closeModal('modal-settings');
-            alert('✅ ' + t('save') + ' OK');
+            alert('✅ Saved');
         }
 
         function doBackup() {
@@ -1430,43 +1134,43 @@
             a.download = name + '.json';
             a.click();
             loadBkList();
-            alert('💾 Backup: ' + name);
+            alert('💾 Backup created: ' + name);
         }
 
         function loadBkList() {
             const el = document.getElementById('bk-list');
             const arr = Object.entries(backups);
-            el.innerHTML = arr.length ? '' : '<div style="padding:8px;color:var(--text-gray);">Aucun</div>';
+            el.innerHTML = arr.length ? '' : '<div style="padding:8px;color:var(--text-gray);">None</div>';
             arr.forEach(([n, d]) => {
                 el.innerHTML += `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--bg-page);border-radius:6px;margin-bottom:4px;">
                     <span><strong>${n}</strong><br><small>${new Date(d.date).toLocaleDateString()}</small></span>
                     <span>
-                        <button onclick="restoreBk('${n}')" style="background:#0066FF;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;margin-right:4px;">Restaurer</button>
-                        <button onclick="renameBk('${n}')" style="background:#FBBF24;color:black;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;margin-right:4px;">Renommer</button>
+                        <button onclick="restoreBk('${n}')" style="background:#0066FF;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;margin-right:4px;">Restore</button>
+                        <button onclick="renameBk('${n}')" style="background:#FBBF24;color:black;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;margin-right:4px;">Rename</button>
                         <button onclick="delBk('${n}')" style="background:#EF4444;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
                     </span></div>`;
             });
         }
 
         function restoreBk(name) {
-            if (!confirm('Restaurer "' + name + '" ?')) return;
+            if (!confirm('Restore "' + name + '"?')) return;
             const d = backups[name];
             products = d.products || {};
             clients = d.clients || {};
             sales = d.sales || [];
             settings = d.settings || settings;
             ['nv_products','nv_clients','nv_sales','nv_settings'].forEach(k => localStorage.setItem(k, JSON.stringify(eval(k.replace('nv_','')))));
-            alert('✅ Restauré');
+            alert('✅ Restored');
             location.reload();
         }
 
         function renameBk(old) {
-            const nw = prompt('Nouveau nom:', old);
+            const nw = prompt('New name:', old);
             if (nw && nw !== old) { backups[nw] = backups[old]; delete backups[old]; localStorage.setItem('nv_backups', JSON.stringify(backups)); loadBkList(); }
         }
 
         function delBk(name) {
-            if (confirm('Supprimer "' + name + '" ?')) { delete backups[name]; localStorage.setItem('nv_backups', JSON.stringify(backups)); loadBkList(); }
+            if (confirm('Delete "' + name + '"?')) { delete backups[name]; localStorage.setItem('nv_backups', JSON.stringify(backups)); loadBkList(); }
         }
 
         function triggerRestore() {
@@ -1481,17 +1185,17 @@
                 try {
                     const d = JSON.parse(ev.target.result);
                     if (d.products || d.sales || d.settings) {
-                        if (confirm('Restaurer fichier ?')) {
+                        if (confirm('Restore file?')) {
                             products = d.products || products;
                             clients = d.clients || clients;
                             sales = d.sales || sales;
                             settings = d.settings || settings;
                             ['nv_products','nv_clients','nv_sales','nv_settings'].forEach(k => localStorage.setItem(k, JSON.stringify(eval(k.replace('nv_','')))));
-                            alert('✅ Restauré');
+                            alert('✅ Restored');
                             location.reload();
                         }
-                    } else alert('Fichier invalide');
-                } catch (er) { alert('Erreur lecture'); }
+                    } else alert('Invalid file');
+                } catch (er) { alert('Read error'); }
             };
             r.readAsText(f);
         });
@@ -1500,7 +1204,7 @@
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        // Lancer
+        // Start App
         init();
         renderCart();
         goScreen();
