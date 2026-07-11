@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>NOVA POS GO</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- Nouvelle police à points (Robotic Dots) -->
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -45,21 +46,65 @@
         .terminal-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.9; }
         .terminal-amount { font-size: 2rem; font-weight: 800; margin: 4px 0; }
 
+        /* NOUVEAU STYLE ECRAN 0 (Caisse) */
         .screen-0 { background: transparent; color: var(--text-dark); }
-        .screen-0 .terminal-box { background: #0A0A0A; border: 2px solid var(--border-light); }
-        #cash-total { font-family: 'Share Tech Mono', monospace; font-size: 2.7rem; color: var(--brand-cyan); text-shadow: 0 0 10px rgba(6,182,212,0.4); }
+        .screen-0 .terminal-box { 
+            background: var(--surface-white); 
+            border: none; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 20px 14px;
+        }
+        .screen-0 .terminal-label { color: var(--text-gray); }
+        
+        /* FONT ROBOTIC DOTS EN GRIS */
+        #cash-total { 
+            font-family: 'DotGothic16', sans-serif; 
+            font-size: 3rem; 
+            color: #888888; /* Gris professionnel */
+            text-shadow: none;
+            margin: 10px 0;
+        }
+        .barcode-display { 
+            font-family: 'DotGothic16', sans-serif; 
+            font-size: 1.1rem; 
+            color: #A1A1AA; 
+            text-align: center; 
+        }
+        
         .cart-area { flex: 1; overflow-y: auto; background: var(--surface-white); border: 1px solid var(--border-light); border-radius: 10px; padding: 6px; margin-bottom: 8px; min-height: 80px; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 6px; border-bottom: 1px solid var(--border-light); font-size: 0.85rem; }
         .cart-item:last-child { border-bottom: none; }
         .qty-tag { background: var(--brand-blue); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; margin-right: 6px; }
-        .barcode-display { padding: 7px; border-radius: 8px; font-family: 'Share Tech Mono', monospace; font-size: 1rem; color: var(--brand-cyan); text-align: center; }
         
-        .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 8px; }
-        .num-key { background: var(--surface-white); border: 1px solid var(--border-light); color: var(--text-dark); padding: 12px; border-radius: 10px; font-size: 1.2rem; font-weight: 700; cursor: pointer; }
-        .num-key:active { transform: scale(0.95); opacity: 0.8; }
+        /* NOUVEAU CLAVIER NUMERIQUE ROND & MODERNE */
+        .numpad { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 12px; 
+            margin-bottom: 15px; 
+            justify-items: center; 
+        }
+        .num-key { 
+            width: 70px; 
+            height: 70px; 
+            border-radius: 50%; 
+            border: 1px solid var(--border-light); 
+            background: var(--surface-white); 
+            color: var(--text-dark); 
+            font-size: 1.6rem; 
+            font-weight: 500; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.15s ease;
+        }
+        .num-key:active { transform: scale(0.9); background: var(--border-light); }
         .num-key.enter-key { background: var(--brand-blue); color: white; border: none; }
+        
         .action-row { display: flex; gap: 8px; }
-        .btn { padding: 12px; border: none; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.15s; }
+        .btn { padding: 14px; border: none; border-radius: 12px; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.15s; }
         .btn:active { transform: scale(0.95); }
         
         .btn-white { background: var(--surface-white); color: var(--text-dark); border: 1px solid var(--border-light); }
@@ -111,7 +156,6 @@
         </div>
     </div>
 
-    <!-- J'ai retiré le "accept" strict pour que tu puisses choisir ton fichier sur n'importe quel appareil -->
     <input type="file" id="restore-file-input" style="display: none;">
 
     <header>
@@ -137,17 +181,33 @@
                     <div class="barcode-display" id="barcode-show">_</div>
                 </div>
                 <div class="cart-area" id="cart-items"></div>
+                
+                <!-- CLAVIER ROND MODERNE -->
                 <div class="numpad">
-                    <button class="num-key" onclick="pressNum('7')">7</button><button class="num-key" onclick="pressNum('8')">8</button><button class="num-key" onclick="pressNum('9')">9</button>
-                    <button class="num-key" onclick="pressNum('4')">4</button><button class="num-key" onclick="pressNum('5')">5</button><button class="num-key" onclick="pressNum('6')">6</button>
-                    <button class="num-key" onclick="pressNum('1')">1</button><button class="num-key" onclick="pressNum('2')">2</button><button class="num-key" onclick="pressNum('3')">3</button>
-                    <button class="num-key" onclick="deleteDigit()" style="color:#EF4444;"><i class="fa-solid fa-delete-left"></i></button>
+                    <button class="num-key" onclick="pressNum('7')">7</button>
+                    <button class="num-key" onclick="pressNum('8')">8</button>
+                    <button class="num-key" onclick="pressNum('9')">9</button>
+                    <button class="num-key" onclick="pressNum('4')">4</button>
+                    <button class="num-key" onclick="pressNum('5')">5</button>
+                    <button class="num-key" onclick="pressNum('6')">6</button>
+                    <button class="num-key" onclick="pressNum('1')">1</button>
+                    <button class="num-key" onclick="pressNum('2')">2</button>
+                    <button class="num-key" onclick="pressNum('3')">3</button>
+                    
+                    <!-- BOUTON CORRECTION EN JAUNE -->
+                    <button class="num-key" onclick="deleteDigit()" style="color: var(--brand-yellow);">
+                        <i class="fa-solid fa-delete-left"></i>
+                    </button>
+                    
                     <button class="num-key" onclick="pressNum('0')">0</button>
                     <button class="num-key enter-key" onclick="addToCart()"><i class="fa-solid fa-plus"></i></button>
                 </div>
+                
                 <div class="action-row">
                     <button class="btn btn-white flex-1" onclick="openPaymentLink()"><i class="fa-solid fa-link"></i> Link</button>
-                    <button class="btn btn-blue flex-1" onclick="processCheckout()"><i class="fa-solid fa-cash-register"></i> PAY</button>
+                    
+                    <!-- BOUTON PAY EN VERT -->
+                    <button class="btn btn-green flex-1" onclick="processCheckout()"><i class="fa-solid fa-cash-register"></i> PAY</button>
                 </div>
             </div>
 
@@ -233,7 +293,6 @@
             
             <div class="input-group"><div class="input-label">Company</div><input type="text" id="set-name" class="input-field"></div>
             
-            <!-- NOUVEAU : AUTH KEY -->
             <div class="input-group">
                 <div class="input-label" style="color:var(--brand-pink);"><i class="fa-solid fa-lock"></i> Auth Key (Security)</div>
                 <input type="password" id="set-auth-key" class="input-field" placeholder="Secret key to protect backups">
@@ -346,7 +405,6 @@
         let clients = JSON.parse(localStorage.getItem('nv_clients')) || {};
         let sales = JSON.parse(localStorage.getItem('nv_sales')) || [];
         
-        // Ajout de "authKey" dans les settings par défaut
         let settings = JSON.parse(localStorage.getItem('nv_settings')) || { companyName: 'NOVA POS', authKey: '', phone: '', paypalLink: '', receiptMessage: 'Thank you!', lang: 'en', currency: 'EUR', theme: 'dark' };
 
         const CURRENCIES = { "EUR":"€", "USD":"$", "GBP":"£", "CHF":"CHF", "CAD":"CA$", "AUD":"A$", "MAD":"DH", "XOF":"CFA", "MUR":"Rs" };
@@ -360,7 +418,7 @@
             const curSel = document.getElementById('set-currency'); curSel.innerHTML = '';
             for (let [c, l] of Object.entries(CURRENCIES)) curSel.innerHTML += `<option value="${c}">${c} ${l}</option>`;
             document.getElementById('set-name').value = settings.companyName; 
-            document.getElementById('set-auth-key').value = settings.authKey || ''; // Init auth key
+            document.getElementById('set-auth-key').value = settings.authKey || '';
             document.getElementById('set-tel').value = settings.phone;
             document.getElementById('set-paypal').value = settings.paypalLink; 
             document.getElementById('set-receipt-msg').value = settings.receiptMessage;
@@ -544,7 +602,7 @@
         function saveSettings() {
             settings = { 
                 companyName: document.getElementById('set-name').value, 
-                authKey: document.getElementById('set-auth-key').value, // Sauvegarde de la clé
+                authKey: document.getElementById('set-auth-key').value, 
                 phone: document.getElementById('set-tel').value, 
                 paypalLink: document.getElementById('set-paypal').value, 
                 receiptMessage: document.getElementById('set-receipt-msg').value, 
@@ -559,30 +617,22 @@
             alert('✅ Configuration Saved');
         }
         
-        // NOUVELLE FONCTION DE BACKUP
         function doBackup() {
             const d = new Date();
-            // Format: DD-MM-YYYY
             const dateStr = d.toLocaleDateString('fr-FR').replace(/\//g, '-');
-            // Format: HHhMM
             const timeStr = d.getHours().toString().padStart(2, '0') + 'h' + d.getMinutes().toString().padStart(2, '0');
-            
-            // Format custom demandé : backup(12-07-2026@01h08).nvp
             const name = `backup(${dateStr}@${timeStr})`;
-            
-            // On intègre l'Auth Key dans le fichier
             const data = { products, clients, sales, settings, authKey: settings.authKey, date: d.toISOString() };
             
             const blob = new Blob([JSON.stringify(data)], { type: 'text/plain' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = name + '.nvp'; // Nouvelle extension !
+            a.download = name + '.nvp'; 
             a.click();
             
             alert(`💾 Backup exported to Downloads folder as:\n\n${name}.nvp`);
         }
 
-        // NOUVELLE FONCTION DE RESTORE (Sécurisée & Sans restriction d'extension)
         document.getElementById('restore-file-input').addEventListener('change', e => {
             let f = e.target.files[0];
             if(!f) return;
@@ -591,16 +641,12 @@
             r.onload = ev => { 
                 try { 
                     let d = JSON.parse(ev.target.result); 
-                    
-                    // VÉRIFICATION DE SÉCURITÉ AUTH KEY
-                    // Si l'appareil a une clé, et que le fichier a une clé différente = ON BLOQUE
                     if (settings.authKey && settings.authKey.trim() !== '') {
                         if (d.authKey !== settings.authKey) {
                             alert('❌ ACCESS DENIED: Authentication Key mismatch! You are not authorized to restore this backup.');
                             return;
                         }
                     }
-
                     if(confirm('Restore this backup? Current data will be replaced.')) { 
                         ['products','clients','sales','settings'].forEach(k => { 
                             if(d[k]) { window[k] = d[k]; localStorage.setItem('nv_'+k, JSON.stringify(d[k])); } 
@@ -613,7 +659,7 @@
                 } 
             };
             r.readAsText(f);
-            e.target.value = ''; // Reset l'input pour pouvoir re-sélectionner le même fichier si besoin
+            e.target.value = ''; 
         });
 
         init(); renderCart(); goScreen();
