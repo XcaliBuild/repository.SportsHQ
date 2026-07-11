@@ -570,7 +570,7 @@
         </div>
     </div>
 
-    <!-- Client Checkout (MODIFIÉ AVEC SÉLECTION) -->
+    <!-- Client Checkout -->
     <div class="modal-overlay" id="modal-checkout-client">
         <div class="modal-dialog">
             <div class="modal-header"><span>👤 Checkout</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-checkout-client')"></i></div>
@@ -578,11 +578,9 @@
             <div class="input-group">
                 <div class="input-label">Select Client</div>
                 <select id="co-client-select" class="input-field" onchange="coClientChange()">
-                    <!-- Options populated by JS -->
                 </select>
             </div>
 
-            <!-- Affiché uniquement si "Create New Client" est sélectionné -->
             <div id="co-new-client-fields" style="display:none;">
                 <div class="input-group"><div class="input-label">Name</div><input type="text" id="co-name" class="input-field"></div>
                 <div class="input-group"><div class="input-label">Address</div><input type="text" id="co-addr" class="input-field"></div>
@@ -590,7 +588,35 @@
                 <div class="input-group"><div class="input-label">Email</div><input type="email" id="co-email" class="input-field"></div>
             </div>
 
-            <button class="btn btn-blue btn-block" onclick="finalizeCheckout()">Validate & Checkout</button>
+            <button class="btn btn-blue btn-block" onclick="finalizeCheckout()">Validate Payment</button>
+        </div>
+    </div>
+
+    <!-- Receipt Selection Modal (NEW) -->
+    <div class="modal-overlay" id="modal-receipt-action">
+        <div class="modal-dialog" style="text-align:center;">
+            <div class="modal-header">
+                <span style="color:var(--brand-green);"><i class="fa-solid fa-circle-check"></i> Payment Success!</span>
+                <i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-receipt-action')"></i>
+            </div>
+            
+            <div style="font-size:2.2rem;font-weight:800;margin:10px 0;color:var(--brand-green);" id="receipt-action-total">0.00 €</div>
+            <p style="margin-bottom: 15px; color: var(--text-gray); font-size: 0.9rem;">Send digital receipt to customer:</p>
+            
+            <div class="input-group" style="text-align: left;">
+                <input type="tel" id="receipt-phone" class="input-field" placeholder="Phone number...">
+            </div>
+            <div class="input-group" style="text-align: left;">
+                <input type="email" id="receipt-email" class="input-field" placeholder="Email address...">
+            </div>
+            
+            <div class="action-row" style="margin-top:15px; margin-bottom:10px;">
+                <button class="btn btn-green flex-1" onclick="triggerSendReceipt('whatsapp')"><i class="fa-brands fa-whatsapp"></i> WA</button>
+                <button class="btn btn-blue flex-1" onclick="triggerSendReceipt('sms')"><i class="fa-solid fa-sms"></i> SMS</button>
+                <button class="btn btn-white flex-1" onclick="triggerSendReceipt('email')"><i class="fa-solid fa-envelope"></i> Email</button>
+            </div>
+            
+            <button class="btn btn-red btn-block" onclick="closeModal('modal-receipt-action')">Close / Skip</button>
         </div>
     </div>
 
@@ -644,6 +670,9 @@
         let scanInstance = null;
         let popupScanInstance = null;
         let selProdCode = null;
+        
+        // Nouvelle variable pour stocker la dernière transaction
+        let lastSale = null;
 
         let products = JSON.parse(localStorage.getItem('nv_products')) || {
             '1111': { name: 'Service A', price: '15.00', stock: 100, desc: 'Standard service' },
@@ -809,7 +838,6 @@
             updateAll();
         }
 
-        // PROCESS CHECKOUT (AVEC SÉLECTION DE CLIENT)
         function processCheckout() {
             if (!cart.length && !inputBuf) { alert('🛒 Empty cart'); return; }
             let tot = cartTotal();
@@ -818,16 +846,14 @@
                 cart.push({ code: 'FREE', name: 'Quick Entry', price: tot.toFixed(2), qty: 1 });
             }
 
-            // Remplir le select des clients
             const sel = document.getElementById('co-client-select');
             sel.innerHTML = '<option value="">-- Walk-in (No Client) --</option><option value="NEW">+ Create New Client</option>';
             Object.entries(clients).forEach(([id, c]) => {
                 sel.innerHTML += `<option value="${id}">${c.name}</option>`;
             });
-            sel.value = ""; // Par défaut: sans client
-            coClientChange(); // Mettre à jour l'affichage des champs
+            sel.value = ""; 
+            coClientChange(); 
 
-            // Vider les champs
             document.getElementById('co-name').value = '';
             document.getElementById('co-addr').value = '';
             document.getElementById('co-tel').value = '';
@@ -836,7 +862,6 @@
             openModal('modal-checkout-client');
         }
 
-        // Afficher/Masquer les champs de nouveau client
         function coClientChange() {
             const val = document.getElementById('co-client-select').value;
             document.getElementById('co-new-client-fields').style.display = (val === 'NEW') ? 'block' : 'none';
@@ -862,7 +887,7 @@
                 localStorage.setItem('nv_clients', JSON.stringify(clients));
                 finalClient = client;
             } else if (selVal !== '') {
-                finalClient = clients[selVal]; // Un client existant a été choisi
+                finalClient = clients[selVal];
             }
 
             closeModal('modal-checkout-client');
@@ -871,19 +896,78 @@
 
         function doCheckout(client) {
             let tot = cartTotal();
+            
+            // Mise à jour de l'inventaire
             cart.forEach(it => {
                 if (it.code !== 'FREE' && products[it.code]) {
                     products[it.code].stock = Math.max(0, (products[it.code].stock || 0) - it.qty);
                 }
             });
             localStorage.setItem('nv_products', JSON.stringify(products));
-            sales.push({ total: tot, items: [...cart], date: new Date().toISOString(), client });
+            
+            // Création de l'enregistrement de vente
+            const saleRecord = { total: tot, items: [...cart], date: new Date().toISOString(), client: client };
+            sales.push(saleRecord);
             localStorage.setItem('nv_sales', JSON.stringify(sales));
+            
+            // Sauvegarder pour le reçu
+            lastSale = saleRecord;
+            
+            // Reset de la caisse
             cart = [];
             inputBuf = '';
             renderCart();
             updateAll();
-            alert('✅ Payment successful!');
+            
+            // Préparer et afficher la fenêtre du reçu
+            document.getElementById('receipt-action-total').textContent = fmt(tot);
+            document.getElementById('receipt-phone').value = client ? (client.phone || '') : '';
+            document.getElementById('receipt-email').value = client ? (client.email || '') : '';
+            
+            openModal('modal-receipt-action');
+        }
+
+        // ==================== RECEIPT LOGIC ====================
+        function generateReceiptText() {
+            if (!lastSale) return '';
+            const d = new Date(lastSale.date);
+            
+            let txt = `🧾 RECEIPT - ${settings.companyName || 'NOVA POS'}\n`;
+            txt += `Date: ${d.toLocaleDateString()} - ${d.toLocaleTimeString()}\n`;
+            txt += `------------------------\n`;
+            
+            lastSale.items.forEach(item => {
+                let itemTotal = parseFloat(item.price) * item.qty;
+                txt += `${item.qty}x ${item.name} = ${fmt(itemTotal)}\n`;
+            });
+            
+            txt += `------------------------\n`;
+            txt += `TOTAL: ${fmt(lastSale.total)}\n`;
+            txt += `------------------------\n`;
+            txt += `Thank you for your visit!`;
+            
+            return txt;
+        }
+
+        function triggerSendReceipt(method) {
+            const phone = document.getElementById('receipt-phone').value;
+            const email = document.getElementById('receipt-email').value;
+            const receiptText = generateReceiptText();
+            const encodedText = encodeURIComponent(receiptText);
+
+            if (method === 'whatsapp') {
+                if (!phone) { alert('Phone number required for WhatsApp'); return; }
+                let waNumber = phone.replace(/\D/g, '');
+                window.open(`https://wa.me/${waNumber}?text=${encodedText}`);
+            } else if (method === 'sms') {
+                if (!phone) { alert('Phone number required for SMS'); return; }
+                window.open(`sms:${phone}?body=${encodedText}`);
+            } else if (method === 'email') {
+                if (!email) { alert('Email address required'); return; }
+                window.open(`mailto:${email}?subject=Receipt ${settings.companyName || 'NOVA POS'}&body=${encodedText}`);
+            }
+            
+            closeModal('modal-receipt-action');
         }
 
         // ==================== REMISE ====================
@@ -1143,7 +1227,6 @@
             document.getElementById('link-contact').placeholder = m === 'email' ? 'Email...' : 'Phone...';
         }
 
-        // FIX LIEN WHATSAPP
         function sendLink() {
             const contact = document.getElementById('link-contact').value;
             if (!contact) { alert('Contact required'); return; }
@@ -1151,16 +1234,12 @@
             if (tot === 0 && inputBuf) tot = parseFloat(inputBuf) || 0;
             
             let paymentStr = '';
-            // On vérifie que tu as bien mis ton pseudo dans les réglages
             if (settings.paypalLink && settings.paypalLink.trim() !== '') {
-                // Nettoyage au cas où tu as copié-collé toute l'URL au lieu du pseudo
                 let ppUser = settings.paypalLink.replace(/https?:\/\/(www\.)?paypal\.me\//gi, '').replace(/^\//, '').split('/')[0];
                 paymentStr = `\n\nPay online here:\nhttps://paypal.me/${ppUser}/${tot.toFixed(2)}`;
             }
 
             const msg = `💳 Payment request ${fmt(tot)} - ${settings.companyName || 'NOVA POS'}\n${settings.phone ? '📞 '+settings.phone : ''}${paymentStr}`;
-            
-            // Formatage de l'URL pour éviter les bugs WhatsApp
             let encodedMsg = encodeURIComponent(msg);
             
             if (linkMethod === 'whatsapp') {
