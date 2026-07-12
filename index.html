@@ -117,7 +117,7 @@
         </div>
         <div style="display: flex; align-items: center;">
             <i class="fa-solid fa-arrows-rotate" id="sync-icon" style="display:none; color:var(--brand-cyan); font-size:1.1rem; margin-right:12px;"></i>
-            <button class="header-btn" onclick="openSettingsSafe()"><i class="fa-solid fa-gear"></i></button>
+            <button class="header-btn" onclick="openModal('modal-settings')"><i class="fa-solid fa-gear"></i></button>
         </div>
     </header>
 
@@ -144,8 +144,8 @@
                     <button class="num-key" onclick="pressNum('2')">2</button>
                     <button class="num-key" onclick="pressNum('3')">3</button>
                     
-                    <!-- BOUTON # MASTER -->
-                    <button class="num-key" onclick="promptMaster()" style="color:var(--brand-cyan);">#</button>
+                    <!-- BOUTON 00 (REMPLACE LE # PIN) -->
+                    <button class="num-key" onclick="pressNum('00')" style="color:var(--brand-cyan);">00</button>
                     
                     <button class="num-key" onclick="pressNum('0')">0</button>
                     <button class="num-key" onclick="deleteDigit()" style="background: var(--brand-yellow); color: #333333; border-color: #D97706; box-shadow: 0 2px 0 #D97706;"><i class="fa-solid fa-delete-left"></i></button>
@@ -211,14 +211,15 @@
                 </div>
             </div>
             
+            <!-- POS ID / MASTER CONFIG -->
             <div class="input-group">
-                <div class="input-label" style="color:var(--brand-cyan);">POS NAME (Type "master" for Master access)</div>
-                <input type="text" id="set-pos-name" class="input-field" placeholder="e.g. POS 1" style="font-weight:bold;">
+                <div class="input-label" style="color:var(--brand-cyan);">POS ID (Type "MASTER" to set as Admin)</div>
+                <input type="text" id="set-pos-name" class="input-field" placeholder="e.g. POS 1 or MASTER" style="font-weight:bold;" oninput="checkMasterInput()">
             </div>
 
-            <div class="input-group" id="master-pin-group" style="display:none;">
-                <div class="input-label" style="color:var(--brand-yellow);"><i class="fa-solid fa-key"></i> Master 6-Digit PIN</div>
-                <input type="password" id="set-master-pin" class="input-field" maxlength="6" placeholder="000000">
+            <div class="input-group">
+                <div class="input-label" style="color:var(--brand-pink);"><i class="fa-solid fa-lock"></i> Auth Key (Encrypted Backups)</div>
+                <input type="password" id="set-auth-key" class="input-field" placeholder="Secret key">
             </div>
 
             <!-- SECTION MASTER: GENERATION DE POS -->
@@ -249,7 +250,6 @@
 
             <div class="action-row"><div class="input-group flex-1"><div class="input-label">Start Ref CS</div><input type="number" id="set-cs-ref" class="input-field" placeholder="100000"></div><div class="input-group flex-1"><div class="input-label">Start Ref CR</div><input type="number" id="set-cr-ref" class="input-field" placeholder="200000"></div></div>
 
-            <div class="input-group"><div class="input-label" style="color:var(--brand-pink);"><i class="fa-solid fa-lock"></i> Auth Key (Encrypted Backups)</div><input type="password" id="set-auth-key" class="input-field" placeholder="Secret key"></div>
             <div class="input-group"><div class="input-label">Theme</div><select id="set-theme" class="input-field"><option value="light">Light</option><option value="dark">AMOLED Dark</option></select></div>
             
             <button class="btn btn-blue btn-block" onclick="saveSettings()" style="margin-bottom:15px; margin-top:10px;">Save Config & Apply</button>
@@ -277,20 +277,18 @@
         });
 
         let cart = [], inputBuf = '', screenIdx = 0, touchStartX = 0, touchStartY = 0, popupScanMode = 'product', scanInstance = null, popupScanInstance = null, lastSale = null;
-        let tempMasterAccess = false; // Utilisé si on tape le code #
         let products = JSON.parse(localStorage.getItem('nv_products')) || {};
         let clients = JSON.parse(localStorage.getItem('nv_clients')) || {}; 
         let sales = JSON.parse(localStorage.getItem('nv_sales')) || [];
         
         let settings = JSON.parse(localStorage.getItem('nv_settings')) || { 
-            companyName: 'NOVA POS', posName: 'POS 1', website: '', authKey: '', 
+            companyName: 'NOVA POS', posName: '', website: '', authKey: '', 
             theme: 'light', autoBackup: true,
             csRefSeq: 100000, crRefSeq: 200000,
-            masterPin: '000000',
-            allowedScreens: [0, 1, 2, 3, 4, 5, 6] // Tous par défaut
+            allowedScreens: [0, 1, 2, 3, 4, 5, 6] // Tous par défaut si non configuré
         };
 
-        const isMaster = () => settings.posName.toLowerCase() === 'master' || tempMasterAccess;
+        const isMaster = () => settings.posName.toUpperCase() === 'MASTER';
 
         function fmt(amount) { return parseFloat(amount).toFixed(2) + ' €'; }
         function cartTotal() { return cart.reduce((s, i) => s + (parseFloat(i.price) * i.qty), 0); }
@@ -316,10 +314,9 @@
         // INITIALISATION & RESTRICTIONS
         function init() {
             document.getElementById('set-name').value = settings.companyName || ''; 
-            document.getElementById('set-pos-name').value = settings.posName || 'POS 1'; 
+            document.getElementById('set-pos-name').value = settings.posName || ''; 
             document.getElementById('set-website').value = settings.website || '';
             document.getElementById('set-auth-key').value = settings.authKey || '';
-            document.getElementById('set-master-pin').value = settings.masterPin || '';
             document.getElementById('set-theme').value = settings.theme || 'light';
             document.getElementById('set-autobackup').checked = settings.autoBackup;
             document.getElementById('set-cs-ref').value = settings.csRefSeq || 100000;
@@ -327,6 +324,9 @@
             
             document.body.dataset.theme = settings.theme || 'light';
             
+            // Afficher le panneau Admin si Master
+            checkMasterInput();
+
             // Build Page Dots based on permissions
             const dotsContainer = document.getElementById('page-dots');
             dotsContainer.innerHTML = '';
@@ -336,17 +336,18 @@
                 }
             }
             
-            // Master specific UI
-            if(settings.posName.toLowerCase() === 'master') {
-                document.getElementById('master-pin-group').style.display = 'block';
+            setupAutoBackupInterval();
+            updateAll(); goScreen(); 
+        }
+
+        // VERIFICATION EN TEMPS REEL POUR AFFICHER LE PANNEAU ADMIN
+        function checkMasterInput() {
+            let val = document.getElementById('set-pos-name').value.toUpperCase();
+            if(val === 'MASTER') {
                 document.getElementById('master-admin-panel').style.display = 'block';
             } else {
-                document.getElementById('master-pin-group').style.display = 'none';
                 document.getElementById('master-admin-panel').style.display = 'none';
             }
-
-            setupAutoBackupInterval();
-            updateAll(); goScreen(); // Force screen logic
         }
 
         function updateAll() {
@@ -382,7 +383,6 @@
             document.getElementById('swipe-container').style.transform = `translateX(-${screenIdx * 14.285}%)`;
             const dots = document.querySelectorAll('.page-dot.allowed');
             let activeIdx = 0;
-            // Find which allowed dot corresponds to current screen
             let tempIdx = 0;
             for(let i=0; i<7; i++) {
                 if(isMaster() || settings.allowedScreens.includes(i)) {
@@ -397,35 +397,6 @@
             updateAll();
         }
 
-        // NUMPAD & MASTER PIN
-        function promptMaster() {
-            if(isMaster()) return; // Already master
-            let pin = prompt("Enter Master PIN:");
-            if(pin === settings.masterPin) {
-                tempMasterAccess = true;
-                alert("Master Access Granted.");
-                init(); // Rebuild UI
-            } else if (pin) {
-                alert("Incorrect PIN");
-            }
-        }
-
-        function openSettingsSafe() {
-            if(isMaster()) {
-                document.getElementById('set-pos-name').addEventListener('input', e => {
-                    if(e.target.value.toLowerCase() === 'master') {
-                        document.getElementById('master-pin-group').style.display = 'block';
-                        document.getElementById('master-admin-panel').style.display = 'block';
-                    } else {
-                        document.getElementById('master-pin-group').style.display = 'none';
-                        document.getElementById('master-admin-panel').style.display = 'none';
-                    }
-                });
-                openModal('modal-settings');
-            } else {
-                promptMaster();
-            }
-        }
 
         function pressNum(n) { 
             inputBuf += n; 
@@ -436,7 +407,6 @@
 
         function addToCart() {
             if(!inputBuf) return; 
-            // On vérifie si c'est un produit
             let val = getInputValue();
             cart.push({code:'FREE', name:'Entry', price:val, qty:1});
             inputBuf = ''; document.getElementById('barcode-show').textContent = 'READY'; renderCart(); updateAll();
@@ -469,9 +439,10 @@
                     if(confirm("Apply new POS configuration?")) {
                         settings.posName = config.posName;
                         settings.allowedScreens = config.allowedScreens;
-                        settings.masterPin = config.masterPin;
                         settings.authKey = config.authKey;
-                        saveSettings();
+                        
+                        // Force save config silently
+                        localStorage.setItem('nv_settings', JSON.stringify(settings));
                         alert("✅ Terminal Configured as: " + settings.posName);
                         location.reload();
                     }
@@ -505,7 +476,6 @@
                 isPosConfig: true,
                 posName: pName,
                 allowedScreens: allowed,
-                masterPin: settings.masterPin,
                 authKey: settings.authKey
             };
             
@@ -551,12 +521,28 @@
             openModal('modal-settlement');
         }
 
+        // ================= SAVE CONFIGURATION AVEC SECURITE MASTER =================
         function saveSettings() {
+            let newPosName = document.getElementById('set-pos-name').value;
+            let typedAuthKey = document.getElementById('set-auth-key').value;
+            
+            // VERIFICATION DE SECURITE
+            if(newPosName.toUpperCase() === 'MASTER') {
+                if(!typedAuthKey) {
+                    return alert("⚠️ Le Master POS nécessite obligatoirement une clé d'authentification (Auth Key).");
+                }
+                // Si une clé était déjà enregistrée dans le système (protection contre un employé)
+                if(settings.authKey && settings.authKey !== typedAuthKey) {
+                    return alert("❌ Clé d'authentification incorrecte pour devenir Master.");
+                }
+            }
+
+            // SI TOUT EST OK, ON SAUVEGARDE
             settings.companyName = document.getElementById('set-name').value;
-            settings.posName = document.getElementById('set-pos-name').value;
+            settings.posName = newPosName;
             settings.website = document.getElementById('set-website').value;
-            settings.authKey = document.getElementById('set-auth-key').value;
-            if(settings.posName.toLowerCase() === 'master') settings.masterPin = document.getElementById('set-master-pin').value;
+            settings.authKey = typedAuthKey;
+            
             settings.csRefSeq = parseInt(document.getElementById('set-cs-ref').value) || 100000;
             settings.crRefSeq = parseInt(document.getElementById('set-cr-ref').value) || 200000;
             
