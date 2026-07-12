@@ -12,6 +12,7 @@
         :root {
             --brand-cyan: #06B6D4; --brand-blue: #0066FF; --brand-green: #22C55E;
             --brand-yellow: #FBBF24; --brand-red: #EF4444; --brand-purple: #A855F7; --brand-pink: #EC4899;
+            
             --bg-page: #000000; --surface-white: #121212; --text-dark: #FFFFFF;
             --text-gray: #A1A1AA; --border-light: #27272A; --nova-text-color: #FFFFFF;
             --go-bg: #FFFFFF; --go-text: #000000; --numpad-bg: #FFFFFF; --numpad-text: #333333;
@@ -21,22 +22,25 @@
             --text-gray: #64748B; --border-light: #CBD5E1; --nova-text-color: #0F172A;
             --go-bg: #0F172A; --go-text: #FFFFFF; --numpad-bg: #FFFFFF; --numpad-text: #333333;
         }
+        
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background: var(--bg-page); color: var(--text-dark); height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; user-select: none; -webkit-tap-highlight-color: transparent; transition: background 0.3s; }
         
         #bootscreen { position: fixed; inset: 0; background: #000000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
+        
         header { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--surface-white); border-bottom: 1px solid var(--border-light); height: 60px; flex-shrink: 0; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
         .logo-container { display: flex; align-items: center; gap: 4px; }
         .nova-logo { display: flex; flex-direction: column; align-items: center; line-height: 1; }
         .nova-logo .nova-text { font-size: 1.25rem; font-weight: 900; color: var(--nova-text-color); letter-spacing: 2px; }
         .nova-logo .pos-text { font-size: 0.6rem; font-weight: 700; color: var(--text-gray); letter-spacing: 3px; margin-top: -3px; }
-        .go-badge { background: var(--go-bg); color: var(--go-text); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; margin-top: -6px; }
+        .go-badge { background: var(--go-bg); color: var(--go-text); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; margin-top: -6px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .page-indicator { display: flex; gap: 5px; }
         .page-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-light); transition: 0.3s; display:none; }
         .page-dot.allowed { display:block; }
         .page-dot.active { width: 20px; border-radius: 10px; }
         .header-btn { background: var(--bg-page); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; color: var(--text-gray); font-size: 1.1rem; }
-        
+        .header-btn:active { transform: scale(0.9); }
+
         .swipe-wrapper { flex: 1; overflow: hidden; position: relative; touch-action: pan-y; }
         .swipe-container { display: flex; width: 700%; height: 100%; transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
         .screen { width: 14.285%; padding: 12px; display: flex; flex-direction: column; overflow-y: auto; padding-bottom: max(20px, env(safe-area-inset-bottom)); position: relative; }
@@ -46,12 +50,14 @@
         .terminal-amount { font-size: 2rem; font-weight: 800; margin: 4px 0; }
 
         .screen-0 { background: transparent; color: var(--text-dark); }
-        .screen-0 .terminal-box { background: #000000; border-radius: 4px; border: 4px solid #1E293B; box-shadow: inset 0 0 15px rgba(0,0,0,0.8); padding: 20px 14px; }
-        #cash-total { font-family: 'Doto', sans-serif; font-size: 3.2rem; font-weight: 700; color: #E2E8F0; letter-spacing: 2px; margin: 10px 0; }
-        .barcode-display { font-family: 'Doto', sans-serif; font-size: 1.2rem; color: #94A3B8; text-align: center; min-height:25px;}
+        .screen-0 .terminal-box { background: #000000; border-radius: 4px; border: 4px solid #1E293B; box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 4px 10px rgba(0,0,0,0.1); padding: 20px 14px; }
+        .screen-0 .terminal-label { color: #A0B2C6; }
+        #cash-total { font-family: 'Doto', sans-serif; font-size: 3.2rem; font-weight: 700; color: #E2E8F0; letter-spacing: 2px; margin: 10px 0; text-shadow: 0 0 5px rgba(226, 232, 240, 0.3); }
+        .barcode-display { font-family: 'Doto', sans-serif; font-size: 1.2rem; color: #94A3B8; text-align: center; min-height: 25px;}
         
-        .cart-area { flex: 1; overflow-y: auto; background: var(--surface-white); border: 1px solid var(--border-light); border-radius: 8px; padding: 6px; margin-bottom: 8px; min-height: 80px; }
+        .cart-area { flex: 1; overflow-y: auto; background: var(--surface-white); border: 1px solid var(--border-light); border-radius: 8px; padding: 6px; margin-bottom: 8px; min-height: 80px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 6px; border-bottom: 1px solid var(--border-light); font-size: 0.9rem; font-weight: 500; }
+        .cart-item:last-child { border-bottom: none; }
         .qty-tag { background: var(--brand-blue); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; margin-right: 6px; }
         
         .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; }
@@ -60,6 +66,8 @@
         
         .action-row { display: flex; gap: 8px; }
         .btn { padding: 14px; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.1s; text-transform: uppercase; }
+        .btn:active { transform: scale(0.96); }
+        
         .btn-white { background: var(--surface-white); color: var(--text-dark); border: 2px solid var(--border-light); }
         .btn-blue { background: var(--brand-blue); color: white; }
         .btn-green { background: var(--brand-green); color: white; }
@@ -70,28 +78,47 @@
         .btn-cyan { background: var(--brand-cyan); color: #000; }
         .btn-block { width: 100%; } .flex-1 { flex: 1; }
 
-        .screen-1 .terminal-box { background: var(--brand-yellow); color: #111827; }
-        .screen-2 .terminal-box { background: var(--brand-blue); }
-        .screen-3 .terminal-box { background: var(--brand-red); }
-        .screen-4 .terminal-box { background: var(--brand-purple); }
-        .screen-5 .terminal-box { background: var(--brand-pink); }
-        .screen-6 .terminal-box { background: #333; }
+        .screen-1 .terminal-box { background: var(--brand-yellow); color: #111827; border-radius: 8px; }
+        .screen-2 .terminal-box { background: var(--brand-blue); border-radius: 8px; }
+        .screen-3 .terminal-box { background: var(--brand-red); border-radius: 8px; }
+        .screen-4 .terminal-box { background: var(--brand-purple); border-radius: 8px; }
+        .screen-5 .terminal-box { background: var(--brand-pink); border-radius: 8px; }
+        .screen-6 .terminal-box { background: #333; border-radius: 8px; }
 
         .scroll-area { flex: 1; overflow-y: auto; margin-bottom: 8px; }
         .input-group { margin-bottom: 12px; text-align: left; }
-        .input-label { font-size: 0.75rem; color: var(--text-gray); font-weight: 700; margin-bottom: 4px; text-transform: uppercase; }
+        .input-label { font-size: 0.75rem; color: var(--text-gray); font-weight: 700; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
         .input-field { width: 100%; padding: 12px; background: var(--surface-white); border: 2px solid var(--border-light); border-radius: 8px; font-size: 0.95rem; color: var(--text-dark); outline: none; transition: 0.2s; }
+        .input-field:focus { border-color: var(--brand-blue); }
+        select.input-field { cursor: pointer; }
+
+        .product-row { background: var(--surface-white); padding: 14px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-light); box-shadow: 0 2px 4px rgba(0,0,0,0.02); cursor:pointer; }
+        .product-row:active { background: var(--border-light); }
+        .stock-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; }
+        .stock-zero { background: var(--brand-red); color: white; } .stock-low { background: var(--brand-yellow); color: #111827; } .stock-good { background: var(--brand-green); color: white; }
+
+        .client-card { background: var(--surface-white); padding: 14px; border-radius: 8px; margin-bottom: 8px; border-left: 5px solid var(--brand-pink); border-top: 1px solid var(--border-light); border-right: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); cursor:pointer; }
+        .client-card:active { background: var(--border-light); }
+        .credit-badge { float: right; background: var(--brand-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight:bold; }
+        .credit-clean { background: var(--brand-green); }
         
-        .product-row { background: var(--surface-white); padding: 14px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-light); cursor:pointer; }
-        .client-card { background: var(--surface-white); padding: 14px; border-radius: 8px; margin-bottom: 8px; border-left: 5px solid var(--brand-pink); border: 1px solid var(--border-light); cursor:pointer; }
-        
+        .floating-search-btn { position: absolute; bottom: 85px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: var(--brand-pink); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; z-index: 100; border: 2px solid var(--surface-white); }
+        .floating-search-btn:active { transform: scale(0.9); }
+        .search-bar-container { display: none; padding: 10px; background: var(--surface-white); border-radius: 8px; margin-bottom: 10px; border: 2px solid var(--brand-pink); animation: fadeIn 0.2s ease-in-out; }
+        .search-bar-container.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
         .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 1000; }
         .modal-overlay.active { display: flex; }
-        .modal-dialog { background: var(--surface-white); border-radius: 16px; padding: 20px; width: 92%; max-width: 400px; max-height: 85vh; overflow-y: auto; margin-bottom: env(safe-area-inset-bottom); }
+        .modal-dialog { background: var(--surface-white); border-radius: 16px; padding: 20px; width: 92%; max-width: 400px; max-height: 85vh; overflow-y: auto; margin-bottom: env(safe-area-inset-bottom); border: 1px solid var(--border-light); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; font-weight: 900; font-size: 1.2rem; margin-bottom: 15px; color: var(--text-dark); }
         .modal-close { cursor: pointer; color: var(--text-gray); font-size: 1.4rem; padding: 5px; }
 
+        .method-toggle { display: flex; justify-content: center; gap: 12px; margin: 15px 0; }
+        .method-btn { width: 48px; height: 48px; border-radius: 8px; border: 2px solid var(--border-light); background: var(--surface-white); color: var(--text-gray); font-size: 1.2rem; cursor:pointer;}
+        .method-btn.active { border-color: var(--brand-blue); color: var(--brand-blue); background: rgba(0, 102, 255, 0.1); }
         #scanner-view, #popup-scanner-view { width: 100%; min-height: 250px; border-radius: 8px; background: #000; display: flex; align-items: center; justify-content: center; border: 2px dashed var(--border-light); }
+        
         #shutdown-screen { position: fixed; inset: 0; background: #000; color: #0f0; display: none; align-items: center; justify-content: center; font-family: 'Doto', monospace; font-size: 1.2rem; z-index: 10000; text-align: center; padding: 20px; }
         
         /* Master Admin Panel Styling */
@@ -100,14 +127,21 @@
 </head>
 <body data-theme="light">
 
+    <!-- BOOTSCREEN TERMINAL -->
     <div id="bootscreen">
         <div class="logo-container" style="transform: scale(2.5);">
-            <div class="nova-logo"><span class="nova-text" style="color:#fff;">NOVA</span><span class="pos-text" style="color:#aaa;">P.O.S</span></div><div class="go-badge" style="background:#fff; color:#000;">GO</div>
+            <div class="nova-logo"><span class="nova-text" style="color:#fff;">NOVA</span><span class="pos-text" style="color:#aaa;">P.O.S</span></div>
+            <div class="go-badge" style="background:#fff; color:#000;">GO</div>
         </div>
-        <div id="boot-text" style="font-family:'Doto', monospace; font-size:0.8rem; color:#06B6D4; margin-top:40px; text-transform:lowercase; letter-spacing:1px; text-align:center;">> init system...</div>
+        <div id="boot-text" style="font-family:'Doto', monospace; font-size:0.8rem; color:#06B6D4; margin-top:40px; text-transform:lowercase; letter-spacing:1px; text-align:center;">
+            > init system...
+        </div>
     </div>
     
-    <div id="shutdown-screen">> system off.<br>backup safely stored.</div>
+    <div id="shutdown-screen">
+        > system off.<br>backup safely stored.<br><br>it is now safe to close this window.
+    </div>
+
     <input type="file" id="restore-file-input" style="display: none;">
 
     <header>
@@ -144,15 +178,15 @@
                     <button class="num-key" onclick="pressNum('2')">2</button>
                     <button class="num-key" onclick="pressNum('3')">3</button>
                     
-                    <!-- BOUTON 00 (Saisie monétaire rapide) -->
+                    <!-- BOUTON 00 (REMPLACE LE POINT) -->
                     <button class="num-key" onclick="pressNum('00')" style="color:var(--brand-cyan);">00</button>
                     <button class="num-key" onclick="pressNum('0')">0</button>
-                    <button class="num-key" onclick="deleteDigit()" style="background: var(--brand-yellow); color: #333333; border-color: #D97706; box-shadow: 0 2px 0 #D97706;"><i class="fa-solid fa-delete-left"></i></button>
+                    <button class="num-key" onclick="deleteDigit()" style="background: var(--brand-yellow); color: #333333; border-color: #D97706; box-shadow: 0 2px 0 #D97706; font-family: 'Segoe UI', sans-serif;"><i class="fa-solid fa-delete-left"></i></button>
                 </div>
-                <button class="btn btn-cyan btn-block" style="margin-bottom: 12px;" onclick="addToCart()"><i class="fa-solid fa-plus"></i> ADD MANUAL PRICE</button>
+                
+                <button class="btn btn-cyan btn-block" style="margin-bottom: 12px;" onclick="addToCart()"><i class="fa-solid fa-plus"></i> ADD TO CART</button>
                 
                 <div class="action-row">
-                    <!-- LE BOUTON SCAN OUVRE LE POPUP AVEC L'OPTION DE SAISIE CODE BARRE MANUELLE -->
                     <button class="btn btn-purple flex-1" onclick="startPopupScan('caisse')"><i class="fa-solid fa-barcode"></i> Scan</button>
                     <button class="btn btn-white flex-1" onclick="openPaymentLink()"><i class="fa-solid fa-link"></i> Link</button>
                     <button class="btn btn-green flex-1" onclick="processCheckout()"><i class="fa-solid fa-cash-register"></i> PAY</button>
@@ -160,13 +194,42 @@
             </div>
 
             <!-- 1: DISCOUNT -->
-            <div class="screen screen-1" data-idx="1"><div class="terminal-box"><div class="terminal-label">DISCOUNT</div><div class="terminal-amount" id="disc-total">0.00 €</div></div><div class="scroll-area"><div class="input-group"><div class="input-label">Amount</div><input type="number" id="disc-amount" class="input-field" step="0.01"></div><div class="action-row" style="margin-bottom:10px;"><button class="btn btn-white flex-1" onclick="quickDisc(5)">-5%</button><button class="btn btn-white flex-1" onclick="quickDisc(10)">-10%</button><button class="btn btn-white flex-1" onclick="quickDisc(20)">-20%</button></div></div><button class="btn btn-yellow btn-block" onclick="applyDiscount()">APPLY</button></div>
+            <div class="screen screen-1" data-idx="1">
+                <div class="terminal-box"><div class="terminal-label">DISCOUNT</div><div class="terminal-amount" id="disc-total">0.00 €</div></div>
+                <div class="scroll-area">
+                    <div class="input-group"><div class="input-label">Amount</div><input type="number" id="disc-amount" class="input-field" step="0.01"></div>
+                    <div class="action-row" style="margin-bottom:10px;">
+                        <button class="btn btn-white flex-1" onclick="quickDisc(5)">-5%</button>
+                        <button class="btn btn-white flex-1" onclick="quickDisc(10)">-10%</button>
+                        <button class="btn btn-white flex-1" onclick="quickDisc(20)">-20%</button>
+                    </div>
+                    <div class="input-group"><div class="input-label">Reason</div><input type="text" id="disc-reason" class="input-field"></div>
+                </div>
+                <button class="btn btn-yellow btn-block" onclick="applyDiscount()">APPLY</button>
+            </div>
 
-            <!-- 2: CREDIT -->
-            <div class="screen screen-2" data-idx="2"><div class="terminal-box"><div class="terminal-label">CREDIT</div><div class="terminal-amount" id="split-total">0.00 €</div></div><div class="scroll-area"><div class="input-group"><div class="input-label">Select Client</div><select id="inst-client-select" class="input-field" onchange="instClientChange()"></select></div><div id="inst-new-client-fields" style="display:none; background:var(--bg-page); padding:10px; border-radius:8px; margin-bottom:10px;"><div class="input-group"><div class="input-label">Client Name</div><input type="text" id="inst-name" class="input-field"></div></div><div class="input-group"><div class="input-label">Notes</div><textarea id="inst-notes" class="input-field" rows="2"></textarea></div></div><button class="btn btn-blue btn-block" onclick="createInstallment()">CREATE CREDIT</button></div>
+            <!-- 2: SPLIT / CREDIT / INSTALLMENT -->
+            <div class="screen screen-2" data-idx="2">
+                <div class="terminal-box"><div class="terminal-label">CREDIT / INSTALLMENT</div><div class="terminal-amount" id="split-total">0.00 €</div></div>
+                <div class="scroll-area">
+                    <div class="input-group"><div class="input-label">Select Client</div><select id="inst-client-select" class="input-field" onchange="instClientChange()"></select></div>
+                    <div id="inst-new-client-fields" style="display:none; background:var(--bg-page); padding:10px; border-radius:8px; margin-bottom:10px;">
+                        <div class="input-group"><div class="input-label">New Client Name</div><input type="text" id="inst-name" class="input-field"></div>
+                        <div class="input-group"><div class="input-label">Phone</div><input type="tel" id="inst-tel" class="input-field"></div>
+                    </div>
+                    <div class="input-group"><div class="input-label">Installments (Months)</div><input type="number" id="inst-nb" class="input-field" value="1"></div>
+                    
+                    <div class="input-group"><div class="input-label">Notes / Reason</div><textarea id="inst-notes" class="input-field" rows="2" placeholder="Reason for credit..."></textarea></div>
+                </div>
+                <button class="btn btn-blue btn-block" onclick="createInstallment()">CREATE CREDIT RECORD</button>
+            </div>
 
             <!-- 3: INVENTORY -->
-            <div class="screen screen-3" data-idx="3"><div class="terminal-box"><div class="terminal-label">INVENTORY</div><div class="terminal-amount" style="font-size:1.4rem;" id="inv-count">0</div></div><div class="scroll-area" id="inv-list"></div><button class="btn btn-red btn-block" onclick="openAddProd()">+ PRODUCT</button></div>
+            <div class="screen screen-3" data-idx="3">
+                <div class="terminal-box"><div class="terminal-label">INVENTORY</div><div class="terminal-amount" style="font-size:1.4rem;" id="inv-count">0</div></div>
+                <div class="scroll-area" id="inv-list"></div>
+                <button class="btn btn-red btn-block" onclick="openAddProd()">+ PRODUCT</button>
+            </div>
 
             <!-- 4: SCANNER (Pairing & Data Sync) -->
             <div class="screen screen-4" data-idx="4">
@@ -174,7 +237,7 @@
                 <div id="scanner-view"><i class="fa-solid fa-camera fa-3x" style="color:#555"></i></div>
                 <div class="action-row" style="margin-top:10px;">
                     <button class="btn btn-white flex-1" onclick="stopScan()">Stop</button>
-                    <button class="btn btn-purple flex-1" onclick="startScan()"><i class="fa-solid fa-qrcode"></i> Scan</button>
+                    <button class="btn btn-purple flex-1" onclick="startScan()"><i class="fa-solid fa-qrcode"></i> Scan Code</button>
                 </div>
                 <!-- BOUTON QR SYNC POUR LE MASTER -->
                 <button class="btn btn-cyan btn-block" style="margin-top:10px;" onclick="showDeviceSyncQR()"><i class="fa-solid fa-mobile-screen"></i> Show Device QR</button>
@@ -185,10 +248,21 @@
             </div>
 
             <!-- 5: CLIENTS -->
-            <div class="screen screen-5" data-idx="5"><div class="terminal-box"><div class="terminal-label">CLIENTS & CREDITS</div><div class="terminal-amount" style="font-size:1.4rem;" id="cli-count">0</div></div><div class="search-bar-container" id="cli-search-box"><input type="text" id="cli-search-input" class="input-field" placeholder="Search..." onkeyup="filterClients()"></div><div class="scroll-area" id="cli-list"></div><button class="btn btn-pink btn-block" onclick="openAddClient()">+ CLIENT</button></div>
+            <div class="screen screen-5" data-idx="5">
+                <div class="terminal-box"><div class="terminal-label">CLIENTS & CREDITS</div><div class="terminal-amount" style="font-size:1.4rem;" id="cli-count">0</div></div>
+                <div class="search-bar-container" id="cli-search-box"><input type="text" id="cli-search-input" class="input-field" placeholder="Search client name, phone..." onkeyup="filterClients()"></div>
+                <div class="scroll-area" id="cli-list"></div>
+                <button class="btn btn-pink btn-block" onclick="openAddClient()">+ CLIENT</button>
+                <div class="floating-search-btn" onclick="toggleClientSearch()"><i class="fa-solid fa-magnifying-glass"></i></div>
+            </div>
 
-            <!-- 6: REVENUE -->
-            <div class="screen screen-6" data-idx="6"><div class="terminal-box"><div class="terminal-label">REVENUE</div><div class="terminal-amount" id="hist-total">0.00 €</div></div><input type="text" id="hist-search-input" class="input-field" placeholder="Search Ref or Client..." onkeyup="filterHistory()" style="margin-bottom: 10px;"><div class="scroll-area" id="hist-list"></div><button class="btn btn-white btn-block" onclick="openSettle()"><i class="fa-solid fa-receipt"></i> Z-REPORT</button></div>
+            <!-- 6: REVENUE (Avec Recherche par Ref) -->
+            <div class="screen screen-6" data-idx="6">
+                <div class="terminal-box"><div class="terminal-label">REVENUE</div><div class="terminal-amount" id="hist-total">0.00 €</div></div>
+                <input type="text" id="hist-search-input" class="input-field" placeholder="Search Ref (ex: CS10000) or Client..." onkeyup="filterHistory()" style="margin-bottom: 10px; border-color:var(--brand-cyan);">
+                <div class="scroll-area" id="hist-list"></div>
+                <button class="btn btn-white btn-block" onclick="openSettle()"><i class="fa-solid fa-receipt"></i> Z-REPORT</button>
+            </div>
         </div>
     </div>
 
@@ -199,6 +273,7 @@
         <div class="modal-dialog">
             <div class="modal-header"><span>📷 Scan Code</span><i class="fa-solid fa-xmark modal-close" onclick="stopPopupScan()"></i></div>
             <div id="popup-scanner-view"></div>
+            
             <div style="margin-top:15px; border-top:1px solid var(--border-light); padding-top:15px;">
                 <div class="input-label" style="text-align:center; margin-bottom:8px;">Or Enter Barcode Manually</div>
                 <div class="action-row">
@@ -206,6 +281,7 @@
                     <button class="btn btn-blue" onclick="submitManualBarcode()">ADD</button>
                 </div>
             </div>
+
             <button class="btn btn-red btn-block" style="margin-top:15px;" onclick="stopPopupScan()">Cancel</button>
         </div>
     </div>
@@ -234,7 +310,7 @@
                 <div class="action-row">
                     <div class="input-group flex-1">
                         <div class="input-label" style="color:var(--brand-pink);"><i class="fa-solid fa-lock"></i> Master Auth Key</div>
-                        <!-- Mis en TYPE TEXT selon ta demande pour être visible -->
+                        <!-- Mis en TYPE TEXT pour être visible -->
                         <input type="text" id="set-auth-key" class="input-field" placeholder="Clé d'origine">
                     </div>
                     <div class="input-group flex-1">
@@ -271,7 +347,7 @@
                     <div class="input-group flex-1"><div class="input-label">Website</div><input type="text" id="set-website" class="input-field" placeholder="www."></div>
                 </div>
 
-                <!-- TOUS LES AUTRES PARAMETRES SONT LA -->
+                <!-- TOUS LES AUTRES PARAMETRES -->
                 <div class="input-group"><div class="input-label">Company Address</div><input type="text" id="set-addr" class="input-field"></div>
                 <div class="action-row">
                     <div class="input-group flex-1"><div class="input-label">Phone</div><input type="text" id="set-tel" class="input-field"></div>
@@ -311,15 +387,6 @@
         </div>
     </div>
 
-    <!-- AUTRES MODALS SIMPLIFIÉS -->
-    <div class="modal-overlay" id="modal-product"><div class="modal-dialog"><div class="modal-header"><span>📦 Product</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-product')"></i></div><div class="input-group"><div class="input-label">Code</div><input type="text" id="pr-code" class="input-field"></div><div class="input-group"><div class="input-label">Name</div><input type="text" id="pr-name" class="input-field"></div><div class="action-row"><div class="input-group flex-1"><div class="input-label">Price</div><input type="number" id="pr-price" class="input-field" step="0.01"></div><div class="input-group flex-1"><div class="input-label">Stock</div><input type="number" id="pr-stock" class="input-field" value="10"></div></div><button class="btn btn-blue btn-block" onclick="saveProd()">Save Product</button></div></div>
-    
-    <div class="modal-overlay" id="modal-checkout-client"><div class="modal-dialog"><div class="modal-header"><span>💳 Checkout</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-checkout-client')"></i></div><div class="input-group"><div class="input-label">Client</div><select id="co-client-select" class="input-field" onchange="coClientChange()"></select></div><div id="co-new-client-fields" style="display:none;"><div class="input-group"><div class="input-label">Name</div><input type="text" id="co-name" class="input-field"></div></div><button class="btn btn-green btn-block" style="margin-top:15px;" onclick="finalizeCheckout()">Validate Payment</button></div></div>
-
-    <div class="modal-overlay" id="modal-receipt-action"><div class="modal-dialog" style="text-align:center;"><div class="modal-header"><span style="color:var(--brand-green);"><i class="fa-solid fa-circle-check"></i> Success</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-receipt-action')"></i></div><div style="font-size:2.5rem;font-weight:800;color:var(--brand-green);" id="receipt-action-total">0.00</div><div style="font-family:monospace; margin-bottom:15px;" id="receipt-action-ref"></div><button class="btn btn-white btn-block" onclick="closeModal('modal-receipt-action')">Close</button></div></div>
-
-    <div class="modal-overlay" id="modal-settlement"><div class="modal-dialog" style="max-width: 500px;"><div class="modal-header"><span>📊 Z-Report</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settlement')"></i></div><div id="settle-content" style="background:#ffffff; color:#000000; padding:20px; border-radius:10px; margin-bottom:12px; font-family:monospace; font-size:0.85rem; border:1px solid #ccc; max-height: 50vh; overflow-y:auto;"></div><button class="btn btn-blue btn-block" style="margin-bottom:8px;" onclick="dlPdf()">PDF</button><button class="btn btn-red btn-block" onclick="closeDay()">CLOSE DAY</button></div></div>
-
     <!-- TRANSACTION DETAIL MODAL -->
     <div class="modal-overlay" id="modal-tx-detail">
         <div class="modal-dialog">
@@ -329,23 +396,50 @@
         </div>
     </div>
 
+    <!-- PRODUCT -->
+    <div class="modal-overlay" id="modal-product">
+        <div class="modal-dialog"><div class="modal-header"><span>📦 Product</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-product')"></i></div><div class="input-group"><div class="input-label">Code</div><div style="display:flex;gap:8px;"><input type="text" id="pr-code" class="input-field" style="flex:1;"><button type="button" class="btn btn-cyan" onclick="startPopupScan('product')"><i class="fa-solid fa-barcode"></i></button></div></div><div class="input-group"><div class="input-label">Name</div><input type="text" id="pr-name" class="input-field"></div><div class="action-row"><div class="input-group flex-1"><div class="input-label">Price</div><input type="number" id="pr-price" class="input-field" step="0.01"></div><div class="input-group flex-1"><div class="input-label">Stock</div><input type="number" id="pr-stock" class="input-field" value="10"></div></div><button class="btn btn-blue btn-block" onclick="saveProd()">Save Product</button></div>
+    </div>
+
+    <!-- CLIENT ADD & MANAGE -->
+    <div class="modal-overlay" id="modal-client"><div class="modal-dialog"><div class="modal-header"><span>👤 Client</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-client')"></i></div><div class="input-group"><div class="input-label">Name</div><input type="text" id="cl-name" class="input-field"></div><div class="input-group"><div class="input-label">Address</div><input type="text" id="cl-addr" class="input-field"></div><div class="input-group"><div class="input-label">Phone</div><input type="tel" id="cl-tel" class="input-field"></div><div class="input-group"><div class="input-label">Email</div><input type="email" id="cl-email" class="input-field"></div><button class="btn btn-pink btn-block" onclick="saveClient()">Save Client</button></div></div>
+    
+    <div class="modal-overlay" id="modal-client-manage"><div class="modal-dialog"><div class="modal-header"><span id="manage-cl-name">Client Name</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-client-manage')"></i></div><p style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 15px;" id="manage-cl-details"></p><div style="background: var(--bg-page); padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; border: 1px solid var(--border-light);"><div class="input-label" style="margin-bottom: 5px;">CURRENT CREDIT DEBT</div><div style="font-size: 2rem; font-weight: 900; color: var(--brand-red);" id="manage-cl-debt">0.00</div></div><div class="input-group"><div class="input-label">Payment Amount</div><input type="number" id="manage-pay-amount" class="input-field" step="0.01" placeholder="Amount to pay..."></div><div class="action-row" style="margin-top: 15px;"><button class="btn btn-blue flex-1" onclick="recordCashSale()"><i class="fa-solid fa-money-bill"></i> CS (Cash)</button><button class="btn btn-green flex-1" onclick="payCreditDebt()"><i class="fa-solid fa-hand-holding-dollar"></i> CR (Pay Debt)</button></div><input type="hidden" id="manage-cl-id"></div></div>
+
+    <!-- CHECKOUT SELECT -->
+    <div class="modal-overlay" id="modal-checkout-client"><div class="modal-dialog"><div class="modal-header"><span>💳 Checkout</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-checkout-client')"></i></div><div class="input-group"><div class="input-label">Client</div><select id="co-client-select" class="input-field" onchange="coClientChange()"></select></div><div id="co-new-client-fields" style="display:none;"><div class="input-group"><div class="input-label">Name</div><input type="text" id="co-name" class="input-field"></div><div class="input-group"><div class="input-label">Phone</div><input type="tel" id="co-tel" class="input-field"></div></div><button class="btn btn-green btn-block" style="margin-top:15px;" onclick="finalizeCheckout()">Validate Payment</button></div></div>
+
+    <!-- RECEIPT SENDER -->
+    <div class="modal-overlay" id="modal-receipt-action"><div class="modal-dialog" style="text-align:center;"><div class="modal-header"><span style="color:var(--brand-green);"><i class="fa-solid fa-circle-check"></i> Success</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-receipt-action')"></i></div><div style="font-size:2.5rem;font-weight:800;margin:10px 0;color:var(--brand-green); font-family: 'Doto', sans-serif;" id="receipt-action-total">0.00</div><div style="font-family:monospace; margin-bottom:10px; font-size:1.2rem;" id="receipt-action-ref"></div><p style="margin-bottom:15px;color:var(--text-gray);font-size:0.9rem;">Send receipt via:</p><input type="tel" id="receipt-phone" class="input-field" placeholder="Phone..." style="margin-bottom:8px;"><input type="email" id="receipt-email" class="input-field" placeholder="Email..." style="margin-bottom:15px;"><div class="action-row" style="margin-bottom:15px;"><button class="btn btn-green flex-1" onclick="triggerSendReceipt('whatsapp')"><i class="fa-brands fa-whatsapp"></i> WA</button><button class="btn btn-blue flex-1" onclick="triggerSendReceipt('sms')"><i class="fa-solid fa-sms"></i> SMS</button><button class="btn btn-white flex-1" onclick="triggerSendReceipt('email')"><i class="fa-solid fa-envelope"></i> Email</button></div><button class="btn btn-white btn-block" onclick="closeModal('modal-receipt-action')">Skip</button></div></div>
+
+    <!-- SETTLEMENT -->
+    <div class="modal-overlay" id="modal-settlement"><div class="modal-dialog" style="max-width: 500px;"><div class="modal-header"><span>📊 Z-Report</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settlement')"></i></div><div id="settle-content" style="background:#ffffff; color:#000000; padding:20px; border-radius:10px; margin-bottom:12px; font-family:monospace; font-size:0.85rem; border:1px solid #ccc; max-height: 50vh; overflow-y:auto;"></div><div class="action-row" style="margin-bottom:8px;"><button class="btn btn-blue flex-1" onclick="dlPdf()"><i class="fa-solid fa-file-pdf"></i> PDF</button><button class="btn btn-white flex-1" onclick="closeModal('modal-settlement')">Close</button></div><button class="btn btn-red btn-block" onclick="closeDay()">CLOSE DAY (ERASE HIST)</button></div></div>
+
+    <!-- LINK -->
+    <div class="modal-overlay" id="modal-link"><div class="modal-dialog" style="text-align:center;"><div class="modal-header"><span>🔗 Payment Link</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-link')"></i></div><div style="font-size:2rem;font-weight:800;margin:10px 0;font-family: 'Doto', sans-serif;" id="link-amount">0.00</div><div class="method-toggle"><button class="method-btn active" data-m="sms" onclick="setMethod('sms')"><i class="fa-solid fa-sms"></i></button><button class="method-btn" data-m="email" onclick="setMethod('email')"><i class="fa-solid fa-envelope"></i></button><button class="method-btn" data-m="whatsapp" onclick="setMethod('whatsapp')"><i class="fa-brands fa-whatsapp"></i></button></div><input type="text" id="link-contact" class="input-field" placeholder="Contact..." style="text-align:center; margin-bottom:15px;"><button class="btn btn-blue btn-block" onclick="sendLink()">SEND LINK</button></div></div>
+
     <script>
         // BOOTSCREEN ANIMATION
         window.addEventListener('load', () => { 
+            const bt = document.getElementById('boot-text');
+            setTimeout(() => { bt.textContent = "> mounting core modules..."; }, 500);
+            setTimeout(() => { bt.textContent = "> recovering auto-backups..."; }, 1200);
+            setTimeout(() => { bt.textContent = "> system ready_"; }, 1900);
             setTimeout(() => { 
                 const bs = document.getElementById('bootscreen'); 
                 if(bs) { bs.style.opacity = '0'; setTimeout(() => bs.style.display = 'none', 500); } 
-            }, 1500); 
+            }, 2400); 
         });
 
         const CURRENCIES = { "EUR":"€", "USD":"$", "GBP":"£", "CHF":"CHF", "CAD":"CA$", "AUD":"A$", "MAD":"DH", "XOF":"CFA", "Rs":"Rs", "CNY":"¥", "JPY":"¥", "SGD":"S$", "THB":"฿", "CUSTOM":"Custom" };
 
-        let cart = [], inputBuf = '', screenIdx = 0, touchStartX = 0, touchStartY = 0, popupScanMode = 'product', scanInstance = null, popupScanInstance = null, lastSale = null;
+        let cart = [], inputBuf = '', screenIdx = 0, touchStartX = 0, touchStartY = 0, linkMethod = 'sms', popupScanMode = 'product', scanInstance = null, popupScanInstance = null, lastSale = null;
         let products = JSON.parse(localStorage.getItem('nv_products')) || {};
         let clients = JSON.parse(localStorage.getItem('nv_clients')) || {}; 
         let sales = JSON.parse(localStorage.getItem('nv_sales')) || [];
         
-        let settings = JSON.parse(localStorage.getItem('nv_settings')) || { 
+        // SECURITE CRITIQUE : Fusion des anciens paramètres avec les nouveaux pour éviter un plantage
+        let defaultSettings = { 
             companyName: 'NOVA POS', posName: '', website: '', authKey: '', linkKey: '12345678',
             address: '', phone: '', email: '', taxRate: 0, currency: 'EUR', customCurrency: '',
             paypalLink: '', receiptMessage: 'Thank you for your visit!', logoBase64: '', lang: 'fr',
@@ -353,10 +447,13 @@
             csRefSeq: 100000, crRefSeq: 200000,
             allowedScreens: [0, 1, 2, 3, 4, 5, 6]
         };
+        let savedSettings = JSON.parse(localStorage.getItem('nv_settings')) || {};
+        let settings = Object.assign({}, defaultSettings, savedSettings);
+        if (!Array.isArray(settings.allowedScreens)) settings.allowedScreens = [0, 1, 2, 3, 4, 5, 6];
 
-        // LA LOGIQUE DE DROITS : Vierge OU Master = Accès total
-        const isVirgin = () => settings.posName.trim() === '';
-        const isMaster = () => settings.posName.toUpperCase() === 'MASTER';
+        // LA LOGIQUE DE DROITS : Vierge OU Master = Accès total (Null-safe)
+        const isVirgin = () => (!settings.posName || String(settings.posName).trim() === '');
+        const isMaster = () => (settings.posName && String(settings.posName).toUpperCase() === 'MASTER');
         const hasAdminRights = () => isVirgin() || isMaster();
 
         function fmt(amount) { 
@@ -366,6 +463,32 @@
         function cartTotal() { return cart.reduce((s, i) => s + (parseFloat(i.price) * i.qty), 0); }
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function openSettings() { init(); openModal('modal-settings'); }
+
+        // AUTO BACKUP MEMORY SYNC
+        let backupInterval;
+        function setupAutoBackupInterval() {
+            clearInterval(backupInterval);
+            if(settings.autoBackup) {
+                backupInterval = setInterval(triggerAutoBackup, 60000); 
+            }
+        }
+
+        function triggerAutoBackup() {
+            if(!settings.autoBackup) return;
+            const icon = document.getElementById('sync-icon');
+            if(icon) {
+                icon.style.display = 'inline-block';
+                icon.classList.add('fa-spin');
+            }
+            
+            localStorage.setItem('nv_products', JSON.stringify(products));
+            localStorage.setItem('nv_clients', JSON.stringify(clients));
+            localStorage.setItem('nv_sales', JSON.stringify(sales));
+            localStorage.setItem('nv_settings', JSON.stringify(settings));
+
+            setTimeout(() => { if(icon) { icon.classList.remove('fa-spin'); icon.style.display = 'none'; } }, 1000);
+        }
 
         // LOGO UPLOAD HANDLER
         document.getElementById('set-logo').addEventListener('change', function(e) {
@@ -389,19 +512,6 @@
 
         // INPUT LOGIC (CENTIMES) -> '5599' = 55.99
         function getInputValue() { return inputBuf.length > 0 ? (parseInt(inputBuf) / 100).toFixed(2) : ''; }
-
-        function setupAutoBackupInterval() {
-            if(settings.autoBackup) setInterval(triggerAutoBackup, 60000); 
-        }
-        function triggerAutoBackup() {
-            if(!settings.autoBackup) return;
-            document.getElementById('sync-icon').style.display = 'inline-block';
-            localStorage.setItem('nv_products', JSON.stringify(products));
-            localStorage.setItem('nv_clients', JSON.stringify(clients));
-            localStorage.setItem('nv_sales', JSON.stringify(sales));
-            localStorage.setItem('nv_settings', JSON.stringify(settings));
-            setTimeout(() => { document.getElementById('sync-icon').style.display = 'none'; }, 500);
-        }
 
         // INITIALISATION
         function init() {
@@ -452,7 +562,9 @@
             }
             
             setupAutoBackupInterval();
-            updateAll(); goScreen(); 
+            updateAll(); 
+            loadInv(); loadCli(); loadHist();
+            goScreen(); 
         }
 
         function checkMasterInput() {
@@ -471,6 +583,8 @@
             let val = getInputValue();
             let tot = cartTotal() || parseFloat(val || '0');
             document.getElementById('cash-total').textContent = fmt(tot);
+            document.getElementById('disc-total').textContent = fmt(tot);
+            document.getElementById('split-total').textContent = fmt(tot);
             document.getElementById('barcode-show').textContent = val ? val + ' ' + (CURRENCIES[settings.currency]||'€') : 'READY';
         }
 
@@ -513,6 +627,11 @@
                 d.style.background = i === activeIdx ? '#06B6D4' : 'var(--border-light)'; 
             });
             updateAll();
+            
+            if(screenIdx===2) initInstScreen(); 
+            if(screenIdx===3) loadInv(); 
+            if(screenIdx===5) loadCli(); 
+            if(screenIdx===6) loadHist();
         }
 
         function pressNum(n) { 
@@ -534,7 +653,7 @@
             document.getElementById('manual-barcode-input').value = '';
             closeModal('modal-product'); openModal('modal-scanner-popup');
             if(!popupScanInstance) popupScanInstance = new Html5Qrcode('popup-scanner-view');
-            popupScanInstance.start({facingMode:'environment'}, {fps:10, qrbox:250}, t => handleBarcodeScan(t), ()=>{}).catch(e => { alert('Camera Error.'); });
+            popupScanInstance.start({facingMode:'environment'}, {fps:10, qrbox:250}, t => handleBarcodeScan(t), ()=>{}).catch(e => { alert('Camera access needed for scanning.'); });
         }
         
         function submitManualBarcode() {
@@ -554,7 +673,6 @@
                         settings.posName = config.posName;
                         settings.allowedScreens = config.allowedScreens;
                         settings.linkKey = config.linkKey;
-                        // On intègre aussi les infos de base pour l'impression des reçus
                         if(config.companyName) settings.companyName = config.companyName;
                         if(config.currency) settings.currency = config.currency;
                         if(config.taxRate !== undefined) settings.taxRate = config.taxRate;
@@ -599,7 +717,7 @@
                 isPosConfig: true,
                 posName: pName,
                 allowedScreens: allowed,
-                linkKey: settings.linkKey, // Le code a 8 chiffres pour lier
+                linkKey: settings.linkKey, 
                 companyName: settings.companyName,
                 website: settings.website,
                 address: settings.address,
@@ -619,7 +737,7 @@
             let total = sales.reduce((s,x) => s + x.total, 0);
             let data = {
                 isSyncData: true,
-                posName: settings.posName || 'Virgin POS',
+                posName: settings.posName || 'Vierge',
                 totalSales: total,
                 txCount: sales.length,
                 date: new Date().toLocaleDateString()
@@ -645,22 +763,52 @@
                 else return alert('🛒 Empty Cart');
             }
             const sel = document.getElementById('co-client-select');
-            sel.innerHTML = '<option value="">-- Walk-in --</option>';
+            sel.innerHTML = '<option value="">-- Walk-in --</option><option value="NEW">+ Create New Client</option>';
             Object.entries(clients).forEach(([id, c]) => sel.innerHTML += `<option value="${id}">${c.name}</option>`);
+            document.getElementById('co-new-client-fields').style.display = 'none';
+            document.getElementById('co-name').value = '';
+            document.getElementById('co-tel').value = '';
             openModal('modal-checkout-client');
         }
         
+        function coClientChange() { document.getElementById('co-new-client-fields').style.display = document.getElementById('co-client-select').value === 'NEW' ? 'block' : 'none'; }
+
         function finalizeCheckout() {
+            let finalClient = null, sel = document.getElementById('co-client-select').value;
+            if(sel === 'NEW') {
+                let n = document.getElementById('co-name').value; if(!n) return alert("Name required");
+                finalClient = { name:n, phone:document.getElementById('co-tel').value||'', address:'', email:'', creditBalance: 0 };
+                clients['CLI'+Date.now()] = finalClient;
+            } else if(sel) finalClient = clients[sel];
+            closeModal('modal-checkout-client');
+
             let tot = cartTotal();
+            cart.forEach(it => { if(it.code!=='FREE' && products[it.code]) products[it.code].stock = Math.max(0, products[it.code].stock - it.qty); });
+
             let refNum = 'CS' + (settings.csRefSeq++);
-            lastSale = { total: tot, items: [...cart], date: new Date().toISOString(), type: 'CS', ref: refNum, pos: settings.posName || 'Vierge' };
+            lastSale = { total: tot, items: [...cart], date: new Date().toISOString(), type: 'CS', client: finalClient, ref: refNum, pos: settings.posName || 'Vierge' };
             sales.push(lastSale); 
+            
             triggerAutoBackup(); 
             cart = []; inputBuf = ''; renderCart(); updateAll();
             
             document.getElementById('receipt-action-total').textContent = fmt(tot);
             document.getElementById('receipt-action-ref').textContent = '#' + refNum;
-            closeModal('modal-checkout-client'); openModal('modal-receipt-action');
+            document.getElementById('receipt-phone').value = finalClient ? finalClient.phone : '';
+            openModal('modal-receipt-action');
+        }
+
+        function triggerSendReceipt(m) {
+            if(!lastSale) return;
+            let taxStr = settings.taxRate > 0 ? `Incl. VAT (${settings.taxRate}%)\n` : '';
+            let txt = `🧾 RECEIPT - ${settings.companyName}\nTerminal: ${settings.posName || 'Vierge'}\nRef: ${lastSale.ref||''}\nDate: ${new Date(lastSale.date).toLocaleString()}\n---\n`;
+            lastSale.items.forEach(i => txt += `${i.qty}x ${i.name} = ${fmt(i.price*i.qty)}\n`);
+            txt += `---\n${taxStr}TOTAL: ${fmt(lastSale.total)}\n---\n${settings.receiptMessage}`;
+            let enc = encodeURIComponent(txt), p = document.getElementById('receipt-phone').value, e = document.getElementById('receipt-email').value;
+            if(m==='whatsapp' && p) window.open(`https://wa.me/${p.replace(/\D/g,'')}?text=${enc}`);
+            else if(m==='sms' && p) window.open(`sms:${p}?body=${enc}`);
+            else if(m==='email' && e) window.open(`mailto:${e}?subject=Receipt&body=${enc}`);
+            closeModal('modal-receipt-action');
         }
 
         function openSettle() {
@@ -698,13 +846,13 @@
         function saveSettings() {
             let newPosName = document.getElementById('set-pos-name').value;
             
-            // SAUVEGARDE GLOBALE (Si Admin / Vierge)
+            // SAUVEGARDE GLOBALE (Si Admin / Vierge / Master)
             if(hasAdminRights() || newPosName.toUpperCase() === 'MASTER') {
                 let typedAuthKey = document.getElementById('set-auth-key').value;
                 
                 // VERIFICATION DE SECURITE MASTER
                 if(newPosName.toUpperCase() === 'MASTER') {
-                    if(!typedAuthKey) return alert("⚠️ Le Master POS nécessite obligatoirement une clé Master Auth Key.");
+                    if(!typedAuthKey) return alert("⚠️ Le Master POS nécessite obligatoirement une Master Auth Key.");
                     if(settings.authKey && settings.authKey !== typedAuthKey) return alert("❌ Master Auth Key incorrecte.");
                 }
 
@@ -789,20 +937,64 @@
         }
         function dlPdf() { const opt = { margin: 10, filename: `Z-Report.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }; html2pdf().set(opt).from(document.getElementById('settle-content')).save(); }
         function closeDay() { if(confirm('Close day and erase history?')) { sales=[]; triggerAutoBackup(); closeModal('modal-settlement'); loadHist(); alert('✅ Day closed'); } }
+        
+        // INVENTAIRE
         function loadInv() { const el = document.getElementById('inv-list'); el.innerHTML = ''; document.getElementById('inv-count').textContent = Object.keys(products).length; Object.entries(products).forEach(([c, p]) => el.innerHTML += `<div class="product-row" onclick="selProd('${c}')"><div><strong style="color:var(--text-dark);">${p.name}</strong> <span class="stock-badge ${p.stock>9?'stock-good':p.stock>0?'stock-low':'stock-zero'}">${p.stock}</span><br><small style="color:var(--text-gray);">#${c}</small></div><strong style="color:var(--text-dark);">${fmt(p.price)}</strong></div>`); }
         function selProd(c) { let p = products[c], act = prompt(`${p.name}\n1: Add to cart\n2: Edit\n3: Delete`, '1'); if(act==='1') { cart.push({code:c, name:p.name, price:p.price, qty:1}); renderCart(); updateAll(); screenIdx=0; goScreen(); } else if(act==='2') { document.getElementById('pr-code').value=c; document.getElementById('pr-name').value=p.name; document.getElementById('pr-price').value=p.price; document.getElementById('pr-stock').value=p.stock; openModal('modal-product'); } else if(act==='3' && confirm('Delete this product?')) { delete products[c]; triggerAutoBackup(); loadInv(); } }
         function openAddProd(c='') { ['pr-code','pr-name','pr-price'].forEach(id=>document.getElementById(id).value=''); document.getElementById('pr-code').value=c; document.getElementById('pr-stock').value='10'; openModal('modal-product'); }
         function saveProd() { let c = document.getElementById('pr-code').value || 'SKU'+Date.now().toString().slice(-4), n = document.getElementById('pr-name').value, pr = document.getElementById('pr-price').value; if(!n || !pr) return alert('⚠️ Name & Price required!'); products[c] = { name:n, price:pr, stock:parseInt(document.getElementById('pr-stock').value)||0 }; triggerAutoBackup(); closeModal('modal-product'); loadInv(); alert('✅ Product Saved!'); }
+        
+        // CLIENTS & CREDIT
         function loadCli() { const el = document.getElementById('cli-list'); el.innerHTML = ''; document.getElementById('cli-count').textContent = Object.keys(clients).length; Object.entries(clients).forEach(([id, c]) => { let bal = parseFloat(c.creditBalance) || 0; let badge = bal > 0 ? `<span class="credit-badge">${fmt(bal)}</span>` : `<span class="credit-badge credit-clean">0.00</span>`; el.innerHTML += `<div class="client-card" onclick="openManageClient('${id}')">${badge}<strong style="color:var(--text-dark);">${c.name}</strong><br><small style="color:var(--text-gray);"><i class="fa-solid fa-phone"></i> ${c.phone||'No phone'}</small></div>`; }); }
         function openAddClient() { ['cl-name','cl-addr','cl-tel','cl-email'].forEach(id=>document.getElementById(id).value=''); openModal('modal-client'); }
         function saveClient() { let n = document.getElementById('cl-name').value; if(!n) return alert('Name required'); clients['CLI'+Date.now()] = { name:n, address:document.getElementById('cl-addr').value||'', phone:document.getElementById('cl-tel').value||'', email:document.getElementById('cl-email').value||'', creditBalance: 0 }; triggerAutoBackup(); closeModal('modal-client'); loadCli(); }
         function openManageClient(id) { let c = clients[id]; document.getElementById('manage-cl-id').value = id; document.getElementById('manage-cl-name').textContent = c.name; document.getElementById('manage-cl-details').innerHTML = `${c.address||''}<br>${c.phone||''}`; document.getElementById('manage-cl-debt').textContent = fmt(c.creditBalance || 0); document.getElementById('manage-pay-amount').value = ''; openModal('modal-client-manage'); }
+        
         function payCreditDebt() { let id = document.getElementById('manage-cl-id').value, amt = parseFloat(document.getElementById('manage-pay-amount').value); if(!amt || amt <= 0) return alert('Enter a valid amount to pay.'); let c = clients[id]; c.creditBalance = Math.max(0, (parseFloat(c.creditBalance) || 0) - amt); let refNum = 'PAY' + Date.now().toString().slice(-6); sales.push({ total: amt, items: [{name: 'Debt Payment (CR)', qty:1, price:amt}], date: new Date().toISOString(), type: 'PAYMENT', client: c, pos: settings.posName || 'Vierge', ref: refNum }); triggerAutoBackup(); alert(`✅ Payment recorded. Remaining debt: ${fmt(c.creditBalance)}`); closeModal('modal-client-manage'); loadCli(); }
         function recordCashSale() { let id = document.getElementById('manage-cl-id').value, amt = parseFloat(document.getElementById('manage-pay-amount').value); if(!amt || amt <= 0) return alert('Enter a valid amount for the cash sale.'); let c = clients[id]; let refNum = 'CS' + (settings.csRefSeq++); sales.push({ total: amt, items: [{name: 'Cash Sale (CS)', qty:1, price:amt}], date: new Date().toISOString(), type: 'CS', client: c, pos: settings.posName || 'Vierge', ref: refNum }); triggerAutoBackup(); alert(`✅ Cash Sale (CS) recorded for ${fmt(amt)}`); closeModal('modal-client-manage'); loadCli(); }
-        function quickDisc(p) { let t = cartTotal() || parseFloat(getInputValue()) || 0; if(t) document.getElementById('disc-amount').value = (t*p/100).toFixed(2); }
+        
+        // INSTALLMENTS (SCREEN 2)
+        function initInstScreen() {
+            const sel = document.getElementById('inst-client-select');
+            sel.innerHTML = '<option value="">-- Select Client --</option><option value="NEW">+ Create New Client</option>';
+            Object.entries(clients).forEach(([id, c]) => sel.innerHTML += `<option value="${id}">${c.name}</option>`);
+            sel.value = ""; instClientChange();
+        }
+        function instClientChange() { document.getElementById('inst-new-client-fields').style.display = document.getElementById('inst-client-select').value === 'NEW' ? 'block' : 'none'; }
+        function createInstallment() {
+            let val = getInputValue(); let t = cartTotal() || parseFloat(val || '0'); if(!t) return alert("No amount to credit.");
+            let sel = document.getElementById('inst-client-select').value;
+            let clientId = sel, clientObj = null;
+            if(sel === 'NEW') {
+                let n = document.getElementById('inst-name').value; if(!n) return alert("Client Name required for credit.");
+                clientId = 'CLI'+Date.now();
+                clientObj = { name:n, phone:document.getElementById('inst-tel').value||'', address:'', email:'', creditBalance: 0 };
+                clients[clientId] = clientObj;
+            } else if (sel) { clientObj = clients[sel]; } else { return alert("You must select or create a client for credit."); }
+            let notes = document.getElementById('inst-notes').value || '';
+            let refNum = 'CR' + (settings.crRefSeq++);
+            clientObj.creditBalance = (parseFloat(clientObj.creditBalance) || 0) + t;
+            sales.push({ total: t, items: [{name: `Credit/Inst. ${refNum} - ${notes}`, qty:1, price:t}], date: new Date().toISOString(), type: 'CR', client: clientObj, ref: refNum, notes: notes, pos: settings.posName || 'Vierge' });
+            triggerAutoBackup();
+            alert(`✅ Credit Record Created: ${refNum}\nClient: ${clientObj.name}\nTotal Debt Added: ${fmt(t)}`);
+            cart = []; inputBuf = ''; renderCart(); updateAll(); document.getElementById('inst-notes').value = ''; screenIdx=0; goScreen();
+        }
+
+        function quickDisc(p) { let val = getInputValue(); let t = cartTotal() || parseFloat(val || '0'); if(t) document.getElementById('disc-amount').value = (t*p/100).toFixed(2); }
         function applyDiscount() { let a = parseFloat(document.getElementById('disc-amount').value), t = cartTotal(); if(a>0 && a<=t) { cart.push({code:'DISC', name:'Discount', price:(-a).toFixed(2), qty:1}); document.getElementById('disc-amount').value=''; renderCart(); updateAll(); screenIdx=0; goScreen(); } }
 
-        init(); renderCart(); goScreen();
+        function setMethod(m) { linkMethod=m; document.querySelectorAll('.method-btn').forEach(b=>b.classList.remove('active')); document.querySelector(`.method-btn[data-m="${m}"]`).classList.add('active'); }
+        function openPaymentLink() { let val = getInputValue(); let t = cartTotal() || parseFloat(val || '0'); if(!t) return; document.getElementById('link-amount').textContent=fmt(t); openModal('modal-link'); }
+        function sendLink() {
+            let c = document.getElementById('link-contact').value; let val = getInputValue(); let t = cartTotal() || parseFloat(val || '0'); if(!c||!t) return;
+            let pp = settings.paypalLink ? `\nPay: https://paypal.me/${settings.paypalLink.replace(/https?:\/\/(www\.)?paypal\.me\//gi, '').replace(/^\//, '').split('/')[0]}/${t.toFixed(2)}` : '';
+            let msg = encodeURIComponent(`💳 Payment ${fmt(t)} - ${settings.companyName}${pp}`);
+            if(linkMethod==='whatsapp') window.open(`https://wa.me/${c.replace(/\D/g,'')}?text=${msg}`); else if(linkMethod==='sms') window.open(`sms:${c}?body=${msg}`); else window.open(`mailto:${c}?body=${msg}`);
+            closeModal('modal-link'); cart=[]; inputBuf=''; renderCart(); updateAll();
+        }
+
+        // INIT EXECUTION
+        init(); 
     </script>
 </body>
 </html>
