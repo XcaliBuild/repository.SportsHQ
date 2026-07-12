@@ -59,7 +59,6 @@
         .cart-item:last-child { border-bottom: none; }
         .qty-tag { background: var(--brand-blue); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; margin-right: 6px; }
         
-        /* CLAVIER AVEC POINT */
         .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; }
         .num-key { width: 100%; height: 55px; border-radius: 6px; border: 2px solid #1E293B; background: var(--numpad-bg); color: var(--numpad-text); font-family: 'Doto', sans-serif; font-size: 1.6rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 0 #1E293B; transition: all 0.1s ease; }
         .num-key:active { transform: translateY(2px); box-shadow: 0 0 0 #1E293B; }
@@ -183,7 +182,6 @@
                 <button class="btn btn-cyan btn-block" style="margin-bottom: 12px;" onclick="addToCart()"><i class="fa-solid fa-plus"></i> ADD TO CART</button>
                 
                 <div class="action-row">
-                    <!-- BOUTON SCAN AJOUTE ICI -->
                     <button class="btn btn-purple flex-1" onclick="startPopupScan('caisse')"><i class="fa-solid fa-barcode"></i> Scan</button>
                     <button class="btn btn-white flex-1" onclick="openPaymentLink()"><i class="fa-solid fa-link"></i> Link</button>
                     <button class="btn btn-green flex-1" onclick="processCheckout()"><i class="fa-solid fa-cash-register"></i> PAY</button>
@@ -214,10 +212,8 @@
                         <div class="input-group"><div class="input-label">New Client Name</div><input type="text" id="inst-name" class="input-field"></div>
                         <div class="input-group"><div class="input-label">Phone</div><input type="tel" id="inst-tel" class="input-field"></div>
                     </div>
-                    <div class="action-row">
-                        <div class="input-group flex-1"><div class="input-label">Installments</div><input type="number" id="inst-nb" class="input-field" value="1"></div>
-                        <div class="input-group flex-1"><div class="input-label">Ref / Doc</div><input type="text" id="inst-ref" class="input-field" value="CR-" maxlength="8"></div>
-                    </div>
+                    <div class="input-group"><div class="input-label">Installments (Months)</div><input type="number" id="inst-nb" class="input-field" value="1"></div>
+                    
                     <div class="input-group"><div class="input-label">Notes / Reason</div><textarea id="inst-notes" class="input-field" rows="2" placeholder="Reason for credit..."></textarea></div>
                 </div>
                 <button class="btn btn-blue btn-block" onclick="createInstallment()">CREATE CREDIT RECORD</button>
@@ -249,9 +245,13 @@
                 <div class="floating-search-btn" onclick="toggleClientSearch()"><i class="fa-solid fa-magnifying-glass"></i></div>
             </div>
 
-            <!-- 6: REVENUE -->
+            <!-- 6: REVENUE (Avec Recherche par Ref) -->
             <div class="screen screen-6">
                 <div class="terminal-box"><div class="terminal-label">REVENUE</div><div class="terminal-amount" id="hist-total">0.00 €</div></div>
+                
+                <!-- NOUVELLE BARRE DE RECHERCHE TRANSACTION -->
+                <input type="text" id="hist-search-input" class="input-field" placeholder="Search Ref (ex: CS10000) or Client..." onkeyup="filterHistory()" style="margin-bottom: 10px; border-color:var(--brand-cyan);">
+                
                 <div class="scroll-area" id="hist-list"></div>
                 <button class="btn btn-white btn-block" onclick="openSettle()"><i class="fa-solid fa-receipt"></i> Z-REPORT</button>
             </div>
@@ -281,6 +281,12 @@
                 <div class="input-group flex-1"><div class="input-label">POS Name/No.</div><input type="text" id="set-pos-name" class="input-field" placeholder="e.g. POS 1"></div>
             </div>
             
+            <!-- REFS DEPART -->
+            <div class="action-row">
+                <div class="input-group flex-1"><div class="input-label">Start Ref CS</div><input type="number" id="set-cs-ref" class="input-field" placeholder="100000"></div>
+                <div class="input-group flex-1"><div class="input-label">Start Ref CR</div><input type="number" id="set-cr-ref" class="input-field" placeholder="200000"></div>
+            </div>
+
             <div class="input-group">
                 <div class="input-label">Company Logo (For Receipt)</div>
                 <input type="file" id="set-logo" class="input-field" accept="image/*" style="padding: 8px;">
@@ -297,6 +303,15 @@
                     <input type="text" id="set-custom-currency" class="input-field" style="display:none; margin-top:5px;" placeholder="Symbol (e.g. ฿)">
                 </div>
                 <div class="input-group flex-1"><div class="input-label">VAT / TVA (%)</div><input type="number" id="set-tax" class="input-field" placeholder="e.g. 20" step="0.01"></div>
+            </div>
+
+            <!-- LANGUE -->
+            <div class="input-group">
+                <div class="input-label">Language</div>
+                <select id="set-lang" class="input-field">
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                </select>
             </div>
 
             <div class="input-group"><div class="input-label" style="color:var(--brand-pink);"><i class="fa-solid fa-lock"></i> Auth Key (Security)</div><input type="password" id="set-auth-key" class="input-field" placeholder="Secret key for backup"></div>
@@ -333,10 +348,10 @@
     <div class="modal-overlay" id="modal-checkout-client"><div class="modal-dialog"><div class="modal-header"><span>💳 Checkout</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-checkout-client')"></i></div><div class="input-group"><div class="input-label">Client</div><select id="co-client-select" class="input-field" onchange="coClientChange()"></select></div><div id="co-new-client-fields" style="display:none;"><div class="input-group"><div class="input-label">Name</div><input type="text" id="co-name" class="input-field"></div><div class="input-group"><div class="input-label">Phone</div><input type="tel" id="co-tel" class="input-field"></div></div><button class="btn btn-green btn-block" style="margin-top:15px;" onclick="finalizeCheckout()">Validate Payment</button></div></div>
 
     <!-- RECEIPT SENDER -->
-    <div class="modal-overlay" id="modal-receipt-action"><div class="modal-dialog" style="text-align:center;"><div class="modal-header"><span style="color:var(--brand-green);"><i class="fa-solid fa-circle-check"></i> Success</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-receipt-action')"></i></div><div style="font-size:2.5rem;font-weight:800;margin:10px 0;color:var(--brand-green); font-family: 'Doto', sans-serif;" id="receipt-action-total">0.00</div><p style="margin-bottom:15px;color:var(--text-gray);font-size:0.9rem;">Send receipt via:</p><input type="tel" id="receipt-phone" class="input-field" placeholder="Phone..." style="margin-bottom:8px;"><input type="email" id="receipt-email" class="input-field" placeholder="Email..." style="margin-bottom:15px;"><div class="action-row" style="margin-bottom:15px;"><button class="btn btn-green flex-1" onclick="triggerSendReceipt('whatsapp')"><i class="fa-brands fa-whatsapp"></i> WA</button><button class="btn btn-blue flex-1" onclick="triggerSendReceipt('sms')"><i class="fa-solid fa-sms"></i> SMS</button><button class="btn btn-white flex-1" onclick="triggerSendReceipt('email')"><i class="fa-solid fa-envelope"></i> Email</button></div><button class="btn btn-white btn-block" onclick="closeModal('modal-receipt-action')">Skip</button></div></div>
+    <div class="modal-overlay" id="modal-receipt-action"><div class="modal-dialog" style="text-align:center;"><div class="modal-header"><span style="color:var(--brand-green);"><i class="fa-solid fa-circle-check"></i> Success</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-receipt-action')"></i></div><div style="font-size:2.5rem;font-weight:800;margin:10px 0;color:var(--brand-green); font-family: 'Doto', sans-serif;" id="receipt-action-total">0.00</div><div style="font-family:monospace; margin-bottom:10px; font-size:1.2rem;" id="receipt-action-ref"></div><p style="margin-bottom:15px;color:var(--text-gray);font-size:0.9rem;">Send receipt via:</p><input type="tel" id="receipt-phone" class="input-field" placeholder="Phone..." style="margin-bottom:8px;"><input type="email" id="receipt-email" class="input-field" placeholder="Email..." style="margin-bottom:15px;"><div class="action-row" style="margin-bottom:15px;"><button class="btn btn-green flex-1" onclick="triggerSendReceipt('whatsapp')"><i class="fa-brands fa-whatsapp"></i> WA</button><button class="btn btn-blue flex-1" onclick="triggerSendReceipt('sms')"><i class="fa-solid fa-sms"></i> SMS</button><button class="btn btn-white flex-1" onclick="triggerSendReceipt('email')"><i class="fa-solid fa-envelope"></i> Email</button></div><button class="btn btn-white btn-block" onclick="closeModal('modal-receipt-action')">Skip</button></div></div>
 
     <!-- SETTLEMENT -->
-    <div class="modal-overlay" id="modal-settlement"><div class="modal-dialog"><div class="modal-header"><span>📊 Z-Report</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settlement')"></i></div><div id="settle-content" style="background:#ffffff; color:#000000; padding:20px; border-radius:10px; margin-bottom:12px; font-family:monospace; font-size:0.85rem; border:1px solid #ccc;"></div><div class="action-row" style="margin-bottom:8px;"><button class="btn btn-blue flex-1" onclick="dlPdf()"><i class="fa-solid fa-file-pdf"></i> PDF</button><button class="btn btn-white flex-1" onclick="closeModal('modal-settlement')">Close</button></div><button class="btn btn-red btn-block" onclick="closeDay()">CLOSE DAY (ERASE HIST)</button></div></div>
+    <div class="modal-overlay" id="modal-settlement"><div class="modal-dialog" style="max-width: 500px;"><div class="modal-header"><span>📊 Z-Report</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settlement')"></i></div><div id="settle-content" style="background:#ffffff; color:#000000; padding:20px; border-radius:10px; margin-bottom:12px; font-family:monospace; font-size:0.85rem; border:1px solid #ccc; max-height: 50vh; overflow-y:auto;"></div><div class="action-row" style="margin-bottom:8px;"><button class="btn btn-blue flex-1" onclick="dlPdf()"><i class="fa-solid fa-file-pdf"></i> PDF</button><button class="btn btn-white flex-1" onclick="closeModal('modal-settlement')">Close</button></div><button class="btn btn-red btn-block" onclick="closeDay()">CLOSE DAY (ERASE HIST)</button></div></div>
 
     <!-- LINK -->
     <div class="modal-overlay" id="modal-link"><div class="modal-dialog" style="text-align:center;"><div class="modal-header"><span>🔗 Payment Link</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-link')"></i></div><div style="font-size:2rem;font-weight:800;margin:10px 0;font-family: 'Doto', sans-serif;" id="link-amount">0.00</div><div class="method-toggle"><button class="method-btn active" data-m="sms" onclick="setMethod('sms')"><i class="fa-solid fa-sms"></i></button><button class="method-btn" data-m="email" onclick="setMethod('email')"><i class="fa-solid fa-envelope"></i></button><button class="method-btn" data-m="whatsapp" onclick="setMethod('whatsapp')"><i class="fa-brands fa-whatsapp"></i></button></div><input type="text" id="link-contact" class="input-field" placeholder="Contact..." style="text-align:center; margin-bottom:15px;"><button class="btn btn-blue btn-block" onclick="sendLink()">SEND LINK</button></div></div>
@@ -362,7 +377,8 @@
         let settings = JSON.parse(localStorage.getItem('nv_settings')) || { 
             companyName: 'NOVA POS', posName: 'POS 1', address: '', phone: '', email: '', 
             authKey: '', paypalLink: '', receiptMessage: 'Thank you for your visit! A bientôt!', 
-            currency: 'EUR', customCurrency: '', taxRate: 0, theme: 'light', autoBackup: true, logoBase64: ''
+            currency: 'EUR', customCurrency: '', taxRate: 0, theme: 'light', autoBackup: true, logoBase64: '',
+            lang: 'fr', csRefSeq: 100000, crRefSeq: 200000
         };
 
         const CURRENCIES = { "EUR":"€", "USD":"$", "GBP":"£", "CHF":"CHF", "CAD":"CA$", "AUD":"A$", "MAD":"DH", "XOF":"CFA", "Rs":"Rs", "CNY":"¥", "JPY":"¥", "SGD":"S$", "THB":"฿", "CUSTOM":"Custom" };
@@ -380,7 +396,7 @@
         function setupAutoBackupInterval() {
             clearInterval(backupInterval);
             if(settings.autoBackup) {
-                backupInterval = setInterval(triggerAutoBackup, 60000); // 60 secondes
+                backupInterval = setInterval(triggerAutoBackup, 60000); 
             }
         }
 
@@ -436,6 +452,11 @@
             document.getElementById('set-theme').value = settings.theme || 'light';
             document.getElementById('set-autobackup').checked = settings.autoBackup;
             
+            // Re-added sequences and language
+            document.getElementById('set-cs-ref').value = settings.csRefSeq || 100000;
+            document.getElementById('set-cr-ref').value = settings.crRefSeq || 200000;
+            document.getElementById('set-lang').value = settings.lang || 'fr';
+            
             checkCustomCurrency();
 
             if(settings.logoBase64) {
@@ -474,7 +495,7 @@
         }
 
         function pressNum(n) { 
-            if (n === '.' && inputBuf.includes('.')) return; // Prevent multiple dots
+            if (n === '.' && inputBuf.includes('.')) return; 
             inputBuf += n; 
             updateAll(); 
         }
@@ -523,7 +544,11 @@
             
             let tot = cartTotal();
             cart.forEach(it => { if(it.code!=='FREE' && products[it.code]) products[it.code].stock = Math.max(0, products[it.code].stock - it.qty); });
-            lastSale = { total: tot, items: [...cart], date: new Date().toISOString(), type: 'CS', client: finalClient, pos: settings.posName };
+            
+            // GENERATION REF CS
+            let refNum = 'CS' + (settings.csRefSeq++);
+            
+            lastSale = { total: tot, items: [...cart], date: new Date().toISOString(), type: 'CS', client: finalClient, pos: settings.posName, ref: refNum };
             sales.push(lastSale); 
             
             triggerAutoBackup(); 
@@ -531,6 +556,7 @@
             cart = []; inputBuf = ''; renderCart(); updateAll();
             
             document.getElementById('receipt-action-total').textContent = fmt(tot);
+            document.getElementById('receipt-action-ref').textContent = '#' + refNum;
             document.getElementById('receipt-phone').value = finalClient ? finalClient.phone : '';
             openModal('modal-receipt-action');
         }
@@ -538,7 +564,7 @@
         function triggerSendReceipt(m) {
             if(!lastSale) return;
             let taxStr = settings.taxRate > 0 ? `Incl. VAT (${settings.taxRate}%)\n` : '';
-            let txt = `🧾 RECEIPT - ${settings.companyName}\nTerminal: ${settings.posName}\nDate: ${new Date(lastSale.date).toLocaleString()}\n---\n`;
+            let txt = `🧾 RECEIPT - ${settings.companyName}\nTerminal: ${settings.posName}\nRef: ${lastSale.ref||''}\nDate: ${new Date(lastSale.date).toLocaleString()}\n---\n`;
             lastSale.items.forEach(i => txt += `${i.qty}x ${i.name} = ${fmt(i.price*i.qty)}\n`);
             txt += `---\n${taxStr}TOTAL: ${fmt(lastSale.total)}\n---\n${settings.receiptMessage}`;
             let enc = encodeURIComponent(txt), p = document.getElementById('receipt-phone').value, e = document.getElementById('receipt-email').value;
@@ -574,17 +600,18 @@
                 clients[clientId] = clientObj;
             } else if (sel) { clientObj = clients[sel]; } else { return alert("You must select or create a client for credit."); }
 
-            let nb = document.getElementById('inst-nb').value || 1;
-            let ref = document.getElementById('inst-ref').value || 'CR-';
             let notes = document.getElementById('inst-notes').value || '';
             
+            // GENERATION REF CR
+            let refNum = 'CR' + (settings.crRefSeq++);
+            
             clientObj.creditBalance = (parseFloat(clientObj.creditBalance) || 0) + t;
-            lastSale = { total: t, items: [{name: `Credit/Inst. ${ref} - ${notes}`, qty:1, price:t}], date: new Date().toISOString(), type: 'CR', client: clientObj, ref: ref, notes: notes, pos: settings.posName };
+            lastSale = { total: t, items: [{name: `Credit/Inst. ${refNum} - ${notes}`, qty:1, price:t}], date: new Date().toISOString(), type: 'CR', client: clientObj, ref: refNum, notes: notes, pos: settings.posName };
             sales.push(lastSale); 
             
             triggerAutoBackup();
 
-            alert(`✅ Credit Record Created: ${ref}\nClient: ${clientObj.name}\nTotal Debt Added: ${fmt(t)}`);
+            alert(`✅ Credit Record Created: ${refNum}\nClient: ${clientObj.name}\nTotal Debt Added: ${fmt(t)}`);
             cart = []; inputBuf = ''; renderCart(); updateAll(); document.getElementById('inst-notes').value = ''; screenIdx=0; goScreen();
         }
 
@@ -607,7 +634,7 @@
             triggerAutoBackup(); closeModal('modal-product'); loadInv(); alert('✅ Product Saved!');
         }
 
-        // SCANNER POPUP ADAPTE (Caisse vs Product)
+        // SCANNER POPUP ADAPTE
         function startPopupScan(mode = 'product') {
             popupScanMode = mode;
             closeModal('modal-product'); 
@@ -668,7 +695,11 @@
             let id = document.getElementById('manage-cl-id').value, amt = parseFloat(document.getElementById('manage-pay-amount').value);
             if(!amt || amt <= 0) return alert('Enter a valid amount to pay.');
             let c = clients[id]; c.creditBalance = Math.max(0, (parseFloat(c.creditBalance) || 0) - amt); 
-            sales.push({ total: amt, items: [{name: 'Debt Payment (CR)', qty:1, price:amt}], date: new Date().toISOString(), type: 'PAYMENT', client: c, pos: settings.posName });
+            
+            // Ref pour un paiement = PAYXXXXXX
+            let refNum = 'PAY' + Date.now().toString().slice(-6);
+            sales.push({ total: amt, items: [{name: 'Debt Payment (CR)', qty:1, price:amt}], date: new Date().toISOString(), type: 'PAYMENT', client: c, pos: settings.posName, ref: refNum });
+            
             triggerAutoBackup(); alert(`✅ Payment recorded. Remaining debt: ${fmt(c.creditBalance)}`); closeModal('modal-client-manage'); loadCli();
         }
 
@@ -676,7 +707,10 @@
             let id = document.getElementById('manage-cl-id').value, amt = parseFloat(document.getElementById('manage-pay-amount').value);
             if(!amt || amt <= 0) return alert('Enter a valid amount for the cash sale.');
             let c = clients[id];
-            sales.push({ total: amt, items: [{name: 'Cash Sale (CS)', qty:1, price:amt}], date: new Date().toISOString(), type: 'CS', client: c, pos: settings.posName });
+            
+            let refNum = 'CS' + (settings.csRefSeq++);
+            sales.push({ total: amt, items: [{name: 'Cash Sale (CS)', qty:1, price:amt}], date: new Date().toISOString(), type: 'CS', client: c, pos: settings.posName, ref: refNum });
+            
             triggerAutoBackup(); alert(`✅ Cash Sale (CS) recorded for ${fmt(amt)}`); closeModal('modal-client-manage'); loadCli();
         }
 
@@ -686,11 +720,22 @@
         }
         function stopScan() { if(scanInstance) { scanInstance.stop().catch(()=>{}); document.getElementById('scanner-view').innerHTML = '<i class="fa-solid fa-camera fa-3x" style="color:#555"></i>'; } }
 
+        // RECHERCHE DANS HISTORIQUE
+        function filterHistory() {
+            let q = document.getElementById('hist-search-input').value.toLowerCase();
+            let rows = document.querySelectorAll('#hist-list .product-row');
+            rows.forEach(row => {
+                if(row.getAttribute('data-search').toLowerCase().includes(q)) row.style.display = 'flex';
+                else row.style.display = 'none';
+            });
+        }
+
         // AFFICHAGE DETAILS TRANSACTION
         function viewTx(idx) {
             let s = sales[idx];
             let taxStr = settings.taxRate > 0 ? `<br>Incl. VAT (${settings.taxRate}%): ${fmt(s.total - (s.total / (1 + (settings.taxRate/100))))}` : '';
-            let html = `<strong>Date:</strong> ${new Date(s.date).toLocaleString()}<br>`;
+            let html = `<strong>Ref:</strong> ${s.ref || 'N/A'}<br>`;
+            html += `<strong>Date:</strong> ${new Date(s.date).toLocaleString()}<br>`;
             html += `<strong>Terminal:</strong> ${s.pos || 'POS 1'}<br>`;
             html += `<strong>Type:</strong> ${s.type}<br>`;
             html += `<strong>Client:</strong> ${s.client ? s.client.name : 'Walk-in'}<br><hr>`;
@@ -711,13 +756,22 @@
                 else badge = `<span style="background:var(--text-gray);color:white;padding:2px 4px;border-radius:4px;font-size:0.7rem;">CASH</span>`;
                 
                 let dateStr = new Date(s.date).toLocaleDateString() + ' ' + new Date(s.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                el.innerHTML += `<div class="product-row" onclick="viewTx(${actualIdx})">
-                    <div style="color:var(--text-dark);"><strong>${dateStr}</strong> ${badge}<br><small style="color:var(--text-gray);">${s.client ? s.client.name : 'Walk-in'} • ${s.pos || ''}</small></div>
+                
+                // data-search includes Ref and Client Name for the filter
+                let searchStr = (s.ref || '') + ' ' + (s.client ? s.client.name : '');
+                
+                el.innerHTML += `<div class="product-row" onclick="viewTx(${actualIdx})" data-search="${searchStr}">
+                    <div style="color:var(--text-dark);">
+                        <strong>${dateStr}</strong> ${badge} 
+                        <span style="font-family:monospace; color:var(--brand-blue);">#${s.ref||''}</span><br>
+                        <small style="color:var(--text-gray);">${s.client ? s.client.name : 'Walk-in'} • ${s.pos || ''}</small>
+                    </div>
                     <strong style="color:var(--text-dark);">${fmt(s.total)}</strong>
                 </div>`;
             });
         }
 
+        // Z-REPORT DETAILLE AVEC TABLEAU DE TRANSACTIONS
         function openSettle() {
             let logoHtml = settings.logoBase64 ? `<img src="${settings.logoBase64}" style="max-height:60px; margin-bottom:10px;"><br>` : '';
             let taxTotal = 0, subTotal = 0, total = sales.reduce((s,x)=>s+x.total,0);
@@ -732,7 +786,34 @@
             if(settings.taxRate > 0) {
                 html += `<br>Subtotal: ${fmt(subTotal)}<br>VAT (${settings.taxRate}%): ${fmt(taxTotal)}<br>`;
             }
-            html += `<br><strong>TOTAL: ${fmt(total)}</strong></div>`;
+            html += `<br><strong>TOTAL: ${fmt(total)}</strong></div><hr>`;
+
+            // TABLEAU DES DETAILS
+            if(sales.length > 0) {
+                html += `<div style="text-align:center; font-weight:bold; margin-bottom:10px;">TRANSACTIONS DETAIL</div>`;
+                html += `<table style="width:100%; font-size:0.75rem; text-align:left; border-collapse:collapse;">
+                            <tr style="border-bottom:1px solid #ccc;">
+                                <th style="padding:4px 0;">Ref</th>
+                                <th>Type</th>
+                                <th>Client</th>
+                                <th style="text-align:right;">Amount</th>
+                            </tr>`;
+                sales.forEach(s => {
+                    html += `<tr style="border-bottom:1px dashed #eee;">
+                                <td style="padding:4px 0;">${s.ref || '-'}</td>
+                                <td>${s.type}</td>
+                                <td>${s.client ? s.client.name : 'Walk-in'}</td>
+                                <td style="text-align:right;">${fmt(s.total)}</td>
+                             </tr>`;
+                    // Ligne des articles
+                    html += `<tr><td colspan="4" style="color:#666; padding-bottom:8px; font-size:0.7rem;">`;
+                    s.items.forEach((it, idx) => {
+                        html += `${it.qty}x ${it.name}${idx < s.items.length-1 ? ', ' : ''}`;
+                    });
+                    html += `</td></tr>`;
+                });
+                html += `</table>`;
+            }
 
             document.getElementById('settle-content').innerHTML = html;
             openModal('modal-settlement');
@@ -781,7 +862,10 @@
                 taxRate: parseFloat(document.getElementById('set-tax').value) || 0,
                 theme: document.getElementById('set-theme').value,
                 autoBackup: document.getElementById('set-autobackup').checked,
-                logoBase64: settings.logoBase64 || ''
+                logoBase64: settings.logoBase64 || '',
+                lang: document.getElementById('set-lang').value || 'fr',
+                csRefSeq: parseInt(document.getElementById('set-cs-ref').value) || 100000,
+                crRefSeq: parseInt(document.getElementById('set-cr-ref').value) || 200000
             };
             document.body.dataset.theme = settings.theme; 
             setupAutoBackupInterval();
