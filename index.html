@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>NOVA POS GO</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Police style matrice de points (Dot Matrix) -->
-    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+    <!-- Nouvelle police Doto de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Doto:wght@400..900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -20,10 +20,10 @@
             --go-bg: #FFFFFF; --go-text: #000000; --numpad-bg: #FFFFFF; --numpad-text: #333333;
         }
         [data-theme="light"] {
-            /* THEME CLAIR AMÉLIORÉ (Gris perle et blanc, moins agressif) */
-            --bg-page: #E2E8F0; /* Gris clair élégant pour le fond */
-            --surface-white: #FFFFFF; /* Blanc pur pour les cartes */
-            --text-dark: #1E293B; /* Texte gris très foncé */
+            /* THEME CLAIR */
+            --bg-page: #E2E8F0; 
+            --surface-white: #FFFFFF; 
+            --text-dark: #1E293B; 
             --text-gray: #64748B; 
             --border-light: #CBD5E1; 
             --nova-text-color: #0F172A;
@@ -49,32 +49,33 @@
         .swipe-wrapper { flex: 1; overflow: hidden; position: relative; touch-action: pan-y; }
         .swipe-container { display: flex; width: 700%; height: 100%; transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
         
-        .screen { width: 14.285%; padding: 12px; display: flex; flex-direction: column; overflow-y: auto; padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+        .screen { width: 14.285%; padding: 12px; display: flex; flex-direction: column; overflow-y: auto; padding-bottom: max(20px, env(safe-area-inset-bottom)); position: relative; }
 
         .terminal-box { color: white; padding: 14px; border-radius: 16px; text-align: center; margin-bottom: 10px; flex-shrink: 0; }
         .terminal-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.9; }
         .terminal-amount { font-size: 2rem; font-weight: 800; margin: 4px 0; }
 
-        /* ÉCRAN CAISSE STYLE DIGITAL (Réf: 1000122526.png) */
+        /* ÉCRAN CAISSE LCD NOIR & FONT DOTO */
         .screen-0 { background: transparent; color: var(--text-dark); }
         .screen-0 .terminal-box { 
-            background: #0B162C; /* Bleu très profond comme sur l'image */
-            border-radius: 4px; /* Rectangulaire */
-            border: 4px solid #1E293B; /* Contour pour faire écran physique */
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 4px 10px rgba(0,0,0,0.1);
+            background: #000000; /* Fond noir profond */
+            border-radius: 4px; 
+            border: 4px solid #1E293B; 
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 4px 10px rgba(0,0,0,0.1);
             padding: 20px 14px;
         }
         .screen-0 .terminal-label { color: #A0B2C6; }
         #cash-total { 
-            font-family: 'DotGothic16', monospace; 
+            font-family: 'Doto', sans-serif; /* Nouvelle Font */
             font-size: 3.2rem; 
-            color: #E2E8F0; /* Blanc cassé / Gris clair pour les points */
+            font-weight: 700;
+            color: #E2E8F0; 
             letter-spacing: 2px;
             margin: 10px 0;
-            text-shadow: 0 0 5px rgba(226, 232, 240, 0.4); /* Léger glow */
+            text-shadow: 0 0 5px rgba(226, 232, 240, 0.3);
         }
         .barcode-display { 
-            font-family: 'DotGothic16', monospace; 
+            font-family: 'Doto', sans-serif; 
             font-size: 1.2rem; 
             color: #94A3B8; 
             text-align: center; 
@@ -85,7 +86,7 @@
         .cart-item:last-child { border-bottom: none; }
         .qty-tag { background: var(--brand-blue); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; margin-right: 6px; }
         
-        /* CLAVIER RECTANGULAIRE BLANC / FONT DOT / BORDURE NOIRE */
+        /* CLAVIER */
         .numpad { 
             display: grid; 
             grid-template-columns: repeat(3, 1fr); 
@@ -95,23 +96,22 @@
         .num-key { 
             width: 100%; 
             height: 60px; 
-            border-radius: 6px; /* Rectangulaire légèrement adouci */
-            border: 2px solid #1E293B; /* Bordure noire/gris très foncé */
+            border-radius: 6px; 
+            border: 2px solid #1E293B; 
             background: var(--numpad-bg); 
             color: var(--numpad-text); 
-            font-family: 'DotGothic16', monospace;
+            font-family: 'Doto', sans-serif;
             font-size: 1.8rem; 
             font-weight: 700; 
             cursor: pointer; 
             display: flex; 
             align-items: center; 
             justify-content: center;
-            box-shadow: 0 2px 0 #1E293B; /* Effet touche mécanique 3D */
+            box-shadow: 0 2px 0 #1E293B; 
             transition: all 0.1s ease;
         }
         .num-key:active { transform: translateY(2px); box-shadow: 0 0 0 #1E293B; }
         
-        /* Bouton Add (+) en Cyan */
         .num-key.enter-key { background: var(--brand-cyan); color: #000; border-color: #0369A1; box-shadow: 0 2px 0 #0369A1; font-family: 'Segoe UI', sans-serif;}
         .num-key.enter-key:active { box-shadow: 0 0 0 #0369A1; }
 
@@ -153,6 +153,38 @@
         .credit-badge { float: right; background: var(--brand-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight:bold; }
         .credit-clean { background: var(--brand-green); }
         
+        /* BOUTON RECHERCHE FLOTTANT */
+        .floating-search-btn {
+            position: absolute;
+            bottom: 85px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: var(--brand-pink);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 100;
+            border: 2px solid var(--surface-white);
+        }
+        .floating-search-btn:active { transform: scale(0.9); }
+        .search-bar-container {
+            display: none;
+            padding: 10px;
+            background: var(--surface-white);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 2px solid var(--brand-pink);
+            animation: fadeIn 0.2s ease-in-out;
+        }
+        .search-bar-container.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
         .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 1000; }
         .modal-overlay.active { display: flex; }
         .modal-dialog { background: var(--surface-white); border-radius: 16px; padding: 20px; width: 92%; max-width: 400px; max-height: 85vh; overflow-y: auto; margin-bottom: env(safe-area-inset-bottom); border: 1px solid var(--border-light); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
@@ -200,7 +232,6 @@
                 </div>
                 <div class="cart-area" id="cart-items"></div>
                 
-                <!-- CLAVIER RECTANGULAIRE BLANC / DOT FONT -->
                 <div class="numpad">
                     <button class="num-key" onclick="pressNum('7')">7</button>
                     <button class="num-key" onclick="pressNum('8')">8</button>
@@ -212,14 +243,12 @@
                     <button class="num-key" onclick="pressNum('2')">2</button>
                     <button class="num-key" onclick="pressNum('3')">3</button>
                     
-                    <!-- BOUTON CORRECTION EN JAUNE (Texte icône) -->
-                    <button class="num-key" onclick="deleteDigit()" style="color: var(--brand-yellow); font-family: 'Segoe UI', sans-serif;">
+                    <!-- BOUTON CORRECTION EN JAUNE / GRIS FONCÉ -->
+                    <button class="num-key" onclick="deleteDigit()" style="background: var(--brand-yellow); color: #333333; border-color: #D97706; box-shadow: 0 2px 0 #D97706; font-family: 'Segoe UI', sans-serif;">
                         <i class="fa-solid fa-delete-left"></i>
                     </button>
                     
                     <button class="num-key" onclick="pressNum('0')">0</button>
-                    
-                    <!-- BOUTON PLUS EN CYAN -->
                     <button class="num-key enter-key" onclick="addToCart()"><i class="fa-solid fa-plus"></i></button>
                 </div>
                 
@@ -249,13 +278,11 @@
                 <div class="terminal-box"><div class="terminal-label">CREDIT / INSTALLMENT</div><div class="terminal-amount" id="split-total">0.00 €</div></div>
                 <div class="scroll-area">
                     
-                    <!-- Sélection du Client Existant -->
                     <div class="input-group">
                         <div class="input-label">Select Client</div>
                         <select id="inst-client-select" class="input-field" onchange="instClientChange()"></select>
                     </div>
 
-                    <!-- Champs Nouveau Client (cachés par défaut) -->
                     <div id="inst-new-client-fields" style="display:none; background:var(--bg-page); padding:10px; border-radius:8px; margin-bottom:10px;">
                         <div class="input-group"><div class="input-label">New Client Name</div><input type="text" id="inst-name" class="input-field"></div>
                         <div class="input-group"><div class="input-label">Phone</div><input type="tel" id="inst-tel" class="input-field"></div>
@@ -266,7 +293,6 @@
                         <div class="input-group flex-1"><div class="input-label">Ref / Doc</div><input type="text" id="inst-ref" class="input-field" value="CR-" maxlength="8"></div>
                     </div>
                     
-                    <!-- Raison du crédit -->
                     <div class="input-group"><div class="input-label">Notes / Reason</div>
                         <textarea id="inst-notes" class="input-field" rows="2" placeholder="Reason for credit..."></textarea>
                     </div>
@@ -295,8 +321,17 @@
             <!-- 5: CLIENTS & CREDIT MANAGEMENT -->
             <div class="screen screen-5">
                 <div class="terminal-box"><div class="terminal-label">CLIENTS & CREDITS</div><div class="terminal-amount" style="font-size:1.4rem;" id="cli-count">0</div></div>
+                
+                <!-- BARRE DE RECHERCHE CACHÉE -->
+                <div class="search-bar-container" id="cli-search-box">
+                    <input type="text" id="cli-search-input" class="input-field" placeholder="Search client name, phone..." onkeyup="filterClients()">
+                </div>
+
                 <div class="scroll-area" id="cli-list"></div>
                 <button class="btn btn-pink btn-block" onclick="openAddClient()">+ CLIENT</button>
+                
+                <!-- BOUTON RECHERCHE FLOTTANT -->
+                <div class="floating-search-btn" onclick="toggleClientSearch()"><i class="fa-solid fa-magnifying-glass"></i></div>
             </div>
 
             <!-- 6: REVENUE -->
@@ -349,7 +384,7 @@
             <div class="input-group"><div class="input-label">PayPal.Me User</div><input type="text" id="set-paypal" class="input-field" placeholder="ex: MyCompany"></div>
             <div class="input-group"><div class="input-label">Receipt Msg</div><input type="text" id="set-receipt-msg" class="input-field"></div>
             
-            <!-- Bouton Sauvegarder -->
+            <!-- BOUTON SAUVEGARDER CORRIGÉ -->
             <button class="btn btn-blue btn-block" onclick="saveSettings()" style="margin-bottom:15px;">Save Config & Apply</button>
             
             <div style="font-weight:900; margin:15px 0 8px; font-size:0.9rem;">💾 DATA EXPORT & IMPORT</div>
@@ -429,7 +464,7 @@
     <div class="modal-overlay" id="modal-receipt-action">
         <div class="modal-dialog" style="text-align:center;">
             <div class="modal-header"><span style="color:var(--brand-green);"><i class="fa-solid fa-circle-check"></i> Success</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-receipt-action')"></i></div>
-            <div style="font-size:2.5rem;font-weight:800;margin:10px 0;color:var(--brand-green); font-family: 'DotGothic16', monospace;" id="receipt-action-total">0.00</div>
+            <div style="font-size:2.5rem;font-weight:800;margin:10px 0;color:var(--brand-green); font-family: 'Doto', sans-serif;" id="receipt-action-total">0.00</div>
             <p style="margin-bottom:15px;color:var(--text-gray);font-size:0.9rem;">Send receipt via:</p>
             <input type="tel" id="receipt-phone" class="input-field" placeholder="Phone..." style="margin-bottom:8px;">
             <input type="email" id="receipt-email" class="input-field" placeholder="Email..." style="margin-bottom:15px;">
@@ -456,7 +491,7 @@
     <div class="modal-overlay" id="modal-link">
         <div class="modal-dialog" style="text-align:center;">
             <div class="modal-header"><span>🔗 Payment Link</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-link')"></i></div>
-            <div style="font-size:2rem;font-weight:800;margin:10px 0;font-family: 'DotGothic16', monospace;" id="link-amount">0.00</div>
+            <div style="font-size:2rem;font-weight:800;margin:10px 0;font-family: 'Doto', sans-serif;" id="link-amount">0.00</div>
             <div class="method-toggle">
                 <button class="method-btn active" data-m="sms" onclick="setMethod('sms')"><i class="fa-solid fa-sms"></i></button>
                 <button class="method-btn" data-m="email" onclick="setMethod('email')"><i class="fa-solid fa-envelope"></i></button>
@@ -472,16 +507,13 @@
 
         let cart = [], inputBuf = '', screenIdx = 0, touchStartX = 0, touchStartY = 0, linkMethod = 'sms', scanInstance = null, popupScanInstance = null, lastSale = null;
         let products = JSON.parse(localStorage.getItem('nv_products')) || {};
-        
-        // Clients struct updated to include credit: { name, address, phone, email, creditBalance }
         let clients = JSON.parse(localStorage.getItem('nv_clients')) || {}; 
         let sales = JSON.parse(localStorage.getItem('nv_sales')) || [];
         
-        // Settings struct updated
         let settings = JSON.parse(localStorage.getItem('nv_settings')) || { 
             companyName: 'NOVA POS', address: '', phone: '', email: '', 
             authKey: '', paypalLink: '', receiptMessage: 'Thank you!', 
-            lang: 'en', currency: 'EUR', theme: 'light' 
+            currency: 'EUR', theme: 'light' 
         };
 
         const CURRENCIES = { "EUR":"€", "USD":"$", "GBP":"£", "CHF":"CHF", "CAD":"CA$", "AUD":"A$", "MAD":"DH", "XOF":"CFA", "MUR":"Rs" };
@@ -505,7 +537,6 @@
             document.getElementById('set-currency').value = settings.currency || 'EUR'; 
             document.getElementById('set-theme').value = settings.theme || 'light';
             
-            // Appliquer le thème visuellement
             document.body.dataset.theme = settings.theme || 'light';
             
             updateAll(); loadInv(); loadCli(); loadHist();
@@ -638,13 +669,11 @@
             let ref = document.getElementById('inst-ref').value || 'CR-';
             let notes = document.getElementById('inst-notes').value || '';
             
-            // Update Client Credit Balance
             clientObj.creditBalance = (parseFloat(clientObj.creditBalance) || 0) + t;
             localStorage.setItem('nv_clients', JSON.stringify(clients));
 
             alert(`✅ Credit Record Created: ${ref}\nClient: ${clientObj.name}\nTotal Debt Added: ${fmt(t)}`);
             
-            // Record Sale as Credit (CR)
             lastSale = { total: t, items: [{name: `Credit/Inst. ${ref} - ${notes}`, qty:1, price:t}], date: new Date().toISOString(), type: 'CR', client: clientObj, ref: ref, notes: notes };
             sales.push(lastSale); localStorage.setItem('nv_sales', JSON.stringify(sales));
             
@@ -680,7 +709,7 @@
         }
         function stopPopupScan() { if(popupScanInstance) popupScanInstance.stop().catch(()=>{}); closeModal('modal-scanner-popup'); openModal('modal-product'); }
 
-        // ================= CLIENTS & CREDIT MANAGEMENT =================
+        // ================= CLIENTS & SEARCH =================
         function loadCli() {
             const el = document.getElementById('cli-list'); el.innerHTML = ''; document.getElementById('cli-count').textContent = Object.keys(clients).length;
             Object.entries(clients).forEach(([id, c]) => {
@@ -715,17 +744,39 @@
             openModal('modal-client-manage');
         }
 
-        // Paiement de la dette (CR)
+        // Logic Recherche Clients
+        function toggleClientSearch() {
+            const box = document.getElementById('cli-search-box');
+            box.classList.toggle('active');
+            if(box.classList.contains('active')) {
+                document.getElementById('cli-search-input').focus();
+            } else {
+                document.getElementById('cli-search-input').value = '';
+                filterClients();
+            }
+        }
+        function filterClients() {
+            let q = document.getElementById('cli-search-input').value.toLowerCase();
+            let cards = document.querySelectorAll('#cli-list .client-card');
+            cards.forEach(card => {
+                let text = card.textContent.toLowerCase();
+                if (text.includes(q)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
         function payCreditDebt() {
             let id = document.getElementById('manage-cl-id').value;
             let amt = parseFloat(document.getElementById('manage-pay-amount').value);
             if(!amt || amt <= 0) return alert('Enter a valid amount to pay.');
             let c = clients[id];
             
-            c.creditBalance = Math.max(0, (parseFloat(c.creditBalance) || 0) - amt); // Deduit la dette
+            c.creditBalance = Math.max(0, (parseFloat(c.creditBalance) || 0) - amt); 
             localStorage.setItem('nv_clients', JSON.stringify(clients));
             
-            // Record payment in history
             sales.push({ total: amt, items: [{name: 'Debt Payment (CR)', qty:1, price:amt}], date: new Date().toISOString(), type: 'PAYMENT', client: c });
             localStorage.setItem('nv_sales', JSON.stringify(sales));
             
@@ -733,14 +784,12 @@
             closeModal('modal-client-manage'); loadCli();
         }
 
-        // Vente rapide Cash Sale (CS) pour ce client
         function recordCashSale() {
             let id = document.getElementById('manage-cl-id').value;
             let amt = parseFloat(document.getElementById('manage-pay-amount').value);
             if(!amt || amt <= 0) return alert('Enter a valid amount for the cash sale.');
             let c = clients[id];
             
-            // Doesn't affect credit balance, just records a sale
             sales.push({ total: amt, items: [{name: 'Cash Sale (CS)', qty:1, price:amt}], date: new Date().toISOString(), type: 'CS', client: c });
             localStorage.setItem('nv_sales', JSON.stringify(sales));
             
@@ -784,6 +833,7 @@
 
         function openSettings() { init(); openModal('modal-settings'); }
         
+        // --- SAUVEGARDE DES PARAMÈTRES CORRIGÉE ---
         function saveSettings() {
             settings = { 
                 companyName: document.getElementById('set-name').value, 
@@ -793,13 +843,11 @@
                 authKey: document.getElementById('set-auth-key').value, 
                 paypalLink: document.getElementById('set-paypal').value, 
                 receiptMessage: document.getElementById('set-receipt-msg').value, 
-                lang: document.getElementById('set-lang').value || 'en', 
                 currency: document.getElementById('set-currency').value, 
                 theme: document.getElementById('set-theme').value 
             };
             localStorage.setItem('nv_settings', JSON.stringify(settings)); 
             
-            // Force le changement de thème immédiat
             document.body.dataset.theme = settings.theme; 
             
             updateAll(); 
