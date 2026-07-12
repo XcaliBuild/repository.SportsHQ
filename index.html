@@ -161,7 +161,7 @@
             <!-- 0: CAISSE -->
             <div class="screen screen-0" data-idx="0">
                 <div class="terminal-box">
-                    <div class="terminal-label">TOTAL DUE</div>
+                    <div class="terminal-label" id="lbl-due">TOTAL DUE</div>
                     <div class="terminal-amount" id="cash-total">0.00 €</div>
                     <div class="barcode-display" id="barcode-show">READY</div>
                 </div>
@@ -177,25 +177,23 @@
                     <button class="num-key" onclick="pressNum('1')">1</button>
                     <button class="num-key" onclick="pressNum('2')">2</button>
                     <button class="num-key" onclick="pressNum('3')">3</button>
-                    
-                    <!-- BOUTON 00 (REMPLACE LE POINT) -->
                     <button class="num-key" onclick="pressNum('00')" style="color:var(--brand-cyan);">00</button>
                     <button class="num-key" onclick="pressNum('0')">0</button>
-                    <button class="num-key" onclick="deleteDigit()" style="background: var(--brand-yellow); color: #333333; border-color: #D97706; box-shadow: 0 2px 0 #D97706; font-family: 'Segoe UI', sans-serif;"><i class="fa-solid fa-delete-left"></i></button>
+                    <button class="num-key" onclick="deleteDigit()" style="background: var(--brand-yellow); color: #333333; border-color: #D97706; box-shadow: 0 2px 0 #D97706;"><i class="fa-solid fa-delete-left"></i></button>
                 </div>
                 
-                <button class="btn btn-cyan btn-block" style="margin-bottom: 12px;" onclick="addToCart()"><i class="fa-solid fa-plus"></i> ADD TO CART</button>
+                <button class="btn btn-cyan btn-block" style="margin-bottom: 12px;" onclick="addToCart()" id="btn-add"><i class="fa-solid fa-plus"></i> ADD TO CART</button>
                 
                 <div class="action-row">
                     <button class="btn btn-purple flex-1" onclick="startPopupScan('caisse')"><i class="fa-solid fa-barcode"></i> Scan</button>
                     <button class="btn btn-white flex-1" onclick="openPaymentLink()"><i class="fa-solid fa-link"></i> Link</button>
-                    <button class="btn btn-green flex-1" onclick="processCheckout()"><i class="fa-solid fa-cash-register"></i> PAY</button>
+                    <button class="btn btn-green flex-1" onclick="processCheckout()" id="btn-pay"><i class="fa-solid fa-cash-register"></i> PAY</button>
                 </div>
             </div>
 
             <!-- 1: DISCOUNT -->
             <div class="screen screen-1" data-idx="1">
-                <div class="terminal-box"><div class="terminal-label">DISCOUNT</div><div class="terminal-amount" id="disc-total">0.00 €</div></div>
+                <div class="terminal-box"><div class="terminal-label" id="lbl-disc">DISCOUNT</div><div class="terminal-amount" id="disc-total">0.00 €</div></div>
                 <div class="scroll-area">
                     <div class="input-group"><div class="input-label">Amount</div><input type="number" id="disc-amount" class="input-field" step="0.01"></div>
                     <div class="action-row" style="margin-bottom:10px;">
@@ -205,12 +203,12 @@
                     </div>
                     <div class="input-group"><div class="input-label">Reason</div><input type="text" id="disc-reason" class="input-field"></div>
                 </div>
-                <button class="btn btn-yellow btn-block" onclick="applyDiscount()">APPLY</button>
+                <button class="btn btn-yellow btn-block" onclick="applyDiscount()" id="btn-apply">APPLY</button>
             </div>
 
             <!-- 2: SPLIT / CREDIT / INSTALLMENT -->
             <div class="screen screen-2" data-idx="2">
-                <div class="terminal-box"><div class="terminal-label">CREDIT / INSTALLMENT</div><div class="terminal-amount" id="split-total">0.00 €</div></div>
+                <div class="terminal-box"><div class="terminal-label" id="lbl-cred">CREDIT / INSTALLMENT</div><div class="terminal-amount" id="split-total">0.00 €</div></div>
                 <div class="scroll-area">
                     <div class="input-group"><div class="input-label">Select Client</div><select id="inst-client-select" class="input-field" onchange="instClientChange()"></select></div>
                     <div id="inst-new-client-fields" style="display:none; background:var(--bg-page); padding:10px; border-radius:8px; margin-bottom:10px;">
@@ -221,19 +219,19 @@
                     
                     <div class="input-group"><div class="input-label">Notes / Reason</div><textarea id="inst-notes" class="input-field" rows="2" placeholder="Reason for credit..."></textarea></div>
                 </div>
-                <button class="btn btn-blue btn-block" onclick="createInstallment()">CREATE CREDIT RECORD</button>
+                <button class="btn btn-blue btn-block" onclick="createInstallment()" id="btn-create-cr">CREATE CREDIT RECORD</button>
             </div>
 
             <!-- 3: INVENTORY -->
             <div class="screen screen-3" data-idx="3">
-                <div class="terminal-box"><div class="terminal-label">INVENTORY</div><div class="terminal-amount" style="font-size:1.4rem;" id="inv-count">0</div></div>
+                <div class="terminal-box"><div class="terminal-label" id="lbl-inv">INVENTORY</div><div class="terminal-amount" style="font-size:1.4rem;" id="inv-count">0</div></div>
                 <div class="scroll-area" id="inv-list"></div>
-                <button class="btn btn-red btn-block" onclick="openAddProd()">+ PRODUCT</button>
+                <button class="btn btn-red btn-block" onclick="openAddProd()" id="btn-prod">+ PRODUCT</button>
             </div>
 
             <!-- 4: SCANNER (Pairing & Data Sync) -->
             <div class="screen screen-4" data-idx="4">
-                <div class="terminal-box"><div class="terminal-label">SCANNER / SYNC</div></div>
+                <div class="terminal-box"><div class="terminal-label" id="lbl-scan">SCANNER / SYNC</div></div>
                 <div id="scanner-view"><i class="fa-solid fa-camera fa-3x" style="color:#555"></i></div>
                 <div class="action-row" style="margin-top:10px;">
                     <button class="btn btn-white flex-1" onclick="stopScan()">Stop</button>
@@ -249,19 +247,19 @@
 
             <!-- 5: CLIENTS -->
             <div class="screen screen-5" data-idx="5">
-                <div class="terminal-box"><div class="terminal-label">CLIENTS & CREDITS</div><div class="terminal-amount" style="font-size:1.4rem;" id="cli-count">0</div></div>
+                <div class="terminal-box"><div class="terminal-label" id="lbl-cli">CLIENTS & CREDITS</div><div class="terminal-amount" style="font-size:1.4rem;" id="cli-count">0</div></div>
                 <div class="search-bar-container" id="cli-search-box"><input type="text" id="cli-search-input" class="input-field" placeholder="Search client name, phone..." onkeyup="filterClients()"></div>
                 <div class="scroll-area" id="cli-list"></div>
-                <button class="btn btn-pink btn-block" onclick="openAddClient()">+ CLIENT</button>
+                <button class="btn btn-pink btn-block" onclick="openAddClient()" id="btn-client">+ CLIENT</button>
                 <div class="floating-search-btn" onclick="toggleClientSearch()"><i class="fa-solid fa-magnifying-glass"></i></div>
             </div>
 
             <!-- 6: REVENUE (Avec Recherche par Ref) -->
             <div class="screen screen-6" data-idx="6">
-                <div class="terminal-box"><div class="terminal-label">REVENUE</div><div class="terminal-amount" id="hist-total">0.00 €</div></div>
+                <div class="terminal-box"><div class="terminal-label" id="lbl-rev">REVENUE</div><div class="terminal-amount" id="hist-total">0.00 €</div></div>
                 <input type="text" id="hist-search-input" class="input-field" placeholder="Search Ref (ex: CS10000) or Client..." onkeyup="filterHistory()" style="margin-bottom: 10px; border-color:var(--brand-cyan);">
                 <div class="scroll-area" id="hist-list"></div>
-                <button class="btn btn-white btn-block" onclick="openSettle()"><i class="fa-solid fa-receipt"></i> Z-REPORT</button>
+                <button class="btn btn-white btn-block" onclick="openSettle()" id="btn-z"><i class="fa-solid fa-receipt"></i> Z-REPORT</button>
             </div>
         </div>
     </div>
@@ -310,7 +308,6 @@
                 <div class="action-row">
                     <div class="input-group flex-1">
                         <div class="input-label" style="color:var(--brand-pink);"><i class="fa-solid fa-lock"></i> Master Auth Key</div>
-                        <!-- Mis en TYPE TEXT pour être visible -->
                         <input type="text" id="set-auth-key" class="input-field" placeholder="Clé d'origine">
                     </div>
                     <div class="input-group flex-1">
@@ -373,15 +370,18 @@
 
                 <div class="input-group"><div class="input-label">PayPal.Me User</div><input type="text" id="set-paypal" class="input-field" placeholder="ex: MyCompany"></div>
                 <div class="input-group"><div class="input-label">Receipt Msg</div><input type="text" id="set-receipt-msg" class="input-field"></div>
-                <div class="input-group"><div class="input-label">Language</div><select id="set-lang" class="input-field"><option value="en">English</option><option value="fr">Français</option></select></div>
-
+                
                 <div style="font-weight:900; margin:15px 0 8px; font-size:0.9rem;">💾 PHYSICAL BACKUP (.nvp)</div>
                 <div class="action-row"><button class="btn btn-green flex-1" onclick="doBackup()"><i class="fa-solid fa-download"></i> Backup</button><button class="btn btn-white flex-1" onclick="document.getElementById('restore-file-input').click()"><i class="fa-solid fa-upload"></i> Restore</button></div>
             
             </div> <!-- FIN RESTRICTED AREA -->
 
             <hr style="border-color:var(--border-light); margin:15px 0;">
-            <div class="input-group"><div class="input-label">Theme</div><select id="set-theme" class="input-field"><option value="light">Light</option><option value="dark">AMOLED Dark</option></select></div>
+            <div class="action-row">
+                <div class="input-group flex-1"><div class="input-label">Theme</div><select id="set-theme" class="input-field"><option value="light">Light</option><option value="dark">AMOLED Dark</option></select></div>
+                <!-- Langue visible pour tous -->
+                <div class="input-group flex-1"><div class="input-label">Language</div><select id="set-lang" class="input-field"><option value="en">English</option><option value="fr">Français</option></select></div>
+            </div>
             
             <button class="btn btn-blue btn-block" onclick="saveSettings()" style="margin-bottom:15px; margin-top:10px;">Save Config & Apply</button>
         </div>
@@ -431,6 +431,24 @@
             }, 2400); 
         });
 
+        // DICTIONNAIRE DE TRADUCTION (FR / EN)
+        const DICT = {
+            "en": {
+                "lbl-due": "TOTAL DUE", "lbl-disc": "DISCOUNT", "lbl-cred": "CREDIT / INSTALLMENT",
+                "lbl-inv": "INVENTORY", "lbl-scan": "SCANNER / SYNC", "lbl-cli": "CLIENTS & CREDITS", "lbl-rev": "REVENUE",
+                "btn-add": "<i class='fa-solid fa-plus'></i> ADD TO CART", "btn-pay": "<i class='fa-solid fa-cash-register'></i> PAY", 
+                "btn-apply": "APPLY", "btn-create-cr": "CREATE CREDIT RECORD",
+                "btn-prod": "+ PRODUCT", "btn-client": "+ CLIENT", "btn-z": "<i class='fa-solid fa-receipt'></i> Z-REPORT"
+            },
+            "fr": {
+                "lbl-due": "TOTAL À PAYER", "lbl-disc": "RÉDUCTION", "lbl-cred": "CRÉDIT / ACOMPTE",
+                "lbl-inv": "INVENTAIRE", "lbl-scan": "SCANNER / SYNCHRO", "lbl-cli": "CLIENTS & CRÉDITS", "lbl-rev": "REVENUS",
+                "btn-add": "<i class='fa-solid fa-plus'></i> AJOUTER", "btn-pay": "<i class='fa-solid fa-cash-register'></i> ENCAISSER", 
+                "btn-apply": "APPLIQUER", "btn-create-cr": "CRÉER UN CRÉDIT",
+                "btn-prod": "+ PRODUIT", "btn-client": "+ CLIENT", "btn-z": "<i class='fa-solid fa-receipt'></i> RAPPORT Z"
+            }
+        };
+
         const CURRENCIES = { "EUR":"€", "USD":"$", "GBP":"£", "CHF":"CHF", "CAD":"CA$", "AUD":"A$", "MAD":"DH", "XOF":"CFA", "Rs":"Rs", "CNY":"¥", "JPY":"¥", "SGD":"S$", "THB":"฿", "CUSTOM":"Custom" };
 
         let cart = [], inputBuf = '', screenIdx = 0, touchStartX = 0, touchStartY = 0, linkMethod = 'sms', popupScanMode = 'product', scanInstance = null, popupScanInstance = null, lastSale = null;
@@ -438,7 +456,6 @@
         let clients = JSON.parse(localStorage.getItem('nv_clients')) || {}; 
         let sales = JSON.parse(localStorage.getItem('nv_sales')) || [];
         
-        // SECURITE CRITIQUE : Fusion des anciens paramètres avec les nouveaux pour éviter un plantage
         let defaultSettings = { 
             companyName: 'NOVA POS', posName: '', website: '', authKey: '', linkKey: '12345678',
             address: '', phone: '', email: '', taxRate: 0, currency: 'EUR', customCurrency: '',
@@ -451,10 +468,18 @@
         let settings = Object.assign({}, defaultSettings, savedSettings);
         if (!Array.isArray(settings.allowedScreens)) settings.allowedScreens = [0, 1, 2, 3, 4, 5, 6];
 
-        // LA LOGIQUE DE DROITS : Vierge OU Master = Accès total (Null-safe)
         const isVirgin = () => (!settings.posName || String(settings.posName).trim() === '');
         const isMaster = () => (settings.posName && String(settings.posName).toUpperCase() === 'MASTER');
         const hasAdminRights = () => isVirgin() || isMaster();
+
+        function applyLang() {
+            let l = settings.lang || 'fr';
+            let dict = DICT[l] || DICT['en'];
+            for(let key in dict) {
+                let el = document.getElementById(key);
+                if(el) el.innerHTML = dict[key];
+            }
+        }
 
         function fmt(amount) { 
             let sym = settings.currency === 'CUSTOM' ? (settings.customCurrency || '') : (CURRENCIES[settings.currency] || '€');
@@ -465,7 +490,6 @@
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         function openSettings() { init(); openModal('modal-settings'); }
 
-        // AUTO BACKUP MEMORY SYNC
         let backupInterval;
         function setupAutoBackupInterval() {
             clearInterval(backupInterval);
@@ -481,16 +505,13 @@
                 icon.style.display = 'inline-block';
                 icon.classList.add('fa-spin');
             }
-            
             localStorage.setItem('nv_products', JSON.stringify(products));
             localStorage.setItem('nv_clients', JSON.stringify(clients));
             localStorage.setItem('nv_sales', JSON.stringify(sales));
             localStorage.setItem('nv_settings', JSON.stringify(settings));
-
             setTimeout(() => { if(icon) { icon.classList.remove('fa-spin'); icon.style.display = 'none'; } }, 1000);
         }
 
-        // LOGO UPLOAD HANDLER
         document.getElementById('set-logo').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if(file) {
@@ -510,16 +531,12 @@
             document.getElementById('set-custom-currency').style.display = (sel === 'CUSTOM') ? 'block' : 'none';
         }
 
-        // INPUT LOGIC (CENTIMES) -> '5599' = 55.99
         function getInputValue() { return inputBuf.length > 0 ? (parseInt(inputBuf) / 100).toFixed(2) : ''; }
 
-        // INITIALISATION
         function init() {
-            // Populate Currencies
             const curSel = document.getElementById('set-currency'); curSel.innerHTML = '';
             for (let [c, l] of Object.entries(CURRENCIES)) curSel.innerHTML += `<option value="${c}">${c} ${l}</option>`;
 
-            // Load Settings UI
             document.getElementById('set-name').value = settings.companyName || ''; 
             document.getElementById('set-pos-name').value = settings.posName || ''; 
             document.getElementById('set-website').value = settings.website || '';
@@ -548,19 +565,19 @@
             checkCustomCurrency();
             document.body.dataset.theme = settings.theme || 'light';
             
-            // SECURITY: HIDE RESTRICTED SETTINGS IF SUB-POS
             document.getElementById('restricted-settings-area').style.display = hasAdminRights() ? 'block' : 'none';
-            checkMasterInput(); // Affiche le panel Admin si Master est tapé
+            checkMasterInput(); 
 
-            // SECURITY: BUILD ALLOWED SCREENS
             const dotsContainer = document.getElementById('page-dots');
             dotsContainer.innerHTML = '';
             for(let i=0; i<7; i++) {
                 if(hasAdminRights() || settings.allowedScreens.includes(i)) {
+                    // data-target stocke l'index réel pour récupérer la bonne couleur
                     dotsContainer.innerHTML += `<div class="page-dot allowed" data-target="${i}"></div>`;
                 }
             }
             
+            applyLang();
             setupAutoBackupInterval();
             updateAll(); 
             loadInv(); loadCli(); loadHist();
@@ -588,7 +605,6 @@
             document.getElementById('barcode-show').textContent = val ? val + ' ' + (CURRENCIES[settings.currency]||'€') : 'READY';
         }
 
-        // SWIPE LOGIC AVEC RESTRICTION
         function getNextAllowed(dir) {
             let next = screenIdx;
             while(true) {
@@ -614,17 +630,15 @@
         function goScreen() {
             document.getElementById('swipe-container').style.transform = `translateX(-${screenIdx * 14.285}%)`;
             const dots = document.querySelectorAll('.page-dot.allowed');
-            let activeIdx = 0;
-            let tempIdx = 0;
-            for(let i=0; i<7; i++) {
-                if(hasAdminRights() || settings.allowedScreens.includes(i)) {
-                    if(i === screenIdx) activeIdx = tempIdx;
-                    tempIdx++;
-                }
-            }
-            dots.forEach((d, i) => { 
-                d.classList.toggle('active', i === activeIdx); 
-                d.style.background = i === activeIdx ? '#06B6D4' : 'var(--border-light)'; 
+            
+            // LA CORRECTION DES COULEURS EST ICI
+            const cols = ['#06B6D4', '#FBBF24', '#0066FF', '#EF4444', '#A855F7', '#EC4899', '#333333'];
+            
+            dots.forEach((d) => { 
+                let tIdx = parseInt(d.getAttribute('data-target'));
+                let isActive = tIdx === screenIdx;
+                d.classList.toggle('active', isActive); 
+                d.style.background = isActive ? cols[tIdx] : 'var(--border-light)'; 
             });
             updateAll();
             
@@ -665,7 +679,6 @@
             if(navigator.vibrate) navigator.vibrate(100); 
             stopPopupScan(); 
             
-            // Check if it's a configuration QR
             try {
                 let config = JSON.parse(t);
                 if(config.isPosConfig) {
@@ -686,12 +699,11 @@
                     return;
                 }
                 
-                // Check if it's a Device Data Sync QR (Scanned by Master)
                 if(config.isSyncData) {
                     alert(`✅ Device Data Synced via QR:\n\nTerminal: ${config.posName}\nTotal Sales: ${fmt(config.totalSales)}\nTransactions: ${config.txCount}\n\n(Full sync requires .nvp backup transfer)`);
                     return;
                 }
-            } catch(e) {} // Not a config JSON
+            } catch(e) {}
 
             if(popupScanMode === 'caisse') {
                 let p = products[t];
@@ -707,7 +719,6 @@
         }
         function stopScan() { if(scanInstance) { scanInstance.stop().catch(()=>{}); document.getElementById('scanner-view').innerHTML = '<i class="fa-solid fa-camera fa-3x" style="color:#555"></i>'; } }
 
-        // GENERATE POS QR (Master)
         function generatePosQR() {
             let pName = document.getElementById('gen-pos-name').value || 'POS 1';
             let allowed = [];
@@ -732,7 +743,6 @@
             document.getElementById('generated-qr-container').style.display = 'block';
         }
 
-        // GENERATE DEVICE SYNC QR (Data check for Master)
         function showDeviceSyncQR() {
             let total = sales.reduce((s,x) => s + x.total, 0);
             let data = {
@@ -749,7 +759,6 @@
             document.getElementById('device-sync-qr-container').style.display = 'block';
         }
 
-        // CHECKOUT & Z-REPORT
         function renderCart() {
             const el = document.getElementById('cart-items'); el.innerHTML = '';
             cart.forEach((it, i) => el.innerHTML += `<div class="cart-item"><span><span class="qty-tag">x${it.qty}</span>${it.name}</span><span>${fmt(it.price*it.qty)} <i class="fa-solid fa-minus-circle" onclick="decCart(${i})" style="color:var(--brand-red);cursor:pointer; margin-left:8px;"></i></span></div>`);
@@ -842,15 +851,11 @@
             document.getElementById('settle-content').innerHTML = html; openModal('modal-settlement');
         }
 
-        // ================= SAVE CONFIGURATION AVEC SECURITE =================
         function saveSettings() {
             let newPosName = document.getElementById('set-pos-name').value;
             
-            // SAUVEGARDE GLOBALE (Si Admin / Vierge / Master)
             if(hasAdminRights() || newPosName.toUpperCase() === 'MASTER') {
                 let typedAuthKey = document.getElementById('set-auth-key').value;
-                
-                // VERIFICATION DE SECURITE MASTER
                 if(newPosName.toUpperCase() === 'MASTER') {
                     if(!typedAuthKey) return alert("⚠️ Le Master POS nécessite obligatoirement une Master Auth Key.");
                     if(settings.authKey && settings.authKey !== typedAuthKey) return alert("❌ Master Auth Key incorrecte.");
@@ -874,7 +879,6 @@
                 settings.logoBase64 = settings.logoBase64 || '';
             }
 
-            // SAUVEGARDE LOCALE (Accessible à tous)
             settings.posName = newPosName;
             settings.theme = document.getElementById('set-theme').value;
             settings.autoBackup = document.getElementById('set-autobackup').checked;
@@ -906,7 +910,6 @@
             r.readAsText(f); e.target.value = ''; 
         });
 
-        // RECHERCHE DANS HISTORIQUE & AUTRES FONCTIONS VUE
         function filterHistory() {
             let q = document.getElementById('hist-search-input').value.toLowerCase();
             let rows = document.querySelectorAll('#hist-list .product-row');
@@ -938,13 +941,11 @@
         function dlPdf() { const opt = { margin: 10, filename: `Z-Report.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }; html2pdf().set(opt).from(document.getElementById('settle-content')).save(); }
         function closeDay() { if(confirm('Close day and erase history?')) { sales=[]; triggerAutoBackup(); closeModal('modal-settlement'); loadHist(); alert('✅ Day closed'); } }
         
-        // INVENTAIRE
         function loadInv() { const el = document.getElementById('inv-list'); el.innerHTML = ''; document.getElementById('inv-count').textContent = Object.keys(products).length; Object.entries(products).forEach(([c, p]) => el.innerHTML += `<div class="product-row" onclick="selProd('${c}')"><div><strong style="color:var(--text-dark);">${p.name}</strong> <span class="stock-badge ${p.stock>9?'stock-good':p.stock>0?'stock-low':'stock-zero'}">${p.stock}</span><br><small style="color:var(--text-gray);">#${c}</small></div><strong style="color:var(--text-dark);">${fmt(p.price)}</strong></div>`); }
         function selProd(c) { let p = products[c], act = prompt(`${p.name}\n1: Add to cart\n2: Edit\n3: Delete`, '1'); if(act==='1') { cart.push({code:c, name:p.name, price:p.price, qty:1}); renderCart(); updateAll(); screenIdx=0; goScreen(); } else if(act==='2') { document.getElementById('pr-code').value=c; document.getElementById('pr-name').value=p.name; document.getElementById('pr-price').value=p.price; document.getElementById('pr-stock').value=p.stock; openModal('modal-product'); } else if(act==='3' && confirm('Delete this product?')) { delete products[c]; triggerAutoBackup(); loadInv(); } }
         function openAddProd(c='') { ['pr-code','pr-name','pr-price'].forEach(id=>document.getElementById(id).value=''); document.getElementById('pr-code').value=c; document.getElementById('pr-stock').value='10'; openModal('modal-product'); }
         function saveProd() { let c = document.getElementById('pr-code').value || 'SKU'+Date.now().toString().slice(-4), n = document.getElementById('pr-name').value, pr = document.getElementById('pr-price').value; if(!n || !pr) return alert('⚠️ Name & Price required!'); products[c] = { name:n, price:pr, stock:parseInt(document.getElementById('pr-stock').value)||0 }; triggerAutoBackup(); closeModal('modal-product'); loadInv(); alert('✅ Product Saved!'); }
         
-        // CLIENTS & CREDIT
         function loadCli() { const el = document.getElementById('cli-list'); el.innerHTML = ''; document.getElementById('cli-count').textContent = Object.keys(clients).length; Object.entries(clients).forEach(([id, c]) => { let bal = parseFloat(c.creditBalance) || 0; let badge = bal > 0 ? `<span class="credit-badge">${fmt(bal)}</span>` : `<span class="credit-badge credit-clean">0.00</span>`; el.innerHTML += `<div class="client-card" onclick="openManageClient('${id}')">${badge}<strong style="color:var(--text-dark);">${c.name}</strong><br><small style="color:var(--text-gray);"><i class="fa-solid fa-phone"></i> ${c.phone||'No phone'}</small></div>`; }); }
         function openAddClient() { ['cl-name','cl-addr','cl-tel','cl-email'].forEach(id=>document.getElementById(id).value=''); openModal('modal-client'); }
         function saveClient() { let n = document.getElementById('cl-name').value; if(!n) return alert('Name required'); clients['CLI'+Date.now()] = { name:n, address:document.getElementById('cl-addr').value||'', phone:document.getElementById('cl-tel').value||'', email:document.getElementById('cl-email').value||'', creditBalance: 0 }; triggerAutoBackup(); closeModal('modal-client'); loadCli(); }
@@ -953,7 +954,6 @@
         function payCreditDebt() { let id = document.getElementById('manage-cl-id').value, amt = parseFloat(document.getElementById('manage-pay-amount').value); if(!amt || amt <= 0) return alert('Enter a valid amount to pay.'); let c = clients[id]; c.creditBalance = Math.max(0, (parseFloat(c.creditBalance) || 0) - amt); let refNum = 'PAY' + Date.now().toString().slice(-6); sales.push({ total: amt, items: [{name: 'Debt Payment (CR)', qty:1, price:amt}], date: new Date().toISOString(), type: 'PAYMENT', client: c, pos: settings.posName || 'Vierge', ref: refNum }); triggerAutoBackup(); alert(`✅ Payment recorded. Remaining debt: ${fmt(c.creditBalance)}`); closeModal('modal-client-manage'); loadCli(); }
         function recordCashSale() { let id = document.getElementById('manage-cl-id').value, amt = parseFloat(document.getElementById('manage-pay-amount').value); if(!amt || amt <= 0) return alert('Enter a valid amount for the cash sale.'); let c = clients[id]; let refNum = 'CS' + (settings.csRefSeq++); sales.push({ total: amt, items: [{name: 'Cash Sale (CS)', qty:1, price:amt}], date: new Date().toISOString(), type: 'CS', client: c, pos: settings.posName || 'Vierge', ref: refNum }); triggerAutoBackup(); alert(`✅ Cash Sale (CS) recorded for ${fmt(amt)}`); closeModal('modal-client-manage'); loadCli(); }
         
-        // INSTALLMENTS (SCREEN 2)
         function initInstScreen() {
             const sel = document.getElementById('inst-client-select');
             sel.innerHTML = '<option value="">-- Select Client --</option><option value="NEW">+ Create New Client</option>';
@@ -993,7 +993,6 @@
             closeModal('modal-link'); cart=[]; inputBuf=''; renderCart(); updateAll();
         }
 
-        // INIT EXECUTION
         init(); 
     </script>
 </body>
