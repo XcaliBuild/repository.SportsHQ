@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>NOVA POS GO</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Nouvelle police Doto de Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Doto:wght@400..900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -14,27 +13,21 @@
             --brand-cyan: #06B6D4; --brand-blue: #0066FF; --brand-green: #22C55E;
             --brand-yellow: #FBBF24; --brand-red: #EF4444; --brand-purple: #A855F7; --brand-pink: #EC4899;
             
-            /* THEME SOMBRE */
             --bg-page: #000000; --surface-white: #121212; --text-dark: #FFFFFF;
             --text-gray: #A1A1AA; --border-light: #27272A; --nova-text-color: #FFFFFF;
             --go-bg: #FFFFFF; --go-text: #000000; --numpad-bg: #FFFFFF; --numpad-text: #333333;
         }
         [data-theme="light"] {
-            /* THEME CLAIR */
-            --bg-page: #E2E8F0; 
-            --surface-white: #FFFFFF; 
-            --text-dark: #1E293B; 
-            --text-gray: #64748B; 
-            --border-light: #CBD5E1; 
-            --nova-text-color: #0F172A;
-            --go-bg: #0F172A; --go-text: #FFFFFF;
-            --numpad-bg: #FFFFFF; --numpad-text: #333333;
+            --bg-page: #E2E8F0; --surface-white: #FFFFFF; --text-dark: #1E293B; 
+            --text-gray: #64748B; --border-light: #CBD5E1; --nova-text-color: #0F172A;
+            --go-bg: #0F172A; --go-text: #FFFFFF; --numpad-bg: #FFFFFF; --numpad-text: #333333;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background: var(--bg-page); color: var(--text-dark); height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; user-select: none; -webkit-tap-highlight-color: transparent; transition: background 0.3s; }
         
-        #bootscreen { position: fixed; inset: 0; background: var(--bg-page); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
+        #bootscreen { position: fixed; inset: 0; background: #000000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
+        
         header { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--surface-white); border-bottom: 1px solid var(--border-light); height: 60px; flex-shrink: 0; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
         .logo-container { display: flex; align-items: center; gap: 4px; }
         .nova-logo { display: flex; flex-direction: column; align-items: center; line-height: 1; }
@@ -45,73 +38,30 @@
         .page-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-light); transition: 0.3s; }
         .page-dot.active { width: 20px; border-radius: 10px; }
         .header-btn { background: var(--bg-page); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; color: var(--text-gray); font-size: 1.1rem; }
+        .header-btn:active { transform: scale(0.9); }
 
         .swipe-wrapper { flex: 1; overflow: hidden; position: relative; touch-action: pan-y; }
         .swipe-container { display: flex; width: 700%; height: 100%; transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-        
         .screen { width: 14.285%; padding: 12px; display: flex; flex-direction: column; overflow-y: auto; padding-bottom: max(20px, env(safe-area-inset-bottom)); position: relative; }
 
         .terminal-box { color: white; padding: 14px; border-radius: 16px; text-align: center; margin-bottom: 10px; flex-shrink: 0; }
         .terminal-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.9; }
         .terminal-amount { font-size: 2rem; font-weight: 800; margin: 4px 0; }
 
-        /* ÉCRAN CAISSE LCD NOIR & FONT DOTO */
         .screen-0 { background: transparent; color: var(--text-dark); }
-        .screen-0 .terminal-box { 
-            background: #000000; /* Fond noir profond */
-            border-radius: 4px; 
-            border: 4px solid #1E293B; 
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 4px 10px rgba(0,0,0,0.1);
-            padding: 20px 14px;
-        }
+        .screen-0 .terminal-box { background: #000000; border-radius: 4px; border: 4px solid #1E293B; box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 4px 10px rgba(0,0,0,0.1); padding: 20px 14px; }
         .screen-0 .terminal-label { color: #A0B2C6; }
-        #cash-total { 
-            font-family: 'Doto', sans-serif; /* Nouvelle Font */
-            font-size: 3.2rem; 
-            font-weight: 700;
-            color: #E2E8F0; 
-            letter-spacing: 2px;
-            margin: 10px 0;
-            text-shadow: 0 0 5px rgba(226, 232, 240, 0.3);
-        }
-        .barcode-display { 
-            font-family: 'Doto', sans-serif; 
-            font-size: 1.2rem; 
-            color: #94A3B8; 
-            text-align: center; 
-        }
+        #cash-total { font-family: 'Doto', sans-serif; font-size: 3.2rem; font-weight: 700; color: #E2E8F0; letter-spacing: 2px; margin: 10px 0; text-shadow: 0 0 5px rgba(226, 232, 240, 0.3); }
+        .barcode-display { font-family: 'Doto', sans-serif; font-size: 1.2rem; color: #94A3B8; text-align: center; }
         
         .cart-area { flex: 1; overflow-y: auto; background: var(--surface-white); border: 1px solid var(--border-light); border-radius: 8px; padding: 6px; margin-bottom: 8px; min-height: 80px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 6px; border-bottom: 1px solid var(--border-light); font-size: 0.9rem; font-weight: 500; }
         .cart-item:last-child { border-bottom: none; }
         .qty-tag { background: var(--brand-blue); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; margin-right: 6px; }
         
-        /* CLAVIER */
-        .numpad { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 8px; 
-            margin-bottom: 15px; 
-        }
-        .num-key { 
-            width: 100%; 
-            height: 60px; 
-            border-radius: 6px; 
-            border: 2px solid #1E293B; 
-            background: var(--numpad-bg); 
-            color: var(--numpad-text); 
-            font-family: 'Doto', sans-serif;
-            font-size: 1.8rem; 
-            font-weight: 700; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            box-shadow: 0 2px 0 #1E293B; 
-            transition: all 0.1s ease;
-        }
+        .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
+        .num-key { width: 100%; height: 60px; border-radius: 6px; border: 2px solid #1E293B; background: var(--numpad-bg); color: var(--numpad-text); font-family: 'Doto', sans-serif; font-size: 1.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 0 #1E293B; transition: all 0.1s ease; }
         .num-key:active { transform: translateY(2px); box-shadow: 0 0 0 #1E293B; }
-        
         .num-key.enter-key { background: var(--brand-cyan); color: #000; border-color: #0369A1; box-shadow: 0 2px 0 #0369A1; font-family: 'Segoe UI', sans-serif;}
         .num-key.enter-key:active { box-shadow: 0 0 0 #0369A1; }
 
@@ -153,35 +103,9 @@
         .credit-badge { float: right; background: var(--brand-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight:bold; }
         .credit-clean { background: var(--brand-green); }
         
-        /* BOUTON RECHERCHE FLOTTANT */
-        .floating-search-btn {
-            position: absolute;
-            bottom: 85px;
-            right: 20px;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            background: var(--brand-pink);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            cursor: pointer;
-            z-index: 100;
-            border: 2px solid var(--surface-white);
-        }
+        .floating-search-btn { position: absolute; bottom: 85px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: var(--brand-pink); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; z-index: 100; border: 2px solid var(--surface-white); }
         .floating-search-btn:active { transform: scale(0.9); }
-        .search-bar-container {
-            display: none;
-            padding: 10px;
-            background: var(--surface-white);
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border: 2px solid var(--brand-pink);
-            animation: fadeIn 0.2s ease-in-out;
-        }
+        .search-bar-container { display: none; padding: 10px; background: var(--surface-white); border-radius: 8px; margin-bottom: 10px; border: 2px solid var(--brand-pink); animation: fadeIn 0.2s ease-in-out; }
         .search-bar-container.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -195,29 +119,44 @@
         .method-btn { width: 48px; height: 48px; border-radius: 8px; border: 2px solid var(--border-light); background: var(--surface-white); color: var(--text-gray); font-size: 1.2rem; cursor:pointer;}
         .method-btn.active { border-color: var(--brand-blue); color: var(--brand-blue); background: rgba(0, 102, 255, 0.1); }
         #scanner-view, #popup-scanner-view { width: 100%; min-height: 250px; border-radius: 8px; background: #000; display: flex; align-items: center; justify-content: center; border: 2px dashed var(--border-light); }
+        
+        /* SHUTDOWN SCREEN */
+        #shutdown-screen { position: fixed; inset: 0; background: #000; color: #0f0; display: none; align-items: center; justify-content: center; font-family: 'Doto', monospace; font-size: 1.2rem; z-index: 10000; text-align: center; padding: 20px; }
     </style>
 </head>
 <body data-theme="light">
 
+    <!-- BOOTSCREEN TERMINAL -->
     <div id="bootscreen">
         <div class="logo-container" style="transform: scale(2.5);">
-            <div class="nova-logo"><span class="nova-text">NOVA</span><span class="pos-text">P.O.S</span></div>
-            <div class="go-badge">GO</div>
+            <div class="nova-logo"><span class="nova-text" style="color:#fff;">NOVA</span><span class="pos-text" style="color:#aaa;">P.O.S</span></div>
+            <div class="go-badge" style="background:#fff; color:#000;">GO</div>
         </div>
+        <div id="boot-text" style="font-family:'Doto', monospace; font-size:0.8rem; color:#06B6D4; margin-top:40px; text-transform:lowercase; letter-spacing:1px; text-align:center;">
+            > init system...
+        </div>
+    </div>
+    
+    <div id="shutdown-screen">
+        > system off.<br>backup safely stored.<br><br>it is now safe to close this window.
     </div>
 
     <input type="file" id="restore-file-input" style="display: none;">
 
     <header>
-        <div class="logo-container">
-            <div class="nova-logo"><span class="nova-text">NOVA</span><span class="pos-text">P.O.S</span></div>
-            <div class="go-badge">GO</div>
-        </div>
+        <!-- BOUTON SHUTDOWN -->
+        <button class="header-btn" onclick="shutdownApp()" style="color:var(--brand-red);"><i class="fa-solid fa-power-off"></i></button>
+        
         <div class="page-indicator" id="page-dots">
             <div class="page-dot active"></div><div class="page-dot"></div><div class="page-dot"></div>
             <div class="page-dot"></div><div class="page-dot"></div><div class="page-dot"></div><div class="page-dot"></div>
         </div>
-        <button class="header-btn" onclick="openSettings()"><i class="fa-solid fa-gear"></i></button>
+        
+        <div style="display: flex; align-items: center;">
+            <!-- ICONE AUTO BACKUP SYNC -->
+            <i class="fa-solid fa-arrows-rotate" id="sync-icon" style="display:none; color:var(--brand-cyan); font-size:1.1rem; margin-right:12px;"></i>
+            <button class="header-btn" onclick="openSettings()"><i class="fa-solid fa-gear"></i></button>
+        </div>
     </header>
 
     <div class="swipe-wrapper" id="swipe-wrapper">
@@ -228,7 +167,7 @@
                 <div class="terminal-box">
                     <div class="terminal-label">TOTAL DUE</div>
                     <div class="terminal-amount" id="cash-total">0.00 €</div>
-                    <div class="barcode-display" id="barcode-show">_</div>
+                    <div class="barcode-display" id="barcode-show">READY</div>
                 </div>
                 <div class="cart-area" id="cart-items"></div>
                 
@@ -243,7 +182,6 @@
                     <button class="num-key" onclick="pressNum('2')">2</button>
                     <button class="num-key" onclick="pressNum('3')">3</button>
                     
-                    <!-- BOUTON CORRECTION EN JAUNE / GRIS FONCÉ -->
                     <button class="num-key" onclick="deleteDigit()" style="background: var(--brand-yellow); color: #333333; border-color: #D97706; box-shadow: 0 2px 0 #D97706; font-family: 'Segoe UI', sans-serif;">
                         <i class="fa-solid fa-delete-left"></i>
                     </button>
@@ -277,26 +215,16 @@
             <div class="screen screen-2">
                 <div class="terminal-box"><div class="terminal-label">CREDIT / INSTALLMENT</div><div class="terminal-amount" id="split-total">0.00 €</div></div>
                 <div class="scroll-area">
-                    
-                    <div class="input-group">
-                        <div class="input-label">Select Client</div>
-                        <select id="inst-client-select" class="input-field" onchange="instClientChange()"></select>
-                    </div>
-
+                    <div class="input-group"><div class="input-label">Select Client</div><select id="inst-client-select" class="input-field" onchange="instClientChange()"></select></div>
                     <div id="inst-new-client-fields" style="display:none; background:var(--bg-page); padding:10px; border-radius:8px; margin-bottom:10px;">
                         <div class="input-group"><div class="input-label">New Client Name</div><input type="text" id="inst-name" class="input-field"></div>
                         <div class="input-group"><div class="input-label">Phone</div><input type="tel" id="inst-tel" class="input-field"></div>
                     </div>
-
                     <div class="action-row">
                         <div class="input-group flex-1"><div class="input-label">Installments</div><input type="number" id="inst-nb" class="input-field" value="1"></div>
                         <div class="input-group flex-1"><div class="input-label">Ref / Doc</div><input type="text" id="inst-ref" class="input-field" value="CR-" maxlength="8"></div>
                     </div>
-                    
-                    <div class="input-group"><div class="input-label">Notes / Reason</div>
-                        <textarea id="inst-notes" class="input-field" rows="2" placeholder="Reason for credit..."></textarea>
-                    </div>
-
+                    <div class="input-group"><div class="input-label">Notes / Reason</div><textarea id="inst-notes" class="input-field" rows="2" placeholder="Reason for credit..."></textarea></div>
                 </div>
                 <button class="btn btn-blue btn-block" onclick="createInstallment()">CREATE CREDIT RECORD</button>
             </div>
@@ -318,19 +246,12 @@
                 </div>
             </div>
 
-            <!-- 5: CLIENTS & CREDIT MANAGEMENT -->
+            <!-- 5: CLIENTS -->
             <div class="screen screen-5">
                 <div class="terminal-box"><div class="terminal-label">CLIENTS & CREDITS</div><div class="terminal-amount" style="font-size:1.4rem;" id="cli-count">0</div></div>
-                
-                <!-- BARRE DE RECHERCHE CACHÉE -->
-                <div class="search-bar-container" id="cli-search-box">
-                    <input type="text" id="cli-search-input" class="input-field" placeholder="Search client name, phone..." onkeyup="filterClients()">
-                </div>
-
+                <div class="search-bar-container" id="cli-search-box"><input type="text" id="cli-search-input" class="input-field" placeholder="Search client name, phone..." onkeyup="filterClients()"></div>
                 <div class="scroll-area" id="cli-list"></div>
                 <button class="btn btn-pink btn-block" onclick="openAddClient()">+ CLIENT</button>
-                
-                <!-- BOUTON RECHERCHE FLOTTANT -->
                 <div class="floating-search-btn" onclick="toggleClientSearch()"><i class="fa-solid fa-magnifying-glass"></i></div>
             </div>
 
@@ -338,20 +259,15 @@
             <div class="screen screen-6">
                 <div class="terminal-box"><div class="terminal-label">REVENUE</div><div class="terminal-amount" id="hist-total">0.00 €</div></div>
                 <div class="scroll-area" id="hist-list"></div>
-                <button class="btn btn-white btn-block" onclick="openSettle()"><i class="fa-solid fa-power-off"></i> Z-REPORT</button>
+                <button class="btn btn-white btn-block" onclick="openSettle()"><i class="fa-solid fa-receipt"></i> Z-REPORT</button>
             </div>
         </div>
     </div>
 
     <!-- ===== MODALS ===== -->
     
-    <!-- SCANNER POPUP -->
     <div class="modal-overlay" id="modal-scanner-popup" style="z-index: 1050;">
-        <div class="modal-dialog">
-            <div class="modal-header"><span>📷 Scan Code</span><i class="fa-solid fa-xmark modal-close" onclick="stopPopupScan()"></i></div>
-            <div id="popup-scanner-view"></div>
-            <button class="btn btn-red btn-block" style="margin-top:15px;" onclick="stopPopupScan()">Cancel</button>
-        </div>
+        <div class="modal-dialog"><div class="modal-header"><span>📷 Scan Code</span><i class="fa-solid fa-xmark modal-close" onclick="stopPopupScan()"></i></div><div id="popup-scanner-view"></div><button class="btn btn-red btn-block" style="margin-top:15px;" onclick="stopPopupScan()">Cancel</button></div>
     </div>
 
     <!-- SETTINGS -->
@@ -359,151 +275,69 @@
         <div class="modal-dialog">
             <div class="modal-header"><span>⚙️ Settings</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settings')"></i></div>
             
-            <div class="input-group"><div class="input-label">Company Name</div><input type="text" id="set-name" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Company Address</div><input type="text" id="set-addr" class="input-field"></div>
-            
-            <div class="action-row">
-                <div class="input-group flex-1"><div class="input-label">Phone</div><input type="text" id="set-tel" class="input-field"></div>
-                <div class="input-group flex-1"><div class="input-label">Email</div><input type="email" id="set-email" class="input-field"></div>
-            </div>
-
             <div class="input-group">
-                <div class="input-label" style="color:var(--brand-pink);"><i class="fa-solid fa-lock"></i> Auth Key (Security)</div>
-                <input type="password" id="set-auth-key" class="input-field" placeholder="Secret key to protect backups">
-            </div>
-
-            <div class="action-row">
-                <div class="input-group flex-1"><div class="input-label">Currency</div><select id="set-currency" class="input-field"></select></div>
-                <div class="input-group flex-1"><div class="input-label">Theme</div>
-                    <select id="set-theme" class="input-field">
-                        <option value="light">Light (Pro)</option>
-                        <option value="dark">AMOLED Dark</option>
-                    </select>
+                <div class="input-label" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span><i class="fa-solid fa-cloud-arrow-up" style="color:var(--brand-cyan);"></i> Auto-Backup (Sync to memory)</span>
+                    <input type="checkbox" id="set-autobackup" style="transform: scale(1.4); cursor:pointer;">
                 </div>
             </div>
+            
+            <div class="input-group"><div class="input-label">Company Name</div><input type="text" id="set-name" class="input-field"></div>
+            
+            <!-- LOGO UPLOAD -->
+            <div class="input-group">
+                <div class="input-label">Company Logo (For Receipt)</div>
+                <input type="file" id="set-logo" class="input-field" accept="image/*" style="padding: 8px;">
+                <img id="logo-preview" style="max-height: 60px; margin-top: 10px; display: none; border-radius:4px; border:1px solid var(--border-light);">
+            </div>
+
+            <div class="input-group"><div class="input-label">Company Address</div><input type="text" id="set-addr" class="input-field"></div>
+            <div class="action-row"><div class="input-group flex-1"><div class="input-label">Phone</div><input type="text" id="set-tel" class="input-field"></div><div class="input-group flex-1"><div class="input-label">Email</div><input type="email" id="set-email" class="input-field"></div></div>
+            <div class="input-group"><div class="input-label" style="color:var(--brand-pink);"><i class="fa-solid fa-lock"></i> Auth Key (Security)</div><input type="password" id="set-auth-key" class="input-field" placeholder="Secret key for backup"></div>
+            <div class="action-row"><div class="input-group flex-1"><div class="input-label">Currency</div><select id="set-currency" class="input-field"></select></div><div class="input-group flex-1"><div class="input-label">Theme</div><select id="set-theme" class="input-field"><option value="light">Light (Pro)</option><option value="dark">AMOLED Dark</option></select></div></div>
             <div class="input-group"><div class="input-label">PayPal.Me User</div><input type="text" id="set-paypal" class="input-field" placeholder="ex: MyCompany"></div>
             <div class="input-group"><div class="input-label">Receipt Msg</div><input type="text" id="set-receipt-msg" class="input-field"></div>
             
-            <!-- BOUTON SAUVEGARDER CORRIGÉ -->
             <button class="btn btn-blue btn-block" onclick="saveSettings()" style="margin-bottom:15px;">Save Config & Apply</button>
-            
-            <div style="font-weight:900; margin:15px 0 8px; font-size:0.9rem;">💾 DATA EXPORT & IMPORT</div>
-            <div class="action-row">
-                <button class="btn btn-green flex-1" onclick="doBackup()"><i class="fa-solid fa-download"></i> Backup</button>
-                <button class="btn btn-white flex-1" onclick="document.getElementById('restore-file-input').click()"><i class="fa-solid fa-upload"></i> Restore</button>
-            </div>
+            <div style="font-weight:900; margin:15px 0 8px; font-size:0.9rem;">💾 EXPORT & IMPORT (.nvp)</div>
+            <div class="action-row"><button class="btn btn-green flex-1" onclick="doBackup()"><i class="fa-solid fa-download"></i> Backup File</button><button class="btn btn-white flex-1" onclick="document.getElementById('restore-file-input').click()"><i class="fa-solid fa-upload"></i> Restore</button></div>
         </div>
     </div>
 
     <!-- PRODUCT -->
     <div class="modal-overlay" id="modal-product">
-        <div class="modal-dialog">
-            <div class="modal-header"><span>📦 Product</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-product')"></i></div>
-            <div class="input-group"><div class="input-label">Code</div>
-                <div style="display:flex;gap:8px;"><input type="text" id="pr-code" class="input-field" style="flex:1;"><button type="button" class="btn btn-cyan" onclick="startPopupScan()"><i class="fa-solid fa-barcode"></i></button></div>
-            </div>
-            <div class="input-group"><div class="input-label">Name</div><input type="text" id="pr-name" class="input-field"></div>
-            <div class="action-row">
-                <div class="input-group flex-1"><div class="input-label">Price</div><input type="number" id="pr-price" class="input-field" step="0.01"></div>
-                <div class="input-group flex-1"><div class="input-label">Stock</div><input type="number" id="pr-stock" class="input-field" value="10"></div>
-            </div>
-            <button class="btn btn-blue btn-block" onclick="saveProd()">Save Product</button>
-        </div>
+        <div class="modal-dialog"><div class="modal-header"><span>📦 Product</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-product')"></i></div><div class="input-group"><div class="input-label">Code</div><div style="display:flex;gap:8px;"><input type="text" id="pr-code" class="input-field" style="flex:1;"><button type="button" class="btn btn-cyan" onclick="startPopupScan()"><i class="fa-solid fa-barcode"></i></button></div></div><div class="input-group"><div class="input-label">Name</div><input type="text" id="pr-name" class="input-field"></div><div class="action-row"><div class="input-group flex-1"><div class="input-label">Price</div><input type="number" id="pr-price" class="input-field" step="0.01"></div><div class="input-group flex-1"><div class="input-label">Stock</div><input type="number" id="pr-stock" class="input-field" value="10"></div></div><button class="btn btn-blue btn-block" onclick="saveProd()">Save Product</button></div>
     </div>
 
-    <!-- CLIENT ADD -->
-    <div class="modal-overlay" id="modal-client">
-        <div class="modal-dialog">
-            <div class="modal-header"><span>👤 Client</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-client')"></i></div>
-            <div class="input-group"><div class="input-label">Name</div><input type="text" id="cl-name" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Address</div><input type="text" id="cl-addr" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Phone</div><input type="tel" id="cl-tel" class="input-field"></div>
-            <div class="input-group"><div class="input-label">Email</div><input type="email" id="cl-email" class="input-field"></div>
-            <button class="btn btn-pink btn-block" onclick="saveClient()">Save Client</button>
-        </div>
-    </div>
-
-    <!-- CLIENT MANAGE (CS / CR) -->
-    <div class="modal-overlay" id="modal-client-manage">
-        <div class="modal-dialog">
-            <div class="modal-header"><span id="manage-cl-name">Client Name</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-client-manage')"></i></div>
-            <p style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 15px;" id="manage-cl-details"></p>
-            
-            <div style="background: var(--bg-page); padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; border: 1px solid var(--border-light);">
-                <div class="input-label" style="margin-bottom: 5px;">CURRENT CREDIT DEBT</div>
-                <div style="font-size: 2rem; font-weight: 900; color: var(--brand-red);" id="manage-cl-debt">0.00</div>
-            </div>
-
-            <div class="input-group">
-                <div class="input-label">Payment Amount</div>
-                <input type="number" id="manage-pay-amount" class="input-field" step="0.01" placeholder="Amount to pay...">
-            </div>
-
-            <div class="action-row" style="margin-top: 15px;">
-                <button class="btn btn-blue flex-1" onclick="recordCashSale()"><i class="fa-solid fa-money-bill"></i> CS (Cash)</button>
-                <button class="btn btn-green flex-1" onclick="payCreditDebt()"><i class="fa-solid fa-hand-holding-dollar"></i> CR (Pay Debt)</button>
-            </div>
-            <input type="hidden" id="manage-cl-id">
-        </div>
-    </div>
+    <!-- CLIENT ADD & MANAGE -->
+    <div class="modal-overlay" id="modal-client"><div class="modal-dialog"><div class="modal-header"><span>👤 Client</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-client')"></i></div><div class="input-group"><div class="input-label">Name</div><input type="text" id="cl-name" class="input-field"></div><div class="input-group"><div class="input-label">Address</div><input type="text" id="cl-addr" class="input-field"></div><div class="input-group"><div class="input-label">Phone</div><input type="tel" id="cl-tel" class="input-field"></div><div class="input-group"><div class="input-label">Email</div><input type="email" id="cl-email" class="input-field"></div><button class="btn btn-pink btn-block" onclick="saveClient()">Save Client</button></div></div>
+    
+    <div class="modal-overlay" id="modal-client-manage"><div class="modal-dialog"><div class="modal-header"><span id="manage-cl-name">Client Name</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-client-manage')"></i></div><p style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 15px;" id="manage-cl-details"></p><div style="background: var(--bg-page); padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; border: 1px solid var(--border-light);"><div class="input-label" style="margin-bottom: 5px;">CURRENT CREDIT DEBT</div><div style="font-size: 2rem; font-weight: 900; color: var(--brand-red);" id="manage-cl-debt">0.00</div></div><div class="input-group"><div class="input-label">Payment Amount</div><input type="number" id="manage-pay-amount" class="input-field" step="0.01" placeholder="Amount to pay..."></div><div class="action-row" style="margin-top: 15px;"><button class="btn btn-blue flex-1" onclick="recordCashSale()"><i class="fa-solid fa-money-bill"></i> CS (Cash)</button><button class="btn btn-green flex-1" onclick="payCreditDebt()"><i class="fa-solid fa-hand-holding-dollar"></i> CR (Pay Debt)</button></div><input type="hidden" id="manage-cl-id"></div></div>
 
     <!-- CHECKOUT SELECT -->
-    <div class="modal-overlay" id="modal-checkout-client">
-        <div class="modal-dialog">
-            <div class="modal-header"><span>💳 Checkout</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-checkout-client')"></i></div>
-            <div class="input-group"><div class="input-label">Client</div><select id="co-client-select" class="input-field" onchange="coClientChange()"></select></div>
-            <div id="co-new-client-fields" style="display:none;">
-                <div class="input-group"><div class="input-label">Name</div><input type="text" id="co-name" class="input-field"></div>
-                <div class="input-group"><div class="input-label">Phone</div><input type="tel" id="co-tel" class="input-field"></div>
-            </div>
-            <button class="btn btn-green btn-block" style="margin-top:15px;" onclick="finalizeCheckout()">Validate Payment</button>
-        </div>
-    </div>
+    <div class="modal-overlay" id="modal-checkout-client"><div class="modal-dialog"><div class="modal-header"><span>💳 Checkout</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-checkout-client')"></i></div><div class="input-group"><div class="input-label">Client</div><select id="co-client-select" class="input-field" onchange="coClientChange()"></select></div><div id="co-new-client-fields" style="display:none;"><div class="input-group"><div class="input-label">Name</div><input type="text" id="co-name" class="input-field"></div><div class="input-group"><div class="input-label">Phone</div><input type="tel" id="co-tel" class="input-field"></div></div><button class="btn btn-green btn-block" style="margin-top:15px;" onclick="finalizeCheckout()">Validate Payment</button></div></div>
 
     <!-- RECEIPT SENDER -->
-    <div class="modal-overlay" id="modal-receipt-action">
-        <div class="modal-dialog" style="text-align:center;">
-            <div class="modal-header"><span style="color:var(--brand-green);"><i class="fa-solid fa-circle-check"></i> Success</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-receipt-action')"></i></div>
-            <div style="font-size:2.5rem;font-weight:800;margin:10px 0;color:var(--brand-green); font-family: 'Doto', sans-serif;" id="receipt-action-total">0.00</div>
-            <p style="margin-bottom:15px;color:var(--text-gray);font-size:0.9rem;">Send receipt via:</p>
-            <input type="tel" id="receipt-phone" class="input-field" placeholder="Phone..." style="margin-bottom:8px;">
-            <input type="email" id="receipt-email" class="input-field" placeholder="Email..." style="margin-bottom:15px;">
-            <div class="action-row" style="margin-bottom:15px;">
-                <button class="btn btn-green flex-1" onclick="triggerSendReceipt('whatsapp')"><i class="fa-brands fa-whatsapp"></i> WA</button>
-                <button class="btn btn-blue flex-1" onclick="triggerSendReceipt('sms')"><i class="fa-solid fa-sms"></i> SMS</button>
-                <button class="btn btn-white flex-1" onclick="triggerSendReceipt('email')"><i class="fa-solid fa-envelope"></i> Email</button>
-            </div>
-            <button class="btn btn-white btn-block" onclick="closeModal('modal-receipt-action')">Skip</button>
-        </div>
-    </div>
+    <div class="modal-overlay" id="modal-receipt-action"><div class="modal-dialog" style="text-align:center;"><div class="modal-header"><span style="color:var(--brand-green);"><i class="fa-solid fa-circle-check"></i> Success</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-receipt-action')"></i></div><div style="font-size:2.5rem;font-weight:800;margin:10px 0;color:var(--brand-green); font-family: 'Doto', sans-serif;" id="receipt-action-total">0.00</div><p style="margin-bottom:15px;color:var(--text-gray);font-size:0.9rem;">Send receipt via:</p><input type="tel" id="receipt-phone" class="input-field" placeholder="Phone..." style="margin-bottom:8px;"><input type="email" id="receipt-email" class="input-field" placeholder="Email..." style="margin-bottom:15px;"><div class="action-row" style="margin-bottom:15px;"><button class="btn btn-green flex-1" onclick="triggerSendReceipt('whatsapp')"><i class="fa-brands fa-whatsapp"></i> WA</button><button class="btn btn-blue flex-1" onclick="triggerSendReceipt('sms')"><i class="fa-solid fa-sms"></i> SMS</button><button class="btn btn-white flex-1" onclick="triggerSendReceipt('email')"><i class="fa-solid fa-envelope"></i> Email</button></div><button class="btn btn-white btn-block" onclick="closeModal('modal-receipt-action')">Skip</button></div></div>
 
     <!-- SETTLEMENT -->
-    <div class="modal-overlay" id="modal-settlement">
-        <div class="modal-dialog">
-            <div class="modal-header"><span>📊 Z-Report</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settlement')"></i></div>
-            <div id="settle-content" style="background:var(--surface-white); color:var(--text-dark); padding:15px; border-radius:10px; margin-bottom:12px; font-family:monospace; font-size:0.8rem; border:1px dashed var(--border-light);"></div>
-            <div class="action-row" style="margin-bottom:8px;"><button class="btn btn-blue flex-1" onclick="dlPdf()">PDF</button><button class="btn btn-white flex-1" onclick="sendSettleEmail()">Email</button></div>
-            <button class="btn btn-red btn-block" onclick="closeDay()">CLOSE DAY</button>
-        </div>
-    </div>
+    <div class="modal-overlay" id="modal-settlement"><div class="modal-dialog"><div class="modal-header"><span>📊 Z-Report</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settlement')"></i></div><div id="settle-content" style="background:var(--surface-white); color:var(--text-dark); padding:15px; border-radius:10px; margin-bottom:12px; font-family:monospace; font-size:0.8rem; border:1px dashed var(--border-light);"></div><div class="action-row" style="margin-bottom:8px;"><button class="btn btn-blue flex-1" onclick="dlPdf()">PDF</button><button class="btn btn-white flex-1" onclick="sendSettleEmail()">Email</button></div><button class="btn btn-red btn-block" onclick="closeDay()">CLOSE DAY</button></div></div>
 
     <!-- LINK -->
-    <div class="modal-overlay" id="modal-link">
-        <div class="modal-dialog" style="text-align:center;">
-            <div class="modal-header"><span>🔗 Payment Link</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-link')"></i></div>
-            <div style="font-size:2rem;font-weight:800;margin:10px 0;font-family: 'Doto', sans-serif;" id="link-amount">0.00</div>
-            <div class="method-toggle">
-                <button class="method-btn active" data-m="sms" onclick="setMethod('sms')"><i class="fa-solid fa-sms"></i></button>
-                <button class="method-btn" data-m="email" onclick="setMethod('email')"><i class="fa-solid fa-envelope"></i></button>
-                <button class="method-btn" data-m="whatsapp" onclick="setMethod('whatsapp')"><i class="fa-brands fa-whatsapp"></i></button>
-            </div>
-            <input type="text" id="link-contact" class="input-field" placeholder="Contact..." style="text-align:center; margin-bottom:15px;">
-            <button class="btn btn-blue btn-block" onclick="sendLink()">SEND LINK</button>
-        </div>
-    </div>
+    <div class="modal-overlay" id="modal-link"><div class="modal-dialog" style="text-align:center;"><div class="modal-header"><span>🔗 Payment Link</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-link')"></i></div><div style="font-size:2rem;font-weight:800;margin:10px 0;font-family: 'Doto', sans-serif;" id="link-amount">0.00</div><div class="method-toggle"><button class="method-btn active" data-m="sms" onclick="setMethod('sms')"><i class="fa-solid fa-sms"></i></button><button class="method-btn" data-m="email" onclick="setMethod('email')"><i class="fa-solid fa-envelope"></i></button><button class="method-btn" data-m="whatsapp" onclick="setMethod('whatsapp')"><i class="fa-brands fa-whatsapp"></i></button></div><input type="text" id="link-contact" class="input-field" placeholder="Contact..." style="text-align:center; margin-bottom:15px;"><button class="btn btn-blue btn-block" onclick="sendLink()">SEND LINK</button></div></div>
 
     <script>
-        window.addEventListener('load', () => { setTimeout(() => { const bs = document.getElementById('bootscreen'); if(bs) { bs.style.opacity = '0'; setTimeout(() => bs.style.display = 'none', 500); } }, 800); });
+        // BOOTSCREEN ANIMATION
+        window.addEventListener('load', () => { 
+            const bt = document.getElementById('boot-text');
+            setTimeout(() => { bt.textContent = "> mounting core modules..."; }, 500);
+            setTimeout(() => { bt.textContent = "> recovering auto-backups..."; }, 1200);
+            setTimeout(() => { bt.textContent = "> system ready_"; }, 1900);
+            setTimeout(() => { 
+                const bs = document.getElementById('bootscreen'); 
+                if(bs) { bs.style.opacity = '0'; setTimeout(() => bs.style.display = 'none', 500); } 
+            }, 2400); 
+        });
 
         let cart = [], inputBuf = '', screenIdx = 0, touchStartX = 0, touchStartY = 0, linkMethod = 'sms', scanInstance = null, popupScanInstance = null, lastSale = null;
         let products = JSON.parse(localStorage.getItem('nv_products')) || {};
@@ -512,8 +346,8 @@
         
         let settings = JSON.parse(localStorage.getItem('nv_settings')) || { 
             companyName: 'NOVA POS', address: '', phone: '', email: '', 
-            authKey: '', paypalLink: '', receiptMessage: 'Thank you!', 
-            currency: 'EUR', theme: 'light' 
+            authKey: '', paypalLink: '', receiptMessage: 'Thank you for your visit! A bientôt!', 
+            currency: 'EUR', theme: 'light', autoBackup: true, logoBase64: ''
         };
 
         const CURRENCIES = { "EUR":"€", "USD":"$", "GBP":"£", "CHF":"CHF", "CAD":"CA$", "AUD":"A$", "MAD":"DH", "XOF":"CFA", "MUR":"Rs" };
@@ -522,6 +356,37 @@
         function cartTotal() { return cart.reduce((s, i) => s + (parseFloat(i.price) * i.qty), 0); }
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        // AUTO BACKUP MEMORY SYNC
+        function triggerAutoBackup() {
+            if(!settings.autoBackup) return;
+            const icon = document.getElementById('sync-icon');
+            icon.style.display = 'inline-block';
+            icon.classList.add('fa-spin');
+            
+            // Core save to browser memory
+            localStorage.setItem('nv_products', JSON.stringify(products));
+            localStorage.setItem('nv_clients', JSON.stringify(clients));
+            localStorage.setItem('nv_sales', JSON.stringify(sales));
+            localStorage.setItem('nv_settings', JSON.stringify(settings));
+
+            setTimeout(() => { icon.classList.remove('fa-spin'); icon.style.display = 'none'; }, 1000);
+        }
+
+        // LOGO UPLOAD HANDLER
+        document.getElementById('set-logo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    settings.logoBase64 = ev.target.result;
+                    const prev = document.getElementById('logo-preview');
+                    prev.src = settings.logoBase64;
+                    prev.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
 
         function init() {
             const curSel = document.getElementById('set-currency'); curSel.innerHTML = '';
@@ -533,12 +398,18 @@
             document.getElementById('set-email').value = settings.email || '';
             document.getElementById('set-auth-key').value = settings.authKey || '';
             document.getElementById('set-paypal').value = settings.paypalLink || ''; 
-            document.getElementById('set-receipt-msg').value = settings.receiptMessage || '';
+            document.getElementById('set-receipt-msg').value = settings.receiptMessage || 'Thank you!';
             document.getElementById('set-currency').value = settings.currency || 'EUR'; 
             document.getElementById('set-theme').value = settings.theme || 'light';
+            document.getElementById('set-autobackup').checked = settings.autoBackup;
+            
+            if(settings.logoBase64) {
+                const prev = document.getElementById('logo-preview');
+                prev.src = settings.logoBase64;
+                prev.style.display = 'block';
+            }
             
             document.body.dataset.theme = settings.theme || 'light';
-            
             updateAll(); loadInv(); loadCli(); loadHist();
         }
 
@@ -606,15 +477,17 @@
             if(sel === 'NEW') {
                 let n = document.getElementById('co-name').value; if(!n) return alert("Name required");
                 finalClient = { name:n, phone:document.getElementById('co-tel').value||'', address:'', email:'', creditBalance: 0 };
-                clients['CLI'+Date.now()] = finalClient; localStorage.setItem('nv_clients', JSON.stringify(clients));
+                clients['CLI'+Date.now()] = finalClient;
             } else if(sel) finalClient = clients[sel];
             closeModal('modal-checkout-client');
             
             let tot = cartTotal();
             cart.forEach(it => { if(it.code!=='FREE' && products[it.code]) products[it.code].stock = Math.max(0, products[it.code].stock - it.qty); });
-            localStorage.setItem('nv_products', JSON.stringify(products));
             lastSale = { total: tot, items: [...cart], date: new Date().toISOString(), type: 'CS', client: finalClient };
-            sales.push(lastSale); localStorage.setItem('nv_sales', JSON.stringify(sales));
+            sales.push(lastSale); 
+            
+            triggerAutoBackup(); // Save Everything
+            
             cart = []; inputBuf = ''; renderCart(); updateAll();
             
             document.getElementById('receipt-action-total').textContent = fmt(tot);
@@ -640,7 +513,6 @@
             if(a>0 && a<=t) { cart.push({code:'DISC', name:'Discount', price:(-a).toFixed(2), qty:1}); document.getElementById('disc-amount').value=''; renderCart(); updateAll(); screenIdx=0; goScreen(); }
         }
 
-        // ================= CREDITS & INSTALLMENTS =================
         function initInstScreen() {
             const sel = document.getElementById('inst-client-select');
             sel.innerHTML = '<option value="">-- Select Client --</option><option value="NEW">+ Create New Client</option>';
@@ -659,30 +531,22 @@
                 clientId = 'CLI'+Date.now();
                 clientObj = { name:n, phone:document.getElementById('inst-tel').value||'', address:'', email:'', creditBalance: 0 };
                 clients[clientId] = clientObj;
-            } else if (sel) {
-                clientObj = clients[sel];
-            } else {
-                return alert("You must select or create a client for credit/installments.");
-            }
+            } else if (sel) { clientObj = clients[sel]; } else { return alert("You must select or create a client for credit."); }
 
             let nb = document.getElementById('inst-nb').value || 1;
             let ref = document.getElementById('inst-ref').value || 'CR-';
             let notes = document.getElementById('inst-notes').value || '';
             
             clientObj.creditBalance = (parseFloat(clientObj.creditBalance) || 0) + t;
-            localStorage.setItem('nv_clients', JSON.stringify(clients));
+            lastSale = { total: t, items: [{name: `Credit/Inst. ${ref} - ${notes}`, qty:1, price:t}], date: new Date().toISOString(), type: 'CR', client: clientObj, ref: ref, notes: notes };
+            sales.push(lastSale); 
+            
+            triggerAutoBackup();
 
             alert(`✅ Credit Record Created: ${ref}\nClient: ${clientObj.name}\nTotal Debt Added: ${fmt(t)}`);
-            
-            lastSale = { total: t, items: [{name: `Credit/Inst. ${ref} - ${notes}`, qty:1, price:t}], date: new Date().toISOString(), type: 'CR', client: clientObj, ref: ref, notes: notes };
-            sales.push(lastSale); localStorage.setItem('nv_sales', JSON.stringify(sales));
-            
-            cart = []; inputBuf = ''; renderCart(); updateAll();
-            document.getElementById('inst-notes').value = '';
-            screenIdx=0; goScreen();
+            cart = []; inputBuf = ''; renderCart(); updateAll(); document.getElementById('inst-notes').value = ''; screenIdx=0; goScreen();
         }
 
-        // ================= INVENTORY =================
         function loadInv() {
             const el = document.getElementById('inv-list'); el.innerHTML = ''; document.getElementById('inv-count').textContent = Object.keys(products).length;
             Object.entries(products).forEach(([c, p]) => el.innerHTML += `<div class="product-row" onclick="selProd('${c}')"><div><strong style="color:var(--text-dark);">${p.name}</strong> <span class="stock-badge ${p.stock>9?'stock-good':p.stock>0?'stock-low':'stock-zero'}">${p.stock}</span><br><small style="color:var(--text-gray);">#${c}</small></div><strong style="color:var(--text-dark);">${fmt(p.price)}</strong></div>`);
@@ -691,7 +555,7 @@
             let p = products[c], act = prompt(`${p.name}\n1: Add to cart\n2: Edit\n3: Delete`, '1');
             if(act==='1') { cart.push({code:c, name:p.name, price:p.price, qty:1}); renderCart(); updateAll(); screenIdx=0; goScreen(); }
             else if(act==='2') { document.getElementById('pr-code').value=c; document.getElementById('pr-name').value=p.name; document.getElementById('pr-price').value=p.price; document.getElementById('pr-stock').value=p.stock; openModal('modal-product'); }
-            else if(act==='3' && confirm('Delete this product?')) { delete products[c]; localStorage.setItem('nv_products', JSON.stringify(products)); loadInv(); }
+            else if(act==='3' && confirm('Delete this product?')) { delete products[c]; triggerAutoBackup(); loadInv(); }
         }
         function openAddProd(c='') { ['pr-code','pr-name','pr-price'].forEach(id=>document.getElementById(id).value=''); document.getElementById('pr-code').value=c; document.getElementById('pr-stock').value='10'; openModal('modal-product'); }
         
@@ -699,7 +563,7 @@
             let c = document.getElementById('pr-code').value || 'SKU'+Date.now().toString().slice(-4), n = document.getElementById('pr-name').value, pr = document.getElementById('pr-price').value;
             if(!n || !pr) return alert('⚠️ Name & Price required!');
             products[c] = { name:n, price:pr, stock:parseInt(document.getElementById('pr-stock').value)||0 };
-            localStorage.setItem('nv_products', JSON.stringify(products)); closeModal('modal-product'); loadInv(); alert('✅ Product Saved!');
+            triggerAutoBackup(); closeModal('modal-product'); loadInv(); alert('✅ Product Saved!');
         }
         function startPopupScan() {
             closeModal('modal-product'); openModal('modal-scanner-popup');
@@ -709,7 +573,6 @@
         }
         function stopPopupScan() { if(popupScanInstance) popupScanInstance.stop().catch(()=>{}); closeModal('modal-scanner-popup'); openModal('modal-product'); }
 
-        // ================= CLIENTS & SEARCH =================
         function loadCli() {
             const el = document.getElementById('cli-list'); el.innerHTML = ''; document.getElementById('cli-count').textContent = Object.keys(clients).length;
             Object.entries(clients).forEach(([id, c]) => {
@@ -726,75 +589,41 @@
         function openAddClient() { ['cl-name','cl-addr','cl-tel','cl-email'].forEach(id=>document.getElementById(id).value=''); openModal('modal-client'); }
         function saveClient() {
             let n = document.getElementById('cl-name').value; if(!n) return alert('Name required');
-            clients['CLI'+Date.now()] = { 
-                name:n, address:document.getElementById('cl-addr').value||'', 
-                phone:document.getElementById('cl-tel').value||'', email:document.getElementById('cl-email').value||'',
-                creditBalance: 0
-            }; 
-            localStorage.setItem('nv_clients', JSON.stringify(clients)); closeModal('modal-client'); loadCli();
+            clients['CLI'+Date.now()] = { name:n, address:document.getElementById('cl-addr').value||'', phone:document.getElementById('cl-tel').value||'', email:document.getElementById('cl-email').value||'', creditBalance: 0 }; 
+            triggerAutoBackup(); closeModal('modal-client'); loadCli();
         }
 
         function openManageClient(id) {
             let c = clients[id];
-            document.getElementById('manage-cl-id').value = id;
-            document.getElementById('manage-cl-name').textContent = c.name;
+            document.getElementById('manage-cl-id').value = id; document.getElementById('manage-cl-name').textContent = c.name;
             document.getElementById('manage-cl-details').innerHTML = `${c.address||''}<br>${c.phone||''}`;
-            document.getElementById('manage-cl-debt').textContent = fmt(c.creditBalance || 0);
-            document.getElementById('manage-pay-amount').value = '';
+            document.getElementById('manage-cl-debt').textContent = fmt(c.creditBalance || 0); document.getElementById('manage-pay-amount').value = '';
             openModal('modal-client-manage');
         }
 
-        // Logic Recherche Clients
         function toggleClientSearch() {
-            const box = document.getElementById('cli-search-box');
-            box.classList.toggle('active');
-            if(box.classList.contains('active')) {
-                document.getElementById('cli-search-input').focus();
-            } else {
-                document.getElementById('cli-search-input').value = '';
-                filterClients();
-            }
+            const box = document.getElementById('cli-search-box'); box.classList.toggle('active');
+            if(box.classList.contains('active')) document.getElementById('cli-search-input').focus(); else { document.getElementById('cli-search-input').value = ''; filterClients(); }
         }
         function filterClients() {
-            let q = document.getElementById('cli-search-input').value.toLowerCase();
-            let cards = document.querySelectorAll('#cli-list .client-card');
-            cards.forEach(card => {
-                let text = card.textContent.toLowerCase();
-                if (text.includes(q)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            let q = document.getElementById('cli-search-input').value.toLowerCase(), cards = document.querySelectorAll('#cli-list .client-card');
+            cards.forEach(card => { if(card.textContent.toLowerCase().includes(q)) card.style.display = 'block'; else card.style.display = 'none'; });
         }
 
         function payCreditDebt() {
-            let id = document.getElementById('manage-cl-id').value;
-            let amt = parseFloat(document.getElementById('manage-pay-amount').value);
+            let id = document.getElementById('manage-cl-id').value, amt = parseFloat(document.getElementById('manage-pay-amount').value);
             if(!amt || amt <= 0) return alert('Enter a valid amount to pay.');
-            let c = clients[id];
-            
-            c.creditBalance = Math.max(0, (parseFloat(c.creditBalance) || 0) - amt); 
-            localStorage.setItem('nv_clients', JSON.stringify(clients));
-            
+            let c = clients[id]; c.creditBalance = Math.max(0, (parseFloat(c.creditBalance) || 0) - amt); 
             sales.push({ total: amt, items: [{name: 'Debt Payment (CR)', qty:1, price:amt}], date: new Date().toISOString(), type: 'PAYMENT', client: c });
-            localStorage.setItem('nv_sales', JSON.stringify(sales));
-            
-            alert(`✅ Payment recorded. Remaining debt: ${fmt(c.creditBalance)}`);
-            closeModal('modal-client-manage'); loadCli();
+            triggerAutoBackup(); alert(`✅ Payment recorded. Remaining debt: ${fmt(c.creditBalance)}`); closeModal('modal-client-manage'); loadCli();
         }
 
         function recordCashSale() {
-            let id = document.getElementById('manage-cl-id').value;
-            let amt = parseFloat(document.getElementById('manage-pay-amount').value);
+            let id = document.getElementById('manage-cl-id').value, amt = parseFloat(document.getElementById('manage-pay-amount').value);
             if(!amt || amt <= 0) return alert('Enter a valid amount for the cash sale.');
             let c = clients[id];
-            
             sales.push({ total: amt, items: [{name: 'Cash Sale (CS)', qty:1, price:amt}], date: new Date().toISOString(), type: 'CS', client: c });
-            localStorage.setItem('nv_sales', JSON.stringify(sales));
-            
-            alert(`✅ Cash Sale (CS) recorded for ${fmt(amt)}`);
-            closeModal('modal-client-manage'); loadCli();
+            triggerAutoBackup(); alert(`✅ Cash Sale (CS) recorded for ${fmt(amt)}`); closeModal('modal-client-manage'); loadCli();
         }
 
         function startScan() {
@@ -812,14 +641,17 @@
                 else if(s.type === 'PAYMENT') badge = `<span style="background:var(--brand-green);color:white;padding:2px 4px;border-radius:4px;font-size:0.7rem;">PAYMENT</span>`;
                 else badge = `<span style="background:var(--text-gray);color:white;padding:2px 4px;border-radius:4px;font-size:0.7rem;">CASH</span>`;
                 
-                el.innerHTML += `<div class="product-row"><div style="color:var(--text-dark);"><strong>${new Date(s.date).toLocaleTimeString()}</strong> ${badge}<br><small style="color:var(--text-gray);">${s.client ? s.client.name : 'Walk-in'}</small></div><strong style="color:var(--text-dark);">${fmt(s.total)}</strong></div>`
+                // FORMAT DATE ET HEURE AJOUTE ICI
+                let dateStr = new Date(s.date).toLocaleDateString() + ' ' + new Date(s.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                el.innerHTML += `<div class="product-row"><div style="color:var(--text-dark);"><strong>${dateStr}</strong> ${badge}<br><small style="color:var(--text-gray);">${s.client ? s.client.name : 'Walk-in'}</small></div><strong style="color:var(--text-dark);">${fmt(s.total)}</strong></div>`
             });
         }
         function openSettle() {
-            document.getElementById('settle-content').innerHTML = `<div style="text-align:center;"><strong>${settings.companyName}</strong><br>${settings.address||''}<br><hr><strong>Z-REPORT</strong><br>${new Date().toLocaleDateString()}<hr>Transactions: ${sales.length}<br><strong>TOTAL: ${fmt(sales.reduce((s,x)=>s+x.total,0))}</strong></div>`;
+            let logoHtml = settings.logoBase64 ? `<img src="${settings.logoBase64}" style="max-height:60px; margin-bottom:10px;"><br>` : '';
+            document.getElementById('settle-content').innerHTML = `<div style="text-align:center;">${logoHtml}<strong>${settings.companyName}</strong><br>${settings.address||''}<br><hr><strong>Z-REPORT</strong><br>${new Date().toLocaleString()}<hr>Transactions: ${sales.length}<br><strong>TOTAL: ${fmt(sales.reduce((s,x)=>s+x.total,0))}</strong></div>`;
             openModal('modal-settlement');
         }
-        function closeDay() { if(confirm('Close day and erase history?')) { sales=[]; localStorage.setItem('nv_sales', '[]'); closeModal('modal-settlement'); loadHist(); alert('✅ Day closed'); } }
+        function closeDay() { if(confirm('Close day and erase history?')) { sales=[]; triggerAutoBackup(); closeModal('modal-settlement'); loadHist(); alert('✅ Day closed'); } }
 
         function setMethod(m) { linkMethod=m; document.querySelectorAll('.method-btn').forEach(b=>b.classList.remove('active')); document.querySelector(`.method-btn[data-m="${m}"]`).classList.add('active'); }
         function openPaymentLink() { let t = cartTotal() || parseFloat(inputBuf) || 0; if(!t) return; document.getElementById('link-amount').textContent=fmt(t); openModal('modal-link'); }
@@ -833,7 +665,6 @@
 
         function openSettings() { init(); openModal('modal-settings'); }
         
-        // --- SAUVEGARDE DES PARAMÈTRES CORRIGÉE ---
         function saveSettings() {
             settings = { 
                 companyName: document.getElementById('set-name').value, 
@@ -844,15 +675,12 @@
                 paypalLink: document.getElementById('set-paypal').value, 
                 receiptMessage: document.getElementById('set-receipt-msg').value, 
                 currency: document.getElementById('set-currency').value, 
-                theme: document.getElementById('set-theme').value 
+                theme: document.getElementById('set-theme').value,
+                autoBackup: document.getElementById('set-autobackup').checked,
+                logoBase64: settings.logoBase64 || ''
             };
-            localStorage.setItem('nv_settings', JSON.stringify(settings)); 
-            
             document.body.dataset.theme = settings.theme; 
-            
-            updateAll(); 
-            closeModal('modal-settings'); 
-            alert('✅ Configuration Saved & Applied!');
+            triggerAutoBackup(); closeModal('modal-settings'); alert('✅ Configuration Saved & Applied!');
         }
         
         function doBackup() {
@@ -861,43 +689,37 @@
             const timeStr = d.getHours().toString().padStart(2, '0') + 'h' + d.getMinutes().toString().padStart(2, '0');
             const name = `backup(${dateStr}@${timeStr})`;
             const data = { products, clients, sales, settings, authKey: settings.authKey, date: d.toISOString() };
-            
             const blob = new Blob([JSON.stringify(data)], { type: 'text/plain' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = name + '.nvp'; 
-            a.click();
-            
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name + '.nvp'; a.click();
             alert(`💾 Backup exported as:\n\n${name}.nvp`);
+        }
+        
+        // SHUTDOWN ROUTINE
+        function shutdownApp() {
+            if(confirm('Are you sure you want to exit?\nSystem memory is automatically saved.')) {
+                if(confirm('Would you like to download a Physical Backup File (.nvp) before exiting?')) {
+                    doBackup();
+                }
+                document.getElementById('shutdown-screen').style.display = 'flex';
+            }
         }
 
         document.getElementById('restore-file-input').addEventListener('change', e => {
-            let f = e.target.files[0];
-            if(!f) return;
-            
+            let f = e.target.files[0]; if(!f) return;
             let r = new FileReader(); 
             r.onload = ev => { 
                 try { 
                     let d = JSON.parse(ev.target.result); 
                     if (settings.authKey && settings.authKey.trim() !== '') {
-                        if (d.authKey !== settings.authKey) {
-                            alert('❌ ACCESS DENIED: Authentication Key mismatch!');
-                            return;
-                        }
+                        if (d.authKey !== settings.authKey) { alert('❌ ACCESS DENIED: Authentication Key mismatch!'); return; }
                     }
                     if(confirm('Restore this backup? Current data will be replaced.')) { 
-                        ['products','clients','sales','settings'].forEach(k => { 
-                            if(d[k]) { window[k] = d[k]; localStorage.setItem('nv_'+k, JSON.stringify(d[k])); } 
-                        }); 
-                        alert('✅ Successfully Restored');
-                        location.reload(); 
+                        ['products','clients','sales','settings'].forEach(k => { if(d[k]) { window[k] = d[k]; localStorage.setItem('nv_'+k, JSON.stringify(d[k])); } }); 
+                        alert('✅ Successfully Restored'); location.reload(); 
                     } 
-                } catch(err) { 
-                    alert('❌ Invalid Backup File. Make sure it is a valid .nvp file.'); 
-                } 
+                } catch(err) { alert('❌ Invalid Backup File. Make sure it is a valid .nvp file.'); } 
             };
-            r.readAsText(f);
-            e.target.value = ''; 
+            r.readAsText(f); e.target.value = ''; 
         });
 
         init(); renderCart(); goScreen();
