@@ -33,12 +33,12 @@
         .nova-logo { display: flex; flex-direction: column; align-items: center; line-height: 1; }
         .nova-logo .nova-text { font-size: 1.25rem; font-weight: 900; color: var(--nova-text-color); letter-spacing: 2px; }
         .nova-logo .pos-text { font-size: 0.6rem; font-weight: 700; color: var(--text-gray); letter-spacing: 3px; margin-top: -3px; }
-        .go-badge { background: var(--go-bg); color: var(--go-text); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; margin-top: -6px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .go-badge { background: var(--go-bg); color: var(--go-text); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; margin-top: -6px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .page-indicator { display: flex; gap: 5px; }
         .page-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-light); transition: 0.3s; display:none; }
         .page-dot.allowed { display:block; }
         .page-dot.active { width: 20px; border-radius: 10px; }
-        .header-btn { background: var(--bg-page); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; color: var(--text-gray); font-size: 1.1rem; }
+        .header-btn { background: var(--bg-page); border: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; color: var(--text-gray); font-size: 1.2rem; display:flex; align-items:center; justify-content:center;}
         .header-btn:active { transform: scale(0.9); }
 
         .swipe-wrapper { flex: 1; overflow: hidden; position: relative; touch-action: pan-y; }
@@ -121,8 +121,19 @@
         
         #shutdown-screen { position: fixed; inset: 0; background: #000; color: #0f0; display: none; align-items: center; justify-content: center; font-family: 'Doto', monospace; font-size: 1.2rem; z-index: 10000; text-align: center; padding: 20px; }
         
-        /* Master Admin Panel Styling */
-        #master-admin-panel { background: rgba(6, 182, 212, 0.1); border: 2px dashed var(--brand-cyan); padding: 15px; border-radius: 8px; margin-top: 15px; display: none; }
+        /* THEME MODERNE POUR LES PARAMETRES (NOIR & BLANC & GRIS) */
+        #modal-settings .modal-dialog { background: #18181b; border: 1px solid #3f3f46; color: #f4f4f5; }
+        #modal-settings .modal-header { color: #ffffff; }
+        #modal-settings .input-field { background: #27272a; border: 1px solid #52525b; color: #ffffff; }
+        #modal-settings .input-field:focus { border-color: #a1a1aa; }
+        #modal-settings .input-label { color: #a1a1aa; font-weight: 600; }
+        #modal-settings .btn-blue, #modal-settings .btn-green, #modal-settings .btn-purple { background: #3f3f46; color: #fff; border: 1px solid #52525b; }
+        #modal-settings .btn-white { background: #27272a; color: #fff; border: 1px solid #52525b; }
+        #modal-settings hr { border-color: #3f3f46; }
+        
+        #master-admin-panel { background: #27272a; border: 1px dashed #52525b; padding: 15px; border-radius: 8px; margin-top: 15px; display: none; }
+        
+        #settle-content { max-height: 55vh; overflow-y: auto; padding-bottom: 20px; }
     </style>
 </head>
 <body data-theme="light">
@@ -146,12 +157,10 @@
 
     <header>
         <button class="header-btn" onclick="shutdownApp()" style="color:var(--brand-red);"><i class="fa-solid fa-power-off"></i></button>
-        <div class="page-indicator" id="page-dots">
-            <!-- Rendu dynamique JS -->
-        </div>
+        <div class="page-indicator" id="page-dots"></div>
         <div style="display: flex; align-items: center;">
             <i class="fa-solid fa-arrows-rotate" id="sync-icon" style="display:none; color:var(--brand-cyan); font-size:1.1rem; margin-right:12px;"></i>
-            <button class="header-btn" onclick="openSettings()"><i class="fa-solid fa-gear"></i></button>
+            <button class="header-btn" onclick="openSettings()"><i class="fa-solid fa-sliders"></i></button>
         </div>
     </header>
 
@@ -213,7 +222,9 @@
                     <div class="input-group"><div class="input-label">Select Client</div><select id="inst-client-select" class="input-field" onchange="instClientChange()"></select></div>
                     <div id="inst-new-client-fields" style="display:none; background:var(--bg-page); padding:10px; border-radius:8px; margin-bottom:10px;">
                         <div class="input-group"><div class="input-label">New Client Name</div><input type="text" id="inst-name" class="input-field"></div>
+                        <div class="input-group"><div class="input-label">Address</div><input type="text" id="inst-addr" class="input-field"></div>
                         <div class="input-group"><div class="input-label">Phone</div><input type="tel" id="inst-tel" class="input-field"></div>
+                        <div class="input-group"><div class="input-label">Email</div><input type="email" id="inst-email" class="input-field"></div>
                     </div>
                     <div class="input-group"><div class="input-label">Installments (Months)</div><input type="number" id="inst-nb" class="input-field" value="1"></div>
                     
@@ -248,7 +259,9 @@
             <!-- 5: CLIENTS -->
             <div class="screen screen-5" data-idx="5">
                 <div class="terminal-box"><div class="terminal-label" id="lbl-cli">CLIENTS & CREDITS</div><div class="terminal-amount" style="font-size:1.4rem;" id="cli-count">0</div></div>
-                <div class="search-bar-container" id="cli-search-box"><input type="text" id="cli-search-input" class="input-field" placeholder="Search client name, phone..." onkeyup="filterClients()"></div>
+                <div class="search-bar-container" id="cli-search-box">
+                    <input type="text" id="cli-search-input" class="input-field" placeholder="Search client name or phone..." onkeyup="filterClients()">
+                </div>
                 <div class="scroll-area" id="cli-list"></div>
                 <button class="btn btn-pink btn-block" onclick="openAddClient()" id="btn-client">+ CLIENT</button>
                 <div class="floating-search-btn" onclick="toggleClientSearch()"><i class="fa-solid fa-magnifying-glass"></i></div>
@@ -284,67 +297,69 @@
         </div>
     </div>
 
-    <!-- SETTINGS -->
+    <!-- SETTINGS (MODE MODERNE SOMBRE) -->
     <div class="modal-overlay" id="modal-settings">
         <div class="modal-dialog">
-            <div class="modal-header"><span>⚙️ Settings</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settings')"></i></div>
+            <div class="modal-header"><span><i class="fa-solid fa-sliders"></i> Settings</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settings')"></i></div>
             
-            <div class="input-group">
-                <div class="input-label" style="display:flex; justify-content:space-between; align-items:center;">
-                    <span><i class="fa-solid fa-cloud-arrow-up" style="color:var(--brand-cyan);"></i> Auto-Backup (Memory)</span>
-                    <input type="checkbox" id="set-autobackup" style="transform: scale(1.4); cursor:pointer;">
+            <div class="action-row">
+                <div class="input-group flex-1">
+                    <div class="input-label">POS ID (Laissez vide = Admin)</div>
+                    <input type="text" id="set-pos-name" class="input-field" placeholder="Ex: POS 1" style="font-weight:bold;" oninput="checkMasterInput()">
                 </div>
+                <div class="input-group flex-1"><div class="input-label">Thème</div><select id="set-theme" class="input-field"><option value="light">Light</option><option value="dark">AMOLED Dark</option></select></div>
             </div>
             
-            <!-- POS ID: Visible pour tous, le déclencheur d'Administration -->
-            <div class="input-group">
-                <div class="input-label" style="color:var(--brand-cyan);">POS ID (Vierge ou "MASTER" = Full Admin)</div>
-                <input type="text" id="set-pos-name" class="input-field" placeholder="Ex: POS 1 (Laisser vide pour Admin)" style="font-weight:bold;" oninput="checkMasterInput()">
+            <div class="input-group"><div class="input-label">Langue</div><select id="set-lang" class="input-field"><option value="en">English</option><option value="fr">Français</option></select></div>
+
+            <!-- ZONE QR CODE POUR LE SUB-POS (Scanner par le Master) -->
+            <div id="sub-pos-qr-area" style="display:none; text-align:center; margin: 15px 0; background: #27272a; padding: 15px; border-radius: 8px;">
+                <div class="input-label" style="color: #fff; margin-bottom: 10px;"><i class="fa-solid fa-mobile-screen"></i> Sync Device to Master</div>
+                <img id="sub-pos-qr-img" style="max-width:160px; background:#fff; padding:5px; border-radius:8px;">
+                <p style="font-size:0.75rem; color:#a1a1aa; margin-top:8px;">Le Master peut scanner ce code pour synchroniser les totaux.</p>
             </div>
 
             <!-- ================= RESTRICTED AREA (Caché pour les Sub-POS) ================= -->
             <div id="restricted-settings-area">
-                
+                <hr>
+                <div class="input-group">
+                    <div class="input-label" style="display:flex; justify-content:space-between; align-items:center;">
+                        <span><i class="fa-solid fa-cloud-arrow-up"></i> Auto-Backup (Memory)</span>
+                        <input type="checkbox" id="set-autobackup" style="transform: scale(1.4); cursor:pointer;">
+                    </div>
+                </div>
                 <div class="action-row">
-                    <div class="input-group flex-1">
-                        <div class="input-label" style="color:var(--brand-pink);"><i class="fa-solid fa-lock"></i> Master Auth Key</div>
-                        <input type="text" id="set-auth-key" class="input-field" placeholder="Clé d'origine">
-                    </div>
-                    <div class="input-group flex-1">
-                        <div class="input-label" style="color:var(--brand-yellow);"><i class="fa-solid fa-link"></i> Terminal Link Key</div>
-                        <input type="text" id="set-link-key" class="input-field" placeholder="ex: 12345678" maxlength="8">
-                    </div>
+                    <div class="input-group flex-1"><div class="input-label"><i class="fa-solid fa-lock"></i> Master Auth Key</div><input type="text" id="set-auth-key" class="input-field" placeholder="Clé d'origine"></div>
+                    <div class="input-group flex-1"><div class="input-label"><i class="fa-solid fa-link"></i> Link Key</div><input type="text" id="set-link-key" class="input-field" placeholder="12345678" maxlength="8"></div>
                 </div>
 
                 <!-- SECTION MASTER: GENERATION DE POS (QR) -->
-                <div id="master-admin-panel" style="display:none; margin-bottom:15px;">
-                    <div style="font-weight:900; margin-bottom:10px; color:var(--brand-cyan);"><i class="fa-solid fa-network-wired"></i> CREATE SUB-POS (Pairing)</div>
+                <div id="master-admin-panel">
+                    <div style="font-weight:900; margin-bottom:10px; color:#fff;"><i class="fa-solid fa-network-wired"></i> CREATE SUB-POS (Pairing)</div>
                     <div class="input-group"><div class="input-label">New POS Name</div><input type="text" id="gen-pos-name" class="input-field" placeholder="e.g. POS 1"></div>
-                    <div class="input-label">Allowed Access:</div>
+                    <div class="input-label" style="margin-bottom:8px;">Allowed Access:</div>
                     <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
-                        <label><input type="checkbox" class="gen-pos-acc" value="0" checked disabled> Till</label>
-                        <label><input type="checkbox" class="gen-pos-acc" value="1"> Discount</label>
-                        <label><input type="checkbox" class="gen-pos-acc" value="2"> Credit</label>
-                        <label><input type="checkbox" class="gen-pos-acc" value="3"> Inventory</label>
-                        <label><input type="checkbox" class="gen-pos-acc" value="4"> Scanner</label>
-                        <label><input type="checkbox" class="gen-pos-acc" value="5"> Clients</label>
-                        <label><input type="checkbox" class="gen-pos-acc" value="6"> Revenue</label>
+                        <label style="color:#a1a1aa;"><input type="checkbox" class="gen-pos-acc" value="0" checked disabled> Till</label>
+                        <label style="color:#a1a1aa;"><input type="checkbox" class="gen-pos-acc" value="1"> Discount</label>
+                        <label style="color:#a1a1aa;"><input type="checkbox" class="gen-pos-acc" value="2"> Credit</label>
+                        <label style="color:#a1a1aa;"><input type="checkbox" class="gen-pos-acc" value="3"> Inventory</label>
+                        <label style="color:#a1a1aa;"><input type="checkbox" class="gen-pos-acc" value="4"> Scanner</label>
+                        <label style="color:#a1a1aa;"><input type="checkbox" class="gen-pos-acc" value="5"> Clients</label>
+                        <label style="color:#a1a1aa;"><input type="checkbox" class="gen-pos-acc" value="6"> Revenue</label>
                     </div>
-                    <button class="btn btn-purple btn-block" onclick="generatePosQR()"><i class="fa-solid fa-qrcode"></i> Generate POS QR</button>
+                    <button class="btn btn-purple btn-block" onclick="generatePosQR()" style="border-color:#A855F7;"><i class="fa-solid fa-qrcode"></i> Generate POS QR</button>
                     <div id="generated-qr-container" style="text-align:center; margin-top:15px; display:none;">
-                        <img id="generated-qr-img" style="max-width:200px; background:white; padding:5px; border-radius:8px;">
-                        <p style="font-size:0.8rem; margin-top:5px; color:var(--text-gray);">Scan this QR on a blank device to pair.</p>
+                        <img id="generated-qr-img" style="max-width:180px; background:white; padding:5px; border-radius:8px;">
+                        <p style="font-size:0.8rem; margin-top:5px; color:#a1a1aa;">Scan on a blank device to pair.</p>
                     </div>
                 </div>
 
-                <hr style="border-color:var(--border-light); margin:15px 0;">
+                <hr>
 
                 <div class="action-row">
                     <div class="input-group flex-1"><div class="input-label">Company Name</div><input type="text" id="set-name" class="input-field"></div>
                     <div class="input-group flex-1"><div class="input-label">Website</div><input type="text" id="set-website" class="input-field" placeholder="www."></div>
                 </div>
-
-                <!-- TOUS LES AUTRES PARAMETRES -->
                 <div class="input-group"><div class="input-label">Company Address</div><input type="text" id="set-addr" class="input-field"></div>
                 <div class="action-row">
                     <div class="input-group flex-1"><div class="input-label">Phone</div><input type="text" id="set-tel" class="input-field"></div>
@@ -363,27 +378,21 @@
                 <div class="input-group">
                     <div class="input-label">Company Logo (For Receipt)</div>
                     <input type="file" id="set-logo" class="input-field" accept="image/*" style="padding: 8px;">
-                    <img id="logo-preview" style="max-height: 60px; margin-top: 10px; display: none; border-radius:4px; border:1px solid var(--border-light);">
+                    <img id="logo-preview" style="max-height: 60px; margin-top: 10px; display: none; border-radius:4px; border:1px solid #52525b;">
                 </div>
 
-                <div class="action-row"><div class="input-group flex-1"><div class="input-label">Start Ref CS</div><input type="number" id="set-cs-ref" class="input-field" placeholder="100000"></div><div class="input-group flex-1"><div class="input-label">Start Ref CR</div><input type="number" id="set-cr-ref" class="input-field" placeholder="200000"></div></div>
+                <div class="action-row"><div class="input-group flex-1"><div class="input-label">Start Ref CS</div><input type="number" id="set-cs-ref" class="input-field"></div><div class="input-group flex-1"><div class="input-label">Start Ref CR</div><input type="number" id="set-cr-ref" class="input-field"></div></div>
 
-                <div class="input-group"><div class="input-label">PayPal.Me User</div><input type="text" id="set-paypal" class="input-field" placeholder="ex: MyCompany"></div>
+                <div class="input-group"><div class="input-label">PayPal.Me User</div><input type="text" id="set-paypal" class="input-field"></div>
                 <div class="input-group"><div class="input-label">Receipt Msg</div><input type="text" id="set-receipt-msg" class="input-field"></div>
                 
-                <div style="font-weight:900; margin:15px 0 8px; font-size:0.9rem;">💾 PHYSICAL BACKUP (.nvp)</div>
-                <div class="action-row"><button class="btn btn-green flex-1" onclick="doBackup()"><i class="fa-solid fa-download"></i> Backup</button><button class="btn btn-white flex-1" onclick="document.getElementById('restore-file-input').click()"><i class="fa-solid fa-upload"></i> Restore</button></div>
+                <hr>
+                <div style="font-weight:900; margin-bottom: 8px; font-size:0.9rem; color:#fff;">💾 PHYSICAL BACKUP (.nvp)</div>
+                <div class="action-row"><button class="btn btn-green flex-1" onclick="doBackup()" style="border-color:#22C55E;"><i class="fa-solid fa-download"></i> Backup</button><button class="btn btn-white flex-1" onclick="document.getElementById('restore-file-input').click()"><i class="fa-solid fa-upload"></i> Restore</button></div>
             
             </div> <!-- FIN RESTRICTED AREA -->
 
-            <hr style="border-color:var(--border-light); margin:15px 0;">
-            <div class="action-row">
-                <div class="input-group flex-1"><div class="input-label">Theme</div><select id="set-theme" class="input-field"><option value="light">Light</option><option value="dark">AMOLED Dark</option></select></div>
-                <!-- Langue visible pour tous -->
-                <div class="input-group flex-1"><div class="input-label">Language</div><select id="set-lang" class="input-field"><option value="en">English</option><option value="fr">Français</option></select></div>
-            </div>
-            
-            <button class="btn btn-blue btn-block" onclick="saveSettings()" style="margin-bottom:15px; margin-top:10px;">Save Config & Apply</button>
+            <button class="btn btn-white btn-block" onclick="saveSettings()" style="margin-bottom:15px; margin-top:20px; font-weight:900; border-color:#fff;">Save Config & Apply</button>
         </div>
     </div>
 
@@ -404,7 +413,11 @@
     <!-- CLIENT ADD & MANAGE -->
     <div class="modal-overlay" id="modal-client"><div class="modal-dialog"><div class="modal-header"><span>👤 Client</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-client')"></i></div><div class="input-group"><div class="input-label">Name</div><input type="text" id="cl-name" class="input-field"></div><div class="input-group"><div class="input-label">Address</div><input type="text" id="cl-addr" class="input-field"></div><div class="input-group"><div class="input-label">Phone</div><input type="tel" id="cl-tel" class="input-field"></div><div class="input-group"><div class="input-label">Email</div><input type="email" id="cl-email" class="input-field"></div><button class="btn btn-pink btn-block" onclick="saveClient()">Save Client</button></div></div>
     
-    <div class="modal-overlay" id="modal-client-manage"><div class="modal-dialog"><div class="modal-header"><span id="manage-cl-name">Client Name</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-client-manage')"></i></div><p style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 15px;" id="manage-cl-details"></p><div style="background: var(--bg-page); padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; border: 1px solid var(--border-light);"><div class="input-label" style="margin-bottom: 5px;">CURRENT CREDIT DEBT</div><div style="font-size: 2rem; font-weight: 900; color: var(--brand-red);" id="manage-cl-debt">0.00</div></div><div class="input-group"><div class="input-label">Payment Amount</div><input type="number" id="manage-pay-amount" class="input-field" step="0.01" placeholder="Amount to pay..."></div><div class="action-row" style="margin-top: 15px;"><button class="btn btn-blue flex-1" onclick="recordCashSale()"><i class="fa-solid fa-money-bill"></i> CS (Cash)</button><button class="btn btn-green flex-1" onclick="payCreditDebt()"><i class="fa-solid fa-hand-holding-dollar"></i> CR (Pay Debt)</button></div><input type="hidden" id="manage-cl-id"></div></div>
+    <div class="modal-overlay" id="modal-client-manage"><div class="modal-dialog"><div class="modal-header"><span id="manage-cl-name">Client Name</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-client-manage')"></i></div><p style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 15px;" id="manage-cl-details"></p>
+        
+        <button class="btn btn-white btn-block" id="btn-edit-client" onclick="editCurrentClient()" style="margin-bottom:15px; border-color:var(--brand-cyan); color:var(--brand-cyan); display:none;"><i class="fa-solid fa-pen"></i> Modifier ce Client</button>
+        
+        <div style="background: var(--bg-page); padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; border: 1px solid var(--border-light);"><div class="input-label" style="margin-bottom: 5px;">CURRENT CREDIT DEBT</div><div style="font-size: 2rem; font-weight: 900; color: var(--brand-red);" id="manage-cl-debt">0.00</div></div><div class="input-group"><div class="input-label">Payment Amount</div><input type="number" id="manage-pay-amount" class="input-field" step="0.01" placeholder="Amount to pay..."></div><div class="action-row" style="margin-top: 15px;"><button class="btn btn-blue flex-1" onclick="recordCashSale()"><i class="fa-solid fa-money-bill"></i> CS (Cash)</button><button class="btn btn-green flex-1" onclick="payCreditDebt()"><i class="fa-solid fa-hand-holding-dollar"></i> CR (Pay Debt)</button></div><input type="hidden" id="manage-cl-id"></div></div>
 
     <!-- CHECKOUT SELECT -->
     <div class="modal-overlay" id="modal-checkout-client"><div class="modal-dialog"><div class="modal-header"><span>💳 Checkout</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-checkout-client')"></i></div><div class="input-group"><div class="input-label">Client</div><select id="co-client-select" class="input-field" onchange="coClientChange()"></select></div><div id="co-new-client-fields" style="display:none;"><div class="input-group"><div class="input-label">Name</div><input type="text" id="co-name" class="input-field"></div><div class="input-group"><div class="input-label">Phone</div><input type="tel" id="co-tel" class="input-field"></div></div><button class="btn btn-green btn-block" style="margin-top:15px;" onclick="finalizeCheckout()">Validate Payment</button></div></div>
@@ -413,7 +426,9 @@
     <div class="modal-overlay" id="modal-receipt-action"><div class="modal-dialog" style="text-align:center;"><div class="modal-header"><span style="color:var(--brand-green);"><i class="fa-solid fa-circle-check"></i> Success</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-receipt-action')"></i></div><div style="font-size:2.5rem;font-weight:800;margin:10px 0;color:var(--brand-green); font-family: 'Doto', sans-serif;" id="receipt-action-total">0.00</div><div style="font-family:monospace; margin-bottom:10px; font-size:1.2rem;" id="receipt-action-ref"></div><p style="margin-bottom:15px;color:var(--text-gray);font-size:0.9rem;">Send receipt via:</p><input type="tel" id="receipt-phone" class="input-field" placeholder="Phone..." style="margin-bottom:8px;"><input type="email" id="receipt-email" class="input-field" placeholder="Email..." style="margin-bottom:15px;"><div class="action-row" style="margin-bottom:15px;"><button class="btn btn-green flex-1" onclick="triggerSendReceipt('whatsapp')"><i class="fa-brands fa-whatsapp"></i> WA</button><button class="btn btn-blue flex-1" onclick="triggerSendReceipt('sms')"><i class="fa-solid fa-sms"></i> SMS</button><button class="btn btn-white flex-1" onclick="triggerSendReceipt('email')"><i class="fa-solid fa-envelope"></i> Email</button></div><button class="btn btn-white btn-block" onclick="closeModal('modal-receipt-action')">Skip</button></div></div>
 
     <!-- SETTLEMENT -->
-    <div class="modal-overlay" id="modal-settlement"><div class="modal-dialog" style="max-width: 500px;"><div class="modal-header"><span>📊 Z-Report</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settlement')"></i></div><div id="settle-content" style="background:#ffffff; color:#000000; padding:20px; border-radius:10px; margin-bottom:12px; font-family:monospace; font-size:0.85rem; border:1px solid #ccc; max-height: 50vh; overflow-y:auto;"></div><div class="action-row" style="margin-bottom:8px;"><button class="btn btn-blue flex-1" onclick="dlPdf()"><i class="fa-solid fa-file-pdf"></i> PDF</button><button class="btn btn-white flex-1" onclick="closeModal('modal-settlement')">Close</button></div><button class="btn btn-red btn-block" onclick="closeDay()">CLOSE DAY (ERASE HIST)</button></div></div>
+    <div class="modal-overlay" id="modal-settlement"><div class="modal-dialog" style="max-width: 500px;"><div class="modal-header"><span>📊 Z-Report</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-settlement')"></i></div>
+    <div id="settle-content" style="background:#ffffff; color:#000000; padding:20px; border-radius:10px; margin-bottom:12px; font-family:monospace; font-size:0.85rem; border:1px solid #ccc;"></div>
+    <div class="action-row" style="margin-bottom:8px;"><button class="btn btn-blue flex-1" onclick="dlPdf()"><i class="fa-solid fa-file-pdf"></i> PDF</button><button class="btn btn-white flex-1" onclick="closeModal('modal-settlement')">Close</button></div><button class="btn btn-red btn-block" onclick="closeDay()">CLOSE DAY (ERASE HIST)</button></div></div>
 
     <!-- LINK -->
     <div class="modal-overlay" id="modal-link"><div class="modal-dialog" style="text-align:center;"><div class="modal-header"><span>🔗 Payment Link</span><i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-link')"></i></div><div style="font-size:2rem;font-weight:800;margin:10px 0;font-family: 'Doto', sans-serif;" id="link-amount">0.00</div><div class="method-toggle"><button class="method-btn active" data-m="sms" onclick="setMethod('sms')"><i class="fa-solid fa-sms"></i></button><button class="method-btn" data-m="email" onclick="setMethod('email')"><i class="fa-solid fa-envelope"></i></button><button class="method-btn" data-m="whatsapp" onclick="setMethod('whatsapp')"><i class="fa-brands fa-whatsapp"></i></button></div><input type="text" id="link-contact" class="input-field" placeholder="Contact..." style="text-align:center; margin-bottom:15px;"><button class="btn btn-blue btn-block" onclick="sendLink()">SEND LINK</button></div></div>
@@ -456,6 +471,8 @@
         let clients = JSON.parse(localStorage.getItem('nv_clients')) || {}; 
         let sales = JSON.parse(localStorage.getItem('nv_sales')) || [];
         
+        let editClientId = null; // Utilisé pour l'édition de client
+
         let defaultSettings = { 
             companyName: 'NOVA POS', posName: '', website: '', authKey: '', linkKey: '12345678',
             address: '', phone: '', email: '', taxRate: 0, currency: 'EUR', customCurrency: '',
@@ -565,14 +582,12 @@
             checkCustomCurrency();
             document.body.dataset.theme = settings.theme || 'light';
             
-            document.getElementById('restricted-settings-area').style.display = hasAdminRights() ? 'block' : 'none';
             checkMasterInput(); 
 
             const dotsContainer = document.getElementById('page-dots');
             dotsContainer.innerHTML = '';
             for(let i=0; i<7; i++) {
                 if(hasAdminRights() || settings.allowedScreens.includes(i)) {
-                    // data-target stocke l'index réel pour récupérer la bonne couleur
                     dotsContainer.innerHTML += `<div class="page-dot allowed" data-target="${i}"></div>`;
                 }
             }
@@ -584,16 +599,35 @@
             goScreen(); 
         }
 
+        // GESTION UI PARAMETRES (MASTER / SUB-POS)
         function checkMasterInput() {
             let val = document.getElementById('set-pos-name').value.toUpperCase();
             if(hasAdminRights() || val === 'MASTER') {
                 document.getElementById('restricted-settings-area').style.display = 'block';
+                document.getElementById('sub-pos-qr-area').style.display = 'none';
                 if(val === 'MASTER') document.getElementById('master-admin-panel').style.display = 'block';
                 else document.getElementById('master-admin-panel').style.display = 'none';
             } else {
                 document.getElementById('master-admin-panel').style.display = 'none';
                 document.getElementById('restricted-settings-area').style.display = 'none';
+                document.getElementById('sub-pos-qr-area').style.display = 'block';
+                showSubPosSyncQR();
             }
+        }
+
+        // GENERATION DU QR POUR QUE LE MASTER SYNCHRONISE
+        function showSubPosSyncQR() {
+            let total = sales.reduce((s,x) => s + x.total, 0);
+            let data = {
+                isSyncData: true,
+                posName: settings.posName || 'Vierge',
+                totalSales: total,
+                txCount: sales.length,
+                date: new Date().toLocaleDateString()
+            };
+            let jsonStr = encodeURIComponent(JSON.stringify(data));
+            let qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${jsonStr}`;
+            document.getElementById('sub-pos-qr-img').src = qrUrl;
         }
 
         function updateAll() {
@@ -631,7 +665,6 @@
             document.getElementById('swipe-container').style.transform = `translateX(-${screenIdx * 14.285}%)`;
             const dots = document.querySelectorAll('.page-dot.allowed');
             
-            // LA CORRECTION DES COULEURS EST ICI
             const cols = ['#06B6D4', '#FBBF24', '#0066FF', '#EF4444', '#A855F7', '#EC4899', '#333333'];
             
             dots.forEach((d) => { 
@@ -649,7 +682,7 @@
         }
 
         function pressNum(n) { 
-            if(n === '00' && inputBuf.length === 0) return; // Prevent leading 00
+            if(n === '00' && inputBuf.length === 0) return; 
             inputBuf += n; 
             updateAll(); 
         }
@@ -687,8 +720,8 @@
                         settings.allowedScreens = config.allowedScreens;
                         settings.linkKey = config.linkKey;
                         if(config.companyName) settings.companyName = config.companyName;
-                        if(config.currency) settings.currency = config.currency;
-                        if(config.taxRate !== undefined) settings.taxRate = config.taxRate;
+                        if(config.currency) settings.currency = config.currency; // 9. CURRENCY APPLIQUÉ
+                        if(config.taxRate !== undefined) settings.taxRate = config.taxRate; // 9. TAX APPLIQUÉ
                         if(config.website) settings.website = config.website;
                         if(config.address) settings.address = config.address;
                         
@@ -719,6 +752,7 @@
         }
         function stopScan() { if(scanInstance) { scanInstance.stop().catch(()=>{}); document.getElementById('scanner-view').innerHTML = '<i class="fa-solid fa-camera fa-3x" style="color:#555"></i>'; } }
 
+        // GENERATE POS QR AVEC TAX ET CURRENCY
         function generatePosQR() {
             let pName = document.getElementById('gen-pos-name').value || 'POS 1';
             let allowed = [];
@@ -732,8 +766,8 @@
                 companyName: settings.companyName,
                 website: settings.website,
                 address: settings.address,
-                currency: settings.currency,
-                taxRate: settings.taxRate
+                currency: settings.currency, 
+                taxRate: settings.taxRate 
             };
             
             let jsonStr = encodeURIComponent(JSON.stringify(config));
@@ -741,22 +775,6 @@
             
             document.getElementById('generated-qr-img').src = qrUrl;
             document.getElementById('generated-qr-container').style.display = 'block';
-        }
-
-        function showDeviceSyncQR() {
-            let total = sales.reduce((s,x) => s + x.total, 0);
-            let data = {
-                isSyncData: true,
-                posName: settings.posName || 'Vierge',
-                totalSales: total,
-                txCount: sales.length,
-                date: new Date().toLocaleDateString()
-            };
-            let jsonStr = encodeURIComponent(JSON.stringify(data));
-            let qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${jsonStr}`;
-            
-            document.getElementById('device-sync-qr-img').src = qrUrl;
-            document.getElementById('device-sync-qr-container').style.display = 'block';
         }
 
         function renderCart() {
@@ -946,10 +964,77 @@
         function openAddProd(c='') { ['pr-code','pr-name','pr-price'].forEach(id=>document.getElementById(id).value=''); document.getElementById('pr-code').value=c; document.getElementById('pr-stock').value='10'; openModal('modal-product'); }
         function saveProd() { let c = document.getElementById('pr-code').value || 'SKU'+Date.now().toString().slice(-4), n = document.getElementById('pr-name').value, pr = document.getElementById('pr-price').value; if(!n || !pr) return alert('⚠️ Name & Price required!'); products[c] = { name:n, price:pr, stock:parseInt(document.getElementById('pr-stock').value)||0 }; triggerAutoBackup(); closeModal('modal-product'); loadInv(); alert('✅ Product Saved!'); }
         
-        function loadCli() { const el = document.getElementById('cli-list'); el.innerHTML = ''; document.getElementById('cli-count').textContent = Object.keys(clients).length; Object.entries(clients).forEach(([id, c]) => { let bal = parseFloat(c.creditBalance) || 0; let badge = bal > 0 ? `<span class="credit-badge">${fmt(bal)}</span>` : `<span class="credit-badge credit-clean">0.00</span>`; el.innerHTML += `<div class="client-card" onclick="openManageClient('${id}')">${badge}<strong style="color:var(--text-dark);">${c.name}</strong><br><small style="color:var(--text-gray);"><i class="fa-solid fa-phone"></i> ${c.phone||'No phone'}</small></div>`; }); }
-        function openAddClient() { ['cl-name','cl-addr','cl-tel','cl-email'].forEach(id=>document.getElementById(id).value=''); openModal('modal-client'); }
-        function saveClient() { let n = document.getElementById('cl-name').value; if(!n) return alert('Name required'); clients['CLI'+Date.now()] = { name:n, address:document.getElementById('cl-addr').value||'', phone:document.getElementById('cl-tel').value||'', email:document.getElementById('cl-email').value||'', creditBalance: 0 }; triggerAutoBackup(); closeModal('modal-client'); loadCli(); }
-        function openManageClient(id) { let c = clients[id]; document.getElementById('manage-cl-id').value = id; document.getElementById('manage-cl-name').textContent = c.name; document.getElementById('manage-cl-details').innerHTML = `${c.address||''}<br>${c.phone||''}`; document.getElementById('manage-cl-debt').textContent = fmt(c.creditBalance || 0); document.getElementById('manage-pay-amount').value = ''; openModal('modal-client-manage'); }
+        // CLIENTS, RECHERCHE & MODIFICATION
+        function toggleClientSearch() {
+            const box = document.getElementById('cli-search-box');
+            box.classList.toggle('active');
+            if (box.classList.contains('active')) document.getElementById('cli-search-input').focus();
+        }
+        function filterClients() {
+            let q = document.getElementById('cli-search-input').value.toLowerCase();
+            let cards = document.querySelectorAll('#cli-list .client-card');
+            cards.forEach(c => {
+                let text = c.getAttribute('data-search').toLowerCase();
+                c.style.display = text.includes(q) ? 'block' : 'none';
+            });
+        }
+        function loadCli() { 
+            const el = document.getElementById('cli-list'); el.innerHTML = ''; 
+            document.getElementById('cli-count').textContent = Object.keys(clients).length; 
+            Object.entries(clients).forEach(([id, c]) => { 
+                let bal = parseFloat(c.creditBalance) || 0; let badge = bal > 0 ? `<span class="credit-badge">${fmt(bal)}</span>` : `<span class="credit-badge credit-clean">0.00</span>`; 
+                let searchData = `${c.name} ${c.phone||''}`;
+                el.innerHTML += `<div class="client-card" onclick="openManageClient('${id}')" data-search="${searchData.toLowerCase()}">${badge}<strong style="color:var(--text-dark);">${c.name}</strong><br><small style="color:var(--text-gray);"><i class="fa-solid fa-phone"></i> ${c.phone||'No phone'}</small></div>`; 
+            }); 
+        }
+        function openAddClient() { 
+            editClientId = null; // Remet à zéro pour une nouvelle création
+            ['cl-name','cl-addr','cl-tel','cl-email'].forEach(id=>document.getElementById(id).value=''); 
+            openModal('modal-client'); 
+        }
+        function saveClient() { 
+            let n = document.getElementById('cl-name').value; 
+            if(!n) return alert('Name required'); 
+            
+            let id = editClientId ? editClientId : 'CLI'+Date.now();
+            let oldCredit = editClientId && clients[editClientId] ? clients[editClientId].creditBalance : 0;
+            
+            clients[id] = { 
+                name:n, 
+                address:document.getElementById('cl-addr').value||'', 
+                phone:document.getElementById('cl-tel').value||'', 
+                email:document.getElementById('cl-email').value||'', 
+                creditBalance: oldCredit 
+            }; 
+            triggerAutoBackup(); closeModal('modal-client'); loadCli(); 
+        }
+        
+        function openManageClient(id) { 
+            let c = clients[id]; 
+            document.getElementById('manage-cl-id').value = id; 
+            document.getElementById('manage-cl-name').textContent = c.name; 
+            document.getElementById('manage-cl-details').innerHTML = `${c.address||''}<br>${c.phone||''}`; 
+            document.getElementById('manage-cl-debt').textContent = fmt(c.creditBalance || 0); 
+            document.getElementById('manage-pay-amount').value = ''; 
+            
+            // Afficher le bouton modifier uniquement pour le Master/Vierge
+            document.getElementById('btn-edit-client').style.display = hasAdminRights() ? 'block' : 'none';
+            
+            openModal('modal-client-manage'); 
+        }
+
+        // Action de modification
+        function editCurrentClient() {
+            let id = document.getElementById('manage-cl-id').value;
+            let c = clients[id];
+            editClientId = id;
+            document.getElementById('cl-name').value = c.name || '';
+            document.getElementById('cl-addr').value = c.address || '';
+            document.getElementById('cl-tel').value = c.phone || '';
+            document.getElementById('cl-email').value = c.email || '';
+            closeModal('modal-client-manage');
+            openModal('modal-client');
+        }
         
         function payCreditDebt() { let id = document.getElementById('manage-cl-id').value, amt = parseFloat(document.getElementById('manage-pay-amount').value); if(!amt || amt <= 0) return alert('Enter a valid amount to pay.'); let c = clients[id]; c.creditBalance = Math.max(0, (parseFloat(c.creditBalance) || 0) - amt); let refNum = 'PAY' + Date.now().toString().slice(-6); sales.push({ total: amt, items: [{name: 'Debt Payment (CR)', qty:1, price:amt}], date: new Date().toISOString(), type: 'PAYMENT', client: c, pos: settings.posName || 'Vierge', ref: refNum }); triggerAutoBackup(); alert(`✅ Payment recorded. Remaining debt: ${fmt(c.creditBalance)}`); closeModal('modal-client-manage'); loadCli(); }
         function recordCashSale() { let id = document.getElementById('manage-cl-id').value, amt = parseFloat(document.getElementById('manage-pay-amount').value); if(!amt || amt <= 0) return alert('Enter a valid amount for the cash sale.'); let c = clients[id]; let refNum = 'CS' + (settings.csRefSeq++); sales.push({ total: amt, items: [{name: 'Cash Sale (CS)', qty:1, price:amt}], date: new Date().toISOString(), type: 'CS', client: c, pos: settings.posName || 'Vierge', ref: refNum }); triggerAutoBackup(); alert(`✅ Cash Sale (CS) recorded for ${fmt(amt)}`); closeModal('modal-client-manage'); loadCli(); }
@@ -961,6 +1046,7 @@
             sel.value = ""; instClientChange();
         }
         function instClientChange() { document.getElementById('inst-new-client-fields').style.display = document.getElementById('inst-client-select').value === 'NEW' ? 'block' : 'none'; }
+        
         function createInstallment() {
             let val = getInputValue(); let t = cartTotal() || parseFloat(val || '0'); if(!t) return alert("No amount to credit.");
             let sel = document.getElementById('inst-client-select').value;
@@ -968,7 +1054,13 @@
             if(sel === 'NEW') {
                 let n = document.getElementById('inst-name').value; if(!n) return alert("Client Name required for credit.");
                 clientId = 'CLI'+Date.now();
-                clientObj = { name:n, phone:document.getElementById('inst-tel').value||'', address:'', email:'', creditBalance: 0 };
+                clientObj = { 
+                    name:n, 
+                    address:document.getElementById('inst-addr').value||'', 
+                    phone:document.getElementById('inst-tel').value||'', 
+                    email:document.getElementById('inst-email').value||'', 
+                    creditBalance: 0 
+                };
                 clients[clientId] = clientObj;
             } else if (sel) { clientObj = clients[sel]; } else { return alert("You must select or create a client for credit."); }
             let notes = document.getElementById('inst-notes').value || '';
