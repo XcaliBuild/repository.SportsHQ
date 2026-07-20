@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+<head><!-- PLAYABLE_TOUCH_PATCH_V1 --><script>
+(function() {
+  if (window.__playableTouchPatchInstalled) return;
+  window.__playableTouchPatchInstalled = true;
+  var origAdd = EventTarget.prototype.addEventListener;
+  var blockedTypes = { touchstart: 1, touchmove: 1, wheel: 1 };
+  EventTarget.prototype.addEventListener = function(type, listener, options) {
+    if (blockedTypes[type]) {
+      if (options === undefined || options === null) {
+        options = { passive: true };
+      } else if (typeof options === 'boolean') {
+        options = { capture: options, passive: true };
+      } else {
+        options = Object.assign({}, options, { passive: true });
+      }
+    }
+    return origAdd.call(this, type, listener, options);
+  };
+})();
+</script><script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Writer. · The Pages. Sources</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Crimson+Text:wght@400;600;700&family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Libre+Baskerville:wght@400;700&family=Lora:wght@400;500;600;700&family=Merriweather:wght@400;700&family=PT+Serif:wght@400;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Source+Serif+Pro:wght@400;600;700&family=Spectral:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Writer. · The Pages. BD PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat+Brush&family=Comic+Neue:wght@400;700&family=Cormorant+Garamond:wght@400;600;700&family=Crimson+Text:wght@400;600;700&family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Libre+Baskerville:wght@400;700&family=Lora:wght@400;500;600;700&family=Merriweather:wght@400;700&family=PT+Serif:wght@400;700&family=Patrick+Hand&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Source+Serif+Pro:wght@400;600;700&family=Special+Elite&family=Spectral:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -32,8 +51,6 @@ body {
     height: 100vh;
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    transition: --accent 0.4s ease;
 }
 .glass { background:var(--glass-bg); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
 .ribbon { height:68px; display:flex; justify-content:space-between; align-items:center; padding:0 20px; z-index:30; }
@@ -42,11 +59,9 @@ body {
 .logo-main { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; color:#fff; }
 .logo-sub { font-size:9px; letter-spacing:4px; text-transform:uppercase; color:var(--accent); font-weight:600; margin-left:4px; transition: color 0.4s; }
 .sync { font-size:10px; color:var(--muted); text-transform:uppercase; display:flex; gap:6px; align-items:center; letter-spacing:1px; flex-shrink:0; }
-
 .btn {
     background: rgba(20,20,25,0.6);
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     color: var(--text);
     border: 1px solid rgba(255,255,255,0.08);
     padding: 9px 16px;
@@ -62,10 +77,9 @@ body {
     transition: all .25s ease;
     flex-shrink:0;
 }
-.btn:hover { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.14); transform:translateY(-1px); box-shadow:inset 0 1px 0 rgba(255,255,255,0.08), 0 6px 24px rgba(0,0,0,0.4); }
+.btn:hover { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.14); transform:translateY(-1px); }
 .btn-danger { color:#ef4444; border-color:rgba(239,68,68,0.2); }
 .btn.lang-active { background:rgba(34,211,238,0.15); color:var(--accent); border-color:var(--accent); }
-
 .main-body { display:flex; flex:1; overflow:hidden; }
 .sidebar { width:240px; background:rgba(10,10,12,0.4); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; }
 .sidebar-scroll { flex:1; overflow-y:auto; padding-top:10px; }
@@ -73,7 +87,6 @@ body {
 .menu-item { padding:10px 20px; color:var(--muted); font-size:13px; border-left:2px solid transparent; display:flex; align-items:center; gap:8px; cursor:pointer; transition:.2s; }
 .menu-item:hover { color:#fff; background:rgba(255,255,255,0.03); }
 .menu-item.active { color:#fff; background:rgba(255,255,255,0.06); border-left-color:var(--accent); font-weight:600; }
-
 .workspace { flex:1; padding:25px; overflow-y:auto; display:flex; justify-content:center; align-items:flex-start; position:relative; }
 .page-nav { position:absolute; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%; background:rgba(20,20,25,0.8); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:15; backdrop-filter:blur(10px); transition:.2s; }
 .page-nav:hover { background:rgba(255,255,255,0.1); border-color:var(--accent); color:var(--accent); }
@@ -82,7 +95,6 @@ body {
 .page-nav.disabled { opacity:.2; pointer-events:none; }
 .sheet { width:100%; max-width:840px; background:var(--glass-sheet); backdrop-filter:blur(25px); border:1px solid var(--border); border-radius:16px; padding:35px 45px; display:flex; flex-direction:column; gap:12px; min-height:65vh; box-shadow:0 30px 60px rgba(0,0,0,0.6); margin-bottom:50px; }
 .sheet.is-cover { justify-content:flex-end; padding-bottom:80px; text-align:center; }
-
 .input-group { display:flex; flex-direction:column; gap:6px; flex:1; min-width:140px; }
 .input-group label { font-size:10px; text-transform:uppercase; color:var(--muted); font-weight:600; display:flex; justify-content:space-between; }
 .text-input { background:transparent; border:none; border-bottom:1px solid rgba(255,255,255,0.15); color:inherit; font-size:24px; font-weight:600; padding:6px 0; outline:none; width:100%; transition:.2s; }
@@ -90,70 +102,73 @@ body {
 .meta-input { background:rgba(0,0,0,0.3); border:1px solid var(--border); color:inherit; font-size:13px; padding:10px 12px; border-radius:8px; outline:none; width:100%; transition:.2s; }
 .meta-input:focus { border-color:var(--accent); }
 .meta-row { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; }
-
 .segment-group { display:flex; background:rgba(0,0,0,0.4); border-radius:10px; padding:4px; border:1px solid var(--border); }
 .segment-btn { flex:1; background:transparent; color:var(--muted); border:none; padding:7px; border-radius:8px; font-size:11px; cursor:pointer; display:flex; justify-content:center; align-items:center; transition:.2s; }
 .segment-btn:hover { background:rgba(255,255,255,0.05); color:#fff; }
-.segment-btn.active { background:rgba(255,255,255,0.1); color:#fff; font-weight:600; box-shadow:0 2px 5px rgba(0,0,0,0.2); }
-
+.segment-btn.active { background:rgba(255,255,255,0.1); color:#fff; font-weight:600; }
 textarea.main { width:100%; min-height:280px; background:transparent; border:none; color:inherit; font-size:16px; line-height:1.8; resize:vertical; outline:none; }
-
 input[type=range] { -webkit-appearance:none; width:100%; background:transparent; }
-input[type=range]:focus { outline:none; }
-input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; height:14px; width:14px; border-radius:50%; background:var(--accent); cursor:pointer; margin-top:-5px; box-shadow:0 0 10px rgba(var(--accent),0.5); }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; height:14px; width:14px; border-radius:50%; background:var(--accent); cursor:pointer; margin-top:-5px; }
 input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; cursor:pointer; background:rgba(255,255,255,0.15); border-radius:2px; }
-
 .btn-preview { position:fixed; bottom:30px; right:30px; background:rgba(20,20,25,0.8); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.08); color:var(--text); padding:14px 24px; border-radius:30px; font-size:14px; font-weight:500; cursor:pointer; z-index:30; display:flex; gap:10px; box-shadow:0 10px 30px rgba(0,0,0,0.5); transition:.2s; }
 .btn-preview:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-1px); }
-
 .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.92); backdrop-filter:blur(15px); display:none; justify-content:center; align-items:center; z-index:1000; padding:20px; }
 .overlay.active { display:flex; }
 .modal { background:#111114; border:1px solid var(--border); border-radius:16px; width:100%; max-width:600px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.8); }
 .modal-head { padding:18px 24px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); }
 .modal-body { padding:24px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:20px; }
-
 .preview-shell { display:flex; flex-direction:column; align-items:center; gap:16px; width:100%; height:100%; justify-content:center; }
 .preview-top { display:flex; gap:8px; background:rgba(20,20,25,0.8); border:1px solid rgba(255,255,255,0.08); padding:10px 14px; border-radius:40px; align-items:center; flex-wrap:wrap; backdrop-filter:blur(12px); }
 .preview-top .btn { border-radius:20px; background:transparent; border-color:transparent; box-shadow:none; padding:7px 14px; }
-.preview-top .btn:hover { background:rgba(255,255,255,0.05); }
-.preview-top .btn.active { background:rgba(255,255,255,0.15); color:var(--accent); border-color:var(--accent); box-shadow:0 0 15px rgba(255,255,255,0.2); font-weight:600; }
-
-.btn-close-round { background:transparent; border:none; color:var(--muted); font-size:22px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:.2s; margin-left:6px; flex-shrink:0; padding:0; outline:none; }
+.preview-top .btn.active { background:rgba(255,255,255,0.15); color:var(--accent); border-color:var(--accent); font-weight:600; }
+.btn-close-round { background:transparent; border:none; color:var(--muted); font-size:22px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:.2s; margin-left:6px; flex-shrink:0; padding:0; }
 .btn-close-round:hover { color:var(--accent); transform:scale(1.1); }
-
 .preview-screen { background:#faf8f5; border-radius:14px; overflow:auto; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.8); border:8px solid #222; transition:.3s ease; }
 .preview-screen.mobile { width:393px; height:852px; }
 .preview-screen.tablet { width:834px; height:1112px; }
 .preview-screen.large, .preview-screen.epub, .preview-screen.pdf { width:100%; height:calc(100vh - 140px); max-width:1200px; border-width:2px; border-radius:6px; }
 .prv-content { padding:40px; color:#111; font-size:16px; line-height:1.7; position:relative; min-height:100%; word-wrap:break-word; }
 .clearfix::after { content:""; clear:both; display:table; }
-
-/* Custom Dropdowns */
 .gen-wrap { position:relative; width:100%; }
 .gen-wrap .btn, .gen-wrap .meta-input { width:100%; justify-content:space-between; cursor:pointer; }
 .dropdown-menu { position:absolute; top:calc(100% + 8px); left:0; min-width:100%; background:rgba(18,18,22,0.98); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:8px; z-index:100; display:none; flex-direction:column; gap:4px; box-shadow:0 20px 40px rgba(0,0,0,0.6); max-height:320px; overflow-y:auto; }
 .dropdown-menu.right { left:auto; right:0; min-width:280px; }
 .dropdown-item { width:100%; justify-content:flex-start; background:transparent; border:none; padding:11px 14px; border-radius:8px; font-size:13px; color:var(--text); display:flex; gap:10px; cursor:pointer; align-items:center; text-align:left; transition:.2s; }
 .dropdown-item:hover { background:rgba(255,255,255,0.08); color:var(--accent); }
-
 .project-item { display:flex; justify-content:space-between; align-items:center; padding:14px; border:1px solid var(--border); border-radius:10px; background:rgba(255,255,255,0.02); transition:.2s; }
 .project-item.active { border-color:var(--accent); background:rgba(255,255,255,0.05); }
-
 .upload-box { margin-top:10px; border:1px dashed var(--border); padding:12px; border-radius:8px; text-align:center; cursor:pointer; font-size:12px; opacity:0.8; transition:.2s; background:rgba(0,0,0,0.2); }
 .upload-box:hover { opacity:1; border-color:var(--accent); color:var(--accent); background:rgba(255,255,255,0.05); }
-
 .saved-toast { position:fixed; bottom:40px; left:50%; transform:translateX(-50%) translateY(100px); background:rgba(20,20,25,0.95); border:1px solid var(--accent); color:#fff; padding:10px 24px; border-radius:30px; z-index:3000; opacity:0; transition:.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display:flex; gap:10px; align-items:center; font-weight:500; box-shadow:0 10px 30px rgba(0,0,0,0.5); }
 .saved-toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
 .footer-copyright { position:fixed; bottom:15px; left:50%; transform:translateX(-50%); font-size:10px; color:var(--muted); z-index:100; pointer-events:none; opacity:.6; text-align:center; letter-spacing:0.5px; }
 
-/* MODULE UI ELEMENTS */
+/* ===== BD PRO STYLES ===== */
+.bd-toolbar { background:rgba(18,18,22,0.98); border:1px solid var(--border); border-radius:12px; padding:14px; display:flex; flex-direction:column; gap:12px; }
+.bd-section-title { font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#fff; display:flex; align-items:center; gap:8px; }
+.bd-section-title i { color:var(--accent); }
+.bd-templates { display:flex; gap:8px; overflow-x:auto; padding:8px 0; scrollbar-width: thin; }
+.template-thumb { width:60px; height:84px; background:#0e0e10; border:2px solid var(--border); border-radius:8px; cursor:pointer; position:relative; overflow:hidden; flex-shrink:0; transition:.2s; }
+.template-thumb:hover { border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }
+.template-thumb.active { border-color:#ef4444; box-shadow:0 0 0 2px rgba(239,68,68,0.3); }
+.bd-canvas-wrap { width:100%; max-width:620px; aspect-ratio:1/1.414; background:#fff; border:4px solid #111; margin:0 auto; position:relative; overflow:hidden; border-radius:4px; box-shadow:0 20px 50px rgba(0,0,0,0.5); }
+.bd-bg-layer { position:absolute; inset:0; overflow:hidden; z-index:0; background:#fff; }
+.bd-grid-container { position:absolute; inset:0; z-index:1; }
+.bd-panel { position:absolute; background:#fff; border:2.5px solid #111; overflow:hidden; cursor:grab; box-sizing:border-box; }
+.bd-panel.selected { border-color:#ef4444; box-shadow:inset 0 0 0 1px #ef4444, 0 0 0 2px rgba(239,68,68,0.4); z-index:3; }
+.bd-panel img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transform-origin:center center; pointer-events:none; will-change:transform; }
+.bd-panel-placeholder { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; color:#777; background:#f5f5f0; font-size:10px; text-transform:uppercase; font-weight:700; text-align:center; padding:10px; }
+.bd-bubble { position:absolute; min-width:50px; min-height:30px; background:#fff; border:2.5px solid #111; padding:6px 10px; font-weight:700; color:#111; cursor:move; user-select:none; z-index:10; max-width:85%; word-wrap:break-word; line-height:1.2; box-shadow:2px 2px 0 rgba(0,0,0,0.15); }
+.bd-bubble.selected { border-color:#ef4444; box-shadow:0 0 0 2px rgba(239,68,68,0.4), 2px 2px 0 rgba(0,0,0,0.15); }
+.bubble-round { border-radius:18px; }
+.bubble-square { border-radius:4px; }
+.bubble-thought { border-radius:24px; border-style:dashed; border-width:2px; }
+.bubble-shout { border-radius:2px; background:#fff; font-family:'Bangers', cursive; letter-spacing:0.5px; transform:translate(-50%,-50%) rotate(-1deg); }
+.bubble-narrator { background:#fff8b5; border-radius:2px; font-style:italic; font-family:'Special Elite', cursive; }
+.bd-bubble-tail { position:absolute; width:14px; height:14px; background:#fff; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; left:50%; transform:translateX(-50%) rotate(45deg); z-index:-1; }
+.bubble-btn { flex:1; background:rgba(255,255,255,0.04); color:var(--text); border:1px solid var(--border); padding:10px; border-radius:8px; cursor:pointer; transition:.2s; font-size:12px; display:flex; align-items:center; justify-content:center; gap:6px; }
+.bubble-btn:hover, .bubble-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(255,255,255,0.06); }
 .module-tools { display:none; flex-direction:column; gap:16px; margin-top:20px; padding-top:20px; border-top:1px solid var(--border); }
-.bubble-btn { flex:1; background:transparent; color:var(--text); border:1px solid var(--border); padding:10px; border-radius:8px; cursor:pointer; transition:.2s; }
-.bubble-btn:hover, .bubble-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(255,255,255,0.05); }
-
-/* BD Canvas Editor */
-#bdCanvasContainer { display:none; width:100%; max-width:600px; aspect-ratio:1/1.414; background:#faf8f5; border:4px solid #111; margin:25px auto 10px; position:relative; overflow:hidden; cursor:grab; box-shadow:0 20px 50px rgba(0,0,0,0.5); border-radius:4px; }
-#bdCanvasContainer:active { cursor:grabbing; }
 </style>
 </head>
 <body>
@@ -194,7 +209,6 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
     <div class="sidebar">
         <div class="sidebar-scroll">
             <div class="cat" id="lblModulesCat">Modules (Licences)</div>
-            
             <div class="menu-item active" id="tab-book" onclick="activateModule('book')">
                 <i class="fas fa-book"></i> <span id="lblBookTab">Livre de poche</span>
             </div>
@@ -204,7 +218,6 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
             <div class="menu-item" id="tab-magazine" onclick="activateModule('magazine')">
                 <i class="fas fa-newspaper"></i> <span id="lblMagTab">Magazine</span>
             </div>
-            
             <div class="cat" id="lblCurProj" style="margin-top:20px;">Projet Actuel</div>
             <div style="padding:0 20px 10px;font-size:12px;color:var(--accent);font-weight:500;" id="currentProjectName">-</div>
         </div>
@@ -239,15 +252,6 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                 <input id="itemTitle" class="meta-input" style="font-weight:700" placeholder="Ex: Chapitre 1" oninput="autoSave()">
             </div>
 
-            <!-- CANVAS BD VISUEL -->
-            <div id="bdCanvasContainer">
-                <div id="bdCanvasPlaceholder" style="position:absolute; inset:0; display:flex; flex-direction:column; gap:10px; align-items:center; justify-content:center; color:#888; font-size:12px; font-weight:600; text-transform:uppercase; pointer-events:none; z-index:0;">
-                    <i class="fas fa-image" style="font-size:32px;opacity:0.5"></i>
-                    Page BD (Drag & Zoom)
-                </div>
-                <img id="bdCanvasImage" src="" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; pointer-events:none; z-index:1; display:none;" />
-            </div>
-            
             <div id="referenceConfigBlock" style="display:none;flex-direction:column;gap:12px;background:rgba(18,18,22,0.98);border:1px solid var(--border);border-radius:12px;padding:14px">
                 <div style="font-weight:600;font-size:13px;color:#fff"><i class="fas fa-link"></i> Référence / Summary - Config liens</div>
                 <div style="display:flex;gap:16px">
@@ -322,15 +326,114 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                 <textarea id="itemText" class="main" placeholder="Commencez à écrire..." oninput="autoSave()"></textarea>
             </div>
 
-            <!-- MODULES INJECTIONS UI -->
-            <div id="bdToolsGroup" class="module-tools">
-                <div class="input-group">
-                    <label><i class="fas fa-comment"></i> Bulles de Dialogue (Outils)</label>
-                    <div style="display:flex;gap:10px">
-                        <button class="bubble-btn" onclick="addBDBubble('round')"><i class="fas fa-comment"></i> Bulle Ronde</button>
-                        <button class="bubble-btn" onclick="addBDBubble('square')"><i class="fas fa-comment-alt"></i> Bulle Carrée</button>
-                        <button class="bubble-btn" onclick="addBDBubble('thought')"><i class="fas fa-cloud"></i> Pensée</button>
+            <!-- ===== BD FULL EDITOR PRO ===== -->
+            <div id="bdFullEditor" style="display:none;flex-direction:column;gap:18px;width:100%">
+                <div class="bd-toolbar">
+                    <div class="bd-section-title"><i class="fas fa-layer-group"></i> Grilles & Fond de page BD</div>
+                    <div class="meta-row">
+                        <div class="input-group" style="flex:2">
+                            <label>Image de fond (derrière la grille) - optionnel</label>
+                            <div style="display:flex;gap:8px">
+                                <input id="bdBgImageInput" class="meta-input" placeholder="URL..." oninput="onBDBgUrlChange(this.value)">
+                                <button class="btn" onclick="document.getElementById('bdBgUpload').click()"><i class="fas fa-upload"></i></button>
+                                <input type="file" id="bdBgUpload" accept="image/*" style="display:none" onchange="onBDBgFile(event)">
+                                <button class="btn btn-danger" onclick="clearBGBg()"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="input-group" style="width:150px">
+                            <label>Zoom fond <span id="bdBgScaleVal">100%</span></label>
+                            <input type="range" id="bdBgScale" min="0.2" max="4" step="0.05" value="1" oninput="onBDBgScale(this.value)">
+                        </div>
+                        <div class="input-group" style="width:150px">
+                            <label>Rotation fond <span id="bdBgRotVal">0°</span></label>
+                            <input type="range" id="bdBgRot" min="-180" max="180" step="1" value="0" oninput="onBDBgRot(this.value)">
+                        </div>
                     </div>
+                    <div class="input-group">
+                        <label>Modèles de grilles - Clique pour appliquer (style Blacksad)</label>
+                        <div id="bdTemplatesList" class="bd-templates"></div>
+                    </div>
+                    <div class="meta-row">
+                        <div class="input-group" style="width:160px">
+                            <label>Cases perso 1-12</label>
+                            <div style="display:flex;gap:8px">
+                                <input type="number" id="bdCustomCount" class="meta-input" min="1" max="12" value="4" style="width:70px">
+                                <button class="btn" onclick="applyCustomGrid()"><i class="fas fa-th"></i> Générer</button>
+                                <button class="btn" onclick="setBDTemplate('full')"><i class="fas fa-expand"></i> Plein</button>
+                            </div>
+                        </div>
+                        <div style="font-size:10px;color:var(--muted);flex:1">Pleine page = utilise l'image en fond. Grille = découpe en cases avec gouttière BD. Tu peux mettre une image de fond + images dans chaque case.</div>
+                    </div>
+                </div>
+
+                <div id="bdCanvasEnhancedWrap" class="bd-canvas-wrap">
+                    <div id="bdBgLayer" class="bd-bg-layer"></div>
+                    <div id="bdGridContainer" class="bd-grid-container"></div>
+                    <div id="bdBubblesPageLayer" style="position:absolute;inset:0;z-index:5;pointer-events:none"></div>
+                </div>
+
+                <div id="bdPanelTools" class="bd-toolbar" style="display:none">
+                    <div class="bd-section-title"><i class="fas fa-crop"></i> Case sélectionnée - <span id="bdSelectedPanelLabel">-</span> <span style="font-weight:400;text-transform:none;opacity:0.7;font-size:10px">Drag image | Molette zoom | Shift+Molette rotation</span></div>
+                    <div class="meta-row">
+                        <div class="input-group" style="flex:2">
+                            <label>Image de la case</label>
+                            <div style="display:flex;gap:8px">
+                                <input id="bdPanelImageUrl" class="meta-input" placeholder="https://..." oninput="onPanelUrlChange(this.value)">
+                                <button class="btn" onclick="document.getElementById('bdPanelUpload').click()"><i class="fas fa-upload"></i> Local</button>
+                                <input type="file" id="bdPanelUpload" accept="image/*" style="display:none" onchange="onPanelFile(event)">
+                                <button class="btn btn-danger" onclick="clearPanelImage()"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="input-group" style="flex:1">
+                            <label>Zoom <span id="bdPanelScaleVal">100%</span></label>
+                            <input type="range" id="bdPanelScale" min="0.1" max="5" step="0.02" value="1" oninput="onPanelScale(this.value)">
+                        </div>
+                        <div class="input-group" style="flex:1">
+                            <label>Rotation <span id="bdPanelRotVal">0°</span></label>
+                            <input type="range" id="bdPanelRot" min="-180" max="180" step="1" value="0" oninput="onPanelRot(this.value)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bd-toolbar">
+                    <div class="bd-section-title"><i class="fas fa-comment-dots"></i> Bulles de dialogue - style BD pro (comme Blacksad)</div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap">
+                        <button class="bubble-btn" onclick="addBDBubble('round')"><i class="fas fa-comment"></i> Ronde</button>
+                        <button class="bubble-btn" onclick="addBDBubble('square')"><i class="fas fa-comment-alt"></i> Carrée</button>
+                        <button class="bubble-btn" onclick="addBDBubble('thought')"><i class="fas fa-cloud"></i> Pensée</button>
+                        <button class="bubble-btn" onclick="addBDBubble('shout')"><i class="fas fa-bolt"></i> Cri</button>
+                        <button class="bubble-btn" onclick="addBDBubble('narrator')"><i class="fas fa-book-open"></i> Narrateur</button>
+                    </div>
+                    <div id="bdBubbleEdit" style="display:none;flex-direction:column;gap:10px;margin-top:12px;background:rgba(0,0,0,0.4);padding:12px;border-radius:8px;border:1px solid var(--border)">
+                        <div class="meta-row">
+                            <div class="input-group" style="flex:2">
+                                <label>Texte de la bulle</label>
+                                <textarea id="bdBubbleText" class="meta-input" rows="2" oninput="onBubbleTextChange(this.value)"></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label>Font BD</label>
+                                <select id="bdBubbleFont" class="meta-input" onchange="onBubbleFontChange(this.value)">
+                                    <option value="'Bangers', cursive">BANGERS - Impact BD</option>
+                                    <option value="'Comic Neue', cursive">Comic Neue - Classique</option>
+                                    <option value="'Patrick Hand', cursive">Patrick Hand - Manuscrit</option>
+                                    <option value="'Caveat Brush', cursive">Caveat Brush - Pinceau</option>
+                                    <option value="'Special Elite', cursive">Special Elite - Machine à écrire</option>
+                                    <option value="'Permanent Marker', cursive">Permanent Marker - Feutre</option>
+                                    <option value="'Inter', sans-serif">Inter - Neutre</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="width:110px">
+                                <label>Taille <span id="bdBubbleSizeVal">14px</span></label>
+                                <input type="range" id="bdBubbleSize" min="8" max="36" value="14" oninput="onBubbleSize(this.value)">
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:8px">
+                            <button class="btn btn-danger" onclick="deleteSelectedBubble()"><i class="fas fa-trash"></i> Supprimer</button>
+                            <button class="btn" onclick="duplicateBubble()"><i class="fas fa-copy"></i> Dupliquer</button>
+                            <button class="btn" onclick="selectedBubbleId=null;document.getElementById('bdBubbleEdit').style.display='none';renderBDCanvas()"><i class="fas fa-times"></i> Fermer</button>
+                        </div>
+                    </div>
+                    <div id="bdBubblesList" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
                 </div>
             </div>
 
@@ -340,7 +443,6 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                     <p style="font-size:11px;opacity:0.7;margin-bottom:8px">Mode image + Texte en dessous activé automatiquement.</p>
                 </div>
             </div>
-
         </div>
         
         <button class="btn-preview" onclick="openPreview()"><i class="fas fa-book-reader"></i> Preview</button>
@@ -354,8 +456,8 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
         <div class="preview-top">
             <button class="btn" id="btnMobile" onclick="setPreviewDevice('mobile')"><i class="fas fa-mobile-alt"></i> Mobile</button>
             <button class="btn" id="btnTablet" onclick="setPreviewDevice('tablet')"><i class="fas fa-tablet-alt"></i> Tablet</button>
-            <button class="btn" id="btnLarge" onclick="setPreviewDevice('large')"><i class="fas fa-desktop"></i> Large Screen</button>
-            <button class="btn" id="btnEpub" onclick="setPreviewDevice('epub')"><i class="fas fa-book"></i> EPUB PC</button>
+            <button class="btn" id="btnLarge" onclick="setPreviewDevice('large')"><i class="fas fa-desktop"></i> Large</button>
+            <button class="btn" id="btnEpub" onclick="setPreviewDevice('epub')"><i class="fas fa-book"></i> EPUB</button>
             <button class="btn" id="btnPdf" onclick="setPreviewDevice('pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
             <button class="btn-close-round" onclick="closePreview()"><i class="fas fa-times-circle"></i></button>
         </div>
@@ -395,7 +497,6 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                     <button class="btn" id="lang-en" onclick="setLang('en')" style="flex:1;justify-content:center">🇬🇧 English</button>
                 </div>
             </div>
-            
             <div>
                 <label style="font-size:11px;opacity:.6;text-transform:uppercase;font-weight:600;display:block;margin-top:10px">Polices Personnalisées</label>
                 <div class="upload-box" onclick="document.getElementById('fontFileInput').click()">
@@ -403,7 +504,6 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                     <input type="file" id="fontFileInput" accept=".ttf,.otf,.woff,.woff2" style="display:none" onchange="handleFontUpload(event)">
                 </div>
             </div>
-
             <div>
                 <label style="font-size:11px;opacity:.6;text-transform:uppercase;font-weight:600;display:block;margin-top:10px">Sauvegarde Globale</label>
                 <p style="font-size:11px;opacity:.6;margin:6px 0">Sauvegarde complète du projet avec polices.</p>
@@ -413,7 +513,6 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                     <input type="file" id="importWorkInput" accept=".writerwork,.json" style="display:none" onchange="importWorkflow(event)">
                 </div>
             </div>
-            
             <div style="border-top:1px solid var(--border);padding-top:15px;margin-top:10px">
                 <label style="font-size:11px;color:#ef4444;text-transform:uppercase;font-weight:600">Zone Dangereuse</label>
                 <button class="btn btn-danger" style="width:100%;justify-content:center" onclick="factoryReset()">Factory Reset</button>
@@ -427,13 +526,9 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
 <script>
 let currentPageId=null, currentProjectId=null, projects=[], appConfig={fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}}, previewDevice='mobile';
 let currentActiveModule = 'book'; 
-
-// Variables BD Drag & Zoom
-let bdScale = 1, bdPanX = 0, bdPanY = 0, isDraggingBD = false, startX, startY;
-
+let selectedPanelIndex=null, selectedBubbleId=null, dragState=null;
 const uid=()=> 'id_'+Date.now()+'_'+Math.random().toString(36).slice(2,5);
 const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-
 let db, customFonts=[];
 let fontMapping={
     'EB Garamond':"'EB Garamond', serif",
@@ -448,14 +543,95 @@ let fontMapping={
     'Source Serif Pro':"'Source Serif Pro', serif",
     'Inter':"'Inter', sans-serif"
 };
-
 const i18n = {
     fr: { proj: "Projets", read: "Livre de poche", bd: "Bande Dessinée (BD)", mag: "Magazine", cur: "Projet Actuel", projTitle: "Projets" },
     en: { proj: "Projects", read: "Paperback", bd: "Comic Book (BD)", mag: "Magazine", cur: "Current Project", projTitle: "Projects" }
 };
-
 const titleSizes = [18,24,28,32,36,42,48,56,64,72];
 const bodySizes = [12,13,14,15,16,17,18,20,22,24,28,32];
+
+/* ===== BD TEMPLATES PRO ===== */
+const BD_TEMPLATES = [
+  {id:'full', name:'Plein', rects:[{x:0,y:0,w:100,h:100}]},
+  {id:'2h', name:'2-H', rects:[{x:0,y:0,w:100,h:49},{x:0,y:51,w:100,h:49}]},
+  {id:'2v', name:'2-V', rects:[{x:0,y:0,w:49,h:100},{x:51,y:0,w:49,h:100}]},
+  {id:'3h', name:'3-H', rects:[{x:0,y:0,w:100,h:32},{x:0,y:34,w:100,h:32},{x:0,y:68,w:100,h:32}]},
+  {id:'3v', name:'3-V', rects:[{x:0,y:0,w:32,h:100},{x:34,y:0,w:32,h:100},{x:68,y:0,w:32,h:100}]},
+  {id:'4', name:'4', rects:[{x:0,y:0,w:49,h:49},{x:51,y:0,w:49,h:49},{x:0,y:51,w:49,h:49},{x:51,y:51,w:49,h:49}]},
+  {id:'3top', name:'3-Top', rects:[{x:0,y:0,w:100,h:58},{x:0,y:60,w:49,h:40},{x:51,y:60,w:49,h:40}]},
+  {id:'3bottom', name:'3-Btm', rects:[{x:0,y:0,w:49,h:40},{x:51,y:0,w:49,h:40},{x:0,y:42,w:100,h:58}]},
+  {id:'5mix', name:'5-Mix', rects:[{x:0,y:0,w:100,h:35},{x:0,y:37,w:49,h:29},{x:51,y:37,w:49,h:29},{x:0,y:68,w:49,h:32},{x:51,y:68,w:49,h:32}]},
+  {id:'6grid', name:'6-Grid', rects:[{x:0,y:0,w:32,h:49},{x:34,y:0,w:32,h:49},{x:68,y:0,w:32,h:49},{x:0,y:51,w:32,h:49},{x:34,y:51,w:32,h:49},{x:68,y:51,w:32,h:49}]},
+  {id:'blacksad', name:'Blacksad', rects:[{x:0,y:0,w:100,h:38},{x:0,y:40,w:100,h:14},{x:0,y:56,w:32,h:20},{x:34,y:56,w:32,h:20},{x:68,y:56,w:32,h:20},{x:0,y:78,w:100,h:22}]},
+  {id:'8', name:'8', rects:[{x:0,y:0,w:49,h:23.5},{x:51,y:0,w:49,h:23.5},{x:0,y:25.5,w:49,h:23.5},{x:51,y:25.5,w:49,h:23.5},{x:0,y:51,w:49,h:23.5},{x:51,y:51,w:49,h:23.5},{x:0,y:76.5,w:49,h:23.5},{x:51,y:76.5,w:49,h:23.5}]},
+  {id:'9', name:'9', rects:[{x:0,y:0,w:32,h:32},{x:34,y:0,w:32,h:32},{x:68,y:0,w:32,h:32},{x:0,y:34,w:32,h:32},{x:34,y:34,w:32,h:32},{x:68,y:34,w:32,h:32},{x:0,y:68,w:32,h:32},{x:34,y:68,w:32,h:32},{x:68,y:68,w:32,h:32}]},
+  {id:'10auto', name:'10', rects:[]},
+];
+
+function generateAutoRects(count){
+ const gap=2;
+ const cols=Math.ceil(Math.sqrt(count));
+ const rows=Math.ceil(count/cols);
+ const cellW=(100-(cols-1)*gap)/cols;
+ const cellH=(100-(rows-1)*gap)/rows;
+ let rects=[];
+ for(let i=0;i<count;i++){
+  let col=i%cols, row=Math.floor(i/cols);
+  rects.push({x:col*(cellW+gap), y:row*(cellH+gap), w:cellW, h:cellH});
+ }
+ return rects;
+}
+function getTemplateRects(id, customCount){
+ if(id==='10auto') return generateAutoRects(customCount||10);
+ let t=BD_TEMPLATES.find(x=>x.id===id);
+ if(t && t.rects && t.rects.length) return t.rects;
+ return generateAutoRects(customCount||4);
+}
+
+function ensureBDData(item){
+ if(!item) return;
+ if(!item.bdBg) item.bdBg={tx:0,ty:0,scale:1,rot:0};
+ if(item.bdBgImage===undefined) item.bdBgImage='';
+ if(!item.bdPanels){
+  if(item.image){
+   item.bdPanels=[{id:uid(), image:item.image, tx:0,ty:0,scale:1,rot:0}];
+  } else {
+   item.bdPanels=[{id:uid(), image:'', tx:0,ty:0,scale:1,rot:0}];
+  }
+ }
+ item.bdPanels.forEach(p=>{
+  if(p.tx===undefined) p.tx=0;
+  if(p.ty===undefined) p.ty=0;
+  if(p.scale===undefined) p.scale=1;
+  if(p.rot===undefined) p.rot=0;
+  if(!p.id) p.id=uid();
+ });
+ if(!item.bdTemplate) item.bdTemplate='full';
+ if(!item.bdTemplateRects || item.bdTemplateRects.length!==item.bdPanels.length){
+  let rects=getTemplateRects(item.bdTemplate, item.bdPanels.length);
+  if(item.bdTemplate!=='custom' && rects.length!==item.bdPanels.length){
+   let newPanels=[];
+   for(let i=0;i<rects.length;i++){
+    if(i<item.bdPanels.length) newPanels.push(item.bdPanels[i]);
+    else newPanels.push({id:uid(), image:'', tx:0,ty:0,scale:1,rot:0});
+   }
+   item.bdPanels=newPanels;
+   item.bdTemplateRects=rects;
+  } else {
+   if(!item.bdTemplateRects) item.bdTemplateRects=rects;
+  }
+ }
+ if(!item.bdBubbles) item.bdBubbles=[];
+ item.bdBubbles.forEach(b=>{
+  if(b.x===undefined) b.x=50;
+  if(b.y===undefined) b.y=50;
+  if(!b.w) b.w=30;
+  if(!b.fontSize) b.fontSize=14;
+  if(!b.fontFamily) b.fontFamily="'Bangers', cursive";
+  if(!b.type) b.type='round';
+  if(b.panelIndex===undefined) b.panelIndex=null;
+ });
+}
 
 function initIDB(cb){ 
     try {
@@ -469,7 +645,6 @@ function initIDB(cb){
         req.onerror=e=>{ if(cb) cb(); };
     } catch(err) { if(cb) cb(); }
 }
-
 function loadFontsFromIDB(cb){ 
     if(!db) return cb&&cb(); 
     try {
@@ -484,7 +659,6 @@ function loadFontsFromIDB(cb){
         r.onerror=()=> { if(cb) cb(); };
     } catch(e) { if(cb) cb(); }
 }
-
 function handleFontUpload(e){ 
     const file=e.target.files[0]; if(!file) return; const r=new FileReader(); 
     r.onload=ev=>{ 
@@ -497,7 +671,6 @@ function handleFontUpload(e){
     }; 
     r.readAsDataURL(file); e.target.value=''; 
 }
-
 function uploadLocalImage(e) {
     const file = e.target.files[0]; if(!file) return; const r = new FileReader();
     r.onload = ev => {
@@ -507,18 +680,15 @@ function uploadLocalImage(e) {
     };
     r.readAsDataURL(file); e.target.value = '';
 }
-
 function applyFont(){ 
     const fam=fontMapping[appConfig.fontFamily]||"'Playfair Display', serif"; 
     const ta=document.getElementById('itemText'); if(ta) ta.style.fontFamily=fam; 
     const it=document.getElementById('itemTitle'); if(it) it.style.fontFamily=fam; 
     const gt=document.getElementById('globalTitle'); if(gt) gt.style.fontFamily=fam;
 } 
-
 function toggleDropdown(id) { const el = document.getElementById(id); const isVis = el.style.display === 'flex'; closeMenus(); if(!isVis) el.style.display = 'flex'; }
 function closeMenus() { document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display='none'); }
 document.addEventListener('click',e=>{ if(!e.target.closest('.gen-wrap')) closeMenus(); }); 
-
 function refreshFontDropdown(){ 
     const dd=document.getElementById('fontDropdown'); if(!dd) return; dd.innerHTML=''; 
     Object.keys(fontMapping).forEach(name=>{ 
@@ -529,7 +699,6 @@ function refreshFontDropdown(){
     const label=document.getElementById('fontSelectLabel'); if(label){ label.textContent=appConfig.fontFamily; label.style.fontFamily=fontMapping[appConfig.fontFamily]; } 
 } 
 function selectFont(name){ appConfig.fontFamily=name; saveProjects(); refreshFontDropdown(); applyFont(); autoSave(); } 
-
 function initSizeDropdowns() {
     const tMenu = document.getElementById('titleSizeDropdown'); const bMenu = document.getElementById('bodySizeDropdown'); tMenu.innerHTML = ''; bMenu.innerHTML = '';
     titleSizes.forEach(s => {
@@ -541,7 +710,6 @@ function initSizeDropdowns() {
         btn.onclick = () => { document.getElementById('bodySizeLabel').dataset.value = s; document.getElementById('bodySizeLabel').textContent = s + 'px'; closeMenus(); autoSave(); }; bMenu.appendChild(btn);
     });
 }
-
 function refreshPageDropdown(){ 
     const dd=document.getElementById('pageDropdown'); if(!dd) return; dd.innerHTML=''; 
     const proj=getCurrentProject(); if(!proj) return; 
@@ -553,13 +721,12 @@ function refreshPageDropdown(){
     const label=document.getElementById('pageSelectLabel'); const cur=proj.data.book.items.find(i=>i.id===currentPageId); 
     if(label&&cur) label.textContent=getDisplayName(cur)+(cur.type==='chapter'?' · '+cur.title:''); 
 } 
-function selectPage(id){ currentPageId=id; loadPageData(); } 
-
+function selectPage(id){ currentPageId=id; selectedPanelIndex=0; selectedBubbleId=null; loadPageData(); } 
 function loadProjects(){ 
     try{ 
         projects=JSON.parse(localStorage.getItem('writer_projects_v2')||'[]'); currentProjectId=localStorage.getItem('writer_current_project_id'); 
         if(projects.length===0){ 
-            const p={id:uid(),title:'Mon projet',data:{book:{title:'Mon projet',items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:''}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()}; 
+            const p={id:uid(),title:'Mon projet',data:{book:{title:'Mon projet',items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()}; 
             projects=[p]; currentProjectId=p.id; saveProjects(); 
         } 
         if(!projects.find(p=>p.id===currentProjectId)) currentProjectId=projects[0].id; 
@@ -568,7 +735,6 @@ function loadProjects(){
 } 
 function saveProjects(){ try { localStorage.setItem('writer_projects_v2',JSON.stringify(projects)); localStorage.setItem('writer_current_project_id',currentProjectId); localStorage.setItem('writer_active_module', currentActiveModule || 'book'); } catch(e) {} } 
 function getCurrentProject(){ return projects.find(p=>p.id===currentProjectId); } 
-
 function openProjects(){ renderProjectsList(); document.getElementById('projectsModal').classList.add('active'); closeMenus(); } 
 function closeProjects(){ document.getElementById('projectsModal').classList.remove('active'); } 
 function renderProjectsList(){ 
@@ -579,41 +745,32 @@ function renderProjectsList(){
         l.appendChild(d); 
     }); 
 } 
-
 function createNewProject(){ 
     const t=document.getElementById('newProjectTitle').value.trim()||'Mon projet'; 
-    const p={id:uid(),title:t,data:{book:{title:t,items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:''}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()}; 
+    const p={id:uid(),title:t,data:{book:{title:t,items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()}; 
     projects.unshift(p); currentProjectId=p.id; saveProjects(); loadProjectIntoUI(); document.getElementById('newProjectTitle').value='';
 } 
-
 function switchProject(id){ currentProjectId=id; saveProjects(); loadProjectIntoUI(); closeProjects(); } 
 function deleteProject(id){ if(projects.length<=1) return; if(!confirm('Supprimer ce projet ?')) return; projects=projects.filter(p=>p.id!==id); if(currentProjectId===id) currentProjectId=projects[0].id; saveProjects(); loadProjectIntoUI(); renderProjectsList(); } 
-
 function loadProjectIntoUI(){ 
     const proj=getCurrentProject(); if(!proj) return; 
     appConfig=proj.config; 
     document.getElementById('currentProjectName').textContent=proj.title; document.getElementById('genCurrentProjectName').textContent=proj.title; document.getElementById('globalTitle').value=proj.data.book.title||proj.title; 
     refreshFontDropdown(); refreshPageDropdown(); applyFont(); 
-    currentPageId = null; loadPageData(); 
+    currentPageId = null; selectedPanelIndex=0; loadPageData(); 
 } 
-
 function getDisplayName(it){ 
     if(it.type==='cover') return currentActiveModule==='magazine'?'Mag Cover' : currentActiveModule==='comic'?'BD Cover':'Book Cover'; 
     if(it.type==='author') return 'Informations'; 
     if(it.type==='reference') return currentActiveModule==='comic'?'Content':'Summary'; 
     return it.title||'Page'; 
 } 
-
-// ACTIVATION DES MODULES NATIFS
 function activateModule(mode) {
     currentActiveModule = mode;
     saveProjects(); 
-    
     document.querySelectorAll('.sidebar .menu-item').forEach(e => e.classList.remove('active'));
-    
     const root = document.documentElement;
     const logoSub = document.getElementById('appLogoSub');
-    
     if(mode === 'comic') {
         document.getElementById('tab-comic').classList.add('active');
         root.style.setProperty('--accent', '#ef4444');
@@ -628,18 +785,14 @@ function activateModule(mode) {
         root.style.setProperty('--accent', '#22d3ee');
         logoSub.textContent = 'sources';
     }
-    
-    // Auto jump to first chapter if going into visual mode
     const proj = getCurrentProject();
     if(proj && (mode === 'comic' || mode === 'magazine')) {
         const firstChap = proj.data.book.items.find(i => i.type === 'chapter');
         if (firstChap) currentPageId = firstChap.id;
     }
-    
     refreshPageDropdown();
     loadPageData();
 }
-
 function loadPageData(){ 
     const proj=getCurrentProject(); if(!proj || !proj.data.book.items.length) return;
     if(!currentPageId) currentPageId = proj.data.book.items[0].id; 
@@ -653,39 +806,29 @@ function loadPageData(){
     
     const isCover=item.type==='cover', isAuthor=item.type==='author', isRef=item.type==='reference', isChapter=item.type==='chapter'; 
     
-    document.getElementById('globalTitleGroup').style.display=isCover?'flex':'none'; document.getElementById('coverOptions').style.display=isCover?'flex':'none'; document.getElementById('itemTitleGroup').style.display=isCover?'none':'flex'; document.getElementById('authorMetaSection').style.display=isAuthor?'flex':'none'; document.getElementById('referenceConfigBlock').style.display=isRef?'flex':'none'; 
+    // Reset visibility
+    document.getElementById('globalTitleGroup').style.display=isCover?'flex':'none'; 
+    document.getElementById('coverOptions').style.display=isCover?'flex':'none'; 
+    document.getElementById('itemTitleGroup').style.display=isCover?'none':'flex'; 
+    document.getElementById('authorMetaSection').style.display=isAuthor?'flex':'none'; 
+    document.getElementById('referenceConfigBlock').style.display=isRef?'flex':'none'; 
     if(isCover) document.getElementById('showTitleOnCover').checked=item.showTitle!==false; 
     if(isAuthor){ document.getElementById('globalAuthor').value=item.author||''; document.getElementById('globalDate').value=item.date||''; document.getElementById('globalPublisher').value=item.publisher||''; document.getElementById('globalGenre').value=item.genre||''; } 
     if(isRef) renderRefBlock(); 
     
-    const txtGroup = document.getElementById('textEditorGroup'); const layoutGroup = document.getElementById('layoutGroup'); const bdTools = document.getElementById('bdToolsGroup'); const magTools = document.getElementById('magToolsGroup');
-    const bdCanvas = document.getElementById('bdCanvasContainer');
+    const isBDChapter = currentActiveModule==='comic' && isChapter;
+    document.getElementById('mediaUrlGroup').style.display = isBDChapter ? 'none' : 'flex';
+    document.getElementById('mediaSlidersGroup').style.display = isBDChapter ? 'none' : 'flex';
+    document.getElementById('fontOptionsGroup').style.display = isBDChapter ? 'none' : 'flex';
+    document.getElementById('textEditorGroup').style.display = isBDChapter ? 'none' : 'flex';
+    document.getElementById('bdFullEditor').style.display = isBDChapter ? 'flex' : 'none';
+    document.getElementById('magToolsGroup').style.display = (currentActiveModule==='magazine' && isChapter) ? 'flex' : 'none';
 
-    txtGroup.style.display = 'flex'; layoutGroup.style.display = 'flex'; bdTools.style.display = 'none'; magTools.style.display = 'none'; bdCanvas.style.display = 'none';
-    
-    if (currentActiveModule === 'comic' && isChapter) {
-        // Mode BD Page Editor
-        txtGroup.style.display = 'none'; layoutGroup.style.display = 'none'; bdTools.style.display = 'flex';
-        bdCanvas.style.display = 'block';
-        
-        // Sync l'image et l'état BD
-        const imgEl = document.getElementById('bdCanvasImage');
-        const placeholder = document.getElementById('bdCanvasPlaceholder');
-        if(item.image) {
-            imgEl.src = item.image; imgEl.style.display = 'block'; placeholder.style.display = 'none';
-        } else {
-            imgEl.src = ''; imgEl.style.display = 'none'; placeholder.style.display = 'flex';
-        }
-
-        bdScale = item.bdScale || 1; bdPanX = item.bdPanX || 0; bdPanY = item.bdPanY || 0;
-        updateBDTransform(false); // Pas de sauvegarde auto ici pour pas spammer au chargement
-
-        setLayout('bg', false); 
-    } 
-    else if (currentActiveModule === 'magazine' && isChapter) {
-        // Mode Mag Editor
-        txtGroup.style.display = 'flex'; layoutGroup.style.display = 'none'; magTools.style.display = 'flex';
-        setLayout('top', false);
+    if(isBDChapter){
+        ensureBDData(item);
+        if(selectedPanelIndex===null) selectedPanelIndex=0;
+        renderBDTemplatesList();
+        renderBDCanvas();
     }
     
     document.getElementById('sheet').classList.toggle('is-cover', isCover); 
@@ -694,98 +837,271 @@ function loadPageData(){
     refreshPageDropdown(); applyFont(); 
 } 
 
-// DRAG ET ZOOM LOGIQUE BD
-function initBDCanvas() {
-    const canvas = document.getElementById('bdCanvasContainer');
-    if(!canvas) return;
-
-    canvas.addEventListener('wheel', (e) => {
-        if(currentActiveModule !== 'comic') return;
-        e.preventDefault();
-        const zoomAmount = e.deltaY * -0.002;
-        bdScale = Math.min(Math.max(0.5, bdScale + zoomAmount), 5);
-        updateBDTransform(true);
-    });
-
-    canvas.addEventListener('mousedown', (e) => {
-        if(currentActiveModule !== 'comic') return;
-        isDraggingBD = true;
-        startX = e.clientX - bdPanX;
-        startY = e.clientY - bdPanY;
-    });
-
-    window.addEventListener('mousemove', (e) => {
-        if(!isDraggingBD) return;
-        bdPanX = e.clientX - startX;
-        bdPanY = e.clientY - startY;
-        updateBDTransform(false);
-    });
-
-    window.addEventListener('mouseup', () => {
-        if(isDraggingBD) {
-            isDraggingBD = false;
-            if(currentActiveModule === 'comic') autoSave();
-        }
-    });
+/* ===== BD PRO LOGIC ===== */
+function renderBDTemplatesList(){
+ const container=document.getElementById('bdTemplatesList');
+ if(!container) return;
+ container.innerHTML='';
+ const curItem=getCurrentProject()?.data.book.items.find(i=>i.id===currentPageId);
+ const curTmpl=curItem?.bdTemplate||'full';
+ BD_TEMPLATES.forEach(t=>{
+  let rects = t.id==='10auto' ? generateAutoRects(10) : t.rects;
+  if(!rects || !rects.length) rects=[{x:0,y:0,w:100,h:100}];
+  let div=document.createElement('div');
+  div.className='template-thumb'+(curTmpl===t.id?' active':'');
+  div.title=t.name;
+  rects.forEach(r=>{
+   let p=document.createElement('div');
+   p.style.position='absolute'; p.style.left=r.x+'%'; p.style.top=r.y+'%'; p.style.width=r.w+'%'; p.style.height=r.h+'%';
+   p.style.background='rgba(255,255,255,0.9)'; p.style.border='1px solid #111'; p.style.boxSizing='border-box';
+   div.appendChild(p);
+  });
+  let label=document.createElement('div');
+  label.style.position='absolute'; label.style.bottom='0'; label.style.left='0'; label.style.right='0'; label.style.fontSize='7px'; label.style.textAlign='center'; label.style.color='#fff'; label.style.background='rgba(0,0,0,0.7)'; label.style.padding='2px 0';
+  label.textContent=t.name;
+  div.appendChild(label);
+  div.onclick=()=>setBDTemplate(t.id);
+  container.appendChild(div);
+ });
 }
-
-function updateBDTransform(save = false) {
-    const imgEl = document.getElementById('bdCanvasImage');
-    if(imgEl) { imgEl.style.transform = `translate(${bdPanX}px, ${bdPanY}px) scale(${bdScale})`; }
-    if(save) autoSave();
+function setBDTemplate(id){
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
+ ensureBDData(item);
+ let rects=getTemplateRects(id, item.bdPanels.length);
+ if(id==='10auto') rects=generateAutoRects(10);
+ let newPanels=[];
+ for(let i=0;i<rects.length;i++){
+  if(i<item.bdPanels.length) newPanels.push(item.bdPanels[i]);
+  else newPanels.push({id:uid(), image:'', tx:0,ty:0,scale:1,rot:0});
+ }
+ item.bdPanels=newPanels;
+ item.bdTemplate=id;
+ item.bdTemplateRects=rects;
+ selectedPanelIndex=0;
+ renderBDTemplatesList();
+ renderBDCanvas();
+ autoSave();
 }
+function applyCustomGrid(){
+ let cnt=parseInt(document.getElementById('bdCustomCount').value)||4;
+ cnt=Math.min(12, Math.max(1,cnt));
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
+ let rects=generateAutoRects(cnt);
+ let newPanels=[];
+ for(let i=0;i<rects.length;i++){
+  if(i<item.bdPanels.length) newPanels.push(item.bdPanels[i]);
+  else newPanels.push({id:uid(), image:'', tx:0,ty:0,scale:1,rot:0});
+ }
+ item.bdPanels=newPanels;
+ item.bdTemplate='custom';
+ item.bdTemplateRects=rects;
+ selectedPanelIndex=0;
+ renderBDTemplatesList();
+ renderBDCanvas();
+ autoSave();
+}
+function createBubbleElement(b){
+ let div=document.createElement('div');
+ div.className='bd-bubble bubble-'+b.type+(selectedBubbleId===b.id?' selected':'');
+ div.dataset.bubbleId=b.id;
+ div.style.left=b.x+'%'; div.style.top=b.y+'%'; div.style.width=b.w+'%';
+ div.style.fontFamily=b.fontFamily; div.style.fontSize=b.fontSize+'px';
+ div.style.transform='translate(-50%, -50%)';
+ if(b.type==='narrator') div.style.background='#fff8b5';
+ div.textContent=b.text||'TEXTE';
+ if(b.type!=='narrator'){
+  let tail=document.createElement('div'); tail.className='bd-bubble-tail'; div.appendChild(tail);
+ }
+ div.addEventListener('mousedown', (e)=>onBubbleMouseDown(e, b.id));
+ div.addEventListener('click', (e)=>{ e.stopPropagation(); selectBubble(b.id); });
+ div.addEventListener('dblclick', (e)=>{ e.stopPropagation(); selectBubble(b.id); document.getElementById('bdBubbleText').focus(); });
+ return div;
+}
+function renderBDCanvas(){
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
+ ensureBDData(item);
+ const bgLayer=document.getElementById('bdBgLayer'); const gridContainer=document.getElementById('bdGridContainer'); const pageLayer=document.getElementById('bdBubblesPageLayer');
+ if(!bgLayer||!gridContainer) return;
+ bgLayer.innerHTML=''; gridContainer.innerHTML=''; if(pageLayer) pageLayer.innerHTML='';
+ if(item.bdBgImage){
+  let img=document.createElement('img');
+  img.src=item.bdBgImage; img.style.position='absolute'; img.style.top='0'; img.style.left='0'; img.style.width='100%'; img.style.height='100%'; img.style.objectFit='cover';
+  img.style.transform=`translate(${item.bdBg.tx||0}px, ${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1}) rotate(${item.bdBg.rot||0}deg)`; img.style.transformOrigin='center center'; img.style.pointerEvents='none';
+  bgLayer.appendChild(img);
+ }
+ item.bdTemplateRects.forEach((rect, idx)=>{
+  let panelData=item.bdPanels[idx]; if(!panelData) return;
+  let panelDiv=document.createElement('div');
+  panelDiv.className='bd-panel'+(selectedPanelIndex===idx?' selected':'');
+  panelDiv.style.left=rect.x+'%'; panelDiv.style.top=rect.y+'%'; panelDiv.style.width=rect.w+'%'; panelDiv.style.height=rect.h+'%';
+  panelDiv.dataset.index=idx;
+  if(panelData.image){
+   let img=document.createElement('img');
+   img.src=panelData.image;
+   img.style.transform=`translate(${panelData.tx||0}px, ${panelData.ty||0}px) scale(${panelData.scale||1}) rotate(${panelData.rot||0}deg)`;
+   panelDiv.appendChild(img);
+  } else {
+   let ph=document.createElement('div'); ph.className='bd-panel-placeholder';
+   ph.innerHTML=`<i class="fas fa-image" style="font-size:18px"></i><span>Case ${idx+1}</span><button class="btn" style="margin-top:4px;font-size:10px;padding:4px 8px" onclick="event.stopPropagation(); triggerPanelUpload(${idx})"><i class="fas fa-upload"></i> Image</button>`;
+   panelDiv.appendChild(ph);
+  }
+  let bubblesInPanel=item.bdBubbles.filter(b=>b.panelIndex===idx);
+  bubblesInPanel.forEach(b=>{ panelDiv.appendChild(createBubbleElement(b)); });
+  panelDiv.addEventListener('mousedown', (e)=>onPanelMouseDown(e, idx));
+  panelDiv.addEventListener('wheel', (e)=>onPanelWheel(e, idx), {passive:false});
+  panelDiv.addEventListener('click', (e)=>{ if(e.target.closest('.bd-bubble')) return; selectPanel(idx); });
+  gridContainer.appendChild(panelDiv);
+ });
+ if(pageLayer){
+  pageLayer.style.pointerEvents='none';
+  let pageBubbles=item.bdBubbles.filter(b=>b.panelIndex===null || b.panelIndex===undefined);
+  pageBubbles.forEach(b=>{ let el=createBubbleElement(b); el.style.pointerEvents='auto'; pageLayer.appendChild(el); });
+ }
+ updatePanelTools();
+ updateBubblesList();
+}
+function selectPanel(idx){
+ selectedPanelIndex=idx; selectedBubbleId=null;
+ renderBDCanvas();
+ document.getElementById('bdPanelTools').style.display='flex';
+ document.getElementById('bdBubbleEdit').style.display='none';
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
+ const p=item.bdPanels[idx];
+ if(p){
+  document.getElementById('bdSelectedPanelLabel').textContent='Case '+(idx+1);
+  document.getElementById('bdPanelImageUrl').value=p.image||'';
+  document.getElementById('bdPanelScale').value=p.scale||1;
+  document.getElementById('bdPanelScaleVal').textContent=Math.round((p.scale||1)*100)+'%';
+  document.getElementById('bdPanelRot').value=p.rot||0;
+  document.getElementById('bdPanelRotVal').textContent=(p.rot||0)+'°';
+ }
+}
+function triggerPanelUpload(idx){ selectedPanelIndex=idx; document.getElementById('bdPanelUpload').click(); }
+function onPanelFile(e){
+ const file=e.target.files[0]; if(!file) return;
+ const idx=selectedPanelIndex;
+ const reader=new FileReader();
+ reader.onload=ev=>{
+  const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
+  if(idx!==null && item.bdPanels[idx]){ item.bdPanels[idx].image=ev.target.result; item.bdPanels[idx].tx=0; item.bdPanels[idx].ty=0; item.bdPanels[idx].scale=1; item.bdPanels[idx].rot=0; }
+  renderBDCanvas(); autoSave();
+ };
+ reader.readAsDataURL(file); e.target.value='';
+}
+function onPanelUrlChange(val){ if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); item.bdPanels[selectedPanelIndex].image=val; renderBDCanvas(); autoSave(); }
+function onPanelScale(val){ if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); item.bdPanels[selectedPanelIndex].scale=parseFloat(val); document.getElementById('bdPanelScaleVal').textContent=Math.round(parseFloat(val)*100)+'%'; renderBDCanvas(); autoSave(); }
+function onPanelRot(val){ if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); item.bdPanels[selectedPanelIndex].rot=parseInt(val); document.getElementById('bdPanelRotVal').textContent=val+'°'; renderBDCanvas(); autoSave(); }
+function clearPanelImage(){ if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); item.bdPanels[selectedPanelIndex].image=''; renderBDCanvas(); autoSave(); }
+function onBDBgFile(e){ const file=e.target.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=ev=>{ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=ev.target.result; renderBDCanvas(); autoSave(); }; reader.readAsDataURL(file); e.target.value=''; }
+function onBDBgUrlChange(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=val; renderBDCanvas(); autoSave(); }
+function onBDBgScale(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBg.scale=parseFloat(val); document.getElementById('bdBgScaleVal').textContent=Math.round(parseFloat(val)*100)+'%'; renderBDCanvas(); autoSave(); }
+function onBDBgRot(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBg.rot=parseInt(val); document.getElementById('bdBgRotVal').textContent=val+'°'; renderBDCanvas(); autoSave(); }
+function clearBGBg(){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=''; item.bdBg={tx:0,ty:0,scale:1,rot:0}; document.getElementById('bdBgImageInput').value=''; renderBDCanvas(); autoSave(); }
+function onPanelMouseDown(e, idx){
+ if(e.target.closest('.bd-bubble')) return;
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
+ const panel=item.bdPanels[idx]; if(!panel.image) return;
+ dragState={type:'panelImage', idx, startX:e.clientX, startY:e.clientY, origTx:panel.tx||0, origTy:panel.ty||0};
+ e.preventDefault();
+}
+function onPanelWheel(e, idx){
+ e.preventDefault();
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
+ const panel=item.bdPanels[idx]; if(!panel.image) return;
+ if(e.shiftKey){
+  panel.rot=(panel.rot||0)+(e.deltaY>0?-3:3);
+  if(panel.rot>180) panel.rot-=360; if(panel.rot<-180) panel.rot+=360;
+  if(selectedPanelIndex===idx){ document.getElementById('bdPanelRot').value=panel.rot; document.getElementById('bdPanelRotVal').textContent=panel.rot+'°'; }
+ } else {
+  let delta=e.deltaY>0?-0.07:0.07; let newScale=Math.min(5,Math.max(0.1,(panel.scale||1)+delta)); panel.scale=newScale;
+  if(selectedPanelIndex===idx){ document.getElementById('bdPanelScale').value=newScale; document.getElementById('bdPanelScaleVal').textContent=Math.round(newScale*100)+'%'; }
+ }
+ renderBDCanvas(); autoSave();
+}
+function addBDBubble(type){
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
+ let newBubble={ id:uid(), panelIndex:selectedPanelIndex, type:type, text:type==='narrator'?'Narration...':'TEXTE', x:50, y:20, w:type==='narrator'?60:34, fontFamily:"'Bangers', cursive", fontSize:14 };
+ item.bdBubbles.push(newBubble); selectedBubbleId=newBubble.id; renderBDCanvas(); selectBubble(newBubble.id); autoSave();
+}
+function onBubbleMouseDown(e, bubbleId){
+ e.stopPropagation();
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
+ let bubble=item.bdBubbles.find(b=>b.id===bubbleId); if(!bubble) return;
+ let panelEl=e.target.closest('.bd-panel'); let parentRect=panelEl?panelEl.getBoundingClientRect():document.getElementById('bdCanvasEnhancedWrap').getBoundingClientRect();
+ dragState={type:'bubble', bubbleId, startX:e.clientX, startY:e.clientY, origX:bubble.x, origY:bubble.y, parentRect};
+ selectBubble(bubbleId); e.preventDefault();
+}
+function selectBubble(id){
+ selectedBubbleId=id;
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
+ let bubble=item.bdBubbles.find(b=>b.id===id); if(!bubble) return;
+ document.getElementById('bdBubbleEdit').style.display='flex';
+ document.getElementById('bdBubbleText').value=bubble.text;
+ document.getElementById('bdBubbleFont').value=bubble.fontFamily;
+ document.getElementById('bdBubbleSize').value=bubble.fontSize;
+ document.getElementById('bdBubbleSizeVal').textContent=bubble.fontSize+'px';
+ renderBDCanvas();
+}
+function onBubbleTextChange(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.text=val; let el=document.querySelector(`[data-bubble-id="${bubble.id}"]`); if(el){ let tail=el.querySelector('.bd-bubble-tail'); el.childNodes[0].textContent=val; if(tail) el.appendChild(tail); } autoSave(); } }
+function onBubbleFontChange(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.fontFamily=val; renderBDCanvas(); autoSave(); } }
+function onBubbleSize(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.fontSize=parseInt(val); document.getElementById('bdBubbleSizeVal').textContent=val+'px'; renderBDCanvas(); autoSave(); } }
+function deleteSelectedBubble(){ if(!selectedBubbleId) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); item.bdBubbles=item.bdBubbles.filter(b=>b.id!==selectedBubbleId); selectedBubbleId=null; document.getElementById('bdBubbleEdit').style.display='none'; renderBDCanvas(); autoSave(); }
+function duplicateBubble(){ if(!selectedBubbleId) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let orig=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(!orig) return; let copy={...orig, id:uid(), x:Math.min(90,orig.x+5), y:Math.min(90,orig.y+5)}; item.bdBubbles.push(copy); selectedBubbleId=copy.id; renderBDCanvas(); selectBubble(copy.id); autoSave(); }
+function updatePanelTools(){}
+function updateBubblesList(){
+ const container=document.getElementById('bdBubblesList'); if(!container) return;
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
+ container.innerHTML='';
+ item.bdBubbles.forEach(b=>{
+  let chip=document.createElement('div');
+  chip.style.padding='4px 10px'; chip.style.borderRadius='14px'; chip.style.background=b.id===selectedBubbleId?'#ef4444':'rgba(255,255,255,0.1)'; chip.style.fontSize='11px'; chip.style.cursor='pointer';
+  chip.textContent=(b.panelIndex!==null?'C'+(b.panelIndex+1)+': ':'Page: ')+(b.text.slice(0,14)||'bulle');
+  chip.onclick=()=>selectBubble(b.id);
+  container.appendChild(chip);
+ });
+}
+document.addEventListener('mousemove', (e)=>{
+ if(!dragState) return;
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
+ if(dragState.type==='panelImage'){
+  let dx=e.clientX-dragState.startX, dy=e.clientY-dragState.startY;
+  let panel=item.bdPanels[dragState.idx]; panel.tx=dragState.origTx+dx; panel.ty=dragState.origTy+dy;
+  let img=document.querySelector(`.bd-panel[data-index="${dragState.idx}"] img`); if(img) img.style.transform=`translate(${panel.tx}px,${panel.ty}px) scale(${panel.scale}) rotate(${panel.rot}deg)`;
+ } else if(dragState.type==='bubble'){
+  let dx=e.clientX-dragState.startX, dy=e.clientY-dragState.startY;
+  let newLeft=dragState.origX+(dx/dragState.parentRect.width)*100;
+  let newTop=dragState.origY+(dy/dragState.parentRect.height)*100;
+  let bubble=item.bdBubbles.find(b=>b.id===dragState.bubbleId);
+  if(bubble){ bubble.x=Math.max(5,Math.min(95,newLeft)); bubble.y=Math.max(5,Math.min(95,newTop)); let el=document.querySelector(`[data-bubble-id="${bubble.id}"]`); if(el){ el.style.left=bubble.x+'%'; el.style.top=bubble.y+'%'; } }
+ }
+});
+document.addEventListener('mouseup', ()=>{ if(dragState){ if(dragState.type==='bubble' || dragState.type==='panelImage'){ renderBDCanvas(); autoSave(); } dragState=null; } });
 
-function addBDBubble(type) { alert("Outil Bulle (" + type + ") sélectionné - En développement pour placement sur BD Canvas."); }
-
-function setLayout(l,s=true){ 
-    document.querySelectorAll('[id^="lay-"]').forEach(b=>b.classList.remove('active')); const btn = document.getElementById('lay-'+l); if(btn) btn.classList.add('active'); 
-    document.getElementById('bgOpacityGroup').style.display=l==='bg'?'flex':'none'; document.getElementById('alignContainer').style.display=l==='bg'?'none':'flex'; 
-    if(s) autoSave(); 
-} 
+/* ===== CORE BOOK LOGIC ===== */
+function setLayout(l,s=true){ document.querySelectorAll('[id^="lay-"]').forEach(b=>b.classList.remove('active')); const btn = document.getElementById('lay-'+l); if(btn) btn.classList.add('active'); document.getElementById('bgOpacityGroup').style.display=l==='bg'?'flex':'none'; document.getElementById('alignContainer').style.display=l==='bg'?'none':'flex'; if(s) autoSave(); } 
 function setImageAlign(a,s=true){ document.querySelectorAll('[id^="align-"]').forEach(b=>b.classList.remove('active')); const btn = document.getElementById('align-'+a); if(btn) btn.classList.add('active'); if(s) autoSave(); } 
 function updateImageSize(v){ document.getElementById('imageSizeVal').textContent=v+'%'; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(item) { item.imageSize = parseInt(v); } updateLivePreviewFast(); autoSave(); } 
 function updateBgOpacity(v){ document.getElementById('bgOpacityVal').textContent=v+'%'; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(item) { item.bgOpacity = parseInt(v); } updateLivePreviewFast(); autoSave(); } 
 function updateLivePreviewFast() { const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(document.getElementById('previewModal').classList.contains('active')) { document.getElementById('prvContent').innerHTML=buildPageHTML(item, proj.title); } }
-
 function renderRefBlock(){ 
     const cfg=appConfig.reference||{mode:'all',selected:[]}; document.querySelectorAll('input[name="refModePage"]').forEach(r=>r.checked=r.value===cfg.mode); 
     const list=document.getElementById('refPageListInPage'); 
-    if(cfg.mode==='select'){ 
-        list.style.display='flex'; list.innerHTML=''; 
-        getCurrentProject().data.book.items.filter(i=>i.type==='chapter').forEach(it=>{ 
-            const checked=cfg.selected.includes(it.id); const label=document.createElement('label'); label.style.cssText='display:flex;gap:8px;font-size:12px;align-items:center'; 
-            label.innerHTML=`<input type="checkbox" value="${it.id}" ${checked?'checked':''} onchange="updateRefSelectionPage()"> ${esc(it.title)}`; list.appendChild(label); 
-        }); 
-    } else { list.style.display='none'; } 
+    if(cfg.mode==='select'){ list.style.display='flex'; list.innerHTML=''; getCurrentProject().data.book.items.filter(i=>i.type==='chapter').forEach(it=>{ const checked=cfg.selected.includes(it.id); const label=document.createElement('label'); label.style.cssText='display:flex;gap:8px;font-size:12px;align-items:center'; label.innerHTML=`<input type="checkbox" value="${it.id}" ${checked?'checked':''} onchange="updateRefSelectionPage()"> ${esc(it.title)}`; list.appendChild(label); }); } else { list.style.display='none'; } 
 } 
 function updateRefConfigPage(){ const mode=document.querySelector('input[name="refModePage"]:checked')?.value||'all'; appConfig.reference.mode=mode; if(mode==='all') appConfig.reference.selected=[]; saveProjects(); renderRefBlock(); } 
 function updateRefSelectionPage(){ const sel=Array.from(document.querySelectorAll('#refPageListInPage input:checked')).map(i=>i.value); appConfig.reference.selected=sel; saveProjects(); } 
 function prevPage(){ const items=getCurrentProject().data.book.items; const idx=items.findIndex(i=>i.id===currentPageId); if(idx>0){ selectPage(items[idx-1].id); } } 
 function nextPage(){ const items=getCurrentProject().data.book.items; const idx=items.findIndex(i=>i.id===currentPageId); if(idx<items.length-1){ selectPage(items[idx+1].id); } } 
-
 function _doSaveCore() {
     const proj=getCurrentProject(); if(!proj) return; const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return; 
-    if(item.type==='cover'){ 
-        const nt=document.getElementById('globalTitle').value.trim()||'Mon projet'; proj.title=nt; proj.data.book.title=nt; 
-        document.getElementById('currentProjectName').textContent=nt; document.getElementById('genCurrentProjectName').textContent=nt; item.showTitle=document.getElementById('showTitleOnCover').checked; 
-    } 
-    item.title=document.getElementById('itemTitle').value.trim()||'Page'; item.image=document.getElementById('itemImage').value; item.text=document.getElementById('itemText').value; 
-    item.layout=document.querySelector('[id^="lay-"].active')?.id.replace('lay-','')||'top'; item.imageAlign=document.querySelector('[id^="align-"].active')?.id.replace('align-','')||'center'; 
-    item.imageSize=parseInt(document.getElementById('imageSize').value)||70; item.bgOpacity=parseInt(document.getElementById('bgOpacity').value)||15; 
-    item.titleSize=parseInt(document.getElementById('titleSizeLabel').dataset.value)||32; item.bodySize=parseInt(document.getElementById('bodySizeLabel').dataset.value)||17; 
-    
-    // MAJ direct du Canvas Visuel BD si actif
-    if(currentActiveModule === 'comic' && item.type === 'chapter') {
-        item.bdScale = bdScale; item.bdPanX = bdPanX; item.bdPanY = bdPanY;
-        const bdImg = document.getElementById('bdCanvasImage');
-        const bdPlaceholder = document.getElementById('bdCanvasPlaceholder');
-        if(bdImg && item.image) {
-             bdImg.src = item.image; bdImg.style.display = 'block'; bdPlaceholder.style.display = 'none';
-        } else if (bdImg) {
-             bdImg.style.display = 'none'; bdPlaceholder.style.display = 'flex';
-        }
+    if(item.type==='cover'){ const nt=document.getElementById('globalTitle').value.trim()||'Mon projet'; proj.title=nt; proj.data.book.title=nt; document.getElementById('currentProjectName').textContent=nt; document.getElementById('genCurrentProjectName').textContent=nt; item.showTitle=document.getElementById('showTitleOnCover').checked; } 
+    item.title=document.getElementById('itemTitle').value.trim()||'Page'; 
+    if(currentActiveModule!=='comic' || item.type!=='chapter'){
+        item.image=document.getElementById('itemImage').value; item.text=document.getElementById('itemText').value; 
+        item.layout=document.querySelector('[id^="lay-"].active')?.id.replace('lay-','')||'top'; item.imageAlign=document.querySelector('[id^="align-"].active')?.id.replace('align-','')||'center'; 
+        item.imageSize=parseInt(document.getElementById('imageSize').value)||70; item.bgOpacity=parseInt(document.getElementById('bgOpacity').value)||15; 
+        item.titleSize=parseInt(document.getElementById('titleSizeLabel').dataset.value)||32; item.bodySize=parseInt(document.getElementById('bodySizeLabel').dataset.value)||17; 
     }
-
     if(item.type==='author'){ item.author=document.getElementById('globalAuthor').value; item.date=document.getElementById('globalDate').value; item.publisher=document.getElementById('globalPublisher').value; item.genre=document.getElementById('globalGenre').value; } 
     proj.config=appConfig; proj.updatedAt=Date.now(); saveProjects(); 
     const ind=document.getElementById('syncIndicator'); if(ind) ind.innerHTML='<i class="fas fa-check-circle"></i> sync'; 
@@ -794,15 +1110,13 @@ function _doSaveCore() {
 }
 function autoSave(){ const ind=document.getElementById('syncIndicator'); if(ind) ind.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> sync'; clearTimeout(window._t); window._t=setTimeout(_doSaveCore, 500); } 
 function manualSave(){ clearTimeout(window._t); _doSaveCore(); }
-
 function addPage(){ 
     const proj=getCurrentProject(); const nid='ch_'+Date.now(); const refIdx=proj.data.book.items.findIndex(i=>i.type==='reference'); 
-    const newItem={id:nid,type:'chapter',title:`Page ${proj.data.book.items.filter(i=>i.type==='chapter').length+1}`,titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdScale:1,bdPanX:0,bdPanY:0}; 
+    const newItem={id:nid,type:'chapter',title:`Page ${proj.data.book.items.filter(i=>i.type==='chapter').length+1}`,titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]}; 
     if(refIdx>-1) proj.data.book.items.splice(refIdx+1,0,newItem); else proj.data.book.items.push(newItem); 
-    currentPageId=nid; saveProjects(); loadProjectIntoUI(); autoSave(); 
+    currentPageId=nid; selectedPanelIndex=0; saveProjects(); loadProjectIntoUI(); autoSave(); 
 } 
 function deletePage(){ const it=getCurrentProject().data.book.items.find(i=>i.id===currentPageId); if(it.type==='cover'||it.type==='author'||it.type==='reference') return alert('Page système non supprimable'); if(!confirm('Supprimer cette page ?')) return; getCurrentProject().data.book.items=getCurrentProject().data.book.items.filter(i=>i.id!==currentPageId); currentPageId=getCurrentProject().data.book.items[0].id; saveProjects(); loadProjectIntoUI(); } 
-
 function generateImgHtml(item, customStyle=''){ 
     if(!item.image) return ''; 
     if(item.layout==='bg' && !customStyle){ return `<img src="${item.image}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:${(item.bgOpacity||20)/100};z-index:0" />`; } 
@@ -811,20 +1125,41 @@ function generateImgHtml(item, customStyle=''){
     else if(!customStyle){ if(item.imageAlign==='left') style+=`float:left;margin:0 14px 8px 0;`; else if(item.imageAlign==='right') style+=`float:right;margin:0 0 8px 14px;`; else style+=`display:block;margin:12px auto;`; } 
     return `<div class="img-wrapper" style="${style}"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover;border-radius:${customStyle?'0':'8px'};display:block" /></div>`; 
 } 
-
+function buildBDHTML(item){
+ ensureBDData(item);
+ let rects=item.bdTemplateRects||[{x:0,y:0,w:100,h:100}];
+ let html=`<div style="position:relative;width:100%;max-width:800px;margin:0 auto;aspect-ratio:1/1.414;background:#fff;border:3.5px solid #111;overflow:hidden;box-sizing:border-box">`;
+ if(item.bdBgImage){
+  html+=`<img src="${item.bdBgImage}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translate(${item.bdBg.tx||0}px,${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1}) rotate(${item.bdBg.rot||0}deg);transform-origin:center" />`;
+ }
+ rects.forEach((r,i)=>{
+  let p=item.bdPanels[i]; if(!p) return;
+  html+=`<div style="position:absolute;left:${r.x}%;top:${r.y}%;width:${r.w}%;height:${r.h}%;border:2.5px solid #111;overflow:hidden;background:#fff;box-sizing:border-box">`;
+  if(p.image){
+   html+=`<img src="${p.image}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transform:translate(${p.tx||0}px,${p.ty||0}px) scale(${p.scale||1}) rotate(${p.rot||0}deg);transform-origin:center" />`;
+  }
+  let bubbles=item.bdBubbles.filter(b=>b.panelIndex===i);
+  bubbles.forEach(b=>{
+   let bg=b.type==='narrator'?'#fff8b5':'#fff';
+   let radius=b.type==='round'?'18px':b.type==='square'?'4px':b.type==='thought'?'24px':'2px';
+   html+=`<div style="position:absolute;left:${b.x}%;top:${b.y}%;width:${b.w}%;transform:translate(-50%,-50%);background:${bg};border:2.5px solid #111;border-radius:${radius};padding:5px 9px;font-family:${b.fontFamily};font-size:${b.fontSize}px;font-weight:700;color:#111;word-wrap:break-word;text-align:center;box-sizing:border-box">${esc(b.text)}</div>`;
+  });
+  html+=`</div>`;
+ });
+ let pageBubbles=item.bdBubbles.filter(b=>b.panelIndex===null || b.panelIndex===undefined);
+ pageBubbles.forEach(b=>{
+  let bg=b.type==='narrator'?'#fff8b5':'#fff';
+  let radius=b.type==='round'?'18px':b.type==='square'?'4px':b.type==='thought'?'24px':'2px';
+  html+=`<div style="position:absolute;left:${b.x}%;top:${b.y}%;width:${b.w}%;transform:translate(-50%,-50%);background:${bg};border:2.5px solid #111;border-radius:${radius};padding:5px 9px;font-family:${b.fontFamily};font-size:${b.fontSize}px;font-weight:700;color:#111;word-wrap:break-word;text-align:center;box-sizing:border-box;z-index:10">${esc(b.text)}</div>`;
+ });
+ html+=`</div>`;
+ return html;
+}
 function buildPageHTML(item, projectTitle){ 
     const fontSty = fontMapping[appConfig.fontFamily]||'serif';
-    
-    // Rendu spécifique BD (Comic) avec Drag/Zoom
     if(currentActiveModule === 'comic' && item.type === 'chapter') {
-        const scale = item.bdScale || 1;
-        const px = item.bdPanX || 0;
-        const py = item.bdPanY || 0;
-        const imgHtml = item.image ? `<img src="${item.image}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;transform:translate(${px}px, ${py}px) scale(${scale});" />` : '';
-        const bdFrame = `<div style="border:4px solid #111;width:100%;max-width:800px;margin:0 auto;aspect-ratio:1/1.414;border-radius:4px;overflow:hidden;background:#faf8f5;position:relative;box-shadow:0 10px 30px rgba(0,0,0,0.4);">${imgHtml}</div>`;
-        return `<div class="clearfix" style="padding:10px;background:#fff;display:flex;justify-content:center;align-items:center;">${bdFrame}</div>`;
+        return buildBDHTML(item);
     }
-
     if(item.type==='reference'){ return `<div class="clearfix"><h1 style="font-size:${item.titleSize||28}px;text-align:center;font-family:${fontSty}">${esc(item.title||'Summary')}</h1><div style="font-size:${item.bodySize||16}px;white-space:pre-wrap;margin:10px 0;font-family:${fontSty}">${esc(item.text||'Sommaire...')}</div></div>`; } 
     if(item.type==='cover'){ 
         const showTitle=item.showTitle!==false; const titleHTML=showTitle?`<h1 style="font-size:${item.titleSize||48}px;text-align:center;color:#fff;text-shadow:0 2px 30px rgba(0,0,0,.9);margin:0;font-family:${fontSty}">${esc(projectTitle||'Mon projet')}</h1>`:''; 
@@ -837,49 +1172,26 @@ function buildPageHTML(item, projectTitle){
     const titleHTML=`<h1 style="font-size:${item.titleSize||32}px;font-weight:700;text-align:center;margin-bottom:10px;font-family:${fontSty}">${esc(item.title||'Chapitre 1')}</h1>`; 
     let meta=''; if(item.type==='author'){ const m=[item.author,item.date,item.publisher,item.genre].filter(Boolean).map(esc).join(' · '); if(m) meta=`<div style="text-align:center;opacity:.6;font-size:.9em;margin-bottom:12px">${m}</div>`; } 
     const img=generateImgHtml(item); const bodyStyle=`font-size:${item.bodySize||17}px;white-space:pre-wrap;text-align:justify;font-family:${fontSty}`; 
-    
-    // Magazine ou Book
     if(item.layout==='bg'){ return `<div style="position:relative;min-height:360px;overflow:hidden;border-radius:10px;padding:20px">${img}<div style="position:relative;z-index:1" class="clearfix">${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div></div></div>`; } 
     if(item.layout==='top'){ return `<div class="clearfix">${img}${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div></div>`; } 
     if(item.layout==='bottom'){ return `<div class="clearfix">${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div>${img}<div style="clear:both"></div></div>`; } 
     return `<div class="clearfix">${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div>${img}</div>`; 
 } 
-
 function openPreview(){ autoSave(); const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); const box=document.getElementById('prvContent'); box.innerHTML=buildPageHTML(item, proj.title); document.getElementById('previewModal').classList.add('active'); setPreviewDevice(previewDevice); } 
 function closePreview(){ document.getElementById('previewModal').classList.remove('active'); } 
 function setPreviewDevice(d){ previewDevice=d; const s=document.getElementById('previewScreen'); s.className='preview-screen '+d; ['mobile','tablet','large','epub','pdf'].forEach(x=>{ const el=document.getElementById('btn'+x.charAt(0).toUpperCase()+x.slice(1)); if(el){ el.classList.remove('active'); if(d===x) el.classList.add('active'); } }); } 
-
 function factoryReset(){ if(!confirm('Tout effacer ?')) return; localStorage.clear(); try { indexedDB.deleteDatabase("WriterFontsDB"); } catch(e){} location.reload(); } 
-
-// FONCTIONS D'EXPORT
-async function exportWorkflow(){ 
-    const fonts=await new Promise(res=>{ if(!db) return res([]); try { const tx=db.transaction("fonts","readonly"); const r=tx.objectStore("fonts").getAll(); r.onsuccess=e=>res(e.target.result||[]); r.onerror=()=>res([]); } catch(e){ res([]); } }); 
-    const blob=new Blob([JSON.stringify({project:getCurrentProject(),fonts},null,2)],{type:"application/json"}); 
-    const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=(getCurrentProject().title||'Mon projet')+'.writerwork'; a.click(); URL.revokeObjectURL(url); 
-} 
-
-function importWorkflow(e){ 
-    const file=e.target.files[0]; if(!file) return; const r=new FileReader(); 
-    r.onload=ev=>{ 
-        try{ 
-            const data=JSON.parse(ev.target.result); const proj=data.project||data; 
-            if(data.fonts&&db){ const tx=db.transaction("fonts","readwrite"); data.fonts.forEach(f=>tx.objectStore("fonts").put(f)); tx.oncomplete=()=>loadFontsFromIDB(); } 
-            if(proj.data){ proj.id=uid(); proj.updatedAt=Date.now(); projects.unshift(proj); currentProjectId=proj.id; saveProjects(); loadProjectIntoUI(); } 
-        }catch(err){ alert('Fichier invalide'); } 
-    }; 
-    r.readAsText(file); e.target.value=''; 
-} 
-
+async function exportWorkflow(){ const fonts=await new Promise(res=>{ if(!db) return res([]); try { const tx=db.transaction("fonts","readonly"); const r=tx.objectStore("fonts").getAll(); r.onsuccess=e=>res(e.target.result||[]); r.onerror=()=>res([]); } catch(e){ res([]); } }); const blob=new Blob([JSON.stringify({project:getCurrentProject(),fonts},null,2)],{type:"application/json"}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=(getCurrentProject().title||'Mon projet')+'.writerwork'; a.click(); URL.revokeObjectURL(url); } 
+function importWorkflow(e){ const file=e.target.files[0]; if(!file) return; const r=new FileReader(); r.onload=ev=>{ try{ const data=JSON.parse(ev.target.result); const proj=data.project||data; if(data.fonts&&db){ const tx=db.transaction("fonts","readwrite"); data.fonts.forEach(f=>tx.objectStore("fonts").put(f)); tx.oncomplete=()=>loadFontsFromIDB(); } if(proj.data){ proj.id=uid(); proj.updatedAt=Date.now(); projects.unshift(proj); currentProjectId=proj.id; saveProjects(); loadProjectIntoUI(); } }catch(err){ alert('Fichier invalide'); } }; r.readAsText(file); e.target.value=''; } 
 async function exportPagesData(){ 
     autoSave(); const proj=getCurrentProject(); const cfg=appConfig.reference||{mode:'all',selected:[]}; 
-    let items=proj.data.book.items.map(it=>({id:it.id,type:it.type,title:it.title,image:it.image,layout:it.layout,imageAlign:it.imageAlign,imageSize:it.imageSize,bgOpacity:it.bgOpacity,showTitle:it.showTitle,titleSize:it.titleSize,bodySize:it.bodySize,author:it.author||'',date:it.date||'',publisher:it.publisher||'',genre:it.genre||'',text:it.text})); 
+    let items=proj.data.book.items.map(it=>({id:it.id,type:it.type,title:it.title,image:it.image,layout:it.layout,imageAlign:it.imageAlign,imageSize:it.imageSize,bgOpacity:it.bgOpacity,showTitle:it.showTitle,titleSize:it.titleSize,bodySize:it.bodySize,author:it.author||'',date:it.date||'',publisher:it.publisher||'',genre:it.genre||'',text:it.text,bdTemplate:it.bdTemplate,bdTemplateRects:it.bdTemplateRects,bdBgImage:it.bdBgImage,bdBg:it.bdBg,bdPanels:it.bdPanels,bdBubbles:it.bdBubbles})); 
     const ref=items.find(i=>i.type==='reference'); 
     if(ref){ let linked=items.filter(i=>i.type==='chapter'); if(cfg.mode==='select'&&cfg.selected.length>0) linked=linked.filter(i=>cfg.selected.includes(i.id)); ref.links=linked; } 
     const fonts=await new Promise(res=>{ if(!db) return res([]); try { const tx=db.transaction("fonts","readonly"); const r=tx.objectStore("fonts").getAll(); r.onsuccess=e=>res(e.target.result||[]); r.onerror=()=>res([]); } catch(e) { res([]); } }); 
     const obj={projectTitle:proj.title,format:'book',config:{fontFamily:appConfig.fontFamily,reference:cfg},items,customFonts:fonts,copyright:"created by Base Essentielle (BE Studio, Paris - France)"}; 
     const blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='pages.data'; a.click(); URL.revokeObjectURL(url); 
 } 
-
 async function exportEPUB3(){ 
     autoSave(); const proj=getCurrentProject(); 
     try{ 
@@ -892,7 +1204,7 @@ async function exportEPUB3(){
             const id=`c${i}`; const fn=`chapter-${i}.xhtml`; manifest+=`\n<item id="${id}" href="${fn}" media-type="application/xhtml+xml"/>`; spine+=`\n<itemref idref="${id}"/>`; 
             let html; 
             if(it.type==='reference'){ const cfg=appConfig.reference; let linked=proj.data.book.items.filter(x=>x.type==='chapter'); if(cfg.mode==='select'&&cfg.selected.length>0) linked=linked.filter(x=>cfg.selected.includes(x.id)); let refHtml=`<h1>${esc(it.title)}</h1><p>${esc(it.text||'Sommaire...')}</p><ul>`; linked.forEach(l=>{ refHtml+=`<li>${esc(l.title)}</li>`; }); refHtml+=`</ul>`; html=refHtml; } else { html=buildPageHTML(it, proj.title); } 
-            const xhtml=`<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><head><meta charset="utf-8"/><title>${esc(it.title)}</title><link rel="stylesheet" href="css/style.css"/></head><body>${html}</body></html>`; 
+            const xhtml=`<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><head><script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script><meta charset="utf-8"/><title>${esc(it.title)}</title><link rel="stylesheet" href="css/style.css"/></head><body>${html}</body></html>`; 
             files.push({fn,c:xhtml}); navOl+=`<li><a href="${fn}">${esc(it.title)}</a></li>`; 
         }); 
         const opf=`<?xml version="1.0"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="bookid">${Date.now()}</dc:identifier><dc:title>${esc(title)}</dc:title><dc:language>fr</dc:language></metadata><manifest>${manifest}</manifest><spine><itemref idref="nav"/>${spine}</spine></package>`; 
@@ -900,14 +1212,12 @@ async function exportEPUB3(){
         const blob=await zip.generateAsync({type:"blob",mimeType:"application/epub+zip"}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=(title.replace(/[^a-z0-9]/gi,'_')+'.epub'); a.click(); URL.revokeObjectURL(url); 
     }catch(e){ alert(e.message); } 
 } 
-
 async function exportPDFBook(){ 
     autoSave(); const proj=getCurrentProject(); const container=document.createElement('div'); container.style.background='#fff'; container.style.color='#111'; container.style.padding='20px'; container.style.fontFamily=fontMapping[appConfig.fontFamily]||'serif'; let html=''; 
     proj.data.book.items.forEach(it=>{ html+=`<div style="page-break-after:always;padding:20px 0">${buildPageHTML(it, proj.title)}</div>`; }); 
     container.innerHTML=html; document.body.appendChild(container); 
     try{ const opt={margin:10,filename:(proj.title||'Mon projet')+'.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a5',orientation:'portrait'}}; await html2pdf().set(opt).from(container).save(); }catch(e){ alert(e.message); }finally{ container.remove(); } 
 } 
-
 function updateLangUI(){
     try {
         const l = localStorage.getItem('writer_lang') || 'fr';
@@ -924,26 +1234,18 @@ function updateLangUI(){
     } catch(e) {}
 }
 function setLang(l){ localStorage.setItem('writer_lang',l); updateLangUI(); }
-
 function bootstrapApp() { 
     try { 
         loadProjects(); const proj=getCurrentProject(); if(!proj) return; 
         document.getElementById('currentProjectName').textContent=proj.title; document.getElementById('genCurrentProjectName').textContent=proj.title; 
-        
         const activeMod = localStorage.getItem('writer_active_module');
-        if (activeMod && (activeMod === 'comic' || activeMod === 'magazine')) {
-            activateModule(activeMod);
-            return;
-        }
-
+        if (activeMod && (activeMod === 'comic' || activeMod === 'magazine')) { activateModule(activeMod); return; }
         refreshFontDropdown(); refreshPageDropdown(); applyFont(); loadPageData(); 
     } catch(e) {} 
 }
-
 function openSettings(){ document.getElementById('settingsModal').classList.add('active'); closeMenus(); } 
 function closeSettings(){ document.getElementById('settingsModal').classList.remove('active'); }
-
-window.onload=()=>{ try { initSizeDropdowns(); updateLangUI(); initBDCanvas(); } catch(e) {} initIDB(bootstrapApp); }; 
+window.onload=()=>{ try { initSizeDropdowns(); updateLangUI(); } catch(e) {} initIDB(bootstrapApp); }; 
 </script>
 </body>
 </html>
