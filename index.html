@@ -128,9 +128,6 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
 .prv-content { padding:40px; color:#111; font-size:16px; line-height:1.7; position:relative; min-height:100%; word-wrap:break-word; }
 .clearfix::after { content:""; clear:both; display:table; }
 
-.sheet .img-wrapper.full-bleed { width:calc(100% + 90px)!important; margin-left:-45px!important; margin-right:-45px!important; }
-.prv-content .img-wrapper.full-bleed { width:calc(100% + 80px)!important; margin-left:-40px!important; margin-right:-40px!important; }
-
 /* Custom Dropdowns */
 .gen-wrap { position:relative; width:100%; }
 .gen-wrap .btn, .gen-wrap .meta-input { width:100%; justify-content:space-between; cursor:pointer; }
@@ -151,16 +148,12 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
 
 /* MODULE UI ELEMENTS */
 .module-tools { display:none; flex-direction:column; gap:16px; margin-top:20px; padding-top:20px; border-top:1px solid var(--border); }
-.grid-select-container { display:flex; gap:10px; flex-wrap:wrap; }
-.grid-box { width:50px; height:50px; border:2px solid var(--border); border-radius:6px; cursor:pointer; display:flex; flex-wrap:wrap; padding:2px; gap:2px; transition:.2s; }
-.grid-box:hover, .grid-box.active { border-color:var(--accent); background:rgba(255,255,255,0.05); }
-.grid-cell { background:var(--muted); flex:1; border-radius:2px; opacity:0.5; }
-.grid-box-rect { flex-direction:column; }
-.grid-box-bolt { clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); padding:0; background:var(--muted); opacity:0.5; }
-.grid-box:hover .grid-box-bolt, .grid-box.active .grid-box-bolt { background:var(--accent); opacity:1; }
-
 .bubble-btn { flex:1; background:transparent; color:var(--text); border:1px solid var(--border); padding:10px; border-radius:8px; cursor:pointer; transition:.2s; }
 .bubble-btn:hover, .bubble-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(255,255,255,0.05); }
+
+/* BD Canvas Editor */
+#bdCanvasContainer { display:none; width:100%; max-width:600px; aspect-ratio:1/1.414; background:#faf8f5; border:4px solid #111; margin:25px auto 10px; position:relative; overflow:hidden; cursor:grab; box-shadow:0 20px 50px rgba(0,0,0,0.5); border-radius:4px; }
+#bdCanvasContainer:active { cursor:grabbing; }
 </style>
 </head>
 <body>
@@ -202,7 +195,6 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
         <div class="sidebar-scroll">
             <div class="cat" id="lblModulesCat">Modules (Licences)</div>
             
-            <!-- MODULES NATIFS INTÉGRÉS -->
             <div class="menu-item active" id="tab-book" onclick="activateModule('book')">
                 <i class="fas fa-book"></i> <span id="lblBookTab">Livre de poche</span>
             </div>
@@ -245,6 +237,15 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
             <div class="input-group" id="itemTitleGroup" style="display:none;">
                 <label>Nom de la page / section</label>
                 <input id="itemTitle" class="meta-input" style="font-weight:700" placeholder="Ex: Chapitre 1" oninput="autoSave()">
+            </div>
+
+            <!-- CANVAS BD VISUEL -->
+            <div id="bdCanvasContainer">
+                <div id="bdCanvasPlaceholder" style="position:absolute; inset:0; display:flex; flex-direction:column; gap:10px; align-items:center; justify-content:center; color:#888; font-size:12px; font-weight:600; text-transform:uppercase; pointer-events:none; z-index:0;">
+                    <i class="fas fa-image" style="font-size:32px;opacity:0.5"></i>
+                    Page BD (Drag & Zoom)
+                </div>
+                <img id="bdCanvasImage" src="" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; pointer-events:none; z-index:1; display:none;" />
             </div>
             
             <div id="referenceConfigBlock" style="display:none;flex-direction:column;gap:12px;background:rgba(18,18,22,0.98);border:1px solid var(--border);border-radius:12px;padding:14px">
@@ -324,16 +325,7 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
             <!-- MODULES INJECTIONS UI -->
             <div id="bdToolsGroup" class="module-tools">
                 <div class="input-group">
-                    <label><i class="fas fa-th-large"></i> Configurations des Casiers (Grilles) <span style="margin-left:auto;color:var(--accent);font-weight:700">Page Transparente Actuelle</span></label>
-                    <div class="grid-select-container">
-                        <div class="grid-box active" onclick="setBDGrid('1x1')" id="grid-1x1"><div class="grid-cell"></div></div>
-                        <div class="grid-box" onclick="setBDGrid('2x2')" id="grid-2x2"><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div></div>
-                        <div class="grid-box grid-box-rect" onclick="setBDGrid('rect')" id="grid-rect"><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div></div>
-                        <div class="grid-box" style="border:none" onclick="setBDGrid('bolt')" id="grid-bolt"><div class="grid-box-bolt" style="width:100%;height:100%"></div></div>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label><i class="fas fa-comment"></i> Bulles de Dialogue</label>
+                    <label><i class="fas fa-comment"></i> Bulles de Dialogue (Outils)</label>
                     <div style="display:flex;gap:10px">
                         <button class="bubble-btn" onclick="addBDBubble('round')"><i class="fas fa-comment"></i> Bulle Ronde</button>
                         <button class="bubble-btn" onclick="addBDBubble('square')"><i class="fas fa-comment-alt"></i> Bulle Carrée</button>
@@ -435,6 +427,9 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
 <script>
 let currentPageId=null, currentProjectId=null, projects=[], appConfig={fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}}, previewDevice='mobile';
 let currentActiveModule = 'book'; 
+
+// Variables BD Drag & Zoom
+let bdScale = 1, bdPanX = 0, bdPanY = 0, isDraggingBD = false, startX, startY;
 
 const uid=()=> 'id_'+Date.now()+'_'+Math.random().toString(36).slice(2,5);
 const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -564,7 +559,7 @@ function loadProjects(){
     try{ 
         projects=JSON.parse(localStorage.getItem('writer_projects_v2')||'[]'); currentProjectId=localStorage.getItem('writer_current_project_id'); 
         if(projects.length===0){ 
-            const p={id:uid(),title:'Mon projet',data:{book:{title:'Mon projet',items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'', bdGrid:'1x1'}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()}; 
+            const p={id:uid(),title:'Mon projet',data:{book:{title:'Mon projet',items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:''}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()}; 
             projects=[p]; currentProjectId=p.id; saveProjects(); 
         } 
         if(!projects.find(p=>p.id===currentProjectId)) currentProjectId=projects[0].id; 
@@ -587,7 +582,7 @@ function renderProjectsList(){
 
 function createNewProject(){ 
     const t=document.getElementById('newProjectTitle').value.trim()||'Mon projet'; 
-    const p={id:uid(),title:t,data:{book:{title:t,items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdGrid:'1x1'}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()}; 
+    const p={id:uid(),title:t,data:{book:{title:t,items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:''}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()}; 
     projects.unshift(p); currentProjectId=p.id; saveProjects(); loadProjectIntoUI(); document.getElementById('newProjectTitle').value='';
 } 
 
@@ -664,16 +659,31 @@ function loadPageData(){
     if(isRef) renderRefBlock(); 
     
     const txtGroup = document.getElementById('textEditorGroup'); const layoutGroup = document.getElementById('layoutGroup'); const bdTools = document.getElementById('bdToolsGroup'); const magTools = document.getElementById('magToolsGroup');
-    txtGroup.style.display = 'flex'; layoutGroup.style.display = 'flex'; bdTools.style.display = 'none'; magTools.style.display = 'none';
+    const bdCanvas = document.getElementById('bdCanvasContainer');
+
+    txtGroup.style.display = 'flex'; layoutGroup.style.display = 'flex'; bdTools.style.display = 'none'; magTools.style.display = 'none'; bdCanvas.style.display = 'none';
     
     if (currentActiveModule === 'comic' && isChapter) {
+        // Mode BD Page Editor
         txtGroup.style.display = 'none'; layoutGroup.style.display = 'none'; bdTools.style.display = 'flex';
-        document.querySelectorAll('.grid-box').forEach(el => el.classList.remove('active'));
-        const activeGrid = document.getElementById('grid-' + (item.bdGrid || '1x1'));
-        if(activeGrid) activeGrid.classList.add('active');
+        bdCanvas.style.display = 'block';
+        
+        // Sync l'image et l'état BD
+        const imgEl = document.getElementById('bdCanvasImage');
+        const placeholder = document.getElementById('bdCanvasPlaceholder');
+        if(item.image) {
+            imgEl.src = item.image; imgEl.style.display = 'block'; placeholder.style.display = 'none';
+        } else {
+            imgEl.src = ''; imgEl.style.display = 'none'; placeholder.style.display = 'flex';
+        }
+
+        bdScale = item.bdScale || 1; bdPanX = item.bdPanX || 0; bdPanY = item.bdPanY || 0;
+        updateBDTransform(false); // Pas de sauvegarde auto ici pour pas spammer au chargement
+
         setLayout('bg', false); 
     } 
     else if (currentActiveModule === 'magazine' && isChapter) {
+        // Mode Mag Editor
         txtGroup.style.display = 'flex'; layoutGroup.style.display = 'none'; magTools.style.display = 'flex';
         setLayout('top', false);
     }
@@ -684,13 +694,48 @@ function loadPageData(){
     refreshPageDropdown(); applyFont(); 
 } 
 
-function setBDGrid(type) {
-    document.querySelectorAll('.grid-box').forEach(el => el.classList.remove('active'));
-    document.getElementById('grid-'+type).classList.add('active');
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    if(item) { item.bdGrid = type; autoSave(); updateLivePreviewFast(); }
+// DRAG ET ZOOM LOGIQUE BD
+function initBDCanvas() {
+    const canvas = document.getElementById('bdCanvasContainer');
+    if(!canvas) return;
+
+    canvas.addEventListener('wheel', (e) => {
+        if(currentActiveModule !== 'comic') return;
+        e.preventDefault();
+        const zoomAmount = e.deltaY * -0.002;
+        bdScale = Math.min(Math.max(0.5, bdScale + zoomAmount), 5);
+        updateBDTransform(true);
+    });
+
+    canvas.addEventListener('mousedown', (e) => {
+        if(currentActiveModule !== 'comic') return;
+        isDraggingBD = true;
+        startX = e.clientX - bdPanX;
+        startY = e.clientY - bdPanY;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if(!isDraggingBD) return;
+        bdPanX = e.clientX - startX;
+        bdPanY = e.clientY - startY;
+        updateBDTransform(false);
+    });
+
+    window.addEventListener('mouseup', () => {
+        if(isDraggingBD) {
+            isDraggingBD = false;
+            if(currentActiveModule === 'comic') autoSave();
+        }
+    });
 }
-function addBDBubble(type) { alert("Outil Bulle (" + type + ") sélectionné - Prêt pour placement sur la Preview."); }
+
+function updateBDTransform(save = false) {
+    const imgEl = document.getElementById('bdCanvasImage');
+    if(imgEl) { imgEl.style.transform = `translate(${bdPanX}px, ${bdPanY}px) scale(${bdScale})`; }
+    if(save) autoSave();
+}
+
+function addBDBubble(type) { alert("Outil Bulle (" + type + ") sélectionné - En développement pour placement sur BD Canvas."); }
 
 function setLayout(l,s=true){ 
     document.querySelectorAll('[id^="lay-"]').forEach(b=>b.classList.remove('active')); const btn = document.getElementById('lay-'+l); if(btn) btn.classList.add('active'); 
@@ -728,6 +773,19 @@ function _doSaveCore() {
     item.layout=document.querySelector('[id^="lay-"].active')?.id.replace('lay-','')||'top'; item.imageAlign=document.querySelector('[id^="align-"].active')?.id.replace('align-','')||'center'; 
     item.imageSize=parseInt(document.getElementById('imageSize').value)||70; item.bgOpacity=parseInt(document.getElementById('bgOpacity').value)||15; 
     item.titleSize=parseInt(document.getElementById('titleSizeLabel').dataset.value)||32; item.bodySize=parseInt(document.getElementById('bodySizeLabel').dataset.value)||17; 
+    
+    // MAJ direct du Canvas Visuel BD si actif
+    if(currentActiveModule === 'comic' && item.type === 'chapter') {
+        item.bdScale = bdScale; item.bdPanX = bdPanX; item.bdPanY = bdPanY;
+        const bdImg = document.getElementById('bdCanvasImage');
+        const bdPlaceholder = document.getElementById('bdCanvasPlaceholder');
+        if(bdImg && item.image) {
+             bdImg.src = item.image; bdImg.style.display = 'block'; bdPlaceholder.style.display = 'none';
+        } else if (bdImg) {
+             bdImg.style.display = 'none'; bdPlaceholder.style.display = 'flex';
+        }
+    }
+
     if(item.type==='author'){ item.author=document.getElementById('globalAuthor').value; item.date=document.getElementById('globalDate').value; item.publisher=document.getElementById('globalPublisher').value; item.genre=document.getElementById('globalGenre').value; } 
     proj.config=appConfig; proj.updatedAt=Date.now(); saveProjects(); 
     const ind=document.getElementById('syncIndicator'); if(ind) ind.innerHTML='<i class="fas fa-check-circle"></i> sync'; 
@@ -739,7 +797,7 @@ function manualSave(){ clearTimeout(window._t); _doSaveCore(); }
 
 function addPage(){ 
     const proj=getCurrentProject(); const nid='ch_'+Date.now(); const refIdx=proj.data.book.items.findIndex(i=>i.type==='reference'); 
-    const newItem={id:nid,type:'chapter',title:`Page ${proj.data.book.items.filter(i=>i.type==='chapter').length+1}`,titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'', bdGrid:'1x1'}; 
+    const newItem={id:nid,type:'chapter',title:`Page ${proj.data.book.items.filter(i=>i.type==='chapter').length+1}`,titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdScale:1,bdPanX:0,bdPanY:0}; 
     if(refIdx>-1) proj.data.book.items.splice(refIdx+1,0,newItem); else proj.data.book.items.push(newItem); 
     currentPageId=nid; saveProjects(); loadProjectIntoUI(); autoSave(); 
 } 
@@ -757,14 +815,14 @@ function generateImgHtml(item, customStyle=''){
 function buildPageHTML(item, projectTitle){ 
     const fontSty = fontMapping[appConfig.fontFamily]||'serif';
     
-    // Rendu spécifique BD (Comic)
+    // Rendu spécifique BD (Comic) avec Drag/Zoom
     if(currentActiveModule === 'comic' && item.type === 'chapter') {
-        let gridHtml = '';
-        if(item.bdGrid === '1x1' || !item.bdGrid) gridHtml = `<div style="border:4px solid #111;width:100%;height:600px;border-radius:4px;overflow:hidden">${generateImgHtml(item, 'width:100%;height:100%')}</div>`;
-        else if(item.bdGrid === '2x2') gridHtml = `<div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:300px 300px;gap:10px;"><div style="border:4px solid #111;overflow:hidden">${generateImgHtml(item, 'width:100%;height:100%')}</div><div style="border:4px solid #111"></div><div style="border:4px solid #111"></div><div style="border:4px solid #111"></div></div>`;
-        else if(item.bdGrid === 'rect') gridHtml = `<div style="display:grid;grid-template-rows:200px 200px 200px;gap:10px;"><div style="border:4px solid #111;overflow:hidden">${generateImgHtml(item, 'width:100%;height:100%')}</div><div style="border:4px solid #111"></div><div style="border:4px solid #111"></div></div>`;
-        else if(item.bdGrid === 'bolt') gridHtml = `<div style="width:100%;height:600px;background:#eee;clip-path:polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);border:4px solid #111;overflow:hidden">${generateImgHtml(item, 'width:100%;height:100%')}</div>`;
-        return `<div class="clearfix" style="padding:10px;background:#fff">${gridHtml}</div>`;
+        const scale = item.bdScale || 1;
+        const px = item.bdPanX || 0;
+        const py = item.bdPanY || 0;
+        const imgHtml = item.image ? `<img src="${item.image}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;transform:translate(${px}px, ${py}px) scale(${scale});" />` : '';
+        const bdFrame = `<div style="border:4px solid #111;width:100%;max-width:800px;margin:0 auto;aspect-ratio:1/1.414;border-radius:4px;overflow:hidden;background:#faf8f5;position:relative;box-shadow:0 10px 30px rgba(0,0,0,0.4);">${imgHtml}</div>`;
+        return `<div class="clearfix" style="padding:10px;background:#fff;display:flex;justify-content:center;align-items:center;">${bdFrame}</div>`;
     }
 
     if(item.type==='reference'){ return `<div class="clearfix"><h1 style="font-size:${item.titleSize||28}px;text-align:center;font-family:${fontSty}">${esc(item.title||'Summary')}</h1><div style="font-size:${item.bodySize||16}px;white-space:pre-wrap;margin:10px 0;font-family:${fontSty}">${esc(item.text||'Sommaire...')}</div></div>`; } 
@@ -793,7 +851,7 @@ function setPreviewDevice(d){ previewDevice=d; const s=document.getElementById('
 
 function factoryReset(){ if(!confirm('Tout effacer ?')) return; localStorage.clear(); try { indexedDB.deleteDatabase("WriterFontsDB"); } catch(e){} location.reload(); } 
 
-// RESTAURATION DES FONCTIONS D'EXPORT ET SAUVEGARDE GLOBALE (BACKUP)
+// FONCTIONS D'EXPORT
 async function exportWorkflow(){ 
     const fonts=await new Promise(res=>{ if(!db) return res([]); try { const tx=db.transaction("fonts","readonly"); const r=tx.objectStore("fonts").getAll(); r.onsuccess=e=>res(e.target.result||[]); r.onerror=()=>res([]); } catch(e){ res([]); } }); 
     const blob=new Blob([JSON.stringify({project:getCurrentProject(),fonts},null,2)],{type:"application/json"}); 
@@ -850,7 +908,6 @@ async function exportPDFBook(){
     try{ const opt={margin:10,filename:(proj.title||'Mon projet')+'.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a5',orientation:'portrait'}}; await html2pdf().set(opt).from(container).save(); }catch(e){ alert(e.message); }finally{ container.remove(); } 
 } 
 
-// RESTAURATION DES LANGUES
 function updateLangUI(){
     try {
         const l = localStorage.getItem('writer_lang') || 'fr';
@@ -866,7 +923,6 @@ function updateLangUI(){
         }
     } catch(e) {}
 }
-
 function setLang(l){ localStorage.setItem('writer_lang',l); updateLangUI(); }
 
 function bootstrapApp() { 
@@ -874,7 +930,6 @@ function bootstrapApp() {
         loadProjects(); const proj=getCurrentProject(); if(!proj) return; 
         document.getElementById('currentProjectName').textContent=proj.title; document.getElementById('genCurrentProjectName').textContent=proj.title; 
         
-        // Relancer le module actif si existant
         const activeMod = localStorage.getItem('writer_active_module');
         if (activeMod && (activeMod === 'comic' || activeMod === 'magazine')) {
             activateModule(activeMod);
@@ -888,7 +943,7 @@ function bootstrapApp() {
 function openSettings(){ document.getElementById('settingsModal').classList.add('active'); closeMenus(); } 
 function closeSettings(){ document.getElementById('settingsModal').classList.remove('active'); }
 
-window.onload=()=>{ try { initSizeDropdowns(); updateLangUI(); } catch(e) {} initIDB(bootstrapApp); }; 
+window.onload=()=>{ try { initSizeDropdowns(); updateLangUI(); initBDCanvas(); } catch(e) {} initIDB(bootstrapApp); }; 
 </script>
 </body>
 </html>
