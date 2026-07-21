@@ -5,7 +5,7 @@
   if (window.__playableTouchPatchInstalled) return;
   window.__playableTouchPatchInstalled = true;
   var origAdd = EventTarget.prototype.addEventListener;
-  var blockedTypes = { touchstart: 1, touchmove: 1, wheel: 1 };
+  var blockedTypes = { touchstart: 1, touchmove: 1 }; /* WHEEL REMOVED to fix scroll lock on zoom */
   EventTarget.prototype.addEventListener = function(type, listener, options) {
     if (blockedTypes[type]) {
       if (options === undefined || options === null) {
@@ -141,7 +141,6 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
 .upload-box:hover { opacity:1; border-color:var(--accent); color:var(--accent); background:rgba(255,255,255,0.05); }
 .saved-toast { position:fixed; bottom:40px; left:50%; transform:translateX(-50%) translateY(100px); background:rgba(20,20,25,0.95); border:1px solid var(--accent); color:#fff; padding:10px 24px; border-radius:30px; z-index:3000; opacity:0; transition:.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display:flex; gap:10px; align-items:center; font-weight:500; box-shadow:0 10px 30px rgba(0,0,0,0.5); }
 .saved-toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
-.footer-copyright { position:fixed; bottom:15px; left:50%; transform:translateX(-50%); font-size:10px; color:var(--muted); z-index:100; pointer-events:none; opacity:.6; text-align:center; letter-spacing:0.5px; }
 
 /* ===== BD PRO STYLES ===== */
 .bd-toolbar { background:rgba(18,18,22,0.98); border:1px solid var(--border); border-radius:12px; padding:14px; display:flex; flex-direction:column; gap:12px; }
@@ -158,14 +157,17 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
 .bd-panel.selected { border-color:#ef4444; box-shadow:inset 0 0 0 1px #ef4444, 0 0 0 2px rgba(239,68,68,0.4); z-index:3; }
 .bd-panel img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transform-origin:center center; pointer-events:none; will-change:transform; }
 .bd-panel-placeholder { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; color:#777; background:#f5f5f0; font-size:10px; text-transform:uppercase; font-weight:700; text-align:center; padding:10px; }
-.bd-bubble { position:absolute; min-width:50px; min-height:30px; background:#fff; border:2.5px solid #111; padding:6px 10px; font-weight:700; color:#111; cursor:move; user-select:none; z-index:10; max-width:85%; word-wrap:break-word; line-height:1.2; box-shadow:2px 2px 0 rgba(0,0,0,0.15); }
+.bd-bubble { position:absolute; min-width:50px; min-height:30px; background:#fff; border:2.5px solid #111; padding:6px 10px; font-weight:700; color:#111; cursor:move; user-select:none; z-index:10; max-width:85%; word-wrap:break-word; line-height:1.2; box-shadow:2px 2px 0 rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; text-align: center; }
 .bd-bubble.selected { border-color:#ef4444; box-shadow:0 0 0 2px rgba(239,68,68,0.4), 2px 2px 0 rgba(0,0,0,0.15); }
 .bubble-round { border-radius:18px; }
 .bubble-square { border-radius:4px; }
 .bubble-thought { border-radius:24px; border-style:dashed; border-width:2px; }
 .bubble-shout { border-radius:2px; background:#fff; font-family:'Bangers', cursive; letter-spacing:0.5px; transform:translate(-50%,-50%) rotate(-1deg); }
 .bubble-narrator { background:#fff8b5; border-radius:2px; font-style:italic; font-family:'Special Elite', cursive; }
-.bd-bubble-tail { position:absolute; width:14px; height:14px; background:#fff; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; left:50%; transform:translateX(-50%) rotate(45deg); z-index:-1; }
+.bd-bubble-tail { position:absolute; width:14px; height:14px; background:#fff; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; z-index:-1; }
+.bd-bubble-tail.left { left: 20%; transform: translateX(-50%) rotate(45deg); }
+.bd-bubble-tail.center { left: 50%; transform: translateX(-50%) rotate(45deg); }
+.bd-bubble-tail.right { left: 80%; transform: translateX(-50%) rotate(45deg); }
 .bubble-btn { flex:1; background:rgba(255,255,255,0.04); color:var(--text); border:1px solid var(--border); padding:10px; border-radius:8px; cursor:pointer; transition:.2s; font-size:12px; display:flex; align-items:center; justify-content:center; gap:6px; }
 .bubble-btn:hover, .bubble-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(255,255,255,0.06); }
 .module-tools { display:none; flex-direction:column; gap:16px; margin-top:20px; padding-top:20px; border-top:1px solid var(--border); }
@@ -191,7 +193,7 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
         </div>
         <button class="btn" onclick="openSettings()"><i class="fas fa-cog"></i></button>
         <div class="gen-wrap" style="width:auto;">
-            <button class="btn" onclick="toggleDropdown('generateDropdown')"><i class="fas fa-layer-group"></i> Create</button>
+            <button class="btn" onclick="toggleDropdown('generateDropdown')"><i class="fas fa-layer-group"></i> <span id="lblCreate">Create</span></button>
             <div id="generateDropdown" class="dropdown-menu right">
                 <div id="genCurrentProjectName" style="font-weight:700;color:#fff;padding:6px 8px;font-size:14px;">-</div>
                 <div style="height:1px;background:var(--border);margin:8px 0"></div>
@@ -201,7 +203,7 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                 <button class="dropdown-item" onclick="exportPDFBook();closeMenus()"><i class="fas fa-file-pdf"></i> Document PDF</button>
             </div>
         </div>
-        <button class="btn" onclick="manualSave()"><i class="fas fa-save"></i> Save</button>
+        <button class="btn" onclick="manualSave()"><i class="fas fa-save"></i> <span id="lblSave">Save</span></button>
     </div>
 </div>
 
@@ -229,49 +231,49 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
         
         <div class="sheet" id="sheet">
             <div class="input-group" id="globalTitleGroup">
-                <label>Titre du projet - editable uniquement dans la couverture</label>
+                <label id="lblTitleProj">Titre du projet - editable uniquement dans la couverture</label>
                 <input id="globalTitle" class="text-input" placeholder="Titre..." oninput="autoSave()">
                 <div id="coverOptions" style="display:none;flex-direction:column;gap:6px;margin-top:5px">
-                    <label style="font-size:12px;display:flex;gap:8px;align-items:center;text-transform:none;opacity:.8"><input type="checkbox" id="showTitleOnCover" checked onchange="autoSave()"> Afficher le titre sur la couverture - ON/OFF</label>
+                    <label style="font-size:12px;display:flex;gap:8px;align-items:center;text-transform:none;opacity:.8"><input type="checkbox" id="showTitleOnCover" checked onchange="autoSave()"> <span id="lblTitleOnCover">Afficher le titre sur la couverture - ON/OFF</span></label>
                 </div>
             </div>
             
             <div id="authorMetaSection" style="display:none;flex-direction:column;gap:12px">
                 <div class="meta-row">
-                    <div class="input-group"><label>Auteur</label><input id="globalAuthor" class="meta-input" oninput="autoSave()"></div>
-                    <div class="input-group"><label>Date</label><input id="globalDate" type="date" class="meta-input" oninput="autoSave()"></div>
+                    <div class="input-group"><label id="lblAuthor">Auteur</label><input id="globalAuthor" class="meta-input" oninput="autoSave()"></div>
+                    <div class="input-group"><label id="lblDate">Date</label><input id="globalDate" type="date" class="meta-input" oninput="autoSave()"></div>
                 </div>
                 <div class="meta-row">
-                    <div class="input-group"><label>Éditeur</label><input id="globalPublisher" class="meta-input" oninput="autoSave()"></div>
-                    <div class="input-group"><label>Genre</label><input id="globalGenre" class="meta-input" oninput="autoSave()"></div>
+                    <div class="input-group"><label id="lblPublisher">Éditeur</label><input id="globalPublisher" class="meta-input" oninput="autoSave()"></div>
+                    <div class="input-group"><label id="lblGenre">Genre</label><input id="globalGenre" class="meta-input" oninput="autoSave()"></div>
                 </div>
             </div>
             
             <div class="input-group" id="itemTitleGroup" style="display:none;">
-                <label>Nom de la page / section</label>
+                <label id="lblPageName">Nom de la page / section</label>
                 <input id="itemTitle" class="meta-input" style="font-weight:700" placeholder="Ex: Chapitre 1" oninput="autoSave()">
             </div>
 
             <div id="referenceConfigBlock" style="display:none;flex-direction:column;gap:12px;background:rgba(18,18,22,0.98);border:1px solid var(--border);border-radius:12px;padding:14px">
-                <div style="font-weight:600;font-size:13px;color:#fff"><i class="fas fa-link"></i> Référence / Summary - Config liens</div>
+                <div style="font-weight:600;font-size:13px;color:#fff"><i class="fas fa-link"></i> <span id="lblLinkConfig">Référence / Summary - Config liens</span></div>
                 <div style="display:flex;gap:16px">
-                    <label style="font-size:12px;display:flex;gap:6px;align-items:center;text-transform:none;opacity:.8"><input type="radio" name="refModePage" value="all" checked onchange="updateRefConfigPage()"> Link all pages</label>
-                    <label style="font-size:12px;display:flex;gap:6px;align-items:center;text-transform:none;opacity:.8"><input type="radio" name="refModePage" value="select" onchange="updateRefConfigPage()"> Select pages</label>
+                    <label style="font-size:12px;display:flex;gap:6px;align-items:center;text-transform:none;opacity:.8"><input type="radio" name="refModePage" value="all" checked onchange="updateRefConfigPage()"> <span id="lblLinkAll">Link all pages</span></label>
+                    <label style="font-size:12px;display:flex;gap:6px;align-items:center;text-transform:none;opacity:.8"><input type="radio" name="refModePage" value="select" onchange="updateRefConfigPage()"> <span id="lblLinkSel">Select pages</span></label>
                 </div>
                 <div id="refPageListInPage" style="display:none;flex-direction:column;gap:8px;max-height:120px;overflow-y:auto;background:rgba(255,255,255,0.04);padding:10px;border-radius:8px;border:1px solid var(--border)"></div>
             </div>
             
             <div class="meta-row" id="mediaUrlGroup">
                 <div class="input-group" style="flex:2">
-                    <label>Illustration (URL ou Fichier Local)</label>
+                    <label id="lblIllu">Illustration (URL ou Fichier Local)</label>
                     <div style="display:flex;gap:8px">
                         <input id="itemImage" class="meta-input" style="flex:1" placeholder="https://..." oninput="autoSave()">
-                        <button class="btn" onclick="document.getElementById('localImgUpload').click()" title="Uploader depuis le PC"><i class="fas fa-upload"></i> Local</button>
+                        <button class="btn" onclick="document.getElementById('localImgUpload').click()"><i class="fas fa-upload"></i> <span id="lblLocal">Local</span></button>
                         <input type="file" id="localImgUpload" accept="image/*" style="display:none" onchange="uploadLocalImage(event)">
                     </div>
                 </div>
                 <div class="input-group" style="flex:1" id="layoutGroup">
-                    <label>Disposition</label>
+                    <label id="lblLayout">Disposition</label>
                     <div class="segment-group">
                         <button class="segment-btn active" id="lay-top" onclick="setLayout('top')">Haut</button>
                         <button class="segment-btn" id="lay-center" onclick="setLayout('center')">Centre</button>
@@ -280,7 +282,7 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                     </div>
                 </div>
                 <div class="input-group" id="alignContainer" style="flex:1">
-                    <label>Alignement</label>
+                    <label id="lblAlign">Alignement</label>
                     <div class="segment-group">
                         <button class="segment-btn" id="align-left" onclick="setImageAlign('left')">Gauche</button>
                         <button class="segment-btn active" id="align-center" onclick="setImageAlign('center')">Centre</button>
@@ -291,18 +293,18 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
             
             <div class="meta-row" id="mediaSlidersGroup">
                 <div class="input-group">
-                    <label>Taille image <span id="imageSizeVal">70%</span> - 100% remplit la page</label>
-                    <input type="range" id="imageSize" min="20" max="100" value="70" oninput="updateImageSize(this.value)">
+                    <label><span id="lblImgSize">Taille image</span> <span id="imageSizeVal">70%</span></label>
+                    <input type="range" id="imageSize" min="20" max="300" value="70" oninput="updateImageSize(this.value)">
                 </div>
                 <div class="input-group" id="bgOpacityGroup" style="display:none">
-                    <label>Transparence <span id="bgOpacityVal">15%</span></label>
+                    <label><span id="lblBgTransp">Transparence</span> <span id="bgOpacityVal">15%</span></label>
                     <input type="range" id="bgOpacity" min="5" max="100" value="15" oninput="updateBgOpacity(this.value)">
                 </div>
             </div>
             
             <div class="meta-row" id="fontOptionsGroup">
                 <div class="input-group">
-                    <label>Taille Titre</label>
+                    <label id="lblTitleSize">Taille Titre</label>
                     <div class="gen-wrap">
                         <button class="meta-input" onclick="toggleDropdown('titleSizeDropdown')">
                             <span id="titleSizeLabel" data-value="32">32px</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i>
@@ -311,7 +313,7 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                     </div>
                 </div>
                 <div class="input-group">
-                    <label>Taille Corps</label>
+                    <label id="lblBodySize">Taille Corps</label>
                     <div class="gen-wrap">
                         <button class="meta-input" onclick="toggleDropdown('bodySizeDropdown')">
                             <span id="bodySizeLabel" data-value="17">17px</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i>
@@ -322,17 +324,17 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
             </div>
             
             <div class="input-group" style="flex:1" id="textEditorGroup">
-                <label>Corps du texte</label>
+                <label id="lblBodyText">Corps du texte</label>
                 <textarea id="itemText" class="main" placeholder="Commencez à écrire..." oninput="autoSave()"></textarea>
             </div>
 
             <!-- ===== BD FULL EDITOR PRO ===== -->
             <div id="bdFullEditor" style="display:none;flex-direction:column;gap:18px;width:100%">
                 <div class="bd-toolbar">
-                    <div class="bd-section-title"><i class="fas fa-layer-group"></i> Grilles & Fond de page BD</div>
+                    <div class="bd-section-title"><i class="fas fa-layer-group"></i> <span id="lblBdGridBg">Grilles & Fond de page BD</span></div>
                     <div class="meta-row">
                         <div class="input-group" style="flex:2">
-                            <label>Image de fond (derrière la grille) - optionnel</label>
+                            <label id="lblBgOpt">Image de fond (derrière la grille) - optionnel</label>
                             <div style="display:flex;gap:8px">
                                 <input id="bdBgImageInput" class="meta-input" placeholder="URL..." oninput="onBDBgUrlChange(this.value)">
                                 <button class="btn" onclick="document.getElementById('bdBgUpload').click()"><i class="fas fa-upload"></i></button>
@@ -341,28 +343,23 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                             </div>
                         </div>
                         <div class="input-group" style="width:150px">
-                            <label>Zoom fond <span id="bdBgScaleVal">100%</span></label>
-                            <input type="range" id="bdBgScale" min="0.2" max="4" step="0.05" value="1" oninput="onBDBgScale(this.value)">
-                        </div>
-                        <div class="input-group" style="width:150px">
-                            <label>Rotation fond <span id="bdBgRotVal">0°</span></label>
-                            <input type="range" id="bdBgRot" min="-180" max="180" step="1" value="0" oninput="onBDBgRot(this.value)">
+                            <label><span id="lblBgZoom">Zoom fond</span> <span id="bdBgScaleVal">100%</span></label>
+                            <input type="range" id="bdBgScale" min="0.2" max="15" step="0.05" value="1" oninput="onBDBgScale(this.value)">
                         </div>
                     </div>
                     <div class="input-group">
-                        <label>Modèles de grilles - Clique pour appliquer (style Blacksad)</label>
+                        <label id="lblGridTmpl">Modèles de grilles</label>
                         <div id="bdTemplatesList" class="bd-templates"></div>
                     </div>
                     <div class="meta-row">
                         <div class="input-group" style="width:160px">
-                            <label>Cases perso 1-12</label>
+                            <label id="lblCustomCases">Cases perso 1-12</label>
                             <div style="display:flex;gap:8px">
                                 <input type="number" id="bdCustomCount" class="meta-input" min="1" max="12" value="4" style="width:70px">
-                                <button class="btn" onclick="applyCustomGrid()"><i class="fas fa-th"></i> Générer</button>
-                                <button class="btn" onclick="setBDTemplate('full')"><i class="fas fa-expand"></i> Plein</button>
+                                <button class="btn" onclick="applyCustomGrid()"><i class="fas fa-th"></i> <span id="lblGen">Générer</span></button>
+                                <button class="btn" onclick="setBDTemplate('full')"><i class="fas fa-expand"></i> <span id="lblFull">Plein</span></button>
                             </div>
                         </div>
-                        <div style="font-size:10px;color:var(--muted);flex:1">Pleine page = utilise l'image en fond. Grille = découpe en cases avec gouttière BD. Tu peux mettre une image de fond + images dans chaque case.</div>
                     </div>
                 </div>
 
@@ -373,45 +370,45 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                 </div>
 
                 <div id="bdPanelTools" class="bd-toolbar" style="display:none">
-                    <div class="bd-section-title"><i class="fas fa-crop"></i> Case sélectionnée - <span id="bdSelectedPanelLabel">-</span> <span style="font-weight:400;text-transform:none;opacity:0.7;font-size:10px">Drag image | Molette zoom | Shift+Molette rotation</span></div>
+                    <div class="bd-section-title"><i class="fas fa-crop"></i> <span id="lblPanelSel">Case sélectionnée - Drag image | Molette zoom | Shift+Molette rotation</span> <span id="bdSelectedPanelLabel" style="margin-left:8px">-</span></div>
                     <div class="meta-row">
                         <div class="input-group" style="flex:2">
-                            <label>Image de la case</label>
+                            <label id="lblPanelImg">Image de la case</label>
                             <div style="display:flex;gap:8px">
                                 <input id="bdPanelImageUrl" class="meta-input" placeholder="https://..." oninput="onPanelUrlChange(this.value)">
-                                <button class="btn" onclick="document.getElementById('bdPanelUpload').click()"><i class="fas fa-upload"></i> Local</button>
+                                <button class="btn" onclick="document.getElementById('bdPanelUpload').click()"><i class="fas fa-upload"></i> <span id="lblPLocal">Local</span></button>
                                 <input type="file" id="bdPanelUpload" accept="image/*" style="display:none" onchange="onPanelFile(event)">
                                 <button class="btn btn-danger" onclick="clearPanelImage()"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
                         <div class="input-group" style="flex:1">
-                            <label>Zoom <span id="bdPanelScaleVal">100%</span></label>
-                            <input type="range" id="bdPanelScale" min="0.1" max="5" step="0.02" value="1" oninput="onPanelScale(this.value)">
+                            <label><span id="lblPanelZoom">Zoom</span> <span id="bdPanelScaleVal">100%</span></label>
+                            <input type="range" id="bdPanelScale" min="0.1" max="15" step="0.05" value="1" oninput="onPanelScale(this.value)">
                         </div>
                         <div class="input-group" style="flex:1">
-                            <label>Rotation <span id="bdPanelRotVal">0°</span></label>
+                            <label><span id="lblPanelRot">Rotation</span> <span id="bdPanelRotVal">0°</span></label>
                             <input type="range" id="bdPanelRot" min="-180" max="180" step="1" value="0" oninput="onPanelRot(this.value)">
                         </div>
                     </div>
                 </div>
 
                 <div class="bd-toolbar">
-                    <div class="bd-section-title"><i class="fas fa-comment-dots"></i> Bulles de dialogue - style BD pro (comme Blacksad)</div>
+                    <div class="bd-section-title"><i class="fas fa-comment-dots"></i> <span id="lblBubbles">Bulles de dialogue</span></div>
                     <div style="display:flex;gap:8px;flex-wrap:wrap">
-                        <button class="bubble-btn" onclick="addBDBubble('round')"><i class="fas fa-comment"></i> Ronde</button>
-                        <button class="bubble-btn" onclick="addBDBubble('square')"><i class="fas fa-comment-alt"></i> Carrée</button>
-                        <button class="bubble-btn" onclick="addBDBubble('thought')"><i class="fas fa-cloud"></i> Pensée</button>
-                        <button class="bubble-btn" onclick="addBDBubble('shout')"><i class="fas fa-bolt"></i> Cri</button>
-                        <button class="bubble-btn" onclick="addBDBubble('narrator')"><i class="fas fa-book-open"></i> Narrateur</button>
+                        <button class="bubble-btn" onclick="addBDBubble('round')"><i class="fas fa-comment"></i> <span class="lblBRound">Ronde</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('square')"><i class="fas fa-comment-alt"></i> <span class="lblBSquare">Carrée</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('thought')"><i class="fas fa-cloud"></i> <span class="lblBThought">Pensée</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('shout')"><i class="fas fa-bolt"></i> <span class="lblBShout">Cri</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('narrator')"><i class="fas fa-book-open"></i> <span class="lblBNarrator">Narrateur</span></button>
                     </div>
                     <div id="bdBubbleEdit" style="display:none;flex-direction:column;gap:10px;margin-top:12px;background:rgba(0,0,0,0.4);padding:12px;border-radius:8px;border:1px solid var(--border)">
                         <div class="meta-row">
                             <div class="input-group" style="flex:2">
-                                <label>Texte de la bulle</label>
+                                <label id="lblBubText">Texte de la bulle</label>
                                 <textarea id="bdBubbleText" class="meta-input" rows="2" oninput="onBubbleTextChange(this.value)"></textarea>
                             </div>
                             <div class="input-group">
-                                <label>Font BD</label>
+                                <label id="lblBubFont">Font BD</label>
                                 <select id="bdBubbleFont" class="meta-input" onchange="onBubbleFontChange(this.value)">
                                     <option value="'Bangers', cursive">BANGERS - Impact BD</option>
                                     <option value="'Comic Neue', cursive">Comic Neue - Classique</option>
@@ -423,14 +420,22 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                                 </select>
                             </div>
                             <div class="input-group" style="width:110px">
-                                <label>Taille <span id="bdBubbleSizeVal">14px</span></label>
+                                <label><span id="lblBubSize">Taille</span> <span id="bdBubbleSizeVal">14px</span></label>
                                 <input type="range" id="bdBubbleSize" min="8" max="36" value="14" oninput="onBubbleSize(this.value)">
+                            </div>
+                            <div class="input-group" style="width:140px">
+                                <label id="lblBubTail">Direction Flèche</label>
+                                <select id="bdBubbleTail" class="meta-input" onchange="onBubbleTailChange(this.value)">
+                                    <option value="left">Gauche</option>
+                                    <option value="center">Milieu</option>
+                                    <option value="right">Droite</option>
+                                </select>
                             </div>
                         </div>
                         <div style="display:flex;gap:8px">
-                            <button class="btn btn-danger" onclick="deleteSelectedBubble()"><i class="fas fa-trash"></i> Supprimer</button>
-                            <button class="btn" onclick="duplicateBubble()"><i class="fas fa-copy"></i> Dupliquer</button>
-                            <button class="btn" onclick="selectedBubbleId=null;document.getElementById('bdBubbleEdit').style.display='none';renderBDCanvas()"><i class="fas fa-times"></i> Fermer</button>
+                            <button class="btn btn-danger" onclick="deleteSelectedBubble()"><i class="fas fa-trash"></i> <span id="lblBubDel">Supprimer</span></button>
+                            <button class="btn" onclick="duplicateBubble()"><i class="fas fa-copy"></i> <span id="lblBubDup">Dupliquer</span></button>
+                            <button class="btn" onclick="selectedBubbleId=null;document.getElementById('bdBubbleEdit').style.display='none';renderBDCanvas()"><i class="fas fa-times"></i> <span id="lblBubClose">Fermer</span></button>
                         </div>
                     </div>
                     <div id="bdBubblesList" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
@@ -445,11 +450,9 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
             </div>
         </div>
         
-        <button class="btn-preview" onclick="openPreview()"><i class="fas fa-book-reader"></i> Preview</button>
+        <button class="btn-preview" onclick="openPreview()"><i class="fas fa-book-reader"></i> <span id="lblPreviewBtn">Preview</span></button>
     </div>
 </div>
-
-<div class="footer-copyright">© copyright protected base essentielle, be studio Paris France.</div>
 
 <div class="overlay" id="previewModal" onclick="if(event.target===this)closePreview()">
     <div class="preview-shell" onclick="event.stopPropagation()">
@@ -543,10 +546,40 @@ let fontMapping={
     'Source Serif Pro':"'Source Serif Pro', serif",
     'Inter':"'Inter', sans-serif"
 };
+
 const i18n = {
-    fr: { proj: "Projets", read: "Livre de poche", bd: "Bande Dessinée (BD)", mag: "Magazine", cur: "Projet Actuel", projTitle: "Projets" },
-    en: { proj: "Projects", read: "Paperback", bd: "Comic Book (BD)", mag: "Magazine", cur: "Current Project", projTitle: "Projects" }
+    fr: { 
+        proj: "Projets", read: "Livre de poche", bd: "Bande Dessinée (BD)", mag: "Magazine", cur: "Projet Actuel", projTitle: "Projets",
+        lblCreate: "Créer", lblSave: "Enregistrer", lblTitleProj: "Titre du projet - éditable uniquement dans la couverture", 
+        lblTitleOnCover: "Afficher le titre sur la couverture - ON/OFF", lblAuthor: "Auteur", lblDate: "Date", lblPublisher: "Éditeur", 
+        lblGenre: "Genre", lblPageName: "Nom de la page / section", lblLinkConfig: "Référence / Sommaire - Config liens", 
+        lblLinkAll: "Lier toutes les pages", lblLinkSel: "Sélectionner les pages", lblIllu: "Illustration (URL ou Fichier Local)", 
+        lblLocal: "Local", lblLayout: "Disposition", lblAlign: "Alignement", lblImgSize: "Taille image", lblBgTransp: "Transparence", 
+        lblTitleSize: "Taille Titre", lblBodySize: "Taille Corps", lblBodyText: "Corps du texte", lblBdGridBg: "Grilles & Fond de page BD", 
+        lblBgOpt: "Image de fond (derrière la grille) - optionnel", lblBgZoom: "Zoom fond", lblGridTmpl: "Modèles de grilles", 
+        lblCustomCases: "Cases perso 1-12", lblGen: "Générer", lblFull: "Plein", lblPanelSel: "Case sélectionnée - Drag image | Molette zoom | Shift+Molette rotation", 
+        lblPanelImg: "Image de la case", lblPLocal: "Local", lblPanelZoom: "Zoom", lblPanelRot: "Rotation", lblBubbles: "Bulles de dialogue", 
+        lblBubText: "Texte de la bulle", lblBubFont: "Font BD", lblBubSize: "Taille", lblBubTail: "Direction Flèche", 
+        lblBubDel: "Supprimer", lblBubDup: "Dupliquer", lblBubClose: "Fermer", lblPreviewBtn: "Aperçu",
+        lblBRound: "Ronde", lblBSquare: "Carrée", lblBThought: "Pensée", lblBShout: "Cri", lblBNarrator: "Narrateur"
+    },
+    en: { 
+        proj: "Projects", read: "Paperback", bd: "Comic Book (BD)", mag: "Magazine", cur: "Current Project", projTitle: "Projects",
+        lblCreate: "Create", lblSave: "Save", lblTitleProj: "Project Title - editable only on cover page", 
+        lblTitleOnCover: "Show title on cover - ON/OFF", lblAuthor: "Author", lblDate: "Date", lblPublisher: "Publisher", 
+        lblGenre: "Genre", lblPageName: "Page / Section Name", lblLinkConfig: "Reference / Summary - Link config", 
+        lblLinkAll: "Link all pages", lblLinkSel: "Select pages", lblIllu: "Illustration (URL or Local File)", 
+        lblLocal: "Local", lblLayout: "Layout", lblAlign: "Alignment", lblImgSize: "Image Size", lblBgTransp: "Transparency", 
+        lblTitleSize: "Title Size", lblBodySize: "Body Size", lblBodyText: "Body Text", lblBdGridBg: "BD Grids & Background", 
+        lblBgOpt: "Background image (behind grid) - optional", lblBgZoom: "Background zoom", lblGridTmpl: "Grid Templates", 
+        lblCustomCases: "Custom panels 1-12", lblGen: "Generate", lblFull: "Full", lblPanelSel: "Selected Panel - Drag img | Scroll zoom | Shift+Scroll rotate", 
+        lblPanelImg: "Panel Image", lblPLocal: "Local", lblPanelZoom: "Zoom", lblPanelRot: "Rotation", lblBubbles: "Speech Bubbles", 
+        lblBubText: "Bubble Text", lblBubFont: "BD Font", lblBubSize: "Size", lblBubTail: "Tail Direction", 
+        lblBubDel: "Delete", lblBubDup: "Duplicate", lblBubClose: "Close", lblPreviewBtn: "Preview",
+        lblBRound: "Round", lblBSquare: "Square", lblBThought: "Thought", lblBShout: "Shout", lblBNarrator: "Narrator"
+    }
 };
+
 const titleSizes = [18,24,28,32,36,42,48,56,64,72];
 const bodySizes = [12,13,14,15,16,17,18,20,22,24,28,32];
 
@@ -562,7 +595,7 @@ const BD_TEMPLATES = [
   {id:'3bottom', name:'3-Btm', rects:[{x:0,y:0,w:49,h:40},{x:51,y:0,w:49,h:40},{x:0,y:42,w:100,h:58}]},
   {id:'5mix', name:'5-Mix', rects:[{x:0,y:0,w:100,h:35},{x:0,y:37,w:49,h:29},{x:51,y:37,w:49,h:29},{x:0,y:68,w:49,h:32},{x:51,y:68,w:49,h:32}]},
   {id:'6grid', name:'6-Grid', rects:[{x:0,y:0,w:32,h:49},{x:34,y:0,w:32,h:49},{x:68,y:0,w:32,h:49},{x:0,y:51,w:32,h:49},{x:34,y:51,w:32,h:49},{x:68,y:51,w:32,h:49}]},
-  {id:'blacksad', name:'Blacksad', rects:[{x:0,y:0,w:100,h:38},{x:0,y:40,w:100,h:14},{x:0,y:56,w:32,h:20},{x:34,y:56,w:32,h:20},{x:68,y:56,w:32,h:20},{x:0,y:78,w:100,h:22}]},
+  {id:'blacksad', name:'Classique', rects:[{x:0,y:0,w:100,h:38},{x:0,y:40,w:100,h:14},{x:0,y:56,w:32,h:20},{x:34,y:56,w:32,h:20},{x:68,y:56,w:32,h:20},{x:0,y:78,w:100,h:22}]},
   {id:'8', name:'8', rects:[{x:0,y:0,w:49,h:23.5},{x:51,y:0,w:49,h:23.5},{x:0,y:25.5,w:49,h:23.5},{x:51,y:25.5,w:49,h:23.5},{x:0,y:51,w:49,h:23.5},{x:51,y:51,w:49,h:23.5},{x:0,y:76.5,w:49,h:23.5},{x:51,y:76.5,w:49,h:23.5}]},
   {id:'9', name:'9', rects:[{x:0,y:0,w:32,h:32},{x:34,y:0,w:32,h:32},{x:68,y:0,w:32,h:32},{x:0,y:34,w:32,h:32},{x:34,y:34,w:32,h:32},{x:68,y:34,w:32,h:32},{x:0,y:68,w:32,h:32},{x:34,y:68,w:32,h:32},{x:68,y:68,w:32,h:32}]},
   {id:'10auto', name:'10', rects:[]},
@@ -629,6 +662,7 @@ function ensureBDData(item){
   if(!b.fontSize) b.fontSize=14;
   if(!b.fontFamily) b.fontFamily="'Bangers', cursive";
   if(!b.type) b.type='round';
+  if(!b.tailPos) b.tailPos='center';
   if(b.panelIndex===undefined) b.panelIndex=null;
  });
 }
@@ -910,7 +944,9 @@ function createBubbleElement(b){
  if(b.type==='narrator') div.style.background='#fff8b5';
  div.textContent=b.text||'TEXTE';
  if(b.type!=='narrator'){
-  let tail=document.createElement('div'); tail.className='bd-bubble-tail'; div.appendChild(tail);
+  let tail=document.createElement('div'); 
+  tail.className='bd-bubble-tail '+(b.tailPos||'center'); 
+  div.appendChild(tail);
  }
  div.addEventListener('mousedown', (e)=>onBubbleMouseDown(e, b.id));
  div.addEventListener('click', (e)=>{ e.stopPropagation(); selectBubble(b.id); });
@@ -926,7 +962,8 @@ function renderBDCanvas(){
  if(item.bdBgImage){
   let img=document.createElement('img');
   img.src=item.bdBgImage; img.style.position='absolute'; img.style.top='0'; img.style.left='0'; img.style.width='100%'; img.style.height='100%'; img.style.objectFit='cover';
-  img.style.transform=`translate(${item.bdBg.tx||0}px, ${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1}) rotate(${item.bdBg.rot||0}deg)`; img.style.transformOrigin='center center'; img.style.pointerEvents='none';
+  img.style.transform=`translate(${item.bdBg.tx||0}px, ${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1})`; 
+  img.style.transformOrigin='center center'; img.style.pointerEvents='none';
   bgLayer.appendChild(img);
  }
  item.bdTemplateRects.forEach((rect, idx)=>{
@@ -995,7 +1032,6 @@ function clearPanelImage(){ if(selectedPanelIndex===null) return; const proj=get
 function onBDBgFile(e){ const file=e.target.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=ev=>{ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=ev.target.result; renderBDCanvas(); autoSave(); }; reader.readAsDataURL(file); e.target.value=''; }
 function onBDBgUrlChange(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=val; renderBDCanvas(); autoSave(); }
 function onBDBgScale(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBg.scale=parseFloat(val); document.getElementById('bdBgScaleVal').textContent=Math.round(parseFloat(val)*100)+'%'; renderBDCanvas(); autoSave(); }
-function onBDBgRot(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBg.rot=parseInt(val); document.getElementById('bdBgRotVal').textContent=val+'°'; renderBDCanvas(); autoSave(); }
 function clearBGBg(){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=''; item.bdBg={tx:0,ty:0,scale:1,rot:0}; document.getElementById('bdBgImageInput').value=''; renderBDCanvas(); autoSave(); }
 function onPanelMouseDown(e, idx){
  if(e.target.closest('.bd-bubble')) return;
@@ -1013,14 +1049,14 @@ function onPanelWheel(e, idx){
   if(panel.rot>180) panel.rot-=360; if(panel.rot<-180) panel.rot+=360;
   if(selectedPanelIndex===idx){ document.getElementById('bdPanelRot').value=panel.rot; document.getElementById('bdPanelRotVal').textContent=panel.rot+'°'; }
  } else {
-  let delta=e.deltaY>0?-0.07:0.07; let newScale=Math.min(5,Math.max(0.1,(panel.scale||1)+delta)); panel.scale=newScale;
+  let delta=e.deltaY>0?-0.07:0.07; let newScale=Math.min(15,Math.max(0.1,(panel.scale||1)+delta)); panel.scale=newScale;
   if(selectedPanelIndex===idx){ document.getElementById('bdPanelScale').value=newScale; document.getElementById('bdPanelScaleVal').textContent=Math.round(newScale*100)+'%'; }
  }
  renderBDCanvas(); autoSave();
 }
 function addBDBubble(type){
  const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
- let newBubble={ id:uid(), panelIndex:selectedPanelIndex, type:type, text:type==='narrator'?'Narration...':'TEXTE', x:50, y:20, w:type==='narrator'?60:34, fontFamily:"'Bangers', cursive", fontSize:14 };
+ let newBubble={ id:uid(), panelIndex:selectedPanelIndex, type:type, text:type==='narrator'?'Narration...':'TEXTE', x:50, y:20, w:type==='narrator'?60:34, fontFamily:"'Bangers', cursive", fontSize:14, tailPos:'center' };
  item.bdBubbles.push(newBubble); selectedBubbleId=newBubble.id; renderBDCanvas(); selectBubble(newBubble.id); autoSave();
 }
 function onBubbleMouseDown(e, bubbleId){
@@ -1040,11 +1076,13 @@ function selectBubble(id){
  document.getElementById('bdBubbleFont').value=bubble.fontFamily;
  document.getElementById('bdBubbleSize').value=bubble.fontSize;
  document.getElementById('bdBubbleSizeVal').textContent=bubble.fontSize+'px';
+ document.getElementById('bdBubbleTail').value=bubble.tailPos||'center';
  renderBDCanvas();
 }
 function onBubbleTextChange(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.text=val; let el=document.querySelector(`[data-bubble-id="${bubble.id}"]`); if(el){ let tail=el.querySelector('.bd-bubble-tail'); el.childNodes[0].textContent=val; if(tail) el.appendChild(tail); } autoSave(); } }
 function onBubbleFontChange(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.fontFamily=val; renderBDCanvas(); autoSave(); } }
 function onBubbleSize(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.fontSize=parseInt(val); document.getElementById('bdBubbleSizeVal').textContent=val+'px'; renderBDCanvas(); autoSave(); } }
+function onBubbleTailChange(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.tailPos=val; renderBDCanvas(); autoSave(); } }
 function deleteSelectedBubble(){ if(!selectedBubbleId) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); item.bdBubbles=item.bdBubbles.filter(b=>b.id!==selectedBubbleId); selectedBubbleId=null; document.getElementById('bdBubbleEdit').style.display='none'; renderBDCanvas(); autoSave(); }
 function duplicateBubble(){ if(!selectedBubbleId) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let orig=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(!orig) return; let copy={...orig, id:uid(), x:Math.min(90,orig.x+5), y:Math.min(90,orig.y+5)}; item.bdBubbles.push(copy); selectedBubbleId=copy.id; renderBDCanvas(); selectBubble(copy.id); autoSave(); }
 function updatePanelTools(){}
@@ -1121,7 +1159,7 @@ function generateImgHtml(item, customStyle=''){
     if(!item.image) return ''; 
     if(item.layout==='bg' && !customStyle){ return `<img src="${item.image}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:${(item.bgOpacity||20)/100};z-index:0" />`; } 
     let style=`width:${item.imageSize||70}%;${customStyle}`; const isFull=(item.imageSize||70)>=100; 
-    if(isFull && !customStyle){ return `<div class="img-wrapper full-bleed" style="width:calc(100% + 90px); margin-left:-45px; margin-right:-45px;"><img src="${item.image}" style="width:100%;height:auto;border-radius:0;display:block" /></div>`; }
+    if(isFull && !customStyle){ return `<div class="img-wrapper full-bleed" style="width:calc(100% + 90px); margin-left:-45px; margin-right:-45px; overflow:hidden;"><img src="${item.image}" style="width:${item.imageSize}%;height:auto;border-radius:0;display:block;margin:0 auto;" /></div>`; }
     else if(!customStyle){ if(item.imageAlign==='left') style+=`float:left;margin:0 14px 8px 0;`; else if(item.imageAlign==='right') style+=`float:right;margin:0 0 8px 14px;`; else style+=`display:block;margin:12px auto;`; } 
     return `<div class="img-wrapper" style="${style}"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover;border-radius:${customStyle?'0':'8px'};display:block" /></div>`; 
 } 
@@ -1130,7 +1168,7 @@ function buildBDHTML(item){
  let rects=item.bdTemplateRects||[{x:0,y:0,w:100,h:100}];
  let html=`<div style="position:relative;width:100%;max-width:800px;margin:0 auto;aspect-ratio:1/1.414;background:#fff;border:3.5px solid #111;overflow:hidden;box-sizing:border-box">`;
  if(item.bdBgImage){
-  html+=`<img src="${item.bdBgImage}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translate(${item.bdBg.tx||0}px,${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1}) rotate(${item.bdBg.rot||0}deg);transform-origin:center" />`;
+  html+=`<img src="${item.bdBgImage}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translate(${item.bdBg.tx||0}px,${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1});transform-origin:center" />`;
  }
  rects.forEach((r,i)=>{
   let p=item.bdPanels[i]; if(!p) return;
@@ -1142,7 +1180,12 @@ function buildBDHTML(item){
   bubbles.forEach(b=>{
    let bg=b.type==='narrator'?'#fff8b5':'#fff';
    let radius=b.type==='round'?'18px':b.type==='square'?'4px':b.type==='thought'?'24px':'2px';
-   html+=`<div style="position:absolute;left:${b.x}%;top:${b.y}%;width:${b.w}%;transform:translate(-50%,-50%);background:${bg};border:2.5px solid #111;border-radius:${radius};padding:5px 9px;font-family:${b.fontFamily};font-size:${b.fontSize}px;font-weight:700;color:#111;word-wrap:break-word;text-align:center;box-sizing:border-box">${esc(b.text)}</div>`;
+   let tailHtml = '';
+   if(b.type!=='narrator') {
+     let tLeft = b.tailPos==='left'?'20%':(b.tailPos==='right'?'80%':'50%');
+     tailHtml = `<div style="position:absolute; width:14px; height:14px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; left:${tLeft}; transform:translateX(-50%) rotate(45deg); z-index:-1;"></div>`;
+   }
+   html+=`<div style="position:absolute;left:${b.x}%;top:${b.y}%;width:${b.w}%;transform:translate(-50%,-50%);background:${bg};border:2.5px solid #111;border-radius:${radius};padding:5px 9px;font-family:${b.fontFamily};font-size:${b.fontSize}px;font-weight:700;color:#111;word-wrap:break-word;text-align:center;box-sizing:border-box;display:flex;align-items:center;justify-content:center;">${esc(b.text)}${tailHtml}</div>`;
   });
   html+=`</div>`;
  });
@@ -1150,7 +1193,12 @@ function buildBDHTML(item){
  pageBubbles.forEach(b=>{
   let bg=b.type==='narrator'?'#fff8b5':'#fff';
   let radius=b.type==='round'?'18px':b.type==='square'?'4px':b.type==='thought'?'24px':'2px';
-  html+=`<div style="position:absolute;left:${b.x}%;top:${b.y}%;width:${b.w}%;transform:translate(-50%,-50%);background:${bg};border:2.5px solid #111;border-radius:${radius};padding:5px 9px;font-family:${b.fontFamily};font-size:${b.fontSize}px;font-weight:700;color:#111;word-wrap:break-word;text-align:center;box-sizing:border-box;z-index:10">${esc(b.text)}</div>`;
+  let tailHtml = '';
+  if(b.type!=='narrator') {
+    let tLeft = b.tailPos==='left'?'20%':(b.tailPos==='right'?'80%':'50%');
+    tailHtml = `<div style="position:absolute; width:14px; height:14px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; left:${tLeft}; transform:translateX(-50%) rotate(45deg); z-index:-1;"></div>`;
+  }
+  html+=`<div style="position:absolute;left:${b.x}%;top:${b.y}%;width:${b.w}%;transform:translate(-50%,-50%);background:${bg};border:2.5px solid #111;border-radius:${radius};padding:5px 9px;font-family:${b.fontFamily};font-size:${b.fontSize}px;font-weight:700;color:#111;word-wrap:break-word;text-align:center;box-sizing:border-box;display:flex;align-items:center;justify-content:center;z-index:10">${esc(b.text)}${tailHtml}</div>`;
  });
  html+=`</div>`;
  return html;
@@ -1224,12 +1272,69 @@ function updateLangUI(){
         document.getElementById('lang-fr').classList.toggle('lang-active', l==='fr');
         document.getElementById('lang-en').classList.toggle('lang-active', l==='en');
         if(i18n[l]) {
-            document.getElementById('lblProjBtn').textContent = i18n[l].proj;
-            document.getElementById('lblBookTab').textContent = i18n[l].read;
-            document.getElementById('lblComicTab').textContent = i18n[l].bd;
-            document.getElementById('lblMagTab').textContent = i18n[l].mag;
-            document.getElementById('lblCurProj').textContent = i18n[l].cur;
-            document.getElementById('lblProjTitle').textContent = i18n[l].projTitle;
+            // Main tabs & buttons
+            if(document.getElementById('lblProjBtn')) document.getElementById('lblProjBtn').textContent = i18n[l].proj;
+            if(document.getElementById('lblBookTab')) document.getElementById('lblBookTab').textContent = i18n[l].read;
+            if(document.getElementById('lblComicTab')) document.getElementById('lblComicTab').textContent = i18n[l].bd;
+            if(document.getElementById('lblMagTab')) document.getElementById('lblMagTab').textContent = i18n[l].mag;
+            if(document.getElementById('lblCurProj')) document.getElementById('lblCurProj').textContent = i18n[l].cur;
+            if(document.getElementById('lblProjTitle')) document.getElementById('lblProjTitle').textContent = i18n[l].projTitle;
+            if(document.getElementById('lblCreate')) document.getElementById('lblCreate').textContent = i18n[l].lblCreate;
+            if(document.getElementById('lblSave')) document.getElementById('lblSave').textContent = i18n[l].lblSave;
+            
+            // Meta & Cover
+            if(document.getElementById('lblTitleProj')) document.getElementById('lblTitleProj').textContent = i18n[l].lblTitleProj;
+            if(document.getElementById('lblTitleOnCover')) document.getElementById('lblTitleOnCover').textContent = i18n[l].lblTitleOnCover;
+            if(document.getElementById('lblAuthor')) document.getElementById('lblAuthor').textContent = i18n[l].lblAuthor;
+            if(document.getElementById('lblDate')) document.getElementById('lblDate').textContent = i18n[l].lblDate;
+            if(document.getElementById('lblPublisher')) document.getElementById('lblPublisher').textContent = i18n[l].lblPublisher;
+            if(document.getElementById('lblGenre')) document.getElementById('lblGenre').textContent = i18n[l].lblGenre;
+            if(document.getElementById('lblPageName')) document.getElementById('lblPageName').textContent = i18n[l].lblPageName;
+            
+            // Config & Setup
+            if(document.getElementById('lblLinkConfig')) document.getElementById('lblLinkConfig').textContent = i18n[l].lblLinkConfig;
+            if(document.getElementById('lblLinkAll')) document.getElementById('lblLinkAll').textContent = i18n[l].lblLinkAll;
+            if(document.getElementById('lblLinkSel')) document.getElementById('lblLinkSel').textContent = i18n[l].lblLinkSel;
+            if(document.getElementById('lblIllu')) document.getElementById('lblIllu').textContent = i18n[l].lblIllu;
+            if(document.getElementById('lblLocal')) document.getElementById('lblLocal').textContent = i18n[l].lblLocal;
+            if(document.getElementById('lblLayout')) document.getElementById('lblLayout').textContent = i18n[l].lblLayout;
+            if(document.getElementById('lblAlign')) document.getElementById('lblAlign').textContent = i18n[l].lblAlign;
+            if(document.getElementById('lblImgSize')) document.getElementById('lblImgSize').textContent = i18n[l].lblImgSize;
+            if(document.getElementById('lblBgTransp')) document.getElementById('lblBgTransp').textContent = i18n[l].lblBgTransp;
+            if(document.getElementById('lblTitleSize')) document.getElementById('lblTitleSize').textContent = i18n[l].lblTitleSize;
+            if(document.getElementById('lblBodySize')) document.getElementById('lblBodySize').textContent = i18n[l].lblBodySize;
+            if(document.getElementById('lblBodyText')) document.getElementById('lblBodyText').textContent = i18n[l].lblBodyText;
+            
+            // BD Tools
+            if(document.getElementById('lblBdGridBg')) document.getElementById('lblBdGridBg').textContent = i18n[l].lblBdGridBg;
+            if(document.getElementById('lblBgOpt')) document.getElementById('lblBgOpt').textContent = i18n[l].lblBgOpt;
+            if(document.getElementById('lblBgZoom')) document.getElementById('lblBgZoom').textContent = i18n[l].lblBgZoom;
+            if(document.getElementById('lblGridTmpl')) document.getElementById('lblGridTmpl').textContent = i18n[l].lblGridTmpl;
+            if(document.getElementById('lblCustomCases')) document.getElementById('lblCustomCases').textContent = i18n[l].lblCustomCases;
+            if(document.getElementById('lblGen')) document.getElementById('lblGen').textContent = i18n[l].lblGen;
+            if(document.getElementById('lblFull')) document.getElementById('lblFull').textContent = i18n[l].lblFull;
+            if(document.getElementById('lblPanelSel')) document.getElementById('lblPanelSel').textContent = i18n[l].lblPanelSel;
+            if(document.getElementById('lblPanelImg')) document.getElementById('lblPanelImg').textContent = i18n[l].lblPanelImg;
+            if(document.getElementById('lblPLocal')) document.getElementById('lblPLocal').textContent = i18n[l].lblPLocal;
+            if(document.getElementById('lblPanelZoom')) document.getElementById('lblPanelZoom').textContent = i18n[l].lblPanelZoom;
+            if(document.getElementById('lblPanelRot')) document.getElementById('lblPanelRot').textContent = i18n[l].lblPanelRot;
+            
+            // Bubbles
+            if(document.getElementById('lblBubbles')) document.getElementById('lblBubbles').textContent = i18n[l].lblBubbles;
+            if(document.getElementById('lblBubText')) document.getElementById('lblBubText').textContent = i18n[l].lblBubText;
+            if(document.getElementById('lblBubFont')) document.getElementById('lblBubFont').textContent = i18n[l].lblBubFont;
+            if(document.getElementById('lblBubSize')) document.getElementById('lblBubSize').textContent = i18n[l].lblBubSize;
+            if(document.getElementById('lblBubTail')) document.getElementById('lblBubTail').textContent = i18n[l].lblBubTail;
+            if(document.getElementById('lblBubDel')) document.getElementById('lblBubDel').textContent = i18n[l].lblBubDel;
+            if(document.getElementById('lblBubDup')) document.getElementById('lblBubDup').textContent = i18n[l].lblBubDup;
+            if(document.getElementById('lblBubClose')) document.getElementById('lblBubClose').textContent = i18n[l].lblBubClose;
+            if(document.getElementById('lblPreviewBtn')) document.getElementById('lblPreviewBtn').textContent = i18n[l].lblPreviewBtn;
+            
+            document.querySelectorAll('.lblBRound').forEach(el => el.textContent = i18n[l].lblBRound);
+            document.querySelectorAll('.lblBSquare').forEach(el => el.textContent = i18n[l].lblBSquare);
+            document.querySelectorAll('.lblBThought').forEach(el => el.textContent = i18n[l].lblBThought);
+            document.querySelectorAll('.lblBShout').forEach(el => el.textContent = i18n[l].lblBShout);
+            document.querySelectorAll('.lblBNarrator').forEach(el => el.textContent = i18n[l].lblBNarrator);
         }
     } catch(e) {}
 }
