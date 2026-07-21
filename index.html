@@ -5,7 +5,7 @@
   if (window.__playableTouchPatchInstalled) return;
   window.__playableTouchPatchInstalled = true;
   var origAdd = EventTarget.prototype.addEventListener;
-  var blockedTypes = { touchstart: 1, touchmove: 1 }; /* WHEEL REMOVED to fix scroll lock on zoom */
+  var blockedTypes = { touchstart: 1, touchmove: 1 };
   EventTarget.prototype.addEventListener = function(type, listener, options) {
     if (blockedTypes[type]) {
       if (options === undefined || options === null) {
@@ -164,10 +164,13 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
 .bubble-thought { border-radius:24px; border-style:dashed; border-width:2px; }
 .bubble-shout { border-radius:2px; background:#fff; font-family:'Bangers', cursive; letter-spacing:0.5px; transform:translate(-50%,-50%) rotate(-1deg); }
 .bubble-narrator { background:#fff8b5; border-radius:2px; font-style:italic; font-family:'Special Elite', cursive; }
-.bd-bubble-tail { position:absolute; width:14px; height:14px; background:#fff; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; z-index:-1; }
-.bd-bubble-tail.left { left: 20%; transform: translateX(-50%) rotate(45deg); }
-.bd-bubble-tail.center { left: 50%; transform: translateX(-50%) rotate(45deg); }
-.bd-bubble-tail.right { left: 80%; transform: translateX(-50%) rotate(45deg); }
+
+/* Incurved BD Tails */
+.bd-bubble-tail { position:absolute; background:inherit; border-right:2.5px solid #111; border-bottom:2.5px solid #111; z-index:-1; }
+.bd-bubble-tail.left { width:14px; height:18px; left:20%; bottom:-12px; border-bottom-right-radius:12px; transform:rotate(15deg); }
+.bd-bubble-tail.center { width:12px; height:12px; left:50%; bottom:-6px; transform:translateX(-50%) rotate(45deg); }
+.bd-bubble-tail.right { width:14px; height:18px; left:80%; bottom:-12px; border-bottom-right-radius:12px; transform:translateX(-100%) scaleX(-1) rotate(15deg); }
+
 .bubble-btn { flex:1; background:rgba(255,255,255,0.04); color:var(--text); border:1px solid var(--border); padding:10px; border-radius:8px; cursor:pointer; transition:.2s; font-size:12px; display:flex; align-items:center; justify-content:center; gap:6px; }
 .bubble-btn:hover, .bubble-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(255,255,255,0.06); }
 .module-tools { display:none; flex-direction:column; gap:16px; margin-top:20px; padding-top:20px; border-top:1px solid var(--border); }
@@ -370,7 +373,7 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                 </div>
 
                 <div id="bdPanelTools" class="bd-toolbar" style="display:none">
-                    <div class="bd-section-title"><i class="fas fa-crop"></i> <span id="lblPanelSel">Case sélectionnée - Drag image | Molette zoom | Shift+Molette rotation</span> <span id="bdSelectedPanelLabel" style="margin-left:8px">-</span></div>
+                    <div class="bd-section-title"><i class="fas fa-crop"></i> <span id="lblPanelSel">Case sélectionnée - Drag image | Molette zoom | Shift+Molette rotation</span> <span id="bdSelectedPanelLabel" style="margin-left:8px;color:var(--accent)">-</span></div>
                     <div class="meta-row">
                         <div class="input-group" style="flex:2">
                             <label id="lblPanelImg">Image de la case</label>
@@ -401,15 +404,16 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                         <button class="bubble-btn" onclick="addBDBubble('shout')"><i class="fas fa-bolt"></i> <span class="lblBShout">Cri</span></button>
                         <button class="bubble-btn" onclick="addBDBubble('narrator')"><i class="fas fa-book-open"></i> <span class="lblBNarrator">Narrateur</span></button>
                     </div>
-                    <div id="bdBubbleEdit" style="display:none;flex-direction:column;gap:10px;margin-top:12px;background:rgba(0,0,0,0.4);padding:12px;border-radius:8px;border:1px solid var(--border)">
-                        <div class="meta-row">
+                    
+                    <div id="bdBubbleEdit" style="display:none;flex-direction:column;gap:12px;margin-top:12px;background:rgba(0,0,0,0.4);padding:14px;border-radius:8px;border:1px solid var(--border)">
+                        <div class="meta-row" style="align-items:flex-start">
                             <div class="input-group" style="flex:2">
                                 <label id="lblBubText">Texte de la bulle</label>
-                                <textarea id="bdBubbleText" class="meta-input" rows="2" oninput="onBubbleTextChange(this.value)"></textarea>
+                                <textarea id="bdBubbleText" class="meta-input" style="height:42px" oninput="onBubbleTextChange(this.value)"></textarea>
                             </div>
-                            <div class="input-group">
+                            <div class="input-group" style="flex:1; min-width:140px">
                                 <label id="lblBubFont">Font BD</label>
-                                <select id="bdBubbleFont" class="meta-input" onchange="onBubbleFontChange(this.value)">
+                                <select id="bdBubbleFont" class="meta-input" style="height:42px" onchange="onBubbleFontChange(this.value)">
                                     <option value="'Bangers', cursive">BANGERS - Impact BD</option>
                                     <option value="'Comic Neue', cursive">Comic Neue - Classique</option>
                                     <option value="'Patrick Hand', cursive">Patrick Hand - Manuscrit</option>
@@ -419,20 +423,22 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
                                     <option value="'Inter', sans-serif">Inter - Neutre</option>
                                 </select>
                             </div>
-                            <div class="input-group" style="width:110px">
-                                <label><span id="lblBubSize">Taille</span> <span id="bdBubbleSizeVal">14px</span></label>
-                                <input type="range" id="bdBubbleSize" min="8" max="36" value="14" oninput="onBubbleSize(this.value)">
+                        </div>
+                        <div class="meta-row">
+                            <div class="input-group" style="flex:1">
+                                <label><span id="lblBubSize">Taille bulle</span> <span id="bdBubbleSizeVal" style="color:var(--accent)">14px</span></label>
+                                <input type="range" id="bdBubbleSize" min="8" max="48" value="14" oninput="onBubbleSize(this.value)">
                             </div>
-                            <div class="input-group" style="width:140px">
-                                <label id="lblBubTail">Direction Flèche</label>
-                                <select id="bdBubbleTail" class="meta-input" onchange="onBubbleTailChange(this.value)">
+                            <div class="input-group" style="width:120px; flex:none">
+                                <label id="lblBubTail">Flèche</label>
+                                <select id="bdBubbleTail" class="meta-input" style="padding:6px 10px" onchange="onBubbleTailChange(this.value)">
                                     <option value="left">Gauche</option>
                                     <option value="center">Milieu</option>
                                     <option value="right">Droite</option>
                                 </select>
                             </div>
                         </div>
-                        <div style="display:flex;gap:8px">
+                        <div style="display:flex;gap:8px;margin-top:4px">
                             <button class="btn btn-danger" onclick="deleteSelectedBubble()"><i class="fas fa-trash"></i> <span id="lblBubDel">Supprimer</span></button>
                             <button class="btn" onclick="duplicateBubble()"><i class="fas fa-copy"></i> <span id="lblBubDup">Dupliquer</span></button>
                             <button class="btn" onclick="selectedBubbleId=null;document.getElementById('bdBubbleEdit').style.display='none';renderBDCanvas()"><i class="fas fa-times"></i> <span id="lblBubClose">Fermer</span></button>
@@ -457,14 +463,15 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
 <div class="overlay" id="previewModal" onclick="if(event.target===this)closePreview()">
     <div class="preview-shell" onclick="event.stopPropagation()">
         <div class="preview-top">
+            <!-- Ordre des boutons ajusté -->
+            <button class="btn" id="btnLarge" onclick="setPreviewDevice('large')"><i class="fas fa-desktop"></i> Plein écran</button>
             <button class="btn" id="btnMobile" onclick="setPreviewDevice('mobile')"><i class="fas fa-mobile-alt"></i> Mobile</button>
-            <button class="btn" id="btnTablet" onclick="setPreviewDevice('tablet')"><i class="fas fa-tablet-alt"></i> Tablet</button>
-            <button class="btn" id="btnLarge" onclick="setPreviewDevice('large')"><i class="fas fa-desktop"></i> Large</button>
+            <button class="btn" id="btnTablet" onclick="setPreviewDevice('tablet')"><i class="fas fa-tablet-alt"></i> Tablette</button>
             <button class="btn" id="btnEpub" onclick="setPreviewDevice('epub')"><i class="fas fa-book"></i> EPUB</button>
             <button class="btn" id="btnPdf" onclick="setPreviewDevice('pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
             <button class="btn-close-round" onclick="closePreview()"><i class="fas fa-times-circle"></i></button>
         </div>
-        <div class="preview-screen mobile" id="previewScreen">
+        <div class="preview-screen large" id="previewScreen">
             <div class="prv-content" id="prvContent"></div>
         </div>
     </div>
@@ -527,7 +534,7 @@ input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; curso
 <div id="savedToast" class="saved-toast"><i class="fas fa-check-circle" style="color:var(--accent)"></i> Enregistré !</div>
 
 <script>
-let currentPageId=null, currentProjectId=null, projects=[], appConfig={fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}}, previewDevice='mobile';
+let currentPageId=null, currentProjectId=null, projects=[], appConfig={fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}}, previewDevice='large'; // default to large
 let currentActiveModule = 'book'; 
 let selectedPanelIndex=null, selectedBubbleId=null, dragState=null;
 const uid=()=> 'id_'+Date.now()+'_'+Math.random().toString(36).slice(2,5);
@@ -559,7 +566,7 @@ const i18n = {
         lblBgOpt: "Image de fond (derrière la grille) - optionnel", lblBgZoom: "Zoom fond", lblGridTmpl: "Modèles de grilles", 
         lblCustomCases: "Cases perso 1-12", lblGen: "Générer", lblFull: "Plein", lblPanelSel: "Case sélectionnée - Drag image | Molette zoom | Shift+Molette rotation", 
         lblPanelImg: "Image de la case", lblPLocal: "Local", lblPanelZoom: "Zoom", lblPanelRot: "Rotation", lblBubbles: "Bulles de dialogue", 
-        lblBubText: "Texte de la bulle", lblBubFont: "Font BD", lblBubSize: "Taille", lblBubTail: "Direction Flèche", 
+        lblBubText: "Texte de la bulle", lblBubFont: "Font BD", lblBubSize: "Taille bulle", lblBubTail: "Flèche", 
         lblBubDel: "Supprimer", lblBubDup: "Dupliquer", lblBubClose: "Fermer", lblPreviewBtn: "Aperçu",
         lblBRound: "Ronde", lblBSquare: "Carrée", lblBThought: "Pensée", lblBShout: "Cri", lblBNarrator: "Narrateur"
     },
@@ -574,7 +581,7 @@ const i18n = {
         lblBgOpt: "Background image (behind grid) - optional", lblBgZoom: "Background zoom", lblGridTmpl: "Grid Templates", 
         lblCustomCases: "Custom panels 1-12", lblGen: "Generate", lblFull: "Full", lblPanelSel: "Selected Panel - Drag img | Scroll zoom | Shift+Scroll rotate", 
         lblPanelImg: "Panel Image", lblPLocal: "Local", lblPanelZoom: "Zoom", lblPanelRot: "Rotation", lblBubbles: "Speech Bubbles", 
-        lblBubText: "Bubble Text", lblBubFont: "BD Font", lblBubSize: "Size", lblBubTail: "Tail Direction", 
+        lblBubText: "Bubble Text", lblBubFont: "BD Font", lblBubSize: "Bubble Size", lblBubTail: "Tail Direction", 
         lblBubDel: "Delete", lblBubDup: "Duplicate", lblBubClose: "Close", lblPreviewBtn: "Preview",
         lblBRound: "Round", lblBSquare: "Square", lblBThought: "Thought", lblBShout: "Shout", lblBNarrator: "Narrator"
     }
@@ -583,7 +590,6 @@ const i18n = {
 const titleSizes = [18,24,28,32,36,42,48,56,64,72];
 const bodySizes = [12,13,14,15,16,17,18,20,22,24,28,32];
 
-/* ===== BD TEMPLATES PRO ===== */
 const BD_TEMPLATES = [
   {id:'full', name:'Plein', rects:[{x:0,y:0,w:100,h:100}]},
   {id:'2h', name:'2-H', rects:[{x:0,y:0,w:100,h:49},{x:0,y:51,w:100,h:49}]},
@@ -749,11 +755,12 @@ function refreshPageDropdown(){
     const proj=getCurrentProject(); if(!proj) return; 
     proj.data.book.items.forEach(it=>{ 
         const b=document.createElement('button'); b.className='dropdown-item'+(it.id===currentPageId?' active':''); 
-        b.innerHTML=`${getDisplayName(it)}${it.type==='chapter'?' · '+esc(it.title):''}`; 
+        // Stop repetitive wording
+        b.innerHTML= it.type === 'chapter' ? esc(it.title) : getDisplayName(it); 
         b.onclick=()=>{ selectPage(it.id); closeMenus(); }; dd.appendChild(b); 
     }); 
     const label=document.getElementById('pageSelectLabel'); const cur=proj.data.book.items.find(i=>i.id===currentPageId); 
-    if(label&&cur) label.textContent=getDisplayName(cur)+(cur.type==='chapter'?' · '+cur.title:''); 
+    if(label&&cur) label.textContent = cur.type === 'chapter' ? cur.title : getDisplayName(cur); 
 } 
 function selectPage(id){ currentPageId=id; selectedPanelIndex=0; selectedBubbleId=null; loadPageData(); } 
 function loadProjects(){ 
@@ -979,7 +986,7 @@ function renderBDCanvas(){
    panelDiv.appendChild(img);
   } else {
    let ph=document.createElement('div'); ph.className='bd-panel-placeholder';
-   ph.innerHTML=`<i class="fas fa-image" style="font-size:18px"></i><span>Case ${idx+1}</span><button class="btn" style="margin-top:4px;font-size:10px;padding:4px 8px" onclick="event.stopPropagation(); triggerPanelUpload(${idx})"><i class="fas fa-upload"></i> Image</button>`;
+   ph.innerHTML=`<i class="fas fa-image" style="font-size:18px"></i><span>pix${idx+1}</span><button class="btn" style="margin-top:4px;font-size:10px;padding:4px 8px" onclick="event.stopPropagation(); triggerPanelUpload(${idx})"><i class="fas fa-upload"></i> Image</button>`;
    panelDiv.appendChild(ph);
   }
   let bubblesInPanel=item.bdBubbles.filter(b=>b.panelIndex===idx);
@@ -1005,7 +1012,7 @@ function selectPanel(idx){
  const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
  const p=item.bdPanels[idx];
  if(p){
-  document.getElementById('bdSelectedPanelLabel').textContent='Case '+(idx+1);
+  document.getElementById('bdSelectedPanelLabel').textContent='pix'+(idx+1);
   document.getElementById('bdPanelImageUrl').value=p.image||'';
   document.getElementById('bdPanelScale').value=p.scale||1;
   document.getElementById('bdPanelScaleVal').textContent=Math.round((p.scale||1)*100)+'%';
@@ -1093,7 +1100,7 @@ function updateBubblesList(){
  item.bdBubbles.forEach(b=>{
   let chip=document.createElement('div');
   chip.style.padding='4px 10px'; chip.style.borderRadius='14px'; chip.style.background=b.id===selectedBubbleId?'#ef4444':'rgba(255,255,255,0.1)'; chip.style.fontSize='11px'; chip.style.cursor='pointer';
-  chip.textContent=(b.panelIndex!==null?'C'+(b.panelIndex+1)+': ':'Page: ')+(b.text.slice(0,14)||'bulle');
+  chip.textContent=(b.panelIndex!==null?'pix'+(b.panelIndex+1)+': ':'Page: ')+(b.text.slice(0,14)||'bulle');
   chip.onclick=()=>selectBubble(b.id);
   container.appendChild(chip);
  });
@@ -1182,10 +1189,15 @@ function buildBDHTML(item){
    let radius=b.type==='round'?'18px':b.type==='square'?'4px':b.type==='thought'?'24px':'2px';
    let tailHtml = '';
    if(b.type!=='narrator') {
-     let tLeft = b.tailPos==='left'?'20%':(b.tailPos==='right'?'80%':'50%');
-     tailHtml = `<div style="position:absolute; width:14px; height:14px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; left:${tLeft}; transform:translateX(-50%) rotate(45deg); z-index:-1;"></div>`;
+     if (b.tailPos === 'left') {
+       tailHtml = `<div style="position:absolute; width:14px; height:18px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; border-bottom-right-radius:12px; bottom:-12px; left:20%; transform:rotate(15deg); z-index:-1;"></div>`;
+     } else if (b.tailPos === 'right') {
+       tailHtml = `<div style="position:absolute; width:14px; height:18px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; border-bottom-right-radius:12px; bottom:-12px; left:80%; transform:translateX(-100%) scaleX(-1) rotate(15deg); z-index:-1;"></div>`;
+     } else {
+       tailHtml = `<div style="position:absolute; width:12px; height:12px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-6px; left:50%; transform:translateX(-50%) rotate(45deg); z-index:-1;"></div>`;
+     }
    }
-   html+=`<div style="position:absolute;left:${b.x}%;top:${b.y}%;width:${b.w}%;transform:translate(-50%,-50%);background:${bg};border:2.5px solid #111;border-radius:${radius};padding:5px 9px;font-family:${b.fontFamily};font-size:${b.fontSize}px;font-weight:700;color:#111;word-wrap:break-word;text-align:center;box-sizing:border-box;display:flex;align-items:center;justify-content:center;">${esc(b.text)}${tailHtml}</div>`;
+   html+=`<div style="position:absolute;left:${b.x}%;top:${b.y}%;width:${b.w}%;transform:translate(-50%,-50%);background:${bg};border:2.5px solid #111;border-radius:${radius};padding:5px 9px;font-family:${b.fontFamily};font-size:${b.fontSize}px;font-weight:700;color:#111;word-wrap:break-word;text-align:center;box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex-direction:column;">${esc(b.text)}${tailHtml}</div>`;
   });
   html+=`</div>`;
  });
@@ -1195,10 +1207,15 @@ function buildBDHTML(item){
   let radius=b.type==='round'?'18px':b.type==='square'?'4px':b.type==='thought'?'24px':'2px';
   let tailHtml = '';
   if(b.type!=='narrator') {
-    let tLeft = b.tailPos==='left'?'20%':(b.tailPos==='right'?'80%':'50%');
-    tailHtml = `<div style="position:absolute; width:14px; height:14px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; left:${tLeft}; transform:translateX(-50%) rotate(45deg); z-index:-1;"></div>`;
+    if (b.tailPos === 'left') {
+      tailHtml = `<div style="position:absolute; width:14px; height:18px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; border-bottom-right-radius:12px; bottom:-12px; left:20%; transform:rotate(15deg); z-index:-1;"></div>`;
+    } else if (b.tailPos === 'right') {
+      tailHtml = `<div style="position:absolute; width:14px; height:18px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; border-bottom-right-radius:12px; bottom:-12px; left:80%; transform:translateX(-100%) scaleX(-1) rotate(15deg); z-index:-1;"></div>`;
+    } else {
+      tailHtml = `<div style="position:absolute; width:12px; height:12px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-6px; left:50%; transform:translateX(-50%) rotate(45deg); z-index:-1;"></div>`;
+    }
   }
-  html+=`<div style="position:absolute;left:${b.x}%;top:${b.y}%;width:${b.w}%;transform:translate(-50%,-50%);background:${bg};border:2.5px solid #111;border-radius:${radius};padding:5px 9px;font-family:${b.fontFamily};font-size:${b.fontSize}px;font-weight:700;color:#111;word-wrap:break-word;text-align:center;box-sizing:border-box;display:flex;align-items:center;justify-content:center;z-index:10">${esc(b.text)}${tailHtml}</div>`;
+  html+=`<div style="position:absolute;left:${b.x}%;top:${b.y}%;width:${b.w}%;transform:translate(-50%,-50%);background:${bg};border:2.5px solid #111;border-radius:${radius};padding:5px 9px;font-family:${b.fontFamily};font-size:${b.fontSize}px;font-weight:700;color:#111;word-wrap:break-word;text-align:center;box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:10">${esc(b.text)}${tailHtml}</div>`;
  });
  html+=`</div>`;
  return html;
@@ -1272,7 +1289,6 @@ function updateLangUI(){
         document.getElementById('lang-fr').classList.toggle('lang-active', l==='fr');
         document.getElementById('lang-en').classList.toggle('lang-active', l==='en');
         if(i18n[l]) {
-            // Main tabs & buttons
             if(document.getElementById('lblProjBtn')) document.getElementById('lblProjBtn').textContent = i18n[l].proj;
             if(document.getElementById('lblBookTab')) document.getElementById('lblBookTab').textContent = i18n[l].read;
             if(document.getElementById('lblComicTab')) document.getElementById('lblComicTab').textContent = i18n[l].bd;
@@ -1281,8 +1297,6 @@ function updateLangUI(){
             if(document.getElementById('lblProjTitle')) document.getElementById('lblProjTitle').textContent = i18n[l].projTitle;
             if(document.getElementById('lblCreate')) document.getElementById('lblCreate').textContent = i18n[l].lblCreate;
             if(document.getElementById('lblSave')) document.getElementById('lblSave').textContent = i18n[l].lblSave;
-            
-            // Meta & Cover
             if(document.getElementById('lblTitleProj')) document.getElementById('lblTitleProj').textContent = i18n[l].lblTitleProj;
             if(document.getElementById('lblTitleOnCover')) document.getElementById('lblTitleOnCover').textContent = i18n[l].lblTitleOnCover;
             if(document.getElementById('lblAuthor')) document.getElementById('lblAuthor').textContent = i18n[l].lblAuthor;
@@ -1290,8 +1304,6 @@ function updateLangUI(){
             if(document.getElementById('lblPublisher')) document.getElementById('lblPublisher').textContent = i18n[l].lblPublisher;
             if(document.getElementById('lblGenre')) document.getElementById('lblGenre').textContent = i18n[l].lblGenre;
             if(document.getElementById('lblPageName')) document.getElementById('lblPageName').textContent = i18n[l].lblPageName;
-            
-            // Config & Setup
             if(document.getElementById('lblLinkConfig')) document.getElementById('lblLinkConfig').textContent = i18n[l].lblLinkConfig;
             if(document.getElementById('lblLinkAll')) document.getElementById('lblLinkAll').textContent = i18n[l].lblLinkAll;
             if(document.getElementById('lblLinkSel')) document.getElementById('lblLinkSel').textContent = i18n[l].lblLinkSel;
@@ -1304,8 +1316,6 @@ function updateLangUI(){
             if(document.getElementById('lblTitleSize')) document.getElementById('lblTitleSize').textContent = i18n[l].lblTitleSize;
             if(document.getElementById('lblBodySize')) document.getElementById('lblBodySize').textContent = i18n[l].lblBodySize;
             if(document.getElementById('lblBodyText')) document.getElementById('lblBodyText').textContent = i18n[l].lblBodyText;
-            
-            // BD Tools
             if(document.getElementById('lblBdGridBg')) document.getElementById('lblBdGridBg').textContent = i18n[l].lblBdGridBg;
             if(document.getElementById('lblBgOpt')) document.getElementById('lblBgOpt').textContent = i18n[l].lblBgOpt;
             if(document.getElementById('lblBgZoom')) document.getElementById('lblBgZoom').textContent = i18n[l].lblBgZoom;
@@ -1318,8 +1328,6 @@ function updateLangUI(){
             if(document.getElementById('lblPLocal')) document.getElementById('lblPLocal').textContent = i18n[l].lblPLocal;
             if(document.getElementById('lblPanelZoom')) document.getElementById('lblPanelZoom').textContent = i18n[l].lblPanelZoom;
             if(document.getElementById('lblPanelRot')) document.getElementById('lblPanelRot').textContent = i18n[l].lblPanelRot;
-            
-            // Bubbles
             if(document.getElementById('lblBubbles')) document.getElementById('lblBubbles').textContent = i18n[l].lblBubbles;
             if(document.getElementById('lblBubText')) document.getElementById('lblBubText').textContent = i18n[l].lblBubText;
             if(document.getElementById('lblBubFont')) document.getElementById('lblBubFont').textContent = i18n[l].lblBubFont;
