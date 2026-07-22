@@ -1,314 +1,1457 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Writer. · The Pages. BD PRO FIX FINAL</title>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat+Brush&family=Comic+Neue:wght@400;700&family=Inter:wght@300;400;500;600&family=Patrick+Hand&family=Permanent+Marker&family=Playfair+Display:wght@600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<head><!-- PLAYABLE_TOUCH_PATCH_V1 --><script>
+(function() {
+  if (window.__playableTouchPatchInstalled) return;
+  window.__playableTouchPatchInstalled = true;
+  var origAdd = EventTarget.prototype.addEventListener;
+  var blockedTypes = { touchstart: 1, touchmove: 1 };
+  EventTarget.prototype.addEventListener = function(type, listener, options) {
+    if (blockedTypes[type]) {
+      if (options === undefined || options === null) {
+        options = { passive: true };
+      } else if (typeof options === 'boolean') {
+        options = { capture: options, passive: true };
+      } else {
+        options = Object.assign({}, options, { passive: true });
+      }
+    }
+    return origAdd.call(this, type, listener, options);
+  };
+})();
+</script><script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writer. · The Pages. BD PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat+Brush&family=Comic+Neue:wght@400;700&family=Cormorant+Garamond:wght@400;600;700&family=Crimson+Text:wght@400;600;700&family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Libre+Baskerville:wght@400;700&family=Lora:wght@400;500;600;700&family=Merriweather:wght@400;700&family=PT+Serif:wght@400;700&family=Patrick+Hand&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Source+Serif+Pro:wght@400;600;700&family=Special+Elite&family=Spectral:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style id="customFontsStyle"></style>
 <style>
-:root{--glass-bg:rgba(15,15,18,0.7);--glass-sheet:rgba(22,22,26,0.65);--border:rgba(255,255,255,0.08);--text:#f3f4f6;--muted:#8c8f9b;--accent:#ef4444}
-*{margin:0;padding:0;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.15) transparent}
-::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:100px;border:2px solid transparent;background-clip:padding-box}
-body{font-family:'Inter',sans-serif;background:radial-gradient(circle at 50% -20%, #1a1a24 0%, #050505 100%);color:var(--text);display:flex;flex-direction:column;height:100vh;overflow:hidden}
-.glass{background:var(--glass-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.ribbon{height:68px;display:flex;justify-content:space-between;align-items:center;padding:0 20px;z-index:30}
-.ribbon-group{display:flex;align-items:center;gap:10px;min-width:0}
-.logo-txt{line-height:1;margin-right:15px;display:flex;align-items:baseline;flex-shrink:0;white-space:nowrap}
-.logo-main{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff}
-.logo-sub{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-left:4px}
-.sync{font-size:10px;color:var(--muted);text-transform:uppercase;display:flex;gap:6px;align-items:center;letter-spacing:1px}
-.btn{background:rgba(20,20,25,0.6);backdrop-filter:blur(12px);color:var(--text);border:1px solid rgba(255,255,255,0.08);padding:9px 16px;border-radius:10px;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:8px;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06),0 4px 20px rgba(0,0,0,0.3);transition:all .25s ease;flex-shrink:0}
-.btn:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.14);transform:translateY(-1px)}
-.btn-danger{color:#ef4444;border-color:rgba(239,68,68,0.2)}
-.main-body{display:flex;flex:1;overflow:hidden}
-.sidebar{width:240px;background:rgba(10,10,12,0.4);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
-.sidebar-scroll{flex:1;overflow-y:auto;padding-top:10px}
-.cat{font-size:10px;text-transform:uppercase;color:var(--muted);padding:16px 20px 8px;letter-spacing:1px;font-weight:600}
-.menu-item{padding:10px 20px;color:var(--muted);font-size:13px;border-left:2px solid transparent;display:flex;align-items:center;gap:8px;cursor:pointer;transition:.2s}
-.menu-item.active{color:#fff;background:rgba(255,255,255,0.06);border-left-color:var(--accent);font-weight:600}
-.workspace{flex:1;padding:25px;overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;position:relative}
-.page-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(20,20,25,0.8);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:15;backdrop-filter:blur(10px)}
-.page-nav.left{left:20px}.page-nav.right{right:20px}.page-nav.disabled{opacity:.2;pointer-events:none}
-.sheet{width:100%;max-width:860px;background:var(--glass-sheet);backdrop-filter:blur(25px);border:1px solid var(--border);border-radius:16px;padding:35px 45px;display:flex;flex-direction:column;gap:12px;min-height:65vh;box-shadow:0 30px 60px rgba(0,0,0,0.6);margin-bottom:80px}
-.input-group{display:flex;flex-direction:column;gap:6px;flex:1;min-width:140px}
-.input-group label{font-size:10px;text-transform:uppercase;color:var(--muted);font-weight:600;display:flex;justify-content:space-between}
-.text-input{background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.15);color:inherit;font-size:24px;font-weight:600;padding:6px 0;outline:none;width:100%}
-.meta-input{background:rgba(0,0,0,0.3);border:1px solid var(--border);color:inherit;font-size:13px;padding:10px 12px;border-radius:8px;outline:none;width:100%}
-.meta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
-.segment-group{display:flex;background:rgba(0,0,0,0.4);border-radius:10px;padding:4px;border:1px solid var(--border)}
-.segment-btn{flex:1;background:transparent;color:var(--muted);border:none;padding:7px;border-radius:8px;font-size:11px;cursor:pointer;display:flex;justify-content:center;align-items:center}
-.segment-btn.active{background:rgba(255,255,255,0.1);color:#fff;font-weight:600}
-textarea.main{width:100%;min-height:280px;background:transparent;border:none;color:inherit;font-size:16px;line-height:1.8;resize:vertical;outline:none}
-input[type=range]{-webkit-appearance:none;width:100%;background:transparent}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;height:14px;width:14px;border-radius:50%;background:var(--accent);cursor:pointer;margin-top:-5px}
-input[type=range]::-webkit-slider-runnable-track{width:100%;height:4px;cursor:pointer;background:rgba(255,255,255,0.15);border-radius:2px}
-.btn-preview{position:fixed;bottom:30px;right:30px;background:rgba(20,20,25,0.9);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:14px 24px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;z-index:30;display:flex;gap:10px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.92);backdrop-filter:blur(15px);display:none;justify-content:center;align-items:center;z-index:1000;padding:20px}
-.overlay.active{display:flex}
-.modal{background:#111114;border:1px solid var(--border);border-radius:16px;width:100%;max-width:600px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
-.modal-head{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.modal-body{padding:24px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:20px}
-.preview-shell{display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;height:100%;justify-content:center}
-.preview-top{display:flex;gap:8px;background:rgba(20,20,25,0.8);border:1px solid rgba(255,255,255,0.08);padding:10px 14px;border-radius:40px;align-items:center;flex-wrap:wrap;backdrop-filter:blur(12px)}
-.preview-top .btn{border-radius:20px;background:transparent;border-color:transparent;box-shadow:none;padding:7px 14px}
-.preview-top .btn.active{background:rgba(255,255,255,0.15);color:var(--accent);border-color:var(--accent);font-weight:600}
-.btn-close-round{background:transparent;border:none;color:var(--muted);font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-left:6px}
-.preview-screen{background:#faf8f5;border-radius:14px;overflow:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.8);border:8px solid #222;transition:.3s ease}
-.preview-screen.mobile{width:393px;height:852px}.preview-screen.tablet{width:834px;height:1112px}.preview-screen.large{width:100%;height:calc(100vh - 140px);max-width:1200px;border-width:2px;border-radius:6px}
-.prv-content{padding:40px;color:#111;font-size:16px;line-height:1.7;position:relative;min-height:100%;word-wrap:break-word}
-.gen-wrap{position:relative;width:100%}.gen-wrap .btn,.gen-wrap .meta-input{width:100%;justify-content:space-between;cursor:pointer}
-.dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:100%;background:rgba(18,18,22,0.98);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:8px;z-index:100;display:none;flex-direction:column;gap:4px;box-shadow:0 20px 40px rgba(0,0,0,0.6);max-height:320px;overflow-y:auto}
-.dropdown-menu.right{left:auto;right:0;min-width:280px}
-.dropdown-item{width:100%;justify-content:flex-start;background:transparent;border:none;padding:11px 14px;border-radius:8px;font-size:13px;color:var(--text);display:flex;gap:10px;cursor:pointer;align-items:center;text-align:left}
-.dropdown-item:hover{background:rgba(255,255,255,0.08);color:var(--accent)}
-.project-item{display:flex;justify-content:space-between;align-items:center;padding:14px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.02)}
-.project-item.active{border-color:var(--accent);background:rgba(255,255,255,0.05)}
-.saved-toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(20,20,25,0.95);border:1px solid var(--accent);color:#fff;padding:10px 24px;border-radius:30px;z-index:3000;opacity:0;transition:.4s;display:flex;gap:10px;align-items:center;font-weight:500}
-.saved-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+:root {
+    --glass-bg: rgba(15,15,18,0.7);
+    --glass-sheet: rgba(22,22,26,0.65);
+    --border: rgba(255,255,255,0.08);
+    --text: #f3f4f6;
+    --muted: #8c8f9b;
+    --accent: #22d3ee;
+}
+* { margin:0; padding:0; box-sizing:border-box; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.15) transparent; }
+::-webkit-scrollbar { width:8px; height:8px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.12); border-radius:100px; border:2px solid transparent; background-clip:padding-box; }
+::-webkit-scrollbar-thumb:hover { background:rgba(255,255,255,0.22); background-clip:padding-box; }
+body {
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(circle at 50% -20%, #1a1a24 0%, #050505 100%);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+.glass { background:var(--glass-bg); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+.ribbon { height:68px; display:flex; justify-content:space-between; align-items:center; padding:0 20px; z-index:30; }
+.ribbon-group { display:flex; align-items:center; gap:10px; min-width:0; }
+.logo-txt { line-height:1; margin-right:15px; display:flex; align-items:baseline; flex-shrink:0; white-space:nowrap; }
+.logo-main { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; color:#fff; }
+.logo-sub { font-size:9px; letter-spacing:4px; text-transform:uppercase; color:var(--accent); font-weight:600; margin-left:4px; transition: color 0.4s; }
+.sync { font-size:10px; color:var(--muted); text-transform:uppercase; display:flex; gap:6px; align-items:center; letter-spacing:1px; flex-shrink:0; }
+.btn {
+    background: rgba(20,20,25,0.6);
+    backdrop-filter: blur(12px);
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 9px 16px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    outline: none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 20px rgba(0,0,0,0.3);
+    transition: all .25s ease;
+    flex-shrink:0;
+}
+.btn:hover { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.14); transform:translateY(-1px); }
+.btn-danger { color:#ef4444; border-color:rgba(239,68,68,0.2); }
+.btn.lang-active { background:rgba(34,211,238,0.15); color:var(--accent); border-color:var(--accent); }
+.main-body { display:flex; flex:1; overflow:hidden; }
+.sidebar { width:240px; background:rgba(10,10,12,0.4); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; }
+.sidebar-scroll { flex:1; overflow-y:auto; padding-top:10px; }
+.cat { font-size:10px; text-transform:uppercase; color:var(--muted); padding:16px 20px 8px; letter-spacing:1px; font-weight:600; }
+.menu-item { padding:10px 20px; color:var(--muted); font-size:13px; border-left:2px solid transparent; display:flex; align-items:center; gap:8px; cursor:pointer; transition:.2s; }
+.menu-item:hover { color:#fff; background:rgba(255,255,255,0.03); }
+.menu-item.active { color:#fff; background:rgba(255,255,255,0.06); border-left-color:var(--accent); font-weight:600; }
+.workspace { flex:1; padding:25px; overflow-y:auto; display:flex; justify-content:center; align-items:flex-start; position:relative; }
+.page-nav { position:absolute; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%; background:rgba(20,20,25,0.8); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:15; backdrop-filter:blur(10px); transition:.2s; }
+.page-nav:hover { background:rgba(255,255,255,0.1); border-color:var(--accent); color:var(--accent); }
+.page-nav.left { left:20px; }
+.page-nav.right { right:20px; }
+.page-nav.disabled { opacity:.2; pointer-events:none; }
+.sheet { width:100%; max-width:840px; background:var(--glass-sheet); backdrop-filter:blur(25px); border:1px solid var(--border); border-radius:16px; padding:35px 45px; display:flex; flex-direction:column; gap:12px; min-height:65vh; box-shadow:0 30px 60px rgba(0,0,0,0.6); margin-bottom:50px; }
+.sheet.is-cover { justify-content:flex-end; padding-bottom:80px; text-align:center; }
+.input-group { display:flex; flex-direction:column; gap:6px; flex:1; min-width:140px; }
+.input-group label { font-size:10px; text-transform:uppercase; color:var(--muted); font-weight:600; display:flex; justify-content:space-between; }
+.text-input { background:transparent; border:none; border-bottom:1px solid rgba(255,255,255,0.15); color:inherit; font-size:24px; font-weight:600; padding:6px 0; outline:none; width:100%; transition:.2s; }
+.text-input:focus { border-bottom-color:var(--accent); }
+.meta-input { background:rgba(0,0,0,0.3); border:1px solid var(--border); color:inherit; font-size:13px; padding:10px 12px; border-radius:8px; outline:none; width:100%; transition:.2s; }
+.meta-input:focus { border-color:var(--accent); }
+.meta-row { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; }
+.segment-group { display:flex; background:rgba(0,0,0,0.4); border-radius:10px; padding:4px; border:1px solid var(--border); }
+.segment-btn { flex:1; background:transparent; color:var(--muted); border:none; padding:7px; border-radius:8px; font-size:11px; cursor:pointer; display:flex; justify-content:center; align-items:center; transition:.2s; }
+.segment-btn:hover { background:rgba(255,255,255,0.05); color:#fff; }
+.segment-btn.active { background:rgba(255,255,255,0.1); color:#fff; font-weight:600; }
+textarea.main { width:100%; min-height:280px; background:transparent; border:none; color:inherit; font-size:16px; line-height:1.8; resize:vertical; outline:none; }
+input[type=range] { -webkit-appearance:none; width:100%; background:transparent; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; height:14px; width:14px; border-radius:50%; background:var(--accent); cursor:pointer; margin-top:-5px; }
+input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; cursor:pointer; background:rgba(255,255,255,0.15); border-radius:2px; }
+.btn-preview { position:fixed; bottom:30px; right:30px; background:rgba(20,20,25,0.8); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.08); color:var(--text); padding:14px 24px; border-radius:30px; font-size:14px; font-weight:500; cursor:pointer; z-index:30; display:flex; gap:10px; box-shadow:0 10px 30px rgba(0,0,0,0.5); transition:.2s; }
+.btn-preview:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-1px); }
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,0.92); backdrop-filter:blur(15px); display:none; justify-content:center; align-items:center; z-index:1000; padding:20px; }
+.overlay.active { display:flex; }
+.modal { background:#111114; border:1px solid var(--border); border-radius:16px; width:100%; max-width:600px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.8); }
+.modal-head { padding:18px 24px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); }
+.modal-body { padding:24px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:20px; }
+.preview-shell { display:flex; flex-direction:column; align-items:center; gap:16px; width:100%; height:100%; justify-content:center; }
+.preview-top { display:flex; gap:8px; background:rgba(20,20,25,0.8); border:1px solid rgba(255,255,255,0.08); padding:10px 14px; border-radius:40px; align-items:center; flex-wrap:wrap; backdrop-filter:blur(12px); }
+.preview-top .btn { border-radius:20px; background:transparent; border-color:transparent; box-shadow:none; padding:7px 14px; }
+.preview-top .btn.active { background:rgba(255,255,255,0.15); color:var(--accent); border-color:var(--accent); font-weight:600; }
+.btn-close-round { background:transparent; border:none; color:var(--muted); font-size:22px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:.2s; margin-left:6px; flex-shrink:0; padding:0; }
+.btn-close-round:hover { color:var(--accent); transform:scale(1.1); }
+.preview-screen { background:#faf8f5; border-radius:14px; overflow:auto; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.8); border:8px solid #222; transition:.3s ease; }
+.preview-screen.mobile { width:393px; height:852px; }
+.preview-screen.tablet { width:834px; height:1112px; }
+.preview-screen.large, .preview-screen.epub, .preview-screen.pdf { width:100%; height:calc(100vh - 140px); max-width:1200px; border-width:2px; border-radius:6px; }
+.prv-content { padding:40px; color:#111; font-size:16px; line-height:1.7; position:relative; min-height:100%; word-wrap:break-word; }
+.clearfix::after { content:""; clear:both; display:table; }
+.gen-wrap { position:relative; width:100%; }
+.gen-wrap .btn, .gen-wrap .meta-input { width:100%; justify-content:space-between; cursor:pointer; }
+.dropdown-menu { position:absolute; top:calc(100% + 8px); left:0; min-width:100%; background:rgba(18,18,22,0.98); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:8px; z-index:100; display:none; flex-direction:column; gap:4px; box-shadow:0 20px 40px rgba(0,0,0,0.6); max-height:320px; overflow-y:auto; }
+.dropdown-menu.right { left:auto; right:0; min-width:280px; }
+.dropdown-item { width:100%; justify-content:flex-start; background:transparent; border:none; padding:11px 14px; border-radius:8px; font-size:13px; color:var(--text); display:flex; gap:10px; cursor:pointer; align-items:center; text-align:left; transition:.2s; }
+.dropdown-item:hover { background:rgba(255,255,255,0.08); color:var(--accent); }
+.project-item { display:flex; justify-content:space-between; align-items:center; padding:14px; border:1px solid var(--border); border-radius:10px; background:rgba(255,255,255,0.02); transition:.2s; }
+.project-item.active { border-color:var(--accent); background:rgba(255,255,255,0.05); }
+.upload-box { margin-top:10px; border:1px dashed var(--border); padding:12px; border-radius:8px; text-align:center; cursor:pointer; font-size:12px; opacity:0.8; transition:.2s; background:rgba(0,0,0,0.2); }
+.upload-box:hover { opacity:1; border-color:var(--accent); color:var(--accent); background:rgba(255,255,255,0.05); }
+.saved-toast { position:fixed; bottom:40px; left:50%; transform:translateX(-50%) translateY(100px); background:rgba(20,20,25,0.95); border:1px solid var(--accent); color:#fff; padding:10px 24px; border-radius:30px; z-index:3000; opacity:0; transition:.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display:flex; gap:10px; align-items:center; font-weight:500; box-shadow:0 10px 30px rgba(0,0,0,0.5); }
+.saved-toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
 
-/* BD FIX FINAL */
-.bd-toolbar{background:rgba(18,18,22,0.98);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px}
-.bd-section-title{font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#fff;display:flex;align-items:center;gap:8px}
-.bd-section-title i{color:var(--accent)}
-.bd-templates{display:flex;gap:8px;overflow-x:auto;padding:8px 0}
-.template-thumb{width:68px;height:92px;background:#0e0e10;border:2px solid var(--border);border-radius:8px;cursor:pointer;position:relative;overflow:hidden;flex-shrink:0}
-.template-thumb.active{border-color:#ef4444;box-shadow:0 0 0 2px rgba(239,68,68,0.3)}
-.bd-canvas-wrap{width:100%;max-width:640px;aspect-ratio:1/1.414;background:#fff;border:5px solid #111;margin:0 auto;position:relative;overflow:hidden;border-radius:6px;box-shadow:0 20px 50px rgba(0,0,0,0.5)}
-.bd-bg-layer{position:absolute;inset:0;overflow:hidden;z-index:0;background:#fff}
-.bd-grid-container{position:absolute;inset:0;z-index:1;background:#111;padding:4px;box-sizing:border-box}
-.bd-panel{position:absolute;background:#fff;border:3px solid #111;overflow:hidden;cursor:grab;box-sizing:border-box;border-radius:2px}
-.bd-panel.selected{border-color:#ef4444;box-shadow:inset 0 0 0 2px #ef4444,0 0 0 2px rgba(239,68,68,0.4);z-index:3}
-.bd-panel img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transform-origin:center center;pointer-events:none}
-.bd-panel-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#777;background:#f5f5f0;font-size:10px;text-transform:uppercase;font-weight:700;text-align:center;padding:10px}
-.bd-bubble{position:absolute;min-width:60px;min-height:38px;background:#fff;border:3px solid #111;padding:10px 14px;font-weight:800;color:#111;cursor:move;user-select:none;z-index:10;max-width:90%;line-height:1.1;box-shadow:4px 4px 0 rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;text-align:center;overflow:visible;box-sizing:border-box}
-.bd-bubble.selected{outline:3px solid #ef4444;outline-offset:2px}
-.bubble-inner{width:100%;word-break:break-word;overflow-wrap:anywhere;white-space:pre-wrap;text-align:center;display:flex;align-items:center;justify-content:center;min-height:100%}
-.bubble-round{border-radius:50%;padding:22px 30px;min-width:90px;min-height:62px}
-.bubble-square{border-radius:8px;padding:12px 16px}
-.bubble-thought{border-radius:50%;border-style:dashed;border-width:3px;padding:20px 24px;background:#fff}
-.bubble-shout{border-radius:4px;background:#fff;font-family:'Bangers',cursive;transform:translate(-50%,-50%) rotate(-1deg);padding:14px 18px}
-.bubble-narrator{background:#fff8b5;border-radius:3px;font-style:italic;font-family:'Special Elite',cursive;padding:9px 13px;border-width:2.5px}
-.bubble-pow,.bubble-boom,.bubble-splash,.bubble-action{border:none;font-family:'Bangers',cursive;text-transform:uppercase;letter-spacing:1px;padding:30px 36px;min-width:100px;min-height:100px;filter:drop-shadow(2px 0 0 #111) drop-shadow(-2px 0 0 #111) drop-shadow(0 2px 0 #111) drop-shadow(0 -2px 0 #111) drop-shadow(4px 4px 0 rgba(0,0,0,0.25))}
-.bubble-pow{clip-path:polygon(50% 0%,63% 30%,100% 15%,72% 48%,88% 88%,50% 68%,12% 88%,28% 48%,0% 15%,38% 30%)}
-.bubble-boom{clip-path:polygon(50% 0%,61% 35%,100% 10%,75% 45%,100% 60%,70% 65%,85% 100%,50% 75%,15% 100%,30% 65%,0% 60%,25% 45%,0% 10%,39% 35%)}
-.bubble-splash{border-radius:40% 60% 50% / 60% 40% 60% 40%;border:3px solid #111;filter:drop-shadow(4px 4px 0 rgba(0,0,0,0.2))}
-.bubble-action{clip-path:polygon(5% 0%,95% 0%,100% 15%,92% 30%,100% 50%,90% 70%,100% 90%,75% 85%,50% 100%,25% 85%,0% 90%,10% 70%,0% 50%,8% 30%,0% 15%)}
-.bd-bubble-tail{position:absolute;width:18px;height:18px;background:inherit;border-right:3px solid #111;border-bottom:3px solid #111;z-index:-1}
-.bd-bubble-tail.left{left:20%;bottom:-11px;border-bottom-right-radius:12px;transform:rotate(15deg)}
-.bd-bubble-tail.center{left:50%;bottom:-8px;transform:translateX(-50%) rotate(45deg);width:14px;height:14px}
-.bd-bubble-tail.right{left:80%;bottom:-11px;border-bottom-right-radius:12px;transform:translateX(-100%) scaleX(-1) rotate(15deg)}
-.bubble-btn{flex:1;background:rgba(255,255,255,0.05);color:var(--text);border:1px solid var(--border);padding:10px;border-radius:8px;cursor:pointer;transition:.2s;font-size:12px;display:flex;align-items:center;justify-content:center;gap:6px}
-.bubble-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(255,255,255,0.08)}
-.action-word{padding:7px 14px;border-radius:24px;border:2px solid #111;font-family:'Bangers',cursive;font-size:15px;cursor:pointer;transition:.2s;box-shadow:3px 3px 0 #111;letter-spacing:0.5px}
-.action-word:hover{transform:translateY(-2px) scale(1.06);box-shadow:4px 4px 0 #111}
+/* ===== BD PRO STYLES ===== */
+.bd-toolbar { background:rgba(18,18,22,0.98); border:1px solid var(--border); border-radius:12px; padding:14px; display:flex; flex-direction:column; gap:12px; }
+.bd-section-title { font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#fff; display:flex; align-items:center; gap:8px; }
+.bd-section-title i { color:var(--accent); }
+.bd-templates { display:flex; gap:8px; overflow-x:auto; padding:8px 0; scrollbar-width: thin; }
+.template-thumb { width:60px; height:84px; background:#0e0e10; border:2px solid var(--border); border-radius:8px; cursor:pointer; position:relative; overflow:hidden; flex-shrink:0; transition:.2s; }
+.template-thumb:hover { border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }
+.template-thumb.active { border-color:#ef4444; box-shadow:0 0 0 2px rgba(239,68,68,0.3); }
+.bd-canvas-wrap { width:100%; max-width:620px; aspect-ratio:1/1.414; background:#fff; border:4px solid #111; margin:0 auto; position:relative; overflow:hidden; border-radius:4px; box-shadow:0 20px 50px rgba(0,0,0,0.5); }
+.bd-bg-layer { position:absolute; inset:0; overflow:hidden; z-index:0; background:#fff; }
+.bd-grid-container { position:absolute; inset:0; z-index:1; }
+.bd-panel { position:absolute; background:#fff; border:2.5px solid #111; overflow:hidden; cursor:grab; box-sizing:border-box; }
+.bd-panel.selected { border-color:#ef4444; box-shadow:inset 0 0 0 1px #ef4444, 0 0 0 2px rgba(239,68,68,0.4); z-index:3; }
+.bd-panel img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transform-origin:center center; pointer-events:none; will-change:transform; }
+.bd-panel-placeholder { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; color:#777; background:#f5f5f0; font-size:10px; text-transform:uppercase; font-weight:700; text-align:center; padding:10px; }
+
+/* Contention du texte et styles mis à jour */
+.bd-bubble { 
+    position:absolute; 
+    min-width:50px; 
+    min-height:30px; 
+    background:#fff; 
+    font-weight:700; 
+    color:#111; 
+    cursor:move; 
+    user-select:none; 
+    z-index:10; 
+    max-width:90%; 
+    line-height:1.15; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+    box-sizing: border-box; 
+    word-break: break-word;
+}
+.bd-bubble.selected { filter: drop-shadow(0 0 0 2px rgba(239,68,68,0.8)); z-index: 15; }
+
+/* Formes adaptées */
+.bubble-round { 
+    border-radius:50%; /* Vraie ellipse */
+    border:2.5px solid #111; 
+    padding: 1.2em 1.5em; 
+}
+.bubble-square { 
+    border-radius:4px; 
+    border:2.5px solid #111; 
+    padding: 0.8em 1em;
+}
+.bubble-thought { 
+    border-radius:30px; 
+    border:2.5px dashed #111; 
+    padding: 1.2em 1.5em;
+}
+.bubble-shout { 
+    border-radius:2px; 
+    border:2.5px solid #111; 
+    font-family:'Bangers', cursive; 
+    letter-spacing:0.5px; 
+    transform:translate(-50%,-50%) rotate(-2deg); 
+    padding: 0.8em 1.2em;
+}
+.bubble-narrator { 
+    border-radius:2px; 
+    border:2.5px solid #111; 
+    font-style:italic; 
+    padding: 0.8em;
+}
+.bubble-action {
+    clip-path: polygon(50% 0%, 61% 25%, 98% 25%, 68% 47%, 79% 91%, 50% 70%, 21% 91%, 32% 47%, 2% 25%, 39% 25%);
+    padding: 1.5em 2em;
+    font-family: 'Bangers', cursive;
+    letter-spacing: 1px;
+    transform:translate(-50%,-50%) rotate(5deg); 
+    filter: drop-shadow(2px 2px 0px #111) drop-shadow(-2px -2px 0px #111) drop-shadow(2px -2px 0px #111) drop-shadow(-2px 2px 0px #111);
+}
+
+.bd-bubble-tail { position:absolute; width:14px; height:14px; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; z-index:-1; }
+.bd-bubble-tail.left { left: 20%; transform: translateX(-50%) rotate(45deg); }
+.bd-bubble-tail.center { left: 50%; transform: translateX(-50%) rotate(45deg); }
+.bd-bubble-tail.right { left: 80%; transform: translateX(-50%) rotate(45deg); }
+
+.bubble-btn { flex:1; background:rgba(255,255,255,0.04); color:var(--text); border:1px solid var(--border); padding:8px; border-radius:8px; cursor:pointer; transition:.2s; font-size:11px; display:flex; align-items:center; justify-content:center; gap:4px; font-weight:600; white-space:nowrap; }
+.bubble-btn:hover, .bubble-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(255,255,255,0.06); }
+.module-tools { display:none; flex-direction:column; gap:16px; margin-top:20px; padding-top:20px; border-top:1px solid var(--border); }
 </style>
 </head>
 <body>
 <div class="ribbon glass">
-<div class="ribbon-group">
-<div class="logo-txt"><div class="logo-main">The Pages.</div><div class="logo-sub" id="appLogoSub">BD PRO FIX</div></div>
-<div class="sync" id="syncIndicator"><i class="fas fa-check-circle"></i> sync</div>
-<button class="btn" onclick="openProjects()"><i class="fas fa-folder"></i> Projets</button>
-<div class="gen-wrap" style="width:200px;"><button class="btn" onclick="toggleDropdown('pageDropdown')"><span id="pageSelectLabel">Page BD</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i></button><div id="pageDropdown" class="dropdown-menu"></div></div>
-<button class="btn" onclick="addPage()"><i class="fas fa-plus"></i></button>
-<button class="btn btn-danger" onclick="deletePage()"><i class="fas fa-trash"></i></button>
+    <div class="ribbon-group">
+        <div class="logo-txt"><div class="logo-main">The Pages.</div><div class="logo-sub" id="appLogoSub">sources</div></div>
+        <div class="sync" id="syncIndicator"><i class="fas fa-check-circle"></i> sync</div>
+        <button class="btn" id="btnProj" onclick="openProjects()"><i class="fas fa-folder"></i> <span id="lblProjBtn">Projets</span></button>
+        <div class="gen-wrap" style="width:200px;">
+            <button class="btn" onclick="toggleDropdown('pageDropdown')"><span id="pageSelectLabel">Book Cover</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i></button>
+            <div id="pageDropdown" class="dropdown-menu"></div>
+        </div>
+        <button class="btn" onclick="addPage()"><i class="fas fa-plus"></i></button>
+        <button class="btn btn-danger" onclick="deletePage()"><i class="fas fa-trash"></i></button>
+    </div>
+    <div class="ribbon-group">
+        <div class="gen-wrap" style="width:220px;">
+            <button class="btn" onclick="toggleDropdown('fontDropdown')"><span style="font-weight:900;font-family:'Times New Roman',serif;font-size:13px">Tt</span> <span id="fontSelectLabel">Playfair Display</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i></button>
+            <div id="fontDropdown" class="dropdown-menu right"></div>
+        </div>
+        <button class="btn" onclick="openSettings()"><i class="fas fa-cog"></i></button>
+        <div class="gen-wrap" style="width:auto;">
+            <button class="btn" onclick="toggleDropdown('generateDropdown')"><i class="fas fa-layer-group"></i> <span id="lblCreate">Create</span></button>
+            <div id="generateDropdown" class="dropdown-menu right">
+                <div id="genCurrentProjectName" style="font-weight:700;color:#fff;padding:6px 8px;font-size:14px;">-</div>
+                <div style="height:1px;background:var(--border);margin:8px 0"></div>
+                <button class="dropdown-item" onclick="openProjects();closeMenus()"><i class="fas fa-folder-open"></i> Choisir autre projet</button>
+                <button class="dropdown-item" onclick="exportPagesData();closeMenus()"><i class="fas fa-code"></i> Fichier pages.data</button>
+                <button class="dropdown-item" onclick="exportEPUB3();closeMenus()"><i class="fas fa-book-open"></i> Livre EPUB3</button>
+                <button class="dropdown-item" onclick="exportPDFBook();closeMenus()"><i class="fas fa-file-pdf"></i> Document PDF</button>
+            </div>
+        </div>
+        <button class="btn" onclick="manualSave()"><i class="fas fa-save"></i> <span id="lblSave">Save</span></button>
+    </div>
 </div>
-<div class="ribbon-group">
-<div class="gen-wrap" style="width:220px;"><button class="btn" onclick="toggleDropdown('fontDropdown')"><span style="font-weight:900;font-family:'Times New Roman',serif;font-size:13px">Tt</span> <span id="fontSelectLabel">Playfair Display</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i></button><div id="fontDropdown" class="dropdown-menu right"></div></div>
-<button class="btn" onclick="openSettings()"><i class="fas fa-cog"></i></button>
-<div class="gen-wrap" style="width:auto;"><button class="btn" onclick="toggleDropdown('generateDropdown')"><i class="fas fa-layer-group"></i> Create</button><div id="generateDropdown" class="dropdown-menu right"><div id="genCurrentProjectName" style="font-weight:700;color:#fff;padding:6px 8px">-</div><div style="height:1px;background:var(--border);margin:8px 0"></div><button class="dropdown-item" onclick="openProjects();closeMenus()"><i class="fas fa-folder-open"></i> Choisir projet</button><button class="dropdown-item" onclick="exportPagesData();closeMenus()"><i class="fas fa-code"></i> pages.data</button><button class="dropdown-item" onclick="exportEPUB3();closeMenus()"><i class="fas fa-book-open"></i> EPUB3</button><button class="dropdown-item" onclick="exportPDFBook();closeMenus()"><i class="fas fa-file-pdf"></i> PDF</button></div></div>
-<button class="btn" onclick="manualSave()"><i class="fas fa-save"></i> Save</button>
-</div>
-</div>
+
 <div class="main-body">
-<div class="sidebar"><div class="sidebar-scroll"><div class="cat">Modules</div><div class="menu-item" id="tab-book" onclick="activateModule('book')"><i class="fas fa-book"></i> Livre</div><div class="menu-item active" id="tab-comic" onclick="activateModule('comic')"><i class="fas fa-layer-group"></i> BD Fix</div><div class="menu-item" id="tab-magazine" onclick="activateModule('magazine')"><i class="fas fa-newspaper"></i> Magazine</div><div class="cat" style="margin-top:20px;">Projet Actuel</div><div style="padding:0 20px 10px;font-size:12px;color:var(--accent);font-weight:600;" id="currentProjectName">-</div></div></div>
-<div class="workspace" id="workspace">
-<div class="page-nav left" id="navLeft" onclick="prevPage()"><i class="fas fa-chevron-left"></i></div><div class="page-nav right" id="navRight" onclick="nextPage()"><i class="fas fa-chevron-right"></i></div>
-<div class="sheet" id="sheet">
-<div class="input-group" id="globalTitleGroup"><label>Titre projet</label><input id="globalTitle" class="text-input" placeholder="Titre..." oninput="autoSave()"><div id="coverOptions" style="display:none;flex-direction:column;gap:6px;margin-top:5px"><label style="font-size:12px;display:flex;gap:8px;align-items:center;text-transform:none;opacity:.8"><input type="checkbox" id="showTitleOnCover" checked onchange="autoSave()"> Afficher titre couverture</label></div></div>
-<div id="authorMetaSection" style="display:none;flex-direction:column;gap:12px"><div class="meta-row"><div class="input-group"><label>Auteur</label><input id="globalAuthor" class="meta-input" oninput="autoSave()"></div><div class="input-group"><label>Date</label><input id="globalDate" type="date" class="meta-input" oninput="autoSave()"></div></div></div>
-<div class="input-group" id="itemTitleGroup"><label>Nom page</label><input id="itemTitle" class="meta-input" style="font-weight:700" placeholder="Page BD 1" oninput="autoSave()"></div>
-<div id="referenceConfigBlock" style="display:none;flex-direction:column;gap:12px;background:rgba(18,18,22,0.98);border:1px solid var(--border);border-radius:12px;padding:14px"><div style="font-weight:600;font-size:13px;color:#fff"><i class="fas fa-link"></i> Summary Config</div><div style="display:flex;gap:16px"><label style="font-size:12px;display:flex;gap:6px;align-items:center"><input type="radio" name="refModePage" value="all" checked onchange="updateRefConfigPage()"> All</label><label style="font-size:12px;display:flex;gap:6px;align-items:center"><input type="radio" name="refModePage" value="select" onchange="updateRefConfigPage()"> Select</label></div><div id="refPageListInPage" style="display:none;flex-direction:column;gap:8px;max-height:120px;overflow-y:auto;background:rgba(255,255,255,0.04);padding:10px;border-radius:8px;border:1px solid var(--border)"></div></div>
-<div class="meta-row" id="mediaUrlGroup"><div class="input-group" style="flex:2"><label>Illustration URL ou Local</label><div style="display:flex;gap:8px"><input id="itemImage" class="meta-input" style="flex:1" placeholder="https://..." oninput="autoSave()"><button class="btn" onclick="document.getElementById('localImgUpload').click()"><i class="fas fa-upload"></i> Local</button><input type="file" id="localImgUpload" accept="image/*" style="display:none" onchange="uploadLocalImage(event)"></div></div></div>
-<div id="bdFullEditor" style="display:flex;flex-direction:column;gap:18px;width:100%">
-<div class="bd-toolbar"><div class="bd-section-title"><i class="fas fa-layer-group"></i> Grilles & Cases BD - comme photos</div><div class="meta-row"><div class="input-group" style="flex:2"><label>Fond derrière grille - optionnel</label><div style="display:flex;gap:8px"><input id="bdBgImageInput" class="meta-input" placeholder="URL..." oninput="onBDBgUrlChange(this.value)"><button class="btn" onclick="document.getElementById('bdBgUpload').click()"><i class="fas fa-upload"></i></button><input type="file" id="bdBgUpload" accept="image/*" style="display:none" onchange="onBDBgFile(event)"><button class="btn btn-danger" onclick="clearBGBg()"><i class="fas fa-times"></i></button></div></div><div class="input-group" style="width:150px"><label>Zoom fond <span id="bdBgScaleVal">100%</span></label><input type="range" id="bdBgScale" min="0.2" max="15" step="0.05" value="1" oninput="onBDBgScale(this.value)"></div></div><div class="input-group"><label>Modèles grilles BD</label><div id="bdTemplatesList" class="bd-templates"></div></div><div class="meta-row"><div class="input-group" style="width:160px"><label>Cases 1-12</label><div style="display:flex;gap:8px"><input type="number" id="bdCustomCount" class="meta-input" min="1" max="12" value="4" style="width:70px"><button class="btn" onclick="applyCustomGrid()"><i class="fas fa-th"></i> Générer</button><button class="btn" onclick="setBDTemplate('full')"><i class="fas fa-expand"></i> Plein</button></div></div></div></div>
-<div id="bdCanvasEnhancedWrap" class="bd-canvas-wrap"><div id="bdBgLayer" class="bd-bg-layer"></div><div id="bdGridContainer" class="bd-grid-container"></div><div id="bdBubblesPageLayer" style="position:absolute;inset:0;z-index:5;pointer-events:none"></div></div>
-<div id="bdPanelTools" class="bd-toolbar" style="display:none"><div class="bd-section-title"><i class="fas fa-crop"></i> Case - Drag image | Molette zoom | Shift+Molette rotation <span id="bdSelectedPanelLabel" style="margin-left:8px;color:var(--accent)">-</span></div><div class="meta-row"><div class="input-group" style="flex:2"><label>Image case</label><div style="display:flex;gap:8px"><input id="bdPanelImageUrl" class="meta-input" placeholder="https://..." oninput="onPanelUrlChange(this.value)"><button class="btn" onclick="document.getElementById('bdPanelUpload').click()"><i class="fas fa-upload"></i> Local</button><input type="file" id="bdPanelUpload" accept="image/*" style="display:none" onchange="onPanelFile(event)"><button class="btn btn-danger" onclick="clearPanelImage()"><i class="fas fa-trash"></i></button></div></div><div class="input-group" style="flex:1"><label>Zoom <span id="bdPanelScaleVal">100%</span></label><input type="range" id="bdPanelScale" min="0.1" max="15" step="0.05" value="1" oninput="onPanelScale(this.value)"></div><div class="input-group" style="flex:1"><label>Rotation <span id="bdPanelRotVal">0°</span></label><input type="range" id="bdPanelRot" min="-180" max="180" step="1" value="0" oninput="onPanelRot(this.value)"></div></div></div>
-<div class="bd-toolbar"><div class="bd-section-title"><i class="fas fa-comment-dots"></i> Bulles dialogue - texte reste dedans, vraiment rondes</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="bubble-btn" onclick="addBDBubble('round')"><i class="fas fa-comment"></i> Ronde vraie</button><button class="bubble-btn" onclick="addBDBubble('square')"><i class="fas fa-comment-alt"></i> Carrée</button><button class="bubble-btn" onclick="addBDBubble('thought')"><i class="fas fa-cloud"></i> Pensée</button><button class="bubble-btn" onclick="addBDBubble('shout')"><i class="fas fa-bolt"></i> Cri</button><button class="bubble-btn" onclick="addBDBubble('narrator')"><i class="fas fa-book-open"></i> Narrateur</button></div>
-<div id="bdBubbleEdit" style="display:none;flex-direction:column;gap:12px;margin-top:12px;background:rgba(0,0,0,0.45);padding:14px;border-radius:10px;border:1px solid var(--border)">
-<div class="meta-row" style="align-items:flex-start"><div class="input-group" style="flex:2"><label>Texte bulle - reste dedans ✅</label><textarea id="bdBubbleText" class="meta-input" style="height:52px" oninput="onBubbleTextChange(this.value)"></textarea></div><div class="input-group" style="flex:1;min-width:140px"><label>Font BD</label><select id="bdBubbleFont" class="meta-input" style="height:52px" onchange="onBubbleFontChange(this.value)"><option value="'Bangers', cursive">BANGERS Impact</option><option value="'Comic Neue', cursive">Comic Neue Classique</option><option value="'Patrick Hand', cursive">Patrick Hand</option><option value="'Caveat Brush', cursive">Caveat Brush</option><option value="'Special Elite', cursive">Special Elite</option><option value="'Permanent Marker', cursive">Permanent Marker</option><option value="'Inter', sans-serif">Inter Neutre</option></select></div></div>
-<div class="meta-row"><div class="input-group"><label>Largeur bulle - agrandit vraiment <span id="bdBubbleWidthVal" style="color:var(--accent)">34%</span></label><input type="range" id="bdBubbleWidth" min="12" max="90" value="34" oninput="onBubbleWidth(this.value)"></div><div class="input-group"><label>Taille texte <span id="bdBubbleFontSizeVal" style="color:var(--accent)">16px</span></label><input type="range" id="bdBubbleFontSize" min="8" max="56" value="16" oninput="onBubbleFontSize(this.value)"></div><div class="input-group" style="width:120px;flex:none"><label>Queue</label><select id="bdBubbleTail" class="meta-input" onchange="onBubbleTailChange(this.value)"><option value="left">Gauche</option><option value="center">Milieu</option><option value="right">Droite</option></select></div></div>
-<div class="meta-row"><div class="input-group"><label>Couleur bulle</label><input type="color" id="bdBubbleBg" class="meta-input" style="height:40px;padding:4px" value="#ffffff" oninput="onBubbleBgChange(this.value)"></div><div class="input-group"><label>Couleur texte</label><input type="color" id="bdBubbleTextColor" class="meta-input" style="height:40px;padding:4px" value="#111111" oninput="onBubbleTextColorChange(this.value)"></div><div class="input-group"><label>Bordure</label><input type="color" id="bdBubbleBorder" class="meta-input" style="height:40px;padding:4px" value="#111111" oninput="onBubbleBorderChange(this.value)"></div></div>
-<div style="display:flex;gap:8px;margin-top:4px"><button class="btn btn-danger" onclick="deleteSelectedBubble()"><i class="fas fa-trash"></i> Supprimer</button><button class="btn" onclick="duplicateBubble()"><i class="fas fa-copy"></i> Dupliquer</button><button class="btn" onclick="selectedBubbleId=null;document.getElementById('bdBubbleEdit').style.display='none';renderBDCanvas()"><i class="fas fa-times"></i> Fermer</button></div></div>
-<div id="bdBubblesList" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div></div>
-<div class="bd-toolbar"><div class="bd-section-title"><i class="fas fa-bomb"></i> Splash Couleur - POW! BOOM! FR/EN comme photos</div><div style="display:flex;gap:8px;flex-wrap:wrap">
-<button class="action-word" style="background:#FFEB3B" onclick="addActionBubble('POW!')">POW!</button>
-<button class="action-word" style="background:#FF5722;color:#fff" onclick="addActionBubble('BANG!!!')">BANG!!!</button>
-<button class="action-word" style="background:#4FC3F7" onclick="addActionBubble('BOOM!')">BOOM!</button>
-<button class="action-word" style="background:#8BC34A" onclick="addActionBubble('SMASH!')">SMASH!</button>
-<button class="action-word" style="background:#E91E63;color:#fff" onclick="addActionBubble('SPLASH!')">SPLASH!</button>
-<button class="action-word" style="background:#FF9800" onclick="addActionBubble('CRASH!')">CRASH!</button>
-<button class="action-word" style="background:#00E5FF" onclick="addActionBubble('WOW!')">WOW!</button>
-<button class="action-word" style="background:#FFEB3B" onclick="addActionBubble('YEAH!')">YEAH!</button>
-<button class="action-word" style="background:#fff" onclick="addActionBubble('YES!')">YES!</button>
-<button class="action-word" style="background:#FF4081;color:#fff" onclick="addActionBubble('OUI!')">OUI!</button>
-<button class="action-word" style="background:#FFEB3B" onclick="addActionBubble('BOUM!')">BOUM!</button>
-<button class="action-word" style="background:#B39DDB" onclick="addActionBubble('PAF!')">PAF!</button>
-<button class="action-word" style="background:#FF6E40;color:#fff" onclick="addActionBubble('BAM!')">BAM!</button>
-<button class="action-word" style="background:#69F0AE" onclick="addActionBubble('ZOOM!')">ZOOM!</button>
-<button class="action-word" style="background:#fff" onclick="addActionBubble('OMG!')">OMG!</button>
-<button class="action-word" style="background:#FFEB3B" onclick="addActionBubble('ARGH!')">ARGH!</button>
-<button class="action-word" style="background:#18FFFF" onclick="addActionBubble('GASP!')">GASP!</button>
-<button class="action-word" style="background:#FF5252;color:#fff" onclick="addActionBubble('VROOOOM!')">VROOOOM!</button>
-<button class="action-word" style="background:#FFEB3B" onclick="addActionBubble('BRRR!')">BRRR!</button>
-<button class="action-word" style="background:#fff;color:#111" onclick="addActionBubble('SHHH!')">SHHH!</button>
-</div><p style="font-size:11px;opacity:.6;margin-top:8px">Chaque clic = bulle explosion couleur recolorable. Tu peux changer couleur fond/texte même pour narrateur.</p></div>
+    <div class="sidebar">
+        <div class="sidebar-scroll">
+            <div class="cat" id="lblModulesCat">Modules (Licences)</div>
+            <div class="menu-item active" id="tab-book" onclick="activateModule('book')">
+                <i class="fas fa-book"></i> <span id="lblBookTab">Livre de poche</span>
+            </div>
+            <div class="menu-item" id="tab-comic" onclick="activateModule('comic')">
+                <i class="fas fa-layer-group"></i> <span id="lblComicTab">Bande Dessinée (BD)</span>
+            </div>
+            <div class="menu-item" id="tab-magazine" onclick="activateModule('magazine')">
+                <i class="fas fa-newspaper"></i> <span id="lblMagTab">Magazine</span>
+            </div>
+            <div class="cat" id="lblCurProj" style="margin-top:20px;">Projet Actuel</div>
+            <div style="padding:0 20px 10px;font-size:12px;color:var(--accent);font-weight:500;" id="currentProjectName">-</div>
+        </div>
+    </div>
+    
+    <div class="workspace" id="workspace">
+        <div class="page-nav left" id="navLeft" onclick="prevPage()"><i class="fas fa-chevron-left"></i></div>
+        <div class="page-nav right" id="navRight" onclick="nextPage()"><i class="fas fa-chevron-right"></i></div>
+        
+        <div class="sheet" id="sheet">
+            <div class="input-group" id="globalTitleGroup">
+                <label id="lblTitleProj">Titre du projet - editable uniquement dans la couverture</label>
+                <input id="globalTitle" class="text-input" placeholder="Titre..." oninput="autoSave()">
+                <div id="coverOptions" style="display:none;flex-direction:column;gap:6px;margin-top:5px">
+                    <label style="font-size:12px;display:flex;gap:8px;align-items:center;text-transform:none;opacity:.8"><input type="checkbox" id="showTitleOnCover" checked onchange="autoSave()"> <span id="lblTitleOnCover">Afficher le titre sur la couverture - ON/OFF</span></label>
+                </div>
+            </div>
+            
+            <div id="authorMetaSection" style="display:none;flex-direction:column;gap:12px">
+                <div class="meta-row">
+                    <div class="input-group"><label id="lblAuthor">Auteur</label><input id="globalAuthor" class="meta-input" oninput="autoSave()"></div>
+                    <div class="input-group"><label id="lblDate">Date</label><input id="globalDate" type="date" class="meta-input" oninput="autoSave()"></div>
+                </div>
+                <div class="meta-row">
+                    <div class="input-group"><label id="lblPublisher">Éditeur</label><input id="globalPublisher" class="meta-input" oninput="autoSave()"></div>
+                    <div class="input-group"><label id="lblGenre">Genre</label><input id="globalGenre" class="meta-input" oninput="autoSave()"></div>
+                </div>
+            </div>
+            
+            <div class="input-group" id="itemTitleGroup" style="display:none;">
+                <label id="lblPageName">Nom de la page / section</label>
+                <input id="itemTitle" class="meta-input" style="font-weight:700" placeholder="Ex: Chapitre 1" oninput="autoSave()">
+            </div>
+
+            <div id="referenceConfigBlock" style="display:none;flex-direction:column;gap:12px;background:rgba(18,18,22,0.98);border:1px solid var(--border);border-radius:12px;padding:14px">
+                <div style="font-weight:600;font-size:13px;color:#fff"><i class="fas fa-link"></i> <span id="lblLinkConfig">Référence / Summary - Config liens</span></div>
+                <div style="display:flex;gap:16px">
+                    <label style="font-size:12px;display:flex;gap:6px;align-items:center;text-transform:none;opacity:.8"><input type="radio" name="refModePage" value="all" checked onchange="updateRefConfigPage()"> <span id="lblLinkAll">Link all pages</span></label>
+                    <label style="font-size:12px;display:flex;gap:6px;align-items:center;text-transform:none;opacity:.8"><input type="radio" name="refModePage" value="select" onchange="updateRefConfigPage()"> <span id="lblLinkSel">Select pages</span></label>
+                </div>
+                <div id="refPageListInPage" style="display:none;flex-direction:column;gap:8px;max-height:120px;overflow-y:auto;background:rgba(255,255,255,0.04);padding:10px;border-radius:8px;border:1px solid var(--border)"></div>
+            </div>
+            
+            <div class="meta-row" id="mediaUrlGroup">
+                <div class="input-group" style="flex:2">
+                    <label id="lblIllu">Illustration (URL ou Fichier Local)</label>
+                    <div style="display:flex;gap:8px">
+                        <input id="itemImage" class="meta-input" style="flex:1" placeholder="https://..." oninput="autoSave()">
+                        <button class="btn" onclick="document.getElementById('localImgUpload').click()"><i class="fas fa-upload"></i> <span id="lblLocal">Local</span></button>
+                        <input type="file" id="localImgUpload" accept="image/*" style="display:none" onchange="uploadLocalImage(event)">
+                    </div>
+                </div>
+                <div class="input-group" style="flex:1" id="layoutGroup">
+                    <label id="lblLayout">Disposition</label>
+                    <div class="segment-group">
+                        <button class="segment-btn active" id="lay-top" onclick="setLayout('top')">Haut</button>
+                        <button class="segment-btn" id="lay-center" onclick="setLayout('center')">Centre</button>
+                        <button class="segment-btn" id="lay-bottom" onclick="setLayout('bottom')">Bas</button>
+                        <button class="segment-btn" id="lay-bg" onclick="setLayout('bg')">Fond</button>
+                    </div>
+                </div>
+                <div class="input-group" id="alignContainer" style="flex:1">
+                    <label id="lblAlign">Alignement</label>
+                    <div class="segment-group">
+                        <button class="segment-btn" id="align-left" onclick="setImageAlign('left')">Gauche</button>
+                        <button class="segment-btn active" id="align-center" onclick="setImageAlign('center')">Centre</button>
+                        <button class="segment-btn" id="align-right" onclick="setImageAlign('right')">Droite</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="meta-row" id="mediaSlidersGroup">
+                <div class="input-group">
+                    <label><span id="lblImgSize">Taille image</span> <span id="imageSizeVal">70%</span></label>
+                    <input type="range" id="imageSize" min="20" max="300" value="70" oninput="updateImageSize(this.value)">
+                </div>
+                <div class="input-group" id="bgOpacityGroup" style="display:none">
+                    <label><span id="lblBgTransp">Transparence</span> <span id="bgOpacityVal">15%</span></label>
+                    <input type="range" id="bgOpacity" min="5" max="100" value="15" oninput="updateBgOpacity(this.value)">
+                </div>
+            </div>
+            
+            <div class="meta-row" id="fontOptionsGroup">
+                <div class="input-group">
+                    <label id="lblTitleSize">Taille Titre</label>
+                    <div class="gen-wrap">
+                        <button class="meta-input" onclick="toggleDropdown('titleSizeDropdown')">
+                            <span id="titleSizeLabel" data-value="32">32px</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i>
+                        </button>
+                        <div id="titleSizeDropdown" class="dropdown-menu"></div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label id="lblBodySize">Taille Corps</label>
+                    <div class="gen-wrap">
+                        <button class="meta-input" onclick="toggleDropdown('bodySizeDropdown')">
+                            <span id="bodySizeLabel" data-value="17">17px</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i>
+                        </button>
+                        <div id="bodySizeDropdown" class="dropdown-menu"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-group" style="flex:1" id="textEditorGroup">
+                <label id="lblBodyText">Corps du texte</label>
+                <textarea id="itemText" class="main" placeholder="Commencez à écrire..." oninput="autoSave()"></textarea>
+            </div>
+
+            <!-- ===== BD FULL EDITOR PRO ===== -->
+            <div id="bdFullEditor" style="display:none;flex-direction:column;gap:18px;width:100%">
+                <div class="bd-toolbar">
+                    <div class="bd-section-title"><i class="fas fa-layer-group"></i> <span id="lblBdGridBg">Grilles & Fond de page BD</span></div>
+                    <div class="meta-row">
+                        <div class="input-group" style="flex:2">
+                            <label id="lblBgOpt">Image de fond (derrière la grille) - optionnel</label>
+                            <div style="display:flex;gap:8px">
+                                <input id="bdBgImageInput" class="meta-input" placeholder="URL..." oninput="onBDBgUrlChange(this.value)">
+                                <button class="btn" onclick="document.getElementById('bdBgUpload').click()"><i class="fas fa-upload"></i></button>
+                                <input type="file" id="bdBgUpload" accept="image/*" style="display:none" onchange="onBDBgFile(event)">
+                                <button class="btn btn-danger" onclick="clearBGBg()"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="input-group" style="width:150px">
+                            <label><span id="lblBgZoom">Zoom fond</span> <span id="bdBgScaleVal">100%</span></label>
+                            <input type="range" id="bdBgScale" min="0.2" max="15" step="0.05" value="1" oninput="onBDBgScale(this.value)">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label id="lblGridTmpl">Modèles de grilles</label>
+                        <div id="bdTemplatesList" class="bd-templates"></div>
+                    </div>
+                    <div class="meta-row">
+                        <div class="input-group" style="width:160px">
+                            <label id="lblCustomCases">Cases perso 1-12</label>
+                            <div style="display:flex;gap:8px">
+                                <input type="number" id="bdCustomCount" class="meta-input" min="1" max="12" value="4" style="width:70px">
+                                <button class="btn" onclick="applyCustomGrid()"><i class="fas fa-th"></i> <span id="lblGen">Générer</span></button>
+                                <button class="btn" onclick="setBDTemplate('full')"><i class="fas fa-expand"></i> <span id="lblFull">Plein</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="bdCanvasEnhancedWrap" class="bd-canvas-wrap">
+                    <div id="bdBgLayer" class="bd-bg-layer"></div>
+                    <div id="bdGridContainer" class="bd-grid-container"></div>
+                    <div id="bdBubblesPageLayer" style="position:absolute;inset:0;z-index:5;pointer-events:none"></div>
+                </div>
+
+                <div id="bdPanelTools" class="bd-toolbar" style="display:none">
+                    <div class="bd-section-title"><i class="fas fa-crop"></i> <span id="lblPanelSel">Case sélectionnée - Drag image | Molette zoom | Shift+Molette rotation</span> <span id="bdSelectedPanelLabel" style="margin-left:8px;color:var(--accent)">-</span></div>
+                    <div class="meta-row">
+                        <div class="input-group" style="flex:2">
+                            <label id="lblPanelImg">Image de la case</label>
+                            <div style="display:flex;gap:8px">
+                                <input id="bdPanelImageUrl" class="meta-input" placeholder="https://..." oninput="onPanelUrlChange(this.value)">
+                                <button class="btn" onclick="document.getElementById('bdPanelUpload').click()"><i class="fas fa-upload"></i> <span id="lblPLocal">Local</span></button>
+                                <input type="file" id="bdPanelUpload" accept="image/*" style="display:none" onchange="onPanelFile(event)">
+                                <button class="btn btn-danger" onclick="clearPanelImage()"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="input-group" style="flex:1">
+                            <label><span id="lblPanelZoom">Zoom</span> <span id="bdPanelScaleVal">100%</span></label>
+                            <input type="range" id="bdPanelScale" min="0.1" max="15" step="0.05" value="1" oninput="onPanelScale(this.value)">
+                        </div>
+                        <div class="input-group" style="flex:1">
+                            <label><span id="lblPanelRot">Rotation</span> <span id="bdPanelRotVal">0°</span></label>
+                            <input type="range" id="bdPanelRot" min="-180" max="180" step="1" value="0" oninput="onPanelRot(this.value)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bd-toolbar">
+                    <div class="bd-section-title"><i class="fas fa-comment-dots"></i> <span id="lblBubbles">Bulles de dialogue</span></div>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap">
+                        <button class="bubble-btn" onclick="addBDBubble('round')"><i class="fas fa-comment"></i> <span class="lblBRound">Ronde</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('square')"><i class="fas fa-comment-alt"></i> <span class="lblBSquare">Carrée</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('thought')"><i class="fas fa-cloud"></i> <span class="lblBThought">Pensée</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('shout')"><i class="fas fa-bolt"></i> <span class="lblBShout">Cri</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('narrator')"><i class="fas fa-book-open"></i> <span class="lblBNarrator">Narrateur</span></button>
+                        
+                        <div style="width:1px;background:rgba(255,255,255,0.1);margin:0 4px"></div>
+                        
+                        <!-- Raccourcis Onomatopées -->
+                        <button class="bubble-btn" style="color:#ffeb3b;border-color:rgba(255,235,59,0.3)" onclick="addBDActionBubble('POW!', '#e91e63')">POW!</button>
+                        <button class="bubble-btn" style="color:#ffeb3b;border-color:rgba(255,235,59,0.3)" onclick="addBDActionBubble('BAM!', '#ff9800')">BAM!</button>
+                        <button class="bubble-btn" style="color:#ffeb3b;border-color:rgba(255,235,59,0.3)" onclick="addBDActionBubble('SMASH!', '#4caf50')">SMASH!</button>
+                        <button class="bubble-btn" style="color:#ffeb3b;border-color:rgba(255,235,59,0.3)" onclick="addBDActionBubble('SPLASH!', '#00bcd4')">SPLASH</button>
+                        <button class="bubble-btn" style="color:#ffeb3b;border-color:rgba(255,235,59,0.3)" onclick="addBDActionBubble('YES!', '#f44336')">YES!</button>
+                        <button class="bubble-btn" style="color:#ffeb3b;border-color:rgba(255,235,59,0.3)" onclick="addBDActionBubble('OUI!', '#2196f3')">OUI!</button>
+                    </div>
+                    
+                    <div id="bdBubbleEdit" style="display:none;flex-direction:column;gap:12px;margin-top:12px;background:rgba(0,0,0,0.4);padding:14px;border-radius:8px;border:1px solid var(--border)">
+                        <div class="meta-row" style="align-items:flex-start">
+                            <div class="input-group" style="flex:2">
+                                <label id="lblBubText">Texte de la bulle</label>
+                                <textarea id="bdBubbleText" class="meta-input" style="height:42px" oninput="onBubbleTextChange(this.value)"></textarea>
+                            </div>
+                            <div class="input-group" style="flex:1; min-width:140px">
+                                <label id="lblBubFont">Font BD</label>
+                                <select id="bdBubbleFont" class="meta-input" style="height:42px" onchange="onBubbleFontChange(this.value)">
+                                    <option value="'Bangers', cursive">BANGERS - Impact BD</option>
+                                    <option value="'Comic Neue', cursive">Comic Neue - Classique</option>
+                                    <option value="'Patrick Hand', cursive">Patrick Hand - Manuscrit</option>
+                                    <option value="'Caveat Brush', cursive">Caveat Brush - Pinceau</option>
+                                    <option value="'Special Elite', cursive">Special Elite - Machine à écrire</option>
+                                    <option value="'Permanent Marker', cursive">Permanent Marker - Feutre</option>
+                                    <option value="'Inter', sans-serif">Inter - Neutre</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="meta-row">
+                            <div class="input-group" style="width:100px">
+                                <label><span id="lblBubWidth">Largeur bulle</span> <span id="bdBubbleWidthVal" style="color:var(--accent)">30%</span></label>
+                                <input type="range" id="bdBubbleWidth" min="10" max="100" value="30" oninput="onBubbleWidth(this.value)">
+                            </div>
+                            <div class="input-group" style="width:100px">
+                                <label><span id="lblBubSize">Taille texte</span> <span id="bdBubbleSizeVal" style="color:var(--accent)">14px</span></label>
+                                <input type="range" id="bdBubbleSize" min="8" max="48" value="14" oninput="onBubbleSize(this.value)">
+                            </div>
+                            <div class="input-group" style="width:70px">
+                                <label id="lblBubBgColor">Couleur</label>
+                                <input type="color" id="bdBubbleBg" class="meta-input" style="padding:0;height:38px" onchange="onBubbleBg(this.value)">
+                            </div>
+                            <div class="input-group" style="width:100px; flex:none">
+                                <label id="lblBubTail">Flèche</label>
+                                <select id="bdBubbleTail" class="meta-input" style="padding:6px 10px" onchange="onBubbleTailChange(this.value)">
+                                    <option value="left">Gauche</option>
+                                    <option value="center">Milieu</option>
+                                    <option value="right">Droite</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:8px;margin-top:4px">
+                            <button class="btn btn-danger" onclick="deleteSelectedBubble()"><i class="fas fa-trash"></i> <span id="lblBubDel">Supprimer</span></button>
+                            <button class="btn" onclick="duplicateBubble()"><i class="fas fa-copy"></i> <span id="lblBubDup">Dupliquer</span></button>
+                            <button class="btn" onclick="selectedBubbleId=null;document.getElementById('bdBubbleEdit').style.display='none';renderBDCanvas()"><i class="fas fa-times"></i> <span id="lblBubClose">Fermer</span></button>
+                        </div>
+                    </div>
+                    <div id="bdBubblesList" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
+                </div>
+            </div>
+
+            <div id="magToolsGroup" class="module-tools">
+                <div class="input-group">
+                    <label><i class="fas fa-newspaper"></i> Magazine Layout</label>
+                    <p style="font-size:11px;opacity:0.7;margin-bottom:8px">Mode image + Texte en dessous activé automatiquement.</p>
+                </div>
+            </div>
+        </div>
+        
+        <button class="btn-preview" onclick="openPreview()"><i class="fas fa-book-reader"></i> <span id="lblPreviewBtn">Preview</span></button>
+    </div>
 </div>
+
+<div class="overlay" id="previewModal" onclick="if(event.target===this)closePreview()">
+    <div class="preview-shell" onclick="event.stopPropagation()">
+        <div class="preview-top">
+            <button class="btn" id="btnLarge" onclick="setPreviewDevice('large')"><i class="fas fa-desktop"></i> Plein écran</button>
+            <button class="btn" id="btnMobile" onclick="setPreviewDevice('mobile')"><i class="fas fa-mobile-alt"></i> Mobile</button>
+            <button class="btn" id="btnTablet" onclick="setPreviewDevice('tablet')"><i class="fas fa-tablet-alt"></i> Tablette</button>
+            <button class="btn" id="btnEpub" onclick="setPreviewDevice('epub')"><i class="fas fa-book"></i> EPUB</button>
+            <button class="btn" id="btnPdf" onclick="setPreviewDevice('pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button class="btn-close-round" onclick="closePreview()"><i class="fas fa-times-circle"></i></button>
+        </div>
+        <div class="preview-screen large" id="previewScreen">
+            <div class="prv-content" id="prvContent"></div>
+        </div>
+    </div>
 </div>
-<button class="btn-preview" onclick="openPreview()"><i class="fas fa-book-reader"></i> Preview</button>
+
+<div class="overlay" id="projectsModal">
+    <div class="modal">
+        <div class="modal-head">
+            <h3><i class="fas fa-folder-open"></i> <span id="lblProjTitle">Projects</span></h3>
+            <button class="btn-close-round" onclick="closeProjects()"><i class="fas fa-times-circle"></i></button>
+        </div>
+        <div class="modal-body">
+            <div style="display:flex;gap:10px">
+                <input id="newProjectTitle" class="meta-input" placeholder="Titre..." style="flex:1">
+                <button class="btn btn-primary" onclick="createNewProject()">Nouveau</button>
+            </div>
+            <div id="projectsList" style="display:flex;flex-direction:column;gap:10px;margin-top:10px"></div>
+        </div>
+    </div>
 </div>
+
+<div class="overlay" id="settingsModal">
+    <div class="modal">
+        <div class="modal-head">
+            <h3><i class="fas fa-cog"></i> Paramètres</h3>
+            <button class="btn-close-round" onclick="closeSettings()"><i class="fas fa-times-circle"></i></button>
+        </div>
+        <div class="modal-body">
+            <div>
+                <label style="font-size:11px;opacity:.6;text-transform:uppercase;font-weight:600">Langue</label>
+                <div style="display:flex;gap:10px;margin-top:8px">
+                    <button class="btn" id="lang-fr" onclick="setLang('fr')" style="flex:1;justify-content:center">🇫🇷 Français</button>
+                    <button class="btn" id="lang-en" onclick="setLang('en')" style="flex:1;justify-content:center">🇬🇧 English</button>
+                </div>
+            </div>
+            <div>
+                <label style="font-size:11px;opacity:.6;text-transform:uppercase;font-weight:600;display:block;margin-top:10px">Polices Personnalisées</label>
+                <div class="upload-box" onclick="document.getElementById('fontFileInput').click()">
+                    <i class="fas fa-font"></i> Importer un fichier Font (.ttf, .otf, .woff)
+                    <input type="file" id="fontFileInput" accept=".ttf,.otf,.woff,.woff2" style="display:none" onchange="handleFontUpload(event)">
+                </div>
+            </div>
+            <div>
+                <label style="font-size:11px;opacity:.6;text-transform:uppercase;font-weight:600;display:block;margin-top:10px">Sauvegarde Globale</label>
+                <p style="font-size:11px;opacity:.6;margin:6px 0">Sauvegarde complète du projet avec polices.</p>
+                <div style="display:flex;gap:10px">
+                    <button class="btn" onclick="exportWorkflow()"><i class="fas fa-download"></i> Backup complet</button>
+                    <button class="btn" onclick="document.getElementById('importWorkInput').click()"><i class="fas fa-upload"></i> Importer</button>
+                    <input type="file" id="importWorkInput" accept=".writerwork,.json" style="display:none" onchange="importWorkflow(event)">
+                </div>
+            </div>
+            <div style="border-top:1px solid var(--border);padding-top:15px;margin-top:10px">
+                <label style="font-size:11px;color:#ef4444;text-transform:uppercase;font-weight:600">Zone Dangereuse</label>
+                <button class="btn btn-danger" style="width:100%;justify-content:center" onclick="factoryReset()">Factory Reset</button>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="overlay" id="previewModal" onclick="if(event.target===this)closePreview()"><div class="preview-shell" onclick="event.stopPropagation()"><div class="preview-top"><button class="btn" id="btnLarge" onclick="setPreviewDevice('large')">Plein écran</button><button class="btn" id="btnMobile" onclick="setPreviewDevice('mobile')">Mobile</button><button class="btn" id="btnTablet" onclick="setPreviewDevice('tablet')">Tablette</button><button class="btn-close-round" onclick="closePreview()"><i class="fas fa-times-circle"></i></button></div><div class="preview-screen large" id="previewScreen"><div class="prv-content" id="prvContent"></div></div></div></div>
-<div class="overlay" id="projectsModal"><div class="modal"><div class="modal-head"><h3>Projects</h3><button class="btn-close-round" onclick="closeProjects()"><i class="fas fa-times-circle"></i></button></div><div class="modal-body"><div style="display:flex;gap:10px"><input id="newProjectTitle" class="meta-input" placeholder="Titre..." style="flex:1"><button class="btn" onclick="createNewProject()">Nouveau</button></div><div id="projectsList" style="display:flex;flex-direction:column;gap:10px;margin-top:10px"></div></div></div></div>
-<div class="overlay" id="settingsModal"><div class="modal"><div class="modal-head"><h3>Paramètres</h3><button class="btn-close-round" onclick="closeSettings()"><i class="fas fa-times-circle"></i></button></div><div class="modal-body"><button class="btn btn-danger" style="width:100%;justify-content:center" onclick="factoryReset()">Factory Reset</button></div></div></div>
-<div id="savedToast" class="saved-toast"><i class="fas fa-check-circle" style="color:var(--accent)"></i> Enregistré!</div>
+
+<div id="savedToast" class="saved-toast"><i class="fas fa-check-circle" style="color:var(--accent)"></i> Enregistré !</div>
+
 <script>
-let currentPageId=null,currentProjectId=null,projects=[],appConfig={fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},previewDevice='large',currentActiveModule='comic',selectedPanelIndex=0,selectedBubbleId=null,dragState=null;
+let currentPageId=null, currentProjectId=null, projects=[], appConfig={fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}}, previewDevice='large'; // default to large
+let currentActiveModule = 'book'; 
+let selectedPanelIndex=null, selectedBubbleId=null, dragState=null;
 const uid=()=> 'id_'+Date.now()+'_'+Math.random().toString(36).slice(2,5);
 const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-let db,customFonts=[],fontMapping={'Playfair Display':"'Playfair Display', serif",'Inter':"'Inter', sans-serif",'Bangers':"'Bangers', cursive",'Comic Neue':"'Comic Neue', cursive"};
-const BD_TEMPLATES=[{id:'full',name:'Plein',rects:[{x:0,y:0,w:100,h:100}]},{id:'2h',name:'2-H',rects:[{x:0,y:0,w:100,h:49},{x:0,y:51,w:100,h:49}]},{id:'2v',name:'2-V',rects:[{x:0,y:0,w:49,h:100},{x:51,y:0,w:49,h:100}]},{id:'3h',name:'3-H',rects:[{x:0,y:0,w:100,h:32},{x:0,y:34,w:100,h:32},{x:0,y:68,w:100,h:32}]},{id:'4',name:'4',rects:[{x:0,y:0,w:49,h:49},{x:51,y:0,w:49,h:49},{x:0,y:51,w:49,h:49},{x:51,y:51,w:49,h:49}]},{id:'3top',name:'3-Top',rects:[{x:0,y:0,w:100,h:58},{x:0,y:60,w:49,h:40},{x:51,y:60,w:49,h:40}]},{id:'blacksad',name:'Classique',rects:[{x:0,y:0,w:100,h:38},{x:0,y:40,w:100,h:14},{x:0,y:56,w:32,h:20},{x:34,y:56,w:32,h:20},{x:68,y:56,w:32,h:20},{x:0,y:78,w:100,h:22}]},{id:'6grid',name:'6-Grid',rects:[{x:0,y:0,w:32,h:49},{x:34,y:0,w:32,h:49},{x:68,y:0,w:32,h:49},{x:0,y:51,w:32,h:49},{x:34,y:51,w:32,h:49},{x:68,y:51,w:32,h:49}]},{id:'10auto',name:'10',rects:[]}];
-function generateAutoRects(c){const gap=2;const cols=Math.ceil(Math.sqrt(c));const rows=Math.ceil(c/cols);const cw=(100-(cols-1)*gap)/cols;const ch=(100-(rows-1)*gap)/rows;let r=[];for(let i=0;i<c;i++){let col=i%cols,row=Math.floor(i/cols);r.push({x:col*(cw+gap),y:row*(ch+gap),w:cw,h:ch});}return r;}
-function getTemplateRects(id,cc){if(id==='10auto')return generateAutoRects(cc||10);let t=BD_TEMPLATES.find(x=>x.id===id);if(t&&t.rects&&t.rects.length)return t.rects;return generateAutoRects(cc||4);}
-function ensureBDData(item){if(!item)return;if(!item.bdBg)item.bdBg={tx:0,ty:0,scale:1,rot:0};if(item.bdBgImage===undefined)item.bdBgImage='';if(!item.bdPanels){item.bdPanels=[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}];}item.bdPanels.forEach(p=>{if(p.tx===undefined)p.tx=0;if(p.ty===undefined)p.ty=0;if(p.scale===undefined)p.scale=1;if(p.rot===undefined)p.rot=0;if(!p.id)p.id=uid();});if(!item.bdTemplate)item.bdTemplate='blacksad';if(!item.bdTemplateRects||item.bdTemplateRects.length!==item.bdPanels.length){let rects=getTemplateRects(item.bdTemplate,item.bdPanels.length);let newPanels=[];for(let i=0;i<rects.length;i++){if(i<item.bdPanels.length)newPanels.push(item.bdPanels[i]);else newPanels.push({id:uid(),image:'',tx:0,ty:0,scale:1,rot:0});}item.bdPanels=newPanels;item.bdTemplateRects=rects;}if(!item.bdBubbles)item.bdBubbles=[];item.bdBubbles.forEach(b=>{if(b.x===undefined)b.x=50;if(b.y===undefined)b.y=50;if(!b.w)b.w=34;if(!b.fontSize)b.fontSize=(b.type&&['pow','boom','splash','action'].includes(b.type))?26:16;if(!b.fontFamily)b.fontFamily="'Bangers', cursive";if(!b.type)b.type='round';if(!b.tailPos)b.tailPos='center';if(b.panelIndex===undefined)b.panelIndex=null;if(!b.bgColor)b.bgColor=b.type==='narrator'?'#fff8b5':(['pow','boom','splash','action'].includes(b.type)?'#FFEB3B':'#ffffff');if(!b.textColor)b.textColor='#111111';if(!b.borderColor)b.borderColor='#111111';if(b.rotation===undefined)b.rotation=0;});}
-function initIDB(cb){try{const req=indexedDB.open("WriterFontsDB",2);req.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains("fonts"))d.createObjectStore("fonts",{keyPath:"name"});};req.onsuccess=e=>{db=e.target.result;loadFontsFromIDB(cb);};req.onerror=()=>{if(cb)cb();};}catch(err){if(cb)cb();}}
-function loadFontsFromIDB(cb){if(!db)return cb&&cb();try{const tx=db.transaction("fonts","readonly");const r=tx.objectStore("fonts").getAll();r.onsuccess=e=>{customFonts=e.target.result||[];customFonts.forEach(f=>{fontMapping[f.name]=`'${f.name}'`;});const css=customFonts.map(f=>`@font-face{font-family:'${f.name}';src:url('${f.dataUrl}');}`).join('\n');document.getElementById('customFontsStyle').textContent=css;refreshFontDropdown();if(cb)cb();};}catch(e){if(cb)cb();}}
-function refreshFontDropdown(){const dd=document.getElementById('fontDropdown');if(!dd)return;dd.innerHTML='';Object.keys(fontMapping).forEach(name=>{const b=document.createElement('button');b.className='dropdown-item'+(name===appConfig.fontFamily?' active':'');b.style.fontFamily=fontMapping[name];b.innerHTML=`Tt ${name}`;b.onclick=()=>{selectFont(name);closeMenus();};dd.appendChild(b);});const label=document.getElementById('fontSelectLabel');if(label){label.textContent=appConfig.fontFamily;}}
-function selectFont(name){appConfig.fontFamily=name;saveProjects();refreshFontDropdown();autoSave();}
-function toggleDropdown(id){const el=document.getElementById(id);const isVis=el.style.display==='flex';closeMenus();if(!isVis)el.style.display='flex';}
-function closeMenus(){document.querySelectorAll('.dropdown-menu').forEach(m=>m.style.display='none');}
-document.addEventListener('click',e=>{if(!e.target.closest('.gen-wrap'))closeMenus();});
-function loadProjects(){try{projects=JSON.parse(localStorage.getItem('writer_projects_v2')||'[]');currentProjectId=localStorage.getItem('writer_current_project_id');if(projects.length===0){const p={id:uid(),title:'Mon projet BD FIX',data:{book:{title:'Mon projet BD FIX',items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'ch1',type:'chapter',title:'Page BD 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()};projects=[p];currentProjectId=p.id;saveProjects();}if(!projects.find(p=>p.id===currentProjectId))currentProjectId=projects[0].id;appConfig=projects.find(p=>p.id===currentProjectId).config;}catch(e){}}
-function saveProjects(){try{localStorage.setItem('writer_projects_v2',JSON.stringify(projects));localStorage.setItem('writer_current_project_id',currentProjectId);}catch(e){}}
-function getCurrentProject(){return projects.find(p=>p.id===currentProjectId);}
-function openProjects(){renderProjectsList();document.getElementById('projectsModal').classList.add('active');closeMenus();}
-function closeProjects(){document.getElementById('projectsModal').classList.remove('active');}
-function renderProjectsList(){const l=document.getElementById('projectsList');l.innerHTML='';projects.forEach(p=>{const d=document.createElement('div');d.className='project-item'+(p.id===currentProjectId?' active':'');d.innerHTML=`<div style="font-weight:500">${esc(p.title)}</div><div style="display:flex;gap:6px"><button class="btn" onclick="switchProject('${p.id}')">OK</button><button class="btn btn-danger" onclick="deleteProject('${p.id}')"><i class="fas fa-times"></i></button></div>`;l.appendChild(d);});}
-function createNewProject(){const t=document.getElementById('newProjectTitle').value.trim()||'Mon projet BD';const p={id:uid(),title:t,data:{book:{title:t,items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'ch1',type:'chapter',title:'Page BD 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()};projects.unshift(p);currentProjectId=p.id;saveProjects();loadProjectIntoUI();document.getElementById('newProjectTitle').value='';}
-function switchProject(id){currentProjectId=id;saveProjects();loadProjectIntoUI();closeProjects();}
-function deleteProject(id){if(projects.length<=1)return;if(!confirm('Supprimer?'))return;projects=projects.filter(p=>p.id!==id);if(currentProjectId===id)currentProjectId=projects[0].id;saveProjects();loadProjectIntoUI();renderProjectsList();}
-function loadProjectIntoUI(){const proj=getCurrentProject();if(!proj)return;appConfig=proj.config;document.getElementById('currentProjectName').textContent=proj.title;document.getElementById('genCurrentProjectName').textContent=proj.title;document.getElementById('globalTitle').value=proj.data.book.title||proj.title;refreshFontDropdown();refreshPageDropdown();currentPageId=null;selectedPanelIndex=0;loadPageData();}
-function getDisplayName(it){if(it.type==='cover')return'📖 Cover';if(it.type==='reference')return'🔗 Summary';return it.title||'Page';}
-function refreshPageDropdown(){const dd=document.getElementById('pageDropdown');if(!dd)return;dd.innerHTML='';const proj=getCurrentProject();if(!proj)return;proj.data.book.items.forEach(it=>{const b=document.createElement('button');b.className='dropdown-item'+(it.id===currentPageId?' active':'');b.innerHTML=it.type==='chapter'?esc(it.title):getDisplayName(it);b.onclick=()=>{selectPage(it.id);closeMenus();};dd.appendChild(b);});const label=document.getElementById('pageSelectLabel');const cur=proj.data.book.items.find(i=>i.id===currentPageId);if(label&&cur)label.textContent=cur.type==='chapter'?cur.title:getDisplayName(cur);}
-function selectPage(id){currentPageId=id;selectedPanelIndex=0;selectedBubbleId=null;loadPageData();}
-function activateModule(mode){currentActiveModule=mode;document.querySelectorAll('.sidebar .menu-item').forEach(e=>e.classList.remove('active'));if(mode==='comic'){document.getElementById('tab-comic').classList.add('active');}else if(mode==='magazine'){document.getElementById('tab-magazine').classList.add('active');}else{document.getElementById('tab-book').classList.add('active');}refreshPageDropdown();loadPageData();}
-function loadPageData(){const proj=getCurrentProject();if(!proj||!proj.data.book.items.length)return;if(!currentPageId)currentPageId=proj.data.book.items[0].id;const item=proj.data.book.items.find(i=>i.id===currentPageId);if(!item)return;document.getElementById('itemTitle').value=item.title||'';document.getElementById('itemImage').value=item.image||'';const isCover=item.type==='cover',isChapter=item.type==='chapter';document.getElementById('globalTitleGroup').style.display=isCover?'flex':'none';document.getElementById('coverOptions').style.display=isCover?'flex':'none';document.getElementById('itemTitleGroup').style.display=isCover?'none':'flex';document.getElementById('mediaUrlGroup').style.display=isChapter&&currentActiveModule==='comic'?'none':'flex';document.getElementById('bdFullEditor').style.display=isChapter&&currentActiveModule==='comic'?'flex':'none';if(isCover)document.getElementById('showTitleOnCover').checked=item.showTitle!==false;if(isChapter&&currentActiveModule==='comic'){ensureBDData(item);if(selectedPanelIndex===null)selectedPanelIndex=0;renderBDTemplatesList();renderBDCanvas();}document.getElementById('navLeft').classList.toggle('disabled',proj.data.book.items.findIndex(i=>i.id===currentPageId)<=0);document.getElementById('navRight').classList.toggle('disabled',proj.data.book.items.findIndex(i=>i.id===currentPageId)>=proj.data.book.items.length-1);refreshPageDropdown();}
-function renderBDTemplatesList(){const container=document.getElementById('bdTemplatesList');if(!container)return;container.innerHTML='';const curItem=getCurrentProject()?.data.book.items.find(i=>i.id===currentPageId);const curTmpl=curItem?.bdTemplate||'full';BD_TEMPLATES.forEach(t=>{let rects=t.id==='10auto'?generateAutoRects(10):t.rects;if(!rects||!rects.length)rects=[{x:0,y:0,w:100,h:100}];let div=document.createElement('div');div.className='template-thumb'+(curTmpl===t.id?' active':'');div.title=t.name;rects.forEach(r=>{let p=document.createElement('div');p.style.position='absolute';p.style.left=r.x+'%';p.style.top=r.y+'%';p.style.width=r.w+'%';p.style.height=r.h+'%';p.style.background='rgba(255,255,255,0.9)';p.style.border='1px solid #111';p.style.boxSizing='border-box';div.appendChild(p);});let label=document.createElement('div');label.style.position='absolute';label.style.bottom='0';label.style.left='0';label.style.right='0';label.style.fontSize='7px';label.style.textAlign='center';label.style.color='#fff';label.style.background='rgba(0,0,0,0.7)';label.style.padding='2px 0';label.textContent=t.name;div.appendChild(label);div.onclick=()=>setBDTemplate(t.id);container.appendChild(div);});}
-function setBDTemplate(id){const proj=getCurrentProject();const item=proj.data.book.items.find(i=>i.id===currentPageId);if(!item)return;ensureBDData(item);let rects=getTemplateRects(id,item.bdPanels.length);if(id==='10auto')rects=generateAutoRects(10);let newPanels=[];for(let i=0;i<rects.length;i++){if(i<item.bdPanels.length)newPanels.push(item.bdPanels[i]);else newPanels.push({id:uid(),image:'',tx:0,ty:0,scale:1,rot:0});}item.bdPanels=newPanels;item.bdTemplate=id;item.bdTemplateRects=rects;selectedPanelIndex=0;renderBDTemplatesList();renderBDCanvas();autoSave();}
-function applyCustomGrid(){let cnt=parseInt(document.getElementById('bdCustomCount').value)||4;cnt=Math.min(12,Math.max(1,cnt));const proj=getCurrentProject();const item=proj.data.book.items.find(i=>i.id===currentPageId);ensureBDData(item);let rects=generateAutoRects(cnt);let newPanels=[];for(let i=0;i<rects.length;i++){if(i<item.bdPanels.length)newPanels.push(item.bdPanels[i]);else newPanels.push({id:uid(),image:'',tx:0,ty:0,scale:1,rot:0});}item.bdPanels=newPanels;item.bdTemplate='custom';item.bdTemplateRects=rects;selectedPanelIndex=0;renderBDTemplatesList();renderBDCanvas();autoSave();}
+let db, customFonts=[];
+let fontMapping={
+    'EB Garamond':"'EB Garamond', serif",
+    'Playfair Display':"'Playfair Display', serif",
+    'Cormorant Garamond':"'Cormorant Garamond', serif",
+    'Crimson Text':"'Crimson Text', serif",
+    'Libre Baskerville':"'Libre Baskerville', serif",
+    'Lora':"'Lora', serif",
+    'Merriweather':"'Merriweather', serif",
+    'Spectral':"'Spectral', serif",
+    'PT Serif':"'PT Serif', serif",
+    'Source Serif Pro':"'Source Serif Pro', serif",
+    'Inter':"'Inter', sans-serif"
+};
+
+const i18n = {
+    fr: { 
+        proj: "Projets", read: "Livre de poche", bd: "Bande Dessinée (BD)", mag: "Magazine", cur: "Projet Actuel", projTitle: "Projets",
+        lblCreate: "Créer", lblSave: "Enregistrer", lblTitleProj: "Titre du projet - éditable uniquement dans la couverture", 
+        lblTitleOnCover: "Afficher le titre sur la couverture - ON/OFF", lblAuthor: "Auteur", lblDate: "Date", lblPublisher: "Éditeur", 
+        lblGenre: "Genre", lblPageName: "Nom de la page / section", lblLinkConfig: "Référence / Sommaire - Config liens", 
+        lblLinkAll: "Lier toutes les pages", lblLinkSel: "Sélectionner les pages", lblIllu: "Illustration (URL ou Fichier Local)", 
+        lblLocal: "Local", lblLayout: "Disposition", lblAlign: "Alignement", lblImgSize: "Taille image", lblBgTransp: "Transparence", 
+        lblTitleSize: "Taille Titre", lblBodySize: "Taille Corps", lblBodyText: "Corps du texte", lblBdGridBg: "Grilles & Fond de page BD", 
+        lblBgOpt: "Image de fond (derrière la grille) - optionnel", lblBgZoom: "Zoom fond", lblGridTmpl: "Modèles de grilles", 
+        lblCustomCases: "Cases perso 1-12", lblGen: "Générer", lblFull: "Plein", lblPanelSel: "Case sélectionnée - Drag image | Molette zoom | Shift+Molette rotation", 
+        lblPanelImg: "Image de la case", lblPLocal: "Local", lblPanelZoom: "Zoom", lblPanelRot: "Rotation", lblBubbles: "Bulles de dialogue", 
+        lblBubText: "Texte de la bulle", lblBubFont: "Font BD", lblBubSize: "Taille bulle", lblBubTail: "Flèche", 
+        lblBubDel: "Supprimer", lblBubDup: "Dupliquer", lblBubClose: "Fermer", lblPreviewBtn: "Aperçu",
+        lblBRound: "Ronde", lblBSquare: "Carrée", lblBThought: "Pensée", lblBShout: "Cri", lblBNarrator: "Narrateur"
+    },
+    en: { 
+        proj: "Projects", read: "Paperback", bd: "Comic Book (BD)", mag: "Magazine", cur: "Current Project", projTitle: "Projects",
+        lblCreate: "Create", lblSave: "Save", lblTitleProj: "Project Title - editable only on cover page", 
+        lblTitleOnCover: "Show title on cover - ON/OFF", lblAuthor: "Author", lblDate: "Date", lblPublisher: "Publisher", 
+        lblGenre: "Genre", lblPageName: "Page / Section Name", lblLinkConfig: "Reference / Summary - Link config", 
+        lblLinkAll: "Link all pages", lblLinkSel: "Select pages", lblIllu: "Illustration (URL or Local File)", 
+        lblLocal: "Local", lblLayout: "Layout", lblAlign: "Alignment", lblImgSize: "Image Size", lblBgTransp: "Transparency", 
+        lblTitleSize: "Title Size", lblBodySize: "Body Size", lblBodyText: "Body Text", lblBdGridBg: "BD Grids & Background", 
+        lblBgOpt: "Background image (behind grid) - optional", lblBgZoom: "Background zoom", lblGridTmpl: "Grid Templates", 
+        lblCustomCases: "Custom panels 1-12", lblGen: "Generate", lblFull: "Full", lblPanelSel: "Selected Panel - Drag img | Scroll zoom | Shift+Scroll rotate", 
+        lblPanelImg: "Panel Image", lblPLocal: "Local", lblPanelZoom: "Zoom", lblPanelRot: "Rotation", lblBubbles: "Speech Bubbles", 
+        lblBubText: "Bubble Text", lblBubFont: "BD Font", lblBubSize: "Bubble Size", lblBubTail: "Tail Direction", 
+        lblBubDel: "Delete", lblBubDup: "Duplicate", lblBubClose: "Close", lblPreviewBtn: "Preview",
+        lblBRound: "Round", lblBSquare: "Square", lblBThought: "Thought", lblBShout: "Shout", lblBNarrator: "Narrator"
+    }
+};
+
+const titleSizes = [18,24,28,32,36,42,48,56,64,72];
+const bodySizes = [12,13,14,15,16,17,18,20,22,24,28,32];
+
+const BD_TEMPLATES = [
+  {id:'full', name:'Plein', rects:[{x:0,y:0,w:100,h:100}]},
+  {id:'2h', name:'2-H', rects:[{x:0,y:0,w:100,h:49},{x:0,y:51,w:100,h:49}]},
+  {id:'2v', name:'2-V', rects:[{x:0,y:0,w:49,h:100},{x:51,y:0,w:49,h:100}]},
+  {id:'3h', name:'3-H', rects:[{x:0,y:0,w:100,h:32},{x:0,y:34,w:100,h:32},{x:0,y:68,w:100,h:32}]},
+  {id:'3v', name:'3-V', rects:[{x:0,y:0,w:32,h:100},{x:34,y:0,w:32,h:100},{x:68,y:0,w:32,h:100}]},
+  {id:'4', name:'4', rects:[{x:0,y:0,w:49,h:49},{x:51,y:0,w:49,h:49},{x:0,y:51,w:49,h:49},{x:51,y:51,w:49,h:49}]},
+  {id:'3top', name:'3-Top', rects:[{x:0,y:0,w:100,h:58},{x:0,y:60,w:49,h:40},{x:51,y:60,w:49,h:40}]},
+  {id:'3bottom', name:'3-Btm', rects:[{x:0,y:0,w:49,h:40},{x:51,y:0,w:49,h:40},{x:0,y:42,w:100,h:58}]},
+  {id:'5mix', name:'5-Mix', rects:[{x:0,y:0,w:100,h:35},{x:0,y:37,w:49,h:29},{x:51,y:37,w:49,h:29},{x:0,y:68,w:49,h:32},{x:51,y:68,w:49,h:32}]},
+  {id:'6grid', name:'6-Grid', rects:[{x:0,y:0,w:32,h:49},{x:34,y:0,w:32,h:49},{x:68,y:0,w:32,h:49},{x:0,y:51,w:32,h:49},{x:34,y:51,w:32,h:49},{x:68,y:51,w:32,h:49}]},
+  {id:'blacksad', name:'Classique', rects:[{x:0,y:0,w:100,h:38},{x:0,y:40,w:100,h:14},{x:0,y:56,w:32,h:20},{x:34,y:56,w:32,h:20},{x:68,y:56,w:32,h:20},{x:0,y:78,w:100,h:22}]},
+  {id:'8', name:'8', rects:[{x:0,y:0,w:49,h:23.5},{x:51,y:0,w:49,h:23.5},{x:0,y:25.5,w:49,h:23.5},{x:51,y:25.5,w:49,h:23.5},{x:0,y:51,w:49,h:23.5},{x:51,y:51,w:49,h:23.5},{x:0,y:76.5,w:49,h:23.5},{x:51,y:76.5,w:49,h:23.5}]},
+  {id:'9', name:'9', rects:[{x:0,y:0,w:32,h:32},{x:34,y:0,w:32,h:32},{x:68,y:0,w:32,h:32},{x:0,y:34,w:32,h:32},{x:34,y:34,w:32,h:32},{x:68,y:34,w:32,h:32},{x:0,y:68,w:32,h:32},{x:34,y:68,w:32,h:32},{x:68,y:68,w:32,h:32}]},
+  {id:'10auto', name:'10', rects:[]},
+];
+
+function generateAutoRects(count){
+ const gap=2;
+ const cols=Math.ceil(Math.sqrt(count));
+ const rows=Math.ceil(count/cols);
+ const cellW=(100-(cols-1)*gap)/cols;
+ const cellH=(100-(rows-1)*gap)/rows;
+ let rects=[];
+ for(let i=0;i<count;i++){
+  let col=i%cols, row=Math.floor(i/cols);
+  rects.push({x:col*(cellW+gap), y:row*(cellH+gap), w:cellW, h:cellH});
+ }
+ return rects;
+}
+function getTemplateRects(id, customCount){
+ if(id==='10auto') return generateAutoRects(customCount||10);
+ let t=BD_TEMPLATES.find(x=>x.id===id);
+ if(t && t.rects && t.rects.length) return t.rects;
+ return generateAutoRects(customCount||4);
+}
+
+function ensureBDData(item){
+ if(!item) return;
+ if(!item.bdBg) item.bdBg={tx:0,ty:0,scale:1,rot:0};
+ if(item.bdBgImage===undefined) item.bdBgImage='';
+ if(!item.bdPanels){
+  if(item.image){
+   item.bdPanels=[{id:uid(), image:item.image, tx:0,ty:0,scale:1,rot:0}];
+  } else {
+   item.bdPanels=[{id:uid(), image:'', tx:0,ty:0,scale:1,rot:0}];
+  }
+ }
+ item.bdPanels.forEach(p=>{
+  if(p.tx===undefined) p.tx=0;
+  if(p.ty===undefined) p.ty=0;
+  if(p.scale===undefined) p.scale=1;
+  if(p.rot===undefined) p.rot=0;
+  if(!p.id) p.id=uid();
+ });
+ if(!item.bdTemplate) item.bdTemplate='full';
+ if(!item.bdTemplateRects || item.bdTemplateRects.length!==item.bdPanels.length){
+  let rects=getTemplateRects(item.bdTemplate, item.bdPanels.length);
+  if(item.bdTemplate!=='custom' && rects.length!==item.bdPanels.length){
+   let newPanels=[];
+   for(let i=0;i<rects.length;i++){
+    if(i<item.bdPanels.length) newPanels.push(item.bdPanels[i]);
+    else newPanels.push({id:uid(), image:'', tx:0,ty:0,scale:1,rot:0});
+   }
+   item.bdPanels=newPanels;
+   item.bdTemplateRects=rects;
+  } else {
+   if(!item.bdTemplateRects) item.bdTemplateRects=rects;
+  }
+ }
+ if(!item.bdBubbles) item.bdBubbles=[];
+ item.bdBubbles.forEach(b=>{
+  if(b.x===undefined) b.x=50;
+  if(b.y===undefined) b.y=50;
+  if(!b.w) b.w=30;
+  if(!b.fontSize) b.fontSize=14;
+  if(!b.fontFamily) b.fontFamily="'Bangers', cursive";
+  if(!b.type) b.type='round';
+  if(!b.tailPos) b.tailPos='center';
+  if(!b.bgColor) b.bgColor = (b.type==='narrator' ? '#fff8b5' : '#ffffff');
+  if(b.panelIndex===undefined) b.panelIndex=null;
+ });
+}
+
+function initIDB(cb){ 
+    try {
+        const req=indexedDB.open("WriterFontsDB",2); 
+        req.onupgradeneeded=e=>{ 
+            const d=e.target.result; 
+            if(!d.objectStoreNames.contains("fonts")) d.createObjectStore("fonts",{keyPath:"name"}); 
+            if(!d.objectStoreNames.contains("images")) d.createObjectStore("images",{keyPath:"id"}); 
+        }; 
+        req.onsuccess=e=>{ db=e.target.result; loadFontsFromIDB(cb); }; 
+        req.onerror=e=>{ if(cb) cb(); };
+    } catch(err) { if(cb) cb(); }
+}
+function loadFontsFromIDB(cb){ 
+    if(!db) return cb&&cb(); 
+    try {
+        const tx=db.transaction("fonts","readonly"); const r=tx.objectStore("fonts").getAll(); 
+        r.onsuccess=e=>{ 
+            customFonts=e.target.result||[];
+            customFonts.forEach(f=>{ fontMapping[f.name]=`'${f.name}'`; }); 
+            const css=customFonts.map(f=>`@font-face{font-family:'${f.name}';src:url('${f.dataUrl}');}`).join('\n'); 
+            document.getElementById('customFontsStyle').textContent=css; 
+            refreshFontDropdown(); if(cb) cb(); 
+        };
+        r.onerror=()=> { if(cb) cb(); };
+    } catch(e) { if(cb) cb(); }
+}
+function handleFontUpload(e){ 
+    const file=e.target.files[0]; if(!file) return; const r=new FileReader(); 
+    r.onload=ev=>{ 
+        const dataUrl=ev.target.result; const name=file.name.replace(/\.[^/.]+$/,"").replace(/[^a-z0-9 _-]/g,'').trim()||'Custom'; 
+        if(fontMapping[name]) return alert('Cette police existe déjà'); 
+        try { if(db) { const tx=db.transaction("fonts","readwrite"); tx.objectStore("fonts").put({name,dataUrl}); } } catch(err) {}
+        customFonts.push({name,dataUrl}); 
+        document.getElementById('customFontsStyle').textContent+=`@font-face{font-family:'${name}';src:url('${dataUrl}');}\n`; 
+        fontMapping[name]=`'${name}'`; refreshFontDropdown(); selectFont(name);
+    }; 
+    r.readAsDataURL(file); e.target.value=''; 
+}
+function uploadLocalImage(e) {
+    const file = e.target.files[0]; if(!file) return; const r = new FileReader();
+    r.onload = ev => {
+        const b64 = ev.target.result;
+        try { if(db) { const tx = db.transaction("images","readwrite"); tx.objectStore("images").put({id: uid(), data: b64}); } } catch(err) {}
+        document.getElementById('itemImage').value = b64; autoSave();
+    };
+    r.readAsDataURL(file); e.target.value = '';
+}
+function applyFont(){ 
+    const fam=fontMapping[appConfig.fontFamily]||"'Playfair Display', serif"; 
+    const ta=document.getElementById('itemText'); if(ta) ta.style.fontFamily=fam; 
+    const it=document.getElementById('itemTitle'); if(it) it.style.fontFamily=fam; 
+    const gt=document.getElementById('globalTitle'); if(gt) gt.style.fontFamily=fam;
+} 
+function toggleDropdown(id) { const el = document.getElementById(id); const isVis = el.style.display === 'flex'; closeMenus(); if(!isVis) el.style.display = 'flex'; }
+function closeMenus() { document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display='none'); }
+document.addEventListener('click',e=>{ if(!e.target.closest('.gen-wrap')) closeMenus(); }); 
+function refreshFontDropdown(){ 
+    const dd=document.getElementById('fontDropdown'); if(!dd) return; dd.innerHTML=''; 
+    Object.keys(fontMapping).forEach(name=>{ 
+        const b=document.createElement('button'); b.className='dropdown-item'+(name===appConfig.fontFamily?' active':''); 
+        b.style.fontFamily=fontMapping[name]; b.innerHTML=`<span style="font-weight:900;font-size:12px;opacity:.6">Tt</span> ${name}`; 
+        b.onclick=()=>{ selectFont(name); closeMenus(); }; dd.appendChild(b); 
+    }); 
+    const label=document.getElementById('fontSelectLabel'); if(label){ label.textContent=appConfig.fontFamily; label.style.fontFamily=fontMapping[appConfig.fontFamily]; } 
+} 
+function selectFont(name){ appConfig.fontFamily=name; saveProjects(); refreshFontDropdown(); applyFont(); autoSave(); } 
+function initSizeDropdowns() {
+    const tMenu = document.getElementById('titleSizeDropdown'); const bMenu = document.getElementById('bodySizeDropdown'); tMenu.innerHTML = ''; bMenu.innerHTML = '';
+    titleSizes.forEach(s => {
+        const btn = document.createElement('button'); btn.className = 'dropdown-item'; btn.textContent = s + 'px';
+        btn.onclick = () => { document.getElementById('titleSizeLabel').dataset.value = s; document.getElementById('titleSizeLabel').textContent = s + 'px'; closeMenus(); autoSave(); }; tMenu.appendChild(btn);
+    });
+    bodySizes.forEach(s => {
+        const btn = document.createElement('button'); btn.className = 'dropdown-item'; btn.textContent = s + 'px';
+        btn.onclick = () => { document.getElementById('bodySizeLabel').dataset.value = s; document.getElementById('bodySizeLabel').textContent = s + 'px'; closeMenus(); autoSave(); }; bMenu.appendChild(btn);
+    });
+}
+function refreshPageDropdown(){ 
+    const dd=document.getElementById('pageDropdown'); if(!dd) return; dd.innerHTML=''; 
+    const proj=getCurrentProject(); if(!proj) return; 
+    proj.data.book.items.forEach(it=>{ 
+        const b=document.createElement('button'); b.className='dropdown-item'+(it.id===currentPageId?' active':''); 
+        b.innerHTML= it.type === 'chapter' ? esc(it.title) : getDisplayName(it); 
+        b.onclick=()=>{ selectPage(it.id); closeMenus(); }; dd.appendChild(b); 
+    }); 
+    const label=document.getElementById('pageSelectLabel'); const cur=proj.data.book.items.find(i=>i.id===currentPageId); 
+    if(label&&cur) label.textContent = cur.type === 'chapter' ? cur.title : getDisplayName(cur); 
+} 
+function selectPage(id){ currentPageId=id; selectedPanelIndex=0; selectedBubbleId=null; loadPageData(); } 
+function loadProjects(){ 
+    try{ 
+        projects=JSON.parse(localStorage.getItem('writer_projects_v2')||'[]'); currentProjectId=localStorage.getItem('writer_current_project_id'); 
+        if(projects.length===0){ 
+            const p={id:uid(),title:'Mon projet',data:{book:{title:'Mon projet',items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()}; 
+            projects=[p]; currentProjectId=p.id; saveProjects(); 
+        } 
+        if(!projects.find(p=>p.id===currentProjectId)) currentProjectId=projects[0].id; 
+        appConfig=projects.find(p=>p.id===currentProjectId).config; 
+    }catch(e){} 
+} 
+function saveProjects(){ try { localStorage.setItem('writer_projects_v2',JSON.stringify(projects)); localStorage.setItem('writer_current_project_id',currentProjectId); localStorage.setItem('writer_active_module', currentActiveModule || 'book'); } catch(e) {} } 
+function getCurrentProject(){ return projects.find(p=>p.id===currentProjectId); } 
+function openProjects(){ renderProjectsList(); document.getElementById('projectsModal').classList.add('active'); closeMenus(); } 
+function closeProjects(){ document.getElementById('projectsModal').classList.remove('active'); } 
+function renderProjectsList(){ 
+    const l=document.getElementById('projectsList'); l.innerHTML=''; 
+    projects.forEach(p=>{ 
+        const d=document.createElement('div'); d.className='project-item'+(p.id===currentProjectId?' active':''); 
+        d.innerHTML=`<div style="font-weight:500">${esc(p.title)}</div><div style="display:flex;gap:6px"><button class="btn" onclick="switchProject('${p.id}')">OK</button><button class="btn btn-danger" onclick="deleteProject('${p.id}')"><i class="fas fa-times"></i></button></div>`; 
+        l.appendChild(d); 
+    }); 
+} 
+function createNewProject(){ 
+    const t=document.getElementById('newProjectTitle').value.trim()||'Mon projet'; 
+    const p={id:uid(),title:t,data:{book:{title:t,items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()}; 
+    projects.unshift(p); currentProjectId=p.id; saveProjects(); loadProjectIntoUI(); document.getElementById('newProjectTitle').value='';
+} 
+function switchProject(id){ currentProjectId=id; saveProjects(); loadProjectIntoUI(); closeProjects(); } 
+function deleteProject(id){ if(projects.length<=1) return; if(!confirm('Supprimer ce projet ?')) return; projects=projects.filter(p=>p.id!==id); if(currentProjectId===id) currentProjectId=projects[0].id; saveProjects(); loadProjectIntoUI(); renderProjectsList(); } 
+function loadProjectIntoUI(){ 
+    const proj=getCurrentProject(); if(!proj) return; 
+    appConfig=proj.config; 
+    document.getElementById('currentProjectName').textContent=proj.title; document.getElementById('genCurrentProjectName').textContent=proj.title; document.getElementById('globalTitle').value=proj.data.book.title||proj.title; 
+    refreshFontDropdown(); refreshPageDropdown(); applyFont(); 
+    currentPageId = null; selectedPanelIndex=0; loadPageData(); 
+} 
+function getDisplayName(it){ 
+    if(it.type==='cover') return currentActiveModule==='magazine'?'Mag Cover' : currentActiveModule==='comic'?'BD Cover':'Book Cover'; 
+    if(it.type==='author') return 'Informations'; 
+    if(it.type==='reference') return currentActiveModule==='comic'?'Content':'Summary'; 
+    return it.title||'Page'; 
+} 
+function activateModule(mode) {
+    currentActiveModule = mode;
+    saveProjects(); 
+    document.querySelectorAll('.sidebar .menu-item').forEach(e => e.classList.remove('active'));
+    const root = document.documentElement;
+    const logoSub = document.getElementById('appLogoSub');
+    if(mode === 'comic') {
+        document.getElementById('tab-comic').classList.add('active');
+        root.style.setProperty('--accent', '#ef4444');
+        logoSub.textContent = 'BD Module';
+    } else if (mode === 'magazine') {
+        document.getElementById('tab-magazine').classList.add('active');
+        root.style.setProperty('--accent', '#f59e0b');
+        logoSub.textContent = 'Magazine';
+    } else {
+        currentActiveModule = 'book';
+        document.getElementById('tab-book').classList.add('active');
+        root.style.setProperty('--accent', '#22d3ee');
+        logoSub.textContent = 'sources';
+    }
+    const proj = getCurrentProject();
+    if(proj && (mode === 'comic' || mode === 'magazine')) {
+        const firstChap = proj.data.book.items.find(i => i.type === 'chapter');
+        if (firstChap) currentPageId = firstChap.id;
+    }
+    refreshPageDropdown();
+    loadPageData();
+}
+function loadPageData(){ 
+    const proj=getCurrentProject(); if(!proj || !proj.data.book.items.length) return;
+    if(!currentPageId) currentPageId = proj.data.book.items[0].id; 
+    const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return; 
+    
+    document.getElementById('itemTitle').value=item.title||''; document.getElementById('itemImage').value=item.image||''; document.getElementById('itemText').value=item.text||''; 
+    document.getElementById('imageSize').value=item.imageSize||70; document.getElementById('imageSizeVal').textContent=(item.imageSize||70)+'%'; 
+    document.getElementById('bgOpacity').value=item.bgOpacity||15; document.getElementById('bgOpacityVal').textContent=(item.bgOpacity||15)+'%'; 
+    document.getElementById('titleSizeLabel').dataset.value = item.titleSize||32; document.getElementById('titleSizeLabel').textContent = (item.titleSize||32)+'px';
+    document.getElementById('bodySizeLabel').dataset.value = item.bodySize||17; document.getElementById('bodySizeLabel').textContent = (item.bodySize||17)+'px';
+    
+    const isCover=item.type==='cover', isAuthor=item.type==='author', isRef=item.type==='reference', isChapter=item.type==='chapter'; 
+    
+    // Reset visibility
+    document.getElementById('globalTitleGroup').style.display=isCover?'flex':'none'; 
+    document.getElementById('coverOptions').style.display=isCover?'flex':'none'; 
+    document.getElementById('itemTitleGroup').style.display=isCover?'none':'flex'; 
+    document.getElementById('authorMetaSection').style.display=isAuthor?'flex':'none'; 
+    document.getElementById('referenceConfigBlock').style.display=isRef?'flex':'none'; 
+    if(isCover) document.getElementById('showTitleOnCover').checked=item.showTitle!==false; 
+    if(isAuthor){ document.getElementById('globalAuthor').value=item.author||''; document.getElementById('globalDate').value=item.date||''; document.getElementById('globalPublisher').value=item.publisher||''; document.getElementById('globalGenre').value=item.genre||''; } 
+    if(isRef) renderRefBlock(); 
+    
+    const isBDChapter = currentActiveModule==='comic' && isChapter;
+    document.getElementById('mediaUrlGroup').style.display = isBDChapter ? 'none' : 'flex';
+    document.getElementById('mediaSlidersGroup').style.display = isBDChapter ? 'none' : 'flex';
+    document.getElementById('fontOptionsGroup').style.display = isBDChapter ? 'none' : 'flex';
+    document.getElementById('textEditorGroup').style.display = isBDChapter ? 'none' : 'flex';
+    document.getElementById('bdFullEditor').style.display = isBDChapter ? 'flex' : 'none';
+    document.getElementById('magToolsGroup').style.display = (currentActiveModule==='magazine' && isChapter) ? 'flex' : 'none';
+
+    if(isBDChapter){
+        ensureBDData(item);
+        if(selectedPanelIndex===null) selectedPanelIndex=0;
+        renderBDTemplatesList();
+        renderBDCanvas();
+    }
+    
+    document.getElementById('sheet').classList.toggle('is-cover', isCover); 
+    setLayout(item.layout||'top',false); setImageAlign(item.imageAlign||'center',false); 
+    const items=proj.data.book.items; document.getElementById('navLeft').classList.toggle('disabled', items.findIndex(i=>i.id===currentPageId)<=0); document.getElementById('navRight').classList.toggle('disabled', items.findIndex(i=>i.id===currentPageId)>=items.length-1); 
+    refreshPageDropdown(); applyFont(); 
+} 
+
+/* ===== BD PRO LOGIC ===== */
+function renderBDTemplatesList(){
+ const container=document.getElementById('bdTemplatesList');
+ if(!container) return;
+ container.innerHTML='';
+ const curItem=getCurrentProject()?.data.book.items.find(i=>i.id===currentPageId);
+ const curTmpl=curItem?.bdTemplate||'full';
+ BD_TEMPLATES.forEach(t=>{
+  let rects = t.id==='10auto' ? generateAutoRects(10) : t.rects;
+  if(!rects || !rects.length) rects=[{x:0,y:0,w:100,h:100}];
+  let div=document.createElement('div');
+  div.className='template-thumb'+(curTmpl===t.id?' active':'');
+  div.title=t.name;
+  rects.forEach(r=>{
+   let p=document.createElement('div');
+   p.style.position='absolute'; p.style.left=r.x+'%'; p.style.top=r.y+'%'; p.style.width=r.w+'%'; p.style.height=r.h+'%';
+   p.style.background='rgba(255,255,255,0.9)'; p.style.border='1px solid #111'; p.style.boxSizing='border-box';
+   div.appendChild(p);
+  });
+  let label=document.createElement('div');
+  label.style.position='absolute'; label.style.bottom='0'; label.style.left='0'; label.style.right='0'; label.style.fontSize='7px'; label.style.textAlign='center'; label.style.color='#fff'; label.style.background='rgba(0,0,0,0.7)'; label.style.padding='2px 0';
+  label.textContent=t.name;
+  div.appendChild(label);
+  div.onclick=()=>setBDTemplate(t.id);
+  container.appendChild(div);
+ });
+}
+function setBDTemplate(id){
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
+ ensureBDData(item);
+ let rects=getTemplateRects(id, item.bdPanels.length);
+ if(id==='10auto') rects=generateAutoRects(10);
+ let newPanels=[];
+ for(let i=0;i<rects.length;i++){
+  if(i<item.bdPanels.length) newPanels.push(item.bdPanels[i]);
+  else newPanels.push({id:uid(), image:'', tx:0,ty:0,scale:1,rot:0});
+ }
+ item.bdPanels=newPanels;
+ item.bdTemplate=id;
+ item.bdTemplateRects=rects;
+ selectedPanelIndex=0;
+ renderBDTemplatesList();
+ renderBDCanvas();
+ autoSave();
+}
+function applyCustomGrid(){
+ let cnt=parseInt(document.getElementById('bdCustomCount').value)||4;
+ cnt=Math.min(12, Math.max(1,cnt));
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
+ let rects=generateAutoRects(cnt);
+ let newPanels=[];
+ for(let i=0;i<rects.length;i++){
+  if(i<item.bdPanels.length) newPanels.push(item.bdPanels[i]);
+  else newPanels.push({id:uid(), image:'', tx:0,ty:0,scale:1,rot:0});
+ }
+ item.bdPanels=newPanels;
+ item.bdTemplate='custom';
+ item.bdTemplateRects=rects;
+ selectedPanelIndex=0;
+ renderBDTemplatesList();
+ renderBDCanvas();
+ autoSave();
+}
 function createBubbleElement(b){
  let div=document.createElement('div');
  div.className='bd-bubble bubble-'+b.type+(selectedBubbleId===b.id?' selected':'');
  div.dataset.bubbleId=b.id;
- div.style.left=b.x+'%';div.style.top=b.y+'%';div.style.width=b.w+'%';
- div.style.fontFamily=b.fontFamily;div.style.fontSize=b.fontSize+'px';
- div.style.background=b.bgColor||'#fff';div.style.color=b.textColor||'#111';
- if(b.borderColor&&!['pow','boom','action'].includes(b.type))div.style.borderColor=b.borderColor;
- div.style.transform='translate(-50%, -50%)'+(b.rotation?' rotate('+b.rotation+'deg)':'');
- let inner=document.createElement('div');inner.className='bubble-inner';inner.textContent=b.text||'TEXTE';
- div.appendChild(inner);
- if(!['pow','boom','splash','action','narrator'].includes(b.type)){
-  let tail=document.createElement('div');tail.className='bd-bubble-tail '+(b.tailPos||'center');tail.style.background=b.bgColor||'#fff';div.appendChild(tail);
+ div.style.left=b.x+'%'; div.style.top=b.y+'%'; div.style.width=b.w+'%';
+ div.style.fontFamily=b.fontFamily; div.style.fontSize=b.fontSize+'px';
+ 
+ if(b.type !== 'action') {
+    div.style.transform='translate(-50%, -50%)';
  }
- div.addEventListener('mousedown',e=>onBubbleMouseDown(e,b.id));
- div.addEventListener('click',e=>{e.stopPropagation();selectBubble(b.id);});
+ 
+ div.style.background = b.bgColor || (b.type==='narrator'?'#fff8b5':'#ffffff');
+ div.textContent=b.text||'TEXTE';
+ 
+ if(b.type!=='narrator' && b.type!=='action'){
+  let tail=document.createElement('div'); 
+  tail.className='bd-bubble-tail '+(b.tailPos||'center');
+  tail.style.background = div.style.background;
+  div.appendChild(tail);
+ }
+ div.addEventListener('mousedown', (e)=>onBubbleMouseDown(e, b.id));
+ div.addEventListener('click', (e)=>{ e.stopPropagation(); selectBubble(b.id); });
+ div.addEventListener('dblclick', (e)=>{ e.stopPropagation(); selectBubble(b.id); document.getElementById('bdBubbleText').focus(); });
  return div;
 }
 function renderBDCanvas(){
- const proj=getCurrentProject();const item=proj.data.book.items.find(i=>i.id===currentPageId);if(!item)return;ensureBDData(item);
- const bgLayer=document.getElementById('bdBgLayer');const gridContainer=document.getElementById('bdGridContainer');const pageLayer=document.getElementById('bdBubblesPageLayer');
- if(!bgLayer||!gridContainer)return;
- bgLayer.innerHTML='';gridContainer.innerHTML='';if(pageLayer)pageLayer.innerHTML='';
- if(item.bdBgImage){let img=document.createElement('img');img.src=item.bdBgImage;img.style.position='absolute';img.style.top='0';img.style.left='0';img.style.width='100%';img.style.height='100%';img.style.objectFit='cover';img.style.transform=`translate(${item.bdBg.tx||0}px, ${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1})`;bgLayer.appendChild(img);}
- item.bdTemplateRects.forEach((rect,idx)=>{
-  let panelData=item.bdPanels[idx];if(!panelData)return;
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
+ ensureBDData(item);
+ const bgLayer=document.getElementById('bdBgLayer'); const gridContainer=document.getElementById('bdGridContainer'); const pageLayer=document.getElementById('bdBubblesPageLayer');
+ if(!bgLayer||!gridContainer) return;
+ bgLayer.innerHTML=''; gridContainer.innerHTML=''; if(pageLayer) pageLayer.innerHTML='';
+ if(item.bdBgImage){
+  let img=document.createElement('img');
+  img.src=item.bdBgImage; img.style.position='absolute'; img.style.top='0'; img.style.left='0'; img.style.width='100%'; img.style.height='100%'; img.style.objectFit='cover';
+  img.style.transform=`translate(${item.bdBg.tx||0}px, ${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1})`; 
+  img.style.transformOrigin='center center'; img.style.pointerEvents='none';
+  bgLayer.appendChild(img);
+ }
+ item.bdTemplateRects.forEach((rect, idx)=>{
+  let panelData=item.bdPanels[idx]; if(!panelData) return;
   let panelDiv=document.createElement('div');
   panelDiv.className='bd-panel'+(selectedPanelIndex===idx?' selected':'');
-  panelDiv.style.left=`calc(${rect.x}% + 2px)`;panelDiv.style.top=`calc(${rect.y}% + 2px)`;panelDiv.style.width=`calc(${rect.w}% - 4px)`;panelDiv.style.height=`calc(${rect.h}% - 4px)`;
+  panelDiv.style.left=rect.x+'%'; panelDiv.style.top=rect.y+'%'; panelDiv.style.width=rect.w+'%'; panelDiv.style.height=rect.h+'%';
   panelDiv.dataset.index=idx;
-  if(panelData.image){let img=document.createElement('img');img.src=panelData.image;img.style.transform=`translate(${panelData.tx||0}px, ${panelData.ty||0}px) scale(${panelData.scale||1}) rotate(${panelData.rot||0}deg)`;panelDiv.appendChild(img);}else{let ph=document.createElement('div');ph.className='bd-panel-placeholder';ph.innerHTML=`<i class="fas fa-image" style="font-size:18px"></i><span>pix${idx+1}</span><button class="btn" style="margin-top:4px;font-size:10px;padding:4px 8px" onclick="event.stopPropagation(); triggerPanelUpload(${idx})">Image</button>`;panelDiv.appendChild(ph);}
+  if(panelData.image){
+   let img=document.createElement('img');
+   img.src=panelData.image;
+   img.style.transform=`translate(${panelData.tx||0}px, ${panelData.ty||0}px) scale(${panelData.scale||1}) rotate(${panelData.rot||0}deg)`;
+   panelDiv.appendChild(img);
+  } else {
+   let ph=document.createElement('div'); ph.className='bd-panel-placeholder';
+   ph.innerHTML=`<i class="fas fa-image" style="font-size:18px"></i><span>pix${idx+1}</span><button class="btn" style="margin-top:4px;font-size:10px;padding:4px 8px" onclick="event.stopPropagation(); triggerPanelUpload(${idx})"><i class="fas fa-upload"></i> Image</button>`;
+   panelDiv.appendChild(ph);
+  }
   let bubblesInPanel=item.bdBubbles.filter(b=>b.panelIndex===idx);
-  bubblesInPanel.forEach(b=>{panelDiv.appendChild(createBubbleElement(b));});
-  panelDiv.addEventListener('mousedown',e=>onPanelMouseDown(e,idx));
-  panelDiv.addEventListener('wheel',e=>onPanelWheel(e,idx),{passive:false});
-  panelDiv.addEventListener('click',e=>{if(e.target.closest('.bd-bubble'))return;selectPanel(idx);});
+  bubblesInPanel.forEach(b=>{ panelDiv.appendChild(createBubbleElement(b)); });
+  panelDiv.addEventListener('mousedown', (e)=>onPanelMouseDown(e, idx));
+  panelDiv.addEventListener('wheel', (e)=>onPanelWheel(e, idx), {passive:false});
+  panelDiv.addEventListener('click', (e)=>{ if(e.target.closest('.bd-bubble')) return; selectPanel(idx); });
   gridContainer.appendChild(panelDiv);
  });
- if(pageLayer){pageLayer.style.pointerEvents='none';let pageBubbles=item.bdBubbles.filter(b=>b.panelIndex===null||b.panelIndex===undefined);pageBubbles.forEach(b=>{let el=createBubbleElement(b);el.style.pointerEvents='auto';pageLayer.appendChild(el);});}
+ if(pageLayer){
+  pageLayer.style.pointerEvents='none';
+  let pageBubbles=item.bdBubbles.filter(b=>b.panelIndex===null || b.panelIndex===undefined);
+  pageBubbles.forEach(b=>{ let el=createBubbleElement(b); el.style.pointerEvents='auto'; pageLayer.appendChild(el); });
+ }
+ updatePanelTools();
  updateBubblesList();
 }
-function selectPanel(idx){selectedPanelIndex=idx;selectedBubbleId=null;renderBDCanvas();document.getElementById('bdPanelTools').style.display='flex';document.getElementById('bdBubbleEdit').style.display='none';const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);const p=item.bdPanels[idx];if(p){document.getElementById('bdSelectedPanelLabel').textContent='pix'+(idx+1);document.getElementById('bdPanelImageUrl').value=p.image||'';document.getElementById('bdPanelScale').value=p.scale||1;document.getElementById('bdPanelScaleVal').textContent=Math.round((p.scale||1)*100)+'%';document.getElementById('bdPanelRot').value=p.rot||0;document.getElementById('bdPanelRotVal').textContent=(p.rot||0)+'°';}}
-function triggerPanelUpload(idx){selectedPanelIndex=idx;document.getElementById('bdPanelUpload').click();}
-function onPanelFile(e){const file=e.target.files[0];if(!file)return;const idx=selectedPanelIndex;const reader=new FileReader();reader.onload=ev=>{const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);ensureBDData(item);if(idx!==null&&item.bdPanels[idx]){item.bdPanels[idx].image=ev.target.result;item.bdPanels[idx].tx=0;item.bdPanels[idx].ty=0;item.bdPanels[idx].scale=1;item.bdPanels[idx].rot=0;}renderBDCanvas();autoSave();};reader.readAsDataURL(file);e.target.value='';}
-function onPanelUrlChange(v){if(selectedPanelIndex===null)return;const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);item.bdPanels[selectedPanelIndex].image=v;renderBDCanvas();autoSave();}
-function onPanelScale(v){if(selectedPanelIndex===null)return;const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);item.bdPanels[selectedPanelIndex].scale=parseFloat(v);document.getElementById('bdPanelScaleVal').textContent=Math.round(parseFloat(v)*100)+'%';renderBDCanvas();autoSave();}
-function onPanelRot(v){if(selectedPanelIndex===null)return;const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);item.bdPanels[selectedPanelIndex].rot=parseInt(v);document.getElementById('bdPanelRotVal').textContent=v+'°';renderBDCanvas();autoSave();}
-function clearPanelImage(){if(selectedPanelIndex===null)return;const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);item.bdPanels[selectedPanelIndex].image='';renderBDCanvas();autoSave();}
-function onBDBgFile(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);ensureBDData(item);item.bdBgImage=ev.target.result;renderBDCanvas();autoSave();};reader.readAsDataURL(file);e.target.value='';}
-function onBDBgUrlChange(v){const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);ensureBDData(item);item.bdBgImage=v;renderBDCanvas();autoSave();}
-function onBDBgScale(v){const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);ensureBDData(item);item.bdBg.scale=parseFloat(v);document.getElementById('bdBgScaleVal').textContent=Math.round(parseFloat(v)*100)+'%';renderBDCanvas();autoSave();}
-function clearBGBg(){const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);ensureBDData(item);item.bdBgImage='';item.bdBg={tx:0,ty:0,scale:1,rot:0};document.getElementById('bdBgImageInput').value='';renderBDCanvas();autoSave();}
-function onPanelMouseDown(e,idx){if(e.target.closest('.bd-bubble'))return;const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);ensureBDData(item);const panel=item.bdPanels[idx];if(!panel.image)return;dragState={type:'panelImage',idx,startX:e.clientX,startY:e.clientY,origTx:panel.tx||0,origTy:panel.ty||0};e.preventDefault();}
-function onPanelWheel(e,idx){e.preventDefault();const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);ensureBDData(item);const panel=item.bdPanels[idx];if(!panel.image)return;if(e.shiftKey){panel.rot=(panel.rot||0)+(e.deltaY>0?-3:3);if(panel.rot>180)panel.rot-=360;if(panel.rot<-180)panel.rot+=360;if(selectedPanelIndex===idx){document.getElementById('bdPanelRot').value=panel.rot;document.getElementById('bdPanelRotVal').textContent=panel.rot+'°';}}else{let d=e.deltaY>0?-0.07:0.07;let ns=Math.min(15,Math.max(0.1,(panel.scale||1)+d));panel.scale=ns;if(selectedPanelIndex===idx){document.getElementById('bdPanelScale').value=ns;document.getElementById('bdPanelScaleVal').textContent=Math.round(ns*100)+'%';}}renderBDCanvas();autoSave();}
-function addBDBubble(type){const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);ensureBDData(item);let nb={id:uid(),panelIndex:selectedPanelIndex,type:type,text:type==='narrator'?'Narration...':'TEXTE',x:50,y:20,w:type==='narrator'?60:34,fontFamily:"'Bangers', cursive",fontSize:16,bgColor:type==='narrator'?'#fff8b5':'#ffffff',textColor:'#111111',borderColor:'#111111',tailPos:'center',rotation:0};item.bdBubbles.push(nb);selectedBubbleId=nb.id;renderBDCanvas();selectBubble(nb.id);autoSave();}
-function addActionBubble(word){const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);ensureBDData(item);const colors=['#FFEB3B','#FF5722','#4FC3F7','#8BC34A','#E91E63','#FF9800','#00E5FF','#FFEA00','#FF4081','#69F0AE'];const bg=colors[Math.floor(Math.random()*colors.length)];const tc=(bg==='#FFEB3B'||bg==='#FFEA00'||bg==='#69F0AE'||bg==='#8BC34A'||bg==='#00E5FF'||bg==='#4FC3F7')?'#111111':'#ffffff';let nb={id:uid(),panelIndex:selectedPanelIndex,type:'pow',text:word,x:50,y:50,w:44,fontFamily:"'Bangers', cursive",fontSize:28,bgColor:bg,textColor:tc,borderColor:'#111111',tailPos:'center',rotation:(Math.random()*8-4)};item.bdBubbles.push(nb);selectedBubbleId=nb.id;renderBDCanvas();selectBubble(nb.id);autoSave();}
-function onBubbleMouseDown(e,bid){e.stopPropagation();const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);let b=item.bdBubbles.find(x=>x.id===bid);if(!b)return;let panelEl=e.target.closest('.bd-panel');let pr=panelEl?panelEl.getBoundingClientRect():document.getElementById('bdCanvasEnhancedWrap').getBoundingClientRect();dragState={type:'bubble',bubbleId:bid,startX:e.clientX,startY:e.clientY,origX:b.x,origY:b.y,parentRect:pr};selectBubble(bid);e.preventDefault();}
-function selectBubble(id){selectedBubbleId=id;const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);let b=item.bdBubbles.find(x=>x.id===id);if(!b)return;document.getElementById('bdBubbleEdit').style.display='flex';document.getElementById('bdBubbleText').value=b.text;document.getElementById('bdBubbleFont').value=b.fontFamily;document.getElementById('bdBubbleWidth').value=b.w;document.getElementById('bdBubbleWidthVal').textContent=b.w+'%';document.getElementById('bdBubbleFontSize').value=b.fontSize;document.getElementById('bdBubbleFontSizeVal').textContent=b.fontSize+'px';document.getElementById('bdBubbleTail').value=b.tailPos||'center';document.getElementById('bdBubbleBg').value=b.bgColor||'#ffffff';document.getElementById('bdBubbleTextColor').value=b.textColor||'#111111';document.getElementById('bdBubbleBorder').value=b.borderColor||'#111111';renderBDCanvas();}
-function onBubbleTextChange(v){const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);let b=item.bdBubbles.find(x=>x.id===selectedBubbleId);if(b){b.text=v;renderBDCanvas();autoSave();}}
-function onBubbleFontChange(v){const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);let b=item.bdBubbles.find(x=>x.id===selectedBubbleId);if(b){b.fontFamily=v;renderBDCanvas();autoSave();}}
-function onBubbleWidth(v){const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);let b=item.bdBubbles.find(x=>x.id===selectedBubbleId);if(b){b.w=parseInt(v);document.getElementById('bdBubbleWidthVal').textContent=v+'%';renderBDCanvas();autoSave();}}
-function onBubbleFontSize(v){const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);let b=item.bdBubbles.find(x=>x.id===selectedBubbleId);if(b){b.fontSize=parseInt(v);document.getElementById('bdBubbleFontSizeVal').textContent=v+'px';renderBDCanvas();autoSave();}}
-function onBubbleBgChange(v){const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);let b=item.bdBubbles.find(x=>x.id===selectedBubbleId);if(b){b.bgColor=v;renderBDCanvas();autoSave();}}
-function onBubbleTextColorChange(v){const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);let b=item.bdBubbles.find(x=>x.id===selectedBubbleId);if(b){b.textColor=v;renderBDCanvas();autoSave();}}
-function onBubbleBorderChange(v){const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);let b=item.bdBubbles.find(x=>x.id===selectedBubbleId);if(b){b.borderColor=v;renderBDCanvas();autoSave();}}
-function onBubbleTailChange(v){const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);let b=item.bdBubbles.find(x=>x.id===selectedBubbleId);if(b){b.tailPos=v;renderBDCanvas();autoSave();}}
-function deleteSelectedBubble(){if(!selectedBubbleId)return;const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);item.bdBubbles=item.bdBubbles.filter(b=>b.id!==selectedBubbleId);selectedBubbleId=null;document.getElementById('bdBubbleEdit').style.display='none';renderBDCanvas();autoSave();}
-function duplicateBubble(){if(!selectedBubbleId)return;const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);let o=item.bdBubbles.find(b=>b.id===selectedBubbleId);if(!o)return;let c={...o,id:uid(),x:Math.min(90,o.x+5),y:Math.min(90,o.y+5)};item.bdBubbles.push(c);selectedBubbleId=c.id;renderBDCanvas();selectBubble(c.id);autoSave();}
-function updateBubblesList(){const container=document.getElementById('bdBubblesList');if(!container)return;const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);if(!item)return;container.innerHTML='';item.bdBubbles.forEach(b=>{let chip=document.createElement('div');chip.style.padding='4px 10px';chip.style.borderRadius='14px';chip.style.background=b.id===selectedBubbleId?'#ef4444':'rgba(255,255,255,0.1)';chip.style.fontSize='11px';chip.style.cursor='pointer';chip.textContent=(b.panelIndex!==null?'pix'+(b.panelIndex+1)+': ':'Page: ')+(b.text.slice(0,14)||'bulle');chip.onclick=()=>selectBubble(b.id);container.appendChild(chip);});}
-document.addEventListener('mousemove',e=>{if(!dragState)return;const item=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);if(!item)return;if(dragState.type==='panelImage'){let dx=e.clientX-dragState.startX,dy=e.clientY-dragState.startY;let p=item.bdPanels[dragState.idx];p.tx=dragState.origTx+dx;p.ty=dragState.origTy+dy;let img=document.querySelector(`.bd-panel[data-index="${dragState.idx}"] img`);if(img)img.style.transform=`translate(${p.tx}px,${p.ty}px) scale(${p.scale}) rotate(${p.rot}deg)`;}else if(dragState.type==='bubble'){let dx=e.clientX-dragState.startX,dy=e.clientY-dragState.startY;let nl=dragState.origX+(dx/dragState.parentRect.width)*100;let nt=dragState.origY+(dy/dragState.parentRect.height)*100;let b=item.bdBubbles.find(x=>x.id===dragState.bubbleId);if(b){b.x=Math.max(5,Math.min(95,nl));b.y=Math.max(5,Math.min(95,nt));let el=document.querySelector(`[data-bubble-id="${b.id}"]`);if(el){el.style.left=b.x+'%';el.style.top=b.y+'%';}}}});
-document.addEventListener('mouseup',()=>{if(dragState){if(dragState.type==='bubble'||dragState.type==='panelImage'){renderBDCanvas();autoSave();}dragState=null;}});
-function setLayout(l,s=true){document.querySelectorAll('[id^="lay-"]').forEach(b=>b.classList.remove('active'));const btn=document.getElementById('lay-'+l);if(btn)btn.classList.add('active');if(s)autoSave();}
-function setImageAlign(a,s=true){document.querySelectorAll('[id^="align-"]').forEach(b=>b.classList.remove('active'));const btn=document.getElementById('align-'+a);if(btn)btn.classList.add('active');if(s)autoSave();}
-function updateImageSize(v){document.getElementById('imageSizeVal')&&(document.getElementById('imageSizeVal').textContent=v+'%');autoSave();}
-function updateBgOpacity(v){document.getElementById('bgOpacityVal')&&(document.getElementById('bgOpacityVal').textContent=v+'%');autoSave();}
-function renderRefBlock(){const cfg=appConfig.reference||{mode:'all',selected:[]};document.querySelectorAll('input[name="refModePage"]').forEach(r=>r.checked=r.value===cfg.mode);const list=document.getElementById('refPageListInPage');if(cfg.mode==='select'){list.style.display='flex';list.innerHTML='';getCurrentProject().data.book.items.filter(i=>i.type==='chapter').forEach(it=>{const checked=cfg.selected.includes(it.id);const label=document.createElement('label');label.style.cssText='display:flex;gap:8px;font-size:12px;align-items:center';label.innerHTML=`<input type="checkbox" value="${it.id}" ${checked?'checked':''} onchange="updateRefSelectionPage()"> ${esc(it.title)}`;list.appendChild(label);});}else{list.style.display='none';}}
-function updateRefConfigPage(){const mode=document.querySelector('input[name="refModePage"]:checked')?.value||'all';appConfig.reference.mode=mode;if(mode==='all')appConfig.reference.selected=[];saveProjects();renderRefBlock();}
-function updateRefSelectionPage(){const sel=Array.from(document.querySelectorAll('#refPageListInPage input:checked')).map(i=>i.value);appConfig.reference.selected=sel;saveProjects();}
-function prevPage(){const items=getCurrentProject().data.book.items;const idx=items.findIndex(i=>i.id===currentPageId);if(idx>0){selectPage(items[idx-1].id);}}
-function nextPage(){const items=getCurrentProject().data.book.items;const idx=items.findIndex(i=>i.id===currentPageId);if(idx<items.length-1){selectPage(items[idx+1].id);}}
-function uploadLocalImage(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{document.getElementById('itemImage').value=ev.target.result;autoSave();};r.readAsDataURL(file);e.target.value='';}
-function _doSaveCore(){const proj=getCurrentProject();if(!proj)return;const item=proj.data.book.items.find(i=>i.id===currentPageId);if(!item)return;if(item.type==='cover'){const nt=document.getElementById('globalTitle').value.trim()||'Mon projet BD';proj.title=nt;proj.data.book.title=nt;document.getElementById('currentProjectName').textContent=nt;document.getElementById('genCurrentProjectName').textContent=nt;item.showTitle=document.getElementById('showTitleOnCover').checked;}item.title=document.getElementById('itemTitle').value.trim()||'Page';if(currentActiveModule!=='comic'||item.type!=='chapter'){item.image=document.getElementById('itemImage')?.value||'';}proj.config=appConfig;proj.updatedAt=Date.now();saveProjects();const ind=document.getElementById('syncIndicator');if(ind)ind.innerHTML='<i class="fas fa-check-circle"></i> sync';document.getElementById('savedToast').classList.add('show');setTimeout(()=>document.getElementById('savedToast').classList.remove('show'),1500);refreshPageDropdown();}
-function autoSave(){const ind=document.getElementById('syncIndicator');if(ind)ind.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> sync';clearTimeout(window._t);window._t=setTimeout(_doSaveCore,400);}
-function manualSave(){clearTimeout(window._t);_doSaveCore();}
-function addPage(){const proj=getCurrentProject();const nid='ch_'+Date.now();const newItem={id:nid,type:'chapter',title:`Page BD ${proj.data.book.items.filter(i=>i.type==='chapter').length+1}`,titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]};proj.data.book.items.push(newItem);currentPageId=nid;selectedPanelIndex=0;saveProjects();loadProjectIntoUI();autoSave();}
-function deletePage(){const it=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);if(it.type==='cover')return alert('Page système');if(!confirm('Supprimer?'))return;getCurrentProject().data.book.items=getCurrentProject().data.book.items.filter(i=>i.id!==currentPageId);currentPageId=getCurrentProject().data.book.items[0].id;saveProjects();loadProjectIntoUI();}
-function buildBDHTML(item){ensureBDData(item);let rects=item.bdTemplateRects||[{x:0,y:0,w:100,h:100}];let html=`<div style="position:relative;width:100%;max-width:800px;margin:0 auto;aspect-ratio:1/1.414;background:#fff;border:4px solid #111;overflow:hidden;box-sizing:border-box">`;if(item.bdBgImage){html+=`<img src="${item.bdBgImage}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translate(${item.bdBg.tx||0}px,${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1})" />`;}rects.forEach((r,i)=>{let p=item.bdPanels[i];if(!p)return;html+=`<div style="position:absolute;left:${r.x}%;top:${r.y}%;width:${r.w}%;height:${r.h}%;border:3px solid #111;overflow:hidden;background:#fff;box-sizing:border-box">`;if(p.image){html+=`<img src="${p.image}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transform:translate(${p.tx||0}px,${p.ty||0}px) scale(${p.scale||1}) rotate(${p.rot||0}deg)" />`;}let bubbles=item.bdBubbles.filter(b=>b.panelIndex===i);bubbles.forEach(b=>{let bg=b.bgColor||'#fff',tc=b.textColor||'#111',isPow=['pow','boom','action','splash'].includes(b.type);let style=`position:absolute;left:${b.x}%;top:${b.y}%;width:${b.w}%;transform:translate(-50%,-50%)${b.rotation?' rotate('+b.rotation+'deg)':''};background:${bg};color:${tc};border:${isPow?'none':'3px solid '+(b.borderColor||'#111')};font-family:${b.fontFamily};font-size:${b.fontSize}px;font-weight:800;display:flex;align-items:center;justify-content:center;text-align:center;box-sizing:border-box;word-break:break-word;white-space:pre-wrap;padding:${isPow?'28px':'14px'};${b.type==='round'?'border-radius:50%;padding:22px 28px;':b.type==='narrator'?'background:'+(b.bgColor||'#fff8b5')+';border-radius:3px;font-style:italic;':''}${isPow?`clip-path:${b.type==='pow'?'polygon(50% 0%,63% 30%,100% 15%,72% 48%,88% 88%,50% 68%,12% 88%,28% 48%,0% 15%,38% 30%)':'polygon(50% 0%,61% 35%,100% 10%,75% 45%,100% 60%,70% 65%,85% 100%,50% 75%,15% 100%,30% 65%,0% 60%,25% 45%,0% 10%,39% 35%)'};filter:drop-shadow(2px 0 0 #111) drop-shadow(-2px 0 0 #111) drop-shadow(0 2px 0 #111) drop-shadow(0 -2px 0 #111);`:''}`;html+=`<div style="${style}">${esc(b.text)}</div>`;});html+=`</div>`;});html+=`</div>`;return html;}
-function buildPageHTML(item,projectTitle){if(currentActiveModule==='comic'&&item.type==='chapter'){return buildBDHTML(item);}if(item.type==='cover'){const show=item.showTitle!==false;const titleHTML=show?`<h1 style="font-size:48px;text-align:center;color:#fff;text-shadow:0 2px 30px rgba(0,0,0,.9);margin:0">${esc(projectTitle||'Mon projet BD')}</h1>`:'';if(item.image){return `<div style="position:relative;min-height:500px;background:#111;display:flex;align-items:flex-end;justify-content:center;padding:40px"><img src="${item.image}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.6" /><div style="position:relative;z-index:1">${titleHTML}</div></div>`;}return `<div style="min-height:400px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:60px;text-align:center;background:#111;color:#fff">${titleHTML}</div>`;}return `<div><h1 style="font-size:28px;text-align:center">${esc(item.title||'Page')}</h1><div style="white-space:pre-wrap">${esc(item.text||'')}</div></div>`;}
-function openPreview(){autoSave();const proj=getCurrentProject();const item=proj.data.book.items.find(i=>i.id===currentPageId);const box=document.getElementById('prvContent');box.innerHTML=buildPageHTML(item,proj.title);document.getElementById('previewModal').classList.add('active');setPreviewDevice(previewDevice);}
-function closePreview(){document.getElementById('previewModal').classList.remove('active');}
-function setPreviewDevice(d){previewDevice=d;const s=document.getElementById('previewScreen');s.className='preview-screen '+d;['mobile','tablet','large'].forEach(x=>{const el=document.getElementById('btn'+x.charAt(0).toUpperCase()+x.slice(1));if(el){el.classList.remove('active');if(d===x)el.classList.add('active');}});}
-function factoryReset(){if(!confirm('Tout effacer?'))return;localStorage.clear();try{indexedDB.deleteDatabase("WriterFontsDB");}catch(e){}location.reload();}
-async function exportPagesData(){autoSave();const proj=getCurrentProject();const obj={projectTitle:proj.title,items:proj.data.book.items,config:appConfig};const blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='pages.data';a.click();URL.revokeObjectURL(url);}
-async function exportEPUB3(){alert('EPUB export à venir - utilise pages.data pour backup');}
-async function exportPDFBook(){autoSave();const proj=getCurrentProject();const container=document.createElement('div');container.style.background='#fff';container.style.color='#111';container.style.padding='20px';let html='';proj.data.book.items.forEach(it=>{html+=`<div style="page-break-after:always;padding:20px 0">${buildPageHTML(it,proj.title)}</div>`;});container.innerHTML=html;document.body.appendChild(container);try{const opt={margin:10,filename:(proj.title||'BD')+'.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a5',orientation:'portrait'}};await html2pdf().set(opt).from(container).save();}catch(e){alert(e.message);}finally{container.remove();}}
-function setLang(l){localStorage.setItem('writer_lang',l);location.reload();}
-function bootstrapApp(){try{loadProjects();const proj=getCurrentProject();if(!proj)return;document.getElementById('currentProjectName').textContent=proj.title;document.getElementById('genCurrentProjectName').textContent=proj.title;refreshFontDropdown();refreshPageDropdown();loadPageData();}catch(e){}}
-function openSettings(){document.getElementById('settingsModal').classList.add('active');closeMenus();}
-function closeSettings(){document.getElementById('settingsModal').classList.remove('active');}
-window.onload=()=>{initIDB(bootstrapApp);};
+function selectPanel(idx){
+ selectedPanelIndex=idx; selectedBubbleId=null;
+ renderBDCanvas();
+ document.getElementById('bdPanelTools').style.display='flex';
+ document.getElementById('bdBubbleEdit').style.display='none';
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
+ const p=item.bdPanels[idx];
+ if(p){
+  document.getElementById('bdSelectedPanelLabel').textContent='pix'+(idx+1);
+  document.getElementById('bdPanelImageUrl').value=p.image||'';
+  document.getElementById('bdPanelScale').value=p.scale||1;
+  document.getElementById('bdPanelScaleVal').textContent=Math.round((p.scale||1)*100)+'%';
+  document.getElementById('bdPanelRot').value=p.rot||0;
+  document.getElementById('bdPanelRotVal').textContent=(p.rot||0)+'°';
+ }
+}
+function triggerPanelUpload(idx){ selectedPanelIndex=idx; document.getElementById('bdPanelUpload').click(); }
+function onPanelFile(e){
+ const file=e.target.files[0]; if(!file) return;
+ const idx=selectedPanelIndex;
+ const reader=new FileReader();
+ reader.onload=ev=>{
+  const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
+  if(idx!==null && item.bdPanels[idx]){ item.bdPanels[idx].image=ev.target.result; item.bdPanels[idx].tx=0; item.bdPanels[idx].ty=0; item.bdPanels[idx].scale=1; item.bdPanels[idx].rot=0; }
+  renderBDCanvas(); autoSave();
+ };
+ reader.readAsDataURL(file); e.target.value='';
+}
+function onPanelUrlChange(val){ if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); item.bdPanels[selectedPanelIndex].image=val; renderBDCanvas(); autoSave(); }
+function onPanelScale(val){ if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); item.bdPanels[selectedPanelIndex].scale=parseFloat(val); document.getElementById('bdPanelScaleVal').textContent=Math.round(parseFloat(val)*100)+'%'; renderBDCanvas(); autoSave(); }
+function onPanelRot(val){ if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); item.bdPanels[selectedPanelIndex].rot=parseInt(val); document.getElementById('bdPanelRotVal').textContent=val+'°'; renderBDCanvas(); autoSave(); }
+function clearPanelImage(){ if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); item.bdPanels[selectedPanelIndex].image=''; renderBDCanvas(); autoSave(); }
+function onBDBgFile(e){ const file=e.target.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=ev=>{ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=ev.target.result; renderBDCanvas(); autoSave(); }; reader.readAsDataURL(file); e.target.value=''; }
+function onBDBgUrlChange(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=val; renderBDCanvas(); autoSave(); }
+function onBDBgScale(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBg.scale=parseFloat(val); document.getElementById('bdBgScaleVal').textContent=Math.round(parseFloat(val)*100)+'%'; renderBDCanvas(); autoSave(); }
+function clearBGBg(){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=''; item.bdBg={tx:0,ty:0,scale:1,rot:0}; document.getElementById('bdBgImageInput').value=''; renderBDCanvas(); autoSave(); }
+function onPanelMouseDown(e, idx){
+ if(e.target.closest('.bd-bubble')) return;
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
+ const panel=item.bdPanels[idx]; if(!panel.image) return;
+ dragState={type:'panelImage', idx, startX:e.clientX, startY:e.clientY, origTx:panel.tx||0, origTy:panel.ty||0};
+ e.preventDefault();
+}
+function onPanelWheel(e, idx){
+ e.preventDefault();
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
+ const panel=item.bdPanels[idx]; if(!panel.image) return;
+ if(e.shiftKey){
+  panel.rot=(panel.rot||0)+(e.deltaY>0?-3:3);
+  if(panel.rot>180) panel.rot-=360; if(panel.rot<-180) panel.rot+=360;
+  if(selectedPanelIndex===idx){ document.getElementById('bdPanelRot').value=panel.rot; document.getElementById('bdPanelRotVal').textContent=panel.rot+'°'; }
+ } else {
+  let delta=e.deltaY>0?-0.07:0.07; let newScale=Math.min(15,Math.max(0.1,(panel.scale||1)+delta)); panel.scale=newScale;
+  if(selectedPanelIndex===idx){ document.getElementById('bdPanelScale').value=newScale; document.getElementById('bdPanelScaleVal').textContent=Math.round(newScale*100)+'%'; }
+ }
+ renderBDCanvas(); autoSave();
+}
+function addBDBubble(type){
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
+ let newBubble={ id:uid(), panelIndex:selectedPanelIndex, type:type, text:type==='narrator'?'Narration...':'TEXTE', x:50, y:20, w:type==='narrator'?60:34, fontFamily:"'Bangers', cursive", fontSize:14, tailPos:'center', bgColor: type==='narrator'?'#fff8b5':'#ffffff' };
+ item.bdBubbles.push(newBubble); selectedBubbleId=newBubble.id; renderBDCanvas(); selectBubble(newBubble.id); autoSave();
+}
+function addBDActionBubble(text, bgColor){
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
+ let newBubble={ id:uid(), panelIndex:selectedPanelIndex, type:'action', text:text, x:50, y:50, w:45, fontFamily:"'Bangers', cursive", fontSize:24, tailPos:'center', bgColor: bgColor };
+ item.bdBubbles.push(newBubble); selectedBubbleId=newBubble.id; renderBDCanvas(); selectBubble(newBubble.id); autoSave();
+}
+function onBubbleMouseDown(e, bubbleId){
+ e.stopPropagation();
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
+ let bubble=item.bdBubbles.find(b=>b.id===bubbleId); if(!bubble) return;
+ let panelEl=e.target.closest('.bd-panel'); let parentRect=panelEl?panelEl.getBoundingClientRect():document.getElementById('bdCanvasEnhancedWrap').getBoundingClientRect();
+ dragState={type:'bubble', bubbleId, startX:e.clientX, startY:e.clientY, origX:bubble.x, origY:bubble.y, parentRect};
+ selectBubble(bubbleId); e.preventDefault();
+}
+function selectBubble(id){
+ selectedBubbleId=id;
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
+ let bubble=item.bdBubbles.find(b=>b.id===id); if(!bubble) return;
+ document.getElementById('bdBubbleEdit').style.display='flex';
+ document.getElementById('bdBubbleText').value=bubble.text;
+ document.getElementById('bdBubbleFont').value=bubble.fontFamily;
+ 
+ document.getElementById('bdBubbleSize').value=bubble.fontSize;
+ document.getElementById('bdBubbleSizeVal').textContent=bubble.fontSize+'px';
+ 
+ document.getElementById('bdBubbleWidth').value=bubble.w || 30;
+ document.getElementById('bdBubbleWidthVal').textContent=(bubble.w || 30)+'%';
+ 
+ document.getElementById('bdBubbleBg').value=bubble.bgColor || '#ffffff';
+ document.getElementById('bdBubbleTail').value=bubble.tailPos||'center';
+ renderBDCanvas();
+}
+function onBubbleTextChange(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.text=val; let el=document.querySelector(`[data-bubble-id="${bubble.id}"]`); if(el){ let tail=el.querySelector('.bd-bubble-tail'); el.childNodes[0].textContent=val; if(tail) el.appendChild(tail); } autoSave(); } }
+function onBubbleFontChange(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.fontFamily=val; renderBDCanvas(); autoSave(); } }
+function onBubbleSize(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.fontSize=parseInt(val); document.getElementById('bdBubbleSizeVal').textContent=val+'px'; renderBDCanvas(); autoSave(); } }
+function onBubbleWidth(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.w=parseInt(val); document.getElementById('bdBubbleWidthVal').textContent=val+'%'; renderBDCanvas(); autoSave(); } }
+function onBubbleBg(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.bgColor=val; renderBDCanvas(); autoSave(); } }
+function onBubbleTailChange(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.tailPos=val; renderBDCanvas(); autoSave(); } }
+function deleteSelectedBubble(){ if(!selectedBubbleId) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); item.bdBubbles=item.bdBubbles.filter(b=>b.id!==selectedBubbleId); selectedBubbleId=null; document.getElementById('bdBubbleEdit').style.display='none'; renderBDCanvas(); autoSave(); }
+function duplicateBubble(){ if(!selectedBubbleId) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let orig=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(!orig) return; let copy={...orig, id:uid(), x:Math.min(90,orig.x+5), y:Math.min(90,orig.y+5)}; item.bdBubbles.push(copy); selectedBubbleId=copy.id; renderBDCanvas(); selectBubble(copy.id); autoSave(); }
+function updatePanelTools(){}
+function updateBubblesList(){
+ const container=document.getElementById('bdBubblesList'); if(!container) return;
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
+ container.innerHTML='';
+ item.bdBubbles.forEach(b=>{
+  let chip=document.createElement('div');
+  chip.style.padding='4px 10px'; chip.style.borderRadius='14px'; chip.style.background=b.id===selectedBubbleId?'#ef4444':'rgba(255,255,255,0.1)'; chip.style.fontSize='11px'; chip.style.cursor='pointer';
+  chip.textContent=(b.panelIndex!==null?'pix'+(b.panelIndex+1)+': ':'Page: ')+(b.text.slice(0,14)||'bulle');
+  chip.onclick=()=>selectBubble(b.id);
+  container.appendChild(chip);
+ });
+}
+document.addEventListener('mousemove', (e)=>{
+ if(!dragState) return;
+ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
+ if(dragState.type==='panelImage'){
+  let dx=e.clientX-dragState.startX, dy=e.clientY-dragState.startY;
+  let panel=item.bdPanels[dragState.idx]; panel.tx=dragState.origTx+dx; panel.ty=dragState.origTy+dy;
+  let img=document.querySelector(`.bd-panel[data-index="${dragState.idx}"] img`); if(img) img.style.transform=`translate(${panel.tx}px,${panel.ty}px) scale(${panel.scale}) rotate(${panel.rot}deg)`;
+ } else if(dragState.type==='bubble'){
+  let dx=e.clientX-dragState.startX, dy=e.clientY-dragState.startY;
+  let newLeft=dragState.origX+(dx/dragState.parentRect.width)*100;
+  let newTop=dragState.origY+(dy/dragState.parentRect.height)*100;
+  let bubble=item.bdBubbles.find(b=>b.id===dragState.bubbleId);
+  if(bubble){ bubble.x=Math.max(5,Math.min(95,newLeft)); bubble.y=Math.max(5,Math.min(95,newTop)); let el=document.querySelector(`[data-bubble-id="${bubble.id}"]`); if(el){ el.style.left=bubble.x+'%'; el.style.top=bubble.y+'%'; } }
+ }
+});
+document.addEventListener('mouseup', ()=>{ if(dragState){ if(dragState.type==='bubble' || dragState.type==='panelImage'){ renderBDCanvas(); autoSave(); } dragState=null; } });
+
+/* ===== CORE BOOK LOGIC ===== */
+function setLayout(l,s=true){ document.querySelectorAll('[id^="lay-"]').forEach(b=>b.classList.remove('active')); const btn = document.getElementById('lay-'+l); if(btn) btn.classList.add('active'); document.getElementById('bgOpacityGroup').style.display=l==='bg'?'flex':'none'; document.getElementById('alignContainer').style.display=l==='bg'?'none':'flex'; if(s) autoSave(); } 
+function setImageAlign(a,s=true){ document.querySelectorAll('[id^="align-"]').forEach(b=>b.classList.remove('active')); const btn = document.getElementById('align-'+a); if(btn) btn.classList.add('active'); if(s) autoSave(); } 
+function updateImageSize(v){ document.getElementById('imageSizeVal').textContent=v+'%'; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(item) { item.imageSize = parseInt(v); } updateLivePreviewFast(); autoSave(); } 
+function updateBgOpacity(v){ document.getElementById('bgOpacityVal').textContent=v+'%'; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(item) { item.bgOpacity = parseInt(v); } updateLivePreviewFast(); autoSave(); } 
+function updateLivePreviewFast() { const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(document.getElementById('previewModal').classList.contains('active')) { document.getElementById('prvContent').innerHTML=buildPageHTML(item, proj.title); } }
+function renderRefBlock(){ 
+    const cfg=appConfig.reference||{mode:'all',selected:[]}; document.querySelectorAll('input[name="refModePage"]').forEach(r=>r.checked=r.value===cfg.mode); 
+    const list=document.getElementById('refPageListInPage'); 
+    if(cfg.mode==='select'){ list.style.display='flex'; list.innerHTML=''; getCurrentProject().data.book.items.filter(i=>i.type==='chapter').forEach(it=>{ const checked=cfg.selected.includes(it.id); const label=document.createElement('label'); label.style.cssText='display:flex;gap:8px;font-size:12px;align-items:center'; label.innerHTML=`<input type="checkbox" value="${it.id}" ${checked?'checked':''} onchange="updateRefSelectionPage()"> ${esc(it.title)}`; list.appendChild(label); }); } else { list.style.display='none'; } 
+} 
+function updateRefConfigPage(){ const mode=document.querySelector('input[name="refModePage"]:checked')?.value||'all'; appConfig.reference.mode=mode; if(mode==='all') appConfig.reference.selected=[]; saveProjects(); renderRefBlock(); } 
+function updateRefSelectionPage(){ const sel=Array.from(document.querySelectorAll('#refPageListInPage input:checked')).map(i=>i.value); appConfig.reference.selected=sel; saveProjects(); } 
+function prevPage(){ const items=getCurrentProject().data.book.items; const idx=items.findIndex(i=>i.id===currentPageId); if(idx>0){ selectPage(items[idx-1].id); } } 
+function nextPage(){ const items=getCurrentProject().data.book.items; const idx=items.findIndex(i=>i.id===currentPageId); if(idx<items.length-1){ selectPage(items[idx+1].id); } } 
+function _doSaveCore() {
+    const proj=getCurrentProject(); if(!proj) return; const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return; 
+    if(item.type==='cover'){ const nt=document.getElementById('globalTitle').value.trim()||'Mon projet'; proj.title=nt; proj.data.book.title=nt; document.getElementById('currentProjectName').textContent=nt; document.getElementById('genCurrentProjectName').textContent=nt; item.showTitle=document.getElementById('showTitleOnCover').checked; } 
+    item.title=document.getElementById('itemTitle').value.trim()||'Page'; 
+    if(currentActiveModule!=='comic' || item.type!=='chapter'){
+        item.image=document.getElementById('itemImage').value; item.text=document.getElementById('itemText').value; 
+        item.layout=document.querySelector('[id^="lay-"].active')?.id.replace('lay-','')||'top'; item.imageAlign=document.querySelector('[id^="align-"].active')?.id.replace('align-','')||'center'; 
+        item.imageSize=parseInt(document.getElementById('imageSize').value)||70; item.bgOpacity=parseInt(document.getElementById('bgOpacity').value)||15; 
+        item.titleSize=parseInt(document.getElementById('titleSizeLabel').dataset.value)||32; item.bodySize=parseInt(document.getElementById('bodySizeLabel').dataset.value)||17; 
+    }
+    if(item.type==='author'){ item.author=document.getElementById('globalAuthor').value; item.date=document.getElementById('globalDate').value; item.publisher=document.getElementById('globalPublisher').value; item.genre=document.getElementById('globalGenre').value; } 
+    proj.config=appConfig; proj.updatedAt=Date.now(); saveProjects(); 
+    const ind=document.getElementById('syncIndicator'); if(ind) ind.innerHTML='<i class="fas fa-check-circle"></i> sync'; 
+    document.getElementById('savedToast').classList.add('show'); setTimeout(()=>document.getElementById('savedToast').classList.remove('show'),1500); 
+    refreshPageDropdown(); updateLivePreviewFast();
+}
+function autoSave(){ const ind=document.getElementById('syncIndicator'); if(ind) ind.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> sync'; clearTimeout(window._t); window._t=setTimeout(_doSaveCore, 500); } 
+function manualSave(){ clearTimeout(window._t); _doSaveCore(); }
+function addPage(){ 
+    const proj=getCurrentProject(); const nid='ch_'+Date.now(); const refIdx=proj.data.book.items.findIndex(i=>i.type==='reference'); 
+    const newItem={id:nid,type:'chapter',title:`Page ${proj.data.book.items.filter(i=>i.type==='chapter').length+1}`,titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]}; 
+    if(refIdx>-1) proj.data.book.items.splice(refIdx+1,0,newItem); else proj.data.book.items.push(newItem); 
+    currentPageId=nid; selectedPanelIndex=0; saveProjects(); loadProjectIntoUI(); autoSave(); 
+} 
+function deletePage(){ const it=getCurrentProject().data.book.items.find(i=>i.id===currentPageId); if(it.type==='cover'||it.type==='author'||it.type==='reference') return alert('Page système non supprimable'); if(!confirm('Supprimer cette page ?')) return; getCurrentProject().data.book.items=getCurrentProject().data.book.items.filter(i=>i.id!==currentPageId); currentPageId=getCurrentProject().data.book.items[0].id; saveProjects(); loadProjectIntoUI(); } 
+function generateImgHtml(item, customStyle=''){ 
+    if(!item.image) return ''; 
+    if(item.layout==='bg' && !customStyle){ return `<img src="${item.image}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:${(item.bgOpacity||20)/100};z-index:0" />`; } 
+    let style=`width:${item.imageSize||70}%;${customStyle}`; const isFull=(item.imageSize||70)>=100; 
+    if(isFull && !customStyle){ return `<div class="img-wrapper full-bleed" style="width:calc(100% + 90px); margin-left:-45px; margin-right:-45px; overflow:hidden;"><img src="${item.image}" style="width:${item.imageSize}%;height:auto;border-radius:0;display:block;margin:0 auto;" /></div>`; }
+    else if(!customStyle){ if(item.imageAlign==='left') style+=`float:left;margin:0 14px 8px 0;`; else if(item.imageAlign==='right') style+=`float:right;margin:0 0 8px 14px;`; else style+=`display:block;margin:12px auto;`; } 
+    return `<div class="img-wrapper" style="${style}"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover;border-radius:${customStyle?'0':'8px'};display:block" /></div>`; 
+} 
+function buildBDHTML(item){
+ ensureBDData(item);
+ let rects=item.bdTemplateRects||[{x:0,y:0,w:100,h:100}];
+ let html=`<div style="position:relative;width:100%;max-width:800px;margin:0 auto;aspect-ratio:1/1.414;background:#fff;border:3.5px solid #111;overflow:hidden;box-sizing:border-box">`;
+ if(item.bdBgImage){
+  html+=`<img src="${item.bdBgImage}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translate(${item.bdBg.tx||0}px,${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1});transform-origin:center" />`;
+ }
+ rects.forEach((r,i)=>{
+  let p=item.bdPanels[i]; if(!p) return;
+  html+=`<div style="position:absolute;left:${r.x}%;top:${r.y}%;width:${r.w}%;height:${r.h}%;border:2.5px solid #111;overflow:hidden;background:#fff;box-sizing:border-box">`;
+  if(p.image){
+   html+=`<img src="${p.image}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transform:translate(${p.tx||0}px,${p.ty||0}px) scale(${p.scale||1}) rotate(${p.rot||0}deg);transform-origin:center" />`;
+  }
+  let bubbles=item.bdBubbles.filter(b=>b.panelIndex===i);
+  bubbles.forEach(b=>{
+   let bg = b.bgColor || (b.type==='narrator'?'#fff8b5':'#ffffff');
+   let radius=b.type==='round'?'50%':b.type==='square'?'4px':b.type==='thought'?'30px':'2px';
+   let bShapeCss = `border-radius:${radius};`;
+   
+   if(b.type === 'action') {
+       bShapeCss = `clip-path: polygon(50% 0%, 61% 25%, 98% 25%, 68% 47%, 79% 91%, 50% 70%, 21% 91%, 32% 47%, 2% 25%, 39% 25%); transform:translate(-50%,-50%) rotate(5deg);`;
+   }
+
+   let tailHtml = '';
+   if(b.type!=='narrator' && b.type!=='action') {
+     let tLeft = b.tailPos==='left'?'20%':(b.tailPos==='right'?'80%':'50%');
+     tailHtml = `<div style="position:absolute; width:14px; height:14px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; left:${tLeft}; transform:translateX(-50%) rotate(45deg); z-index:-1;"></div>`;
+   }
+   
+   html+=`<div style="position:absolute;left:${b.x}%;top:${b.y}%;width:${b.w}%; ${b.type!=='action'?'transform:translate(-50%,-50%);':''} background:${bg}; ${b.type==='action'?'':'border:2.5px solid #111;'} ${bShapeCss} padding:1.2em 1.5em;font-family:${b.fontFamily};font-size:${b.fontSize}px;font-weight:700;color:#111;word-wrap:break-word;text-align:center;box-sizing:border-box;display:flex;align-items:center;justify-content:center;">${esc(b.text)}${tailHtml}</div>`;
+  });
+  html+=`</div>`;
+ });
+ let pageBubbles=item.bdBubbles.filter(b=>b.panelIndex===null || b.panelIndex===undefined);
+ pageBubbles.forEach(b=>{
+   let bg = b.bgColor || (b.type==='narrator'?'#fff8b5':'#ffffff');
+   let radius=b.type==='round'?'50%':b.type==='square'?'4px':b.type==='thought'?'30px':'2px';
+   let bShapeCss = `border-radius:${radius};`;
+   
+   if(b.type === 'action') {
+       bShapeCss = `clip-path: polygon(50% 0%, 61% 25%, 98% 25%, 68% 47%, 79% 91%, 50% 70%, 21% 91%, 32% 47%, 2% 25%, 39% 25%); transform:translate(-50%,-50%) rotate(5deg);`;
+   }
+
+   let tailHtml = '';
+   if(b.type!=='narrator' && b.type!=='action') {
+     let tLeft = b.tailPos==='left'?'20%':(b.tailPos==='right'?'80%':'50%');
+     tailHtml = `<div style="position:absolute; width:14px; height:14px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; left:${tLeft}; transform:translateX(-50%) rotate(45deg); z-index:-1;"></div>`;
+   }
+  
+  html+=`<div style="position:absolute;left:${b.x}%;top:${b.y}%;width:${b.w}%; ${b.type!=='action'?'transform:translate(-50%,-50%);':''} background:${bg}; ${b.type==='action'?'':'border:2.5px solid #111;'} ${bShapeCss} padding:1.2em 1.5em;font-family:${b.fontFamily};font-size:${b.fontSize}px;font-weight:700;color:#111;word-wrap:break-word;text-align:center;box-sizing:border-box;display:flex;align-items:center;justify-content:center;z-index:10">${esc(b.text)}${tailHtml}</div>`;
+ });
+ html+=`</div>`;
+ return html;
+}
+function buildPageHTML(item, projectTitle){ 
+    const fontSty = fontMapping[appConfig.fontFamily]||'serif';
+    if(currentActiveModule === 'comic' && item.type === 'chapter') {
+        return buildBDHTML(item);
+    }
+    if(item.type==='reference'){ return `<div class="clearfix"><h1 style="font-size:${item.titleSize||28}px;text-align:center;font-family:${fontSty}">${esc(item.title||'Summary')}</h1><div style="font-size:${item.bodySize||16}px;white-space:pre-wrap;margin:10px 0;font-family:${fontSty}">${esc(item.text||'Sommaire...')}</div></div>`; } 
+    if(item.type==='cover'){ 
+        const showTitle=item.showTitle!==false; const titleHTML=showTitle?`<h1 style="font-size:${item.titleSize||48}px;text-align:center;color:#fff;text-shadow:0 2px 30px rgba(0,0,0,.9);margin:0;font-family:${fontSty}">${esc(projectTitle||'Mon projet')}</h1>`:''; 
+        if(item.layout==='bg'){ 
+            if((item.imageSize||100)>=100){ return `<div style="position:absolute;top:-40px;left:-40px;right:-40px;bottom:-40px;width:calc(100% + 80px);height:calc(100% + 80px);overflow:hidden"><img src="${item.image}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:${(item.bgOpacity||20)/100}" /><div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,.7), transparent);display:flex;align-items:flex-end;justify-content:center;padding:70px 30px;z-index:1">${titleHTML}</div></div>`; }
+            else{ return `<div style="min-height:500px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:40px;text-align:center"><img src="${item.image}" style="width:${item.imageSize}%;border-radius:12px;opacity:${(item.bgOpacity||20)/100};margin-bottom:20px" />${titleHTML}</div>`; } 
+        } 
+        return `<div style="min-height:400px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:60px;text-align:center">${titleHTML}</div>`; 
+    } 
+    const titleHTML=`<h1 style="font-size:${item.titleSize||32}px;font-weight:700;text-align:center;margin-bottom:10px;font-family:${fontSty}">${esc(item.title||'Chapitre 1')}</h1>`; 
+    let meta=''; if(item.type==='author'){ const m=[item.author,item.date,item.publisher,item.genre].filter(Boolean).map(esc).join(' · '); if(m) meta=`<div style="text-align:center;opacity:.6;font-size:.9em;margin-bottom:12px">${m}</div>`; } 
+    const img=generateImgHtml(item); const bodyStyle=`font-size:${item.bodySize||17}px;white-space:pre-wrap;text-align:justify;font-family:${fontSty}`; 
+    if(item.layout==='bg'){ return `<div style="position:relative;min-height:360px;overflow:hidden;border-radius:10px;padding:20px">${img}<div style="position:relative;z-index:1" class="clearfix">${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div></div></div>`; } 
+    if(item.layout==='top'){ return `<div class="clearfix">${img}${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div></div>`; } 
+    if(item.layout==='bottom'){ return `<div class="clearfix">${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div>${img}<div style="clear:both"></div></div>`; } 
+    return `<div class="clearfix">${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div>${img}</div>`; 
+} 
+function openPreview(){ autoSave(); const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); const box=document.getElementById('prvContent'); box.innerHTML=buildPageHTML(item, proj.title); document.getElementById('previewModal').classList.add('active'); setPreviewDevice(previewDevice); } 
+function closePreview(){ document.getElementById('previewModal').classList.remove('active'); } 
+function setPreviewDevice(d){ previewDevice=d; const s=document.getElementById('previewScreen'); s.className='preview-screen '+d; ['mobile','tablet','large','epub','pdf'].forEach(x=>{ const el=document.getElementById('btn'+x.charAt(0).toUpperCase()+x.slice(1)); if(el){ el.classList.remove('active'); if(d===x) el.classList.add('active'); } }); } 
+function factoryReset(){ if(!confirm('Tout effacer ?')) return; localStorage.clear(); try { indexedDB.deleteDatabase("WriterFontsDB"); } catch(e){} location.reload(); } 
+async function exportWorkflow(){ const fonts=await new Promise(res=>{ if(!db) return res([]); try { const tx=db.transaction("fonts","readonly"); const r=tx.objectStore("fonts").getAll(); r.onsuccess=e=>res(e.target.result||[]); r.onerror=()=>res([]); } catch(e){ res([]); } }); const blob=new Blob([JSON.stringify({project:getCurrentProject(),fonts},null,2)],{type:"application/json"}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=(getCurrentProject().title||'Mon projet')+'.writerwork'; a.click(); URL.revokeObjectURL(url); } 
+function importWorkflow(e){ const file=e.target.files[0]; if(!file) return; const r=new FileReader(); r.onload=ev=>{ try{ const data=JSON.parse(ev.target.result); const proj=data.project||data; if(data.fonts&&db){ const tx=db.transaction("fonts","readwrite"); data.fonts.forEach(f=>tx.objectStore("fonts").put(f)); tx.oncomplete=()=>loadFontsFromIDB(); } if(proj.data){ proj.id=uid(); proj.updatedAt=Date.now(); projects.unshift(proj); currentProjectId=proj.id; saveProjects(); loadProjectIntoUI(); } }catch(err){ alert('Fichier invalide'); } }; r.readAsText(file); e.target.value=''; } 
+async function exportPagesData(){ 
+    autoSave(); const proj=getCurrentProject(); const cfg=appConfig.reference||{mode:'all',selected:[]}; 
+    let items=proj.data.book.items.map(it=>({id:it.id,type:it.type,title:it.title,image:it.image,layout:it.layout,imageAlign:it.imageAlign,imageSize:it.imageSize,bgOpacity:it.bgOpacity,showTitle:it.showTitle,titleSize:it.titleSize,bodySize:it.bodySize,author:it.author||'',date:it.date||'',publisher:it.publisher||'',genre:it.genre||'',text:it.text,bdTemplate:it.bdTemplate,bdTemplateRects:it.bdTemplateRects,bdBgImage:it.bdBgImage,bdBg:it.bdBg,bdPanels:it.bdPanels,bdBubbles:it.bdBubbles})); 
+    const ref=items.find(i=>i.type==='reference'); 
+    if(ref){ let linked=items.filter(i=>i.type==='chapter'); if(cfg.mode==='select'&&cfg.selected.length>0) linked=linked.filter(i=>cfg.selected.includes(i.id)); ref.links=linked; } 
+    const fonts=await new Promise(res=>{ if(!db) return res([]); try { const tx=db.transaction("fonts","readonly"); const r=tx.objectStore("fonts").getAll(); r.onsuccess=e=>res(e.target.result||[]); r.onerror=()=>res([]); } catch(e) { res([]); } }); 
+    const obj={projectTitle:proj.title,format:'book',config:{fontFamily:appConfig.fontFamily,reference:cfg},items,customFonts:fonts,copyright:"created by Base Essentielle (BE Studio, Paris - France)"}; 
+    const blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='pages.data'; a.click(); URL.revokeObjectURL(url); 
+} 
+async function exportEPUB3(){ 
+    autoSave(); const proj=getCurrentProject(); 
+    try{ 
+        const zip=new JSZip(); const title=proj.title||'Mon projet'; 
+        zip.file("mimetype","application/epub+zip",{compression:"STORE"}); 
+        zip.folder("META-INF").file("container.xml",`<?xml version="1.0"?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>`); 
+        const oebps=zip.folder("OEBPS"); oebps.folder("css").file("style.css",`body{font-family:${fontMapping[appConfig.fontFamily]||'serif'};line-height:1.7}`); 
+        let manifest=`<item id="css" href="css/style.css" media-type="text/css"/>\n<item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>`; let spine=``; let navOl=``; const files=[]; 
+        proj.data.book.items.forEach((it,i)=>{ 
+            const id=`c${i}`; const fn=`chapter-${i}.xhtml`; manifest+=`\n<item id="${id}" href="${fn}" media-type="application/xhtml+xml"/>`; spine+=`\n<itemref idref="${id}"/>`; 
+            let html; 
+            if(it.type==='reference'){ const cfg=appConfig.reference; let linked=proj.data.book.items.filter(x=>x.type==='chapter'); if(cfg.mode==='select'&&cfg.selected.length>0) linked=linked.filter(x=>cfg.selected.includes(x.id)); let refHtml=`<h1>${esc(it.title)}</h1><p>${esc(it.text||'Sommaire...')}</p><ul>`; linked.forEach(l=>{ refHtml+=`<li>${esc(l.title)}</li>`; }); refHtml+=`</ul>`; html=refHtml; } else { html=buildPageHTML(it, proj.title); } 
+            const xhtml=`<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><head><script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};<\/script><meta charset="utf-8"/><title>${esc(it.title)}</title><link rel="stylesheet" href="css/style.css"/></head><body>${html}</body></html>`; 
+            files.push({fn,c:xhtml}); navOl+=`<li><a href="${fn}">${esc(it.title)}</a></li>`; 
+        }); 
+        const opf=`<?xml version="1.0"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="bookid">${Date.now()}</dc:identifier><dc:title>${esc(title)}</dc:title><dc:language>fr</dc:language></metadata><manifest>${manifest}</manifest><spine><itemref idref="nav"/>${spine}</spine></package>`; 
+        oebps.file("content.opf",opf); oebps.file("nav.xhtml",`<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><body><nav epub:type="toc"><ol>${navOl}</ol></nav></body></html>`); files.forEach(f=>oebps.file(f.fn,f.c)); 
+        const blob=await zip.generateAsync({type:"blob",mimeType:"application/epub+zip"}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=(title.replace(/[^a-z0-9]/gi,'_')+'.epub'); a.click(); URL.revokeObjectURL(url); 
+    }catch(e){ alert(e.message); } 
+} 
+async function exportPDFBook(){ 
+    autoSave(); const proj=getCurrentProject(); const container=document.createElement('div'); container.style.background='#fff'; container.style.color='#111'; container.style.padding='20px'; container.style.fontFamily=fontMapping[appConfig.fontFamily]||'serif'; let html=''; 
+    proj.data.book.items.forEach(it=>{ html+=`<div style="page-break-after:always;padding:20px 0">${buildPageHTML(it, proj.title)}</div>`; }); 
+    container.innerHTML=html; document.body.appendChild(container); 
+    try{ const opt={margin:10,filename:(proj.title||'Mon projet')+'.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a5',orientation:'portrait'}}; await html2pdf().set(opt).from(container).save(); }catch(e){ alert(e.message); }finally{ container.remove(); } 
+} 
+function updateLangUI(){
+    try {
+        const l = localStorage.getItem('writer_lang') || 'fr';
+        document.getElementById('lang-fr').classList.toggle('lang-active', l==='fr');
+        document.getElementById('lang-en').classList.toggle('lang-active', l==='en');
+        if(i18n[l]) {
+            if(document.getElementById('lblProjBtn')) document.getElementById('lblProjBtn').textContent = i18n[l].proj;
+            if(document.getElementById('lblBookTab')) document.getElementById('lblBookTab').textContent = i18n[l].read;
+            if(document.getElementById('lblComicTab')) document.getElementById('lblComicTab').textContent = i18n[l].bd;
+            if(document.getElementById('lblMagTab')) document.getElementById('lblMagTab').textContent = i18n[l].mag;
+            if(document.getElementById('lblCurProj')) document.getElementById('lblCurProj').textContent = i18n[l].cur;
+            if(document.getElementById('lblProjTitle')) document.getElementById('lblProjTitle').textContent = i18n[l].projTitle;
+            if(document.getElementById('lblCreate')) document.getElementById('lblCreate').textContent = i18n[l].lblCreate;
+            if(document.getElementById('lblSave')) document.getElementById('lblSave').textContent = i18n[l].lblSave;
+            if(document.getElementById('lblTitleProj')) document.getElementById('lblTitleProj').textContent = i18n[l].lblTitleProj;
+            if(document.getElementById('lblTitleOnCover')) document.getElementById('lblTitleOnCover').textContent = i18n[l].lblTitleOnCover;
+            if(document.getElementById('lblAuthor')) document.getElementById('lblAuthor').textContent = i18n[l].lblAuthor;
+            if(document.getElementById('lblDate')) document.getElementById('lblDate').textContent = i18n[l].lblDate;
+            if(document.getElementById('lblPublisher')) document.getElementById('lblPublisher').textContent = i18n[l].lblPublisher;
+            if(document.getElementById('lblGenre')) document.getElementById('lblGenre').textContent = i18n[l].lblGenre;
+            if(document.getElementById('lblPageName')) document.getElementById('lblPageName').textContent = i18n[l].lblPageName;
+            if(document.getElementById('lblLinkConfig')) document.getElementById('lblLinkConfig').textContent = i18n[l].lblLinkConfig;
+            if(document.getElementById('lblLinkAll')) document.getElementById('lblLinkAll').textContent = i18n[l].lblLinkAll;
+            if(document.getElementById('lblLinkSel')) document.getElementById('lblLinkSel').textContent = i18n[l].lblLinkSel;
+            if(document.getElementById('lblIllu')) document.getElementById('lblIllu').textContent = i18n[l].lblIllu;
+            if(document.getElementById('lblLocal')) document.getElementById('lblLocal').textContent = i18n[l].lblLocal;
+            if(document.getElementById('lblLayout')) document.getElementById('lblLayout').textContent = i18n[l].lblLayout;
+            if(document.getElementById('lblAlign')) document.getElementById('lblAlign').textContent = i18n[l].lblAlign;
+            if(document.getElementById('lblImgSize')) document.getElementById('lblImgSize').textContent = i18n[l].lblImgSize;
+            if(document.getElementById('lblBgTransp')) document.getElementById('lblBgTransp').textContent = i18n[l].lblBgTransp;
+            if(document.getElementById('lblTitleSize')) document.getElementById('lblTitleSize').textContent = i18n[l].lblTitleSize;
+            if(document.getElementById('lblBodySize')) document.getElementById('lblBodySize').textContent = i18n[l].lblBodySize;
+            if(document.getElementById('lblBodyText')) document.getElementById('lblBodyText').textContent = i18n[l].lblBodyText;
+            if(document.getElementById('lblBdGridBg')) document.getElementById('lblBdGridBg').textContent = i18n[l].lblBdGridBg;
+            if(document.getElementById('lblBgOpt')) document.getElementById('lblBgOpt').textContent = i18n[l].lblBgOpt;
+            if(document.getElementById('lblBgZoom')) document.getElementById('lblBgZoom').textContent = i18n[l].lblBgZoom;
+            if(document.getElementById('lblGridTmpl')) document.getElementById('lblGridTmpl').textContent = i18n[l].lblGridTmpl;
+            if(document.getElementById('lblCustomCases')) document.getElementById('lblCustomCases').textContent = i18n[l].lblCustomCases;
+            if(document.getElementById('lblGen')) document.getElementById('lblGen').textContent = i18n[l].lblGen;
+            if(document.getElementById('lblFull')) document.getElementById('lblFull').textContent = i18n[l].lblFull;
+            if(document.getElementById('lblPanelSel')) document.getElementById('lblPanelSel').textContent = i18n[l].lblPanelSel;
+            if(document.getElementById('lblPanelImg')) document.getElementById('lblPanelImg').textContent = i18n[l].lblPanelImg;
+            if(document.getElementById('lblPLocal')) document.getElementById('lblPLocal').textContent = i18n[l].lblPLocal;
+            if(document.getElementById('lblPanelZoom')) document.getElementById('lblPanelZoom').textContent = i18n[l].lblPanelZoom;
+            if(document.getElementById('lblPanelRot')) document.getElementById('lblPanelRot').textContent = i18n[l].lblPanelRot;
+            if(document.getElementById('lblBubbles')) document.getElementById('lblBubbles').textContent = i18n[l].lblBubbles;
+            if(document.getElementById('lblBubText')) document.getElementById('lblBubText').textContent = i18n[l].lblBubText;
+            if(document.getElementById('lblBubFont')) document.getElementById('lblBubFont').textContent = i18n[l].lblBubFont;
+            if(document.getElementById('lblBubSize')) document.getElementById('lblBubSize').textContent = i18n[l].lblBubSize;
+            if(document.getElementById('lblBubTail')) document.getElementById('lblBubTail').textContent = i18n[l].lblBubTail;
+            if(document.getElementById('lblBubDel')) document.getElementById('lblBubDel').textContent = i18n[l].lblBubDel;
+            if(document.getElementById('lblBubDup')) document.getElementById('lblBubDup').textContent = i18n[l].lblBubDup;
+            if(document.getElementById('lblBubClose')) document.getElementById('lblBubClose').textContent = i18n[l].lblBubClose;
+            if(document.getElementById('lblPreviewBtn')) document.getElementById('lblPreviewBtn').textContent = i18n[l].lblPreviewBtn;
+            
+            document.querySelectorAll('.lblBRound').forEach(el => el.textContent = i18n[l].lblBRound);
+            document.querySelectorAll('.lblBSquare').forEach(el => el.textContent = i18n[l].lblBSquare);
+            document.querySelectorAll('.lblBThought').forEach(el => el.textContent = i18n[l].lblBThought);
+            document.querySelectorAll('.lblBShout').forEach(el => el.textContent = i18n[l].lblBShout);
+            document.querySelectorAll('.lblBNarrator').forEach(el => el.textContent = i18n[l].lblBNarrator);
+        }
+    } catch(e) {}
+}
+function setLang(l){ localStorage.setItem('writer_lang',l); updateLangUI(); }
+function bootstrapApp() { 
+    try { 
+        loadProjects(); const proj=getCurrentProject(); if(!proj) return; 
+        document.getElementById('currentProjectName').textContent=proj.title; document.getElementById('genCurrentProjectName').textContent=proj.title; 
+        const activeMod = localStorage.getItem('writer_active_module');
+        if (activeMod && (activeMod === 'comic' || activeMod === 'magazine')) { activateModule(activeMod); return; }
+        refreshFontDropdown(); refreshPageDropdown(); applyFont(); loadPageData(); 
+    } catch(e) {} 
+}
+function openSettings(){ document.getElementById('settingsModal').classList.add('active'); closeMenus(); } 
+function closeSettings(){ document.getElementById('settingsModal').classList.remove('active'); }
+window.onload=()=>{ try { initSizeDropdowns(); updateLangUI(); } catch(e) {} initIDB(bootstrapApp); }; 
 </script>
 </body>
 </html>
