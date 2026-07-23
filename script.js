@@ -128,18 +128,37 @@ function loadPageData(){
     if(!currentPageId) currentPageId = proj.data.book.items[0].id;
     const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
 
+    // 1. On cache tout par défaut
+    document.getElementById('bdFullEditor').style.display = 'none';
+    const pocketEditor = document.getElementById('pocketFullEditor');
+    const magEditor = document.getElementById('magFullEditor');
+    if(pocketEditor) pocketEditor.style.display = 'none';
+    if(magEditor) magEditor.style.display = 'none';
+
+    // 2. Gestion de la page de couverture vs page normale
     if(item.type==='cover'){
         document.getElementById('globalTitleGroup').style.display='flex';
         document.getElementById('itemTitleGroup').style.display='none';
-        document.getElementById('bdFullEditor').style.display='none';
     } else {
         document.getElementById('globalTitleGroup').style.display='none';
         document.getElementById('itemTitleGroup').style.display='flex';
         document.getElementById('itemTitle').value=item.title||'';
-        document.getElementById('bdFullEditor').style.display='flex';
-        ensureBDData(item);
-        if(selectedPanelIndex===null) selectedPanelIndex=0;
-        renderBDTemplatesList(); renderBDCanvas();
+        
+        // 3. On affiche le bon éditeur selon le module actif
+        if (currentActiveModule === 'comic') {
+            document.getElementById('bdFullEditor').style.display='flex';
+            ensureBDData(item);
+            if(selectedPanelIndex===null) selectedPanelIndex=0;
+            renderBDTemplatesList(); renderBDCanvas();
+        } 
+        else if (currentActiveModule === 'pocket') {
+            if(pocketEditor) pocketEditor.style.display='flex';
+            // Placeholder for loading saved text data later
+        } 
+        else if (currentActiveModule === 'magazine') {
+            if(magEditor) magEditor.style.display='flex';
+            // Placeholder for loading saved text/image data later
+        }
     }
     refreshPageDropdown();
 }
