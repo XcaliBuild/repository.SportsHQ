@@ -112,33 +112,102 @@
     .bd-panel img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transform-origin:center center; pointer-events:none; will-change:transform; }
     .bd-panel-placeholder { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; color:#777; background:#f5f5f0; font-size:10px; text-transform:uppercase; font-weight:700; text-align:center; padding:10px; }
     
-    /* Bulles */
+    /* Bulles - NEW PALETTE PRO */
     .bd-bubble {
-        position:absolute; min-width:10%; background:#fff; font-weight:700; color:#111; cursor:move; user-select:none; z-index:10; 
-        line-height:1.2; display: flex; align-items: center; justify-content: center; text-align: center; box-sizing: border-box; 
-        white-space: pre-wrap; overflow-wrap: break-word;
+        position:absolute; min-width:14%; background:#fff; font-weight:700; color:#111; cursor:move; user-select:none; z-index:10; 
+        line-height:1.15; display:flex; align-items:center; justify-content:center; text-align:center; box-sizing:border-box; 
+        white-space:pre-wrap; overflow-wrap:break-word; padding:0.75em 1.1em; border:2.8px solid #111;
     }
-    .bd-bubble.selected { filter: drop-shadow(0 0 0 2px rgba(239,68,68,0.8)); z-index: 15; }
+    .bd-bubble.selected { outline:2px solid #ef4444; outline-offset:2px; z-index:15; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25)); }
     
-    /* Formes Palette */
-    .bubble-oval { border-radius: 50% / 50%; border:2.5px solid #111; padding: 0.8em 1.2em; }
-    .bubble-round { border-radius: 50%; padding: 1.2em; aspect-ratio: 1/1; } 
-    .bubble-rect { border-radius:12px; border:2.5px solid #111; padding: 0.6em 1em; }
-    .bubble-capsule { border-radius:50px; border:2.5px solid #111; padding: 0.6em 1.2em; }
-    .bubble-cloud { border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; border:2.5px dashed #111; padding: 1em 1.5em; }
-    .bubble-spiky { clip-path: polygon(50% 0%, 65% 20%, 100% 20%, 75% 45%, 100% 80%, 60% 70%, 50% 100%, 40% 70%, 0% 80%, 25% 45%, 0% 20%, 35% 20%); padding: 1.5em; filter: drop-shadow(2px 2px 0px #111) drop-shadow(-2px -2px 0px #111) drop-shadow(2px -2px 0px #111) drop-shadow(-2px 2px 0px #111); }
-    .bubble-boom { border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; border:3px solid #111; padding: 1em 1.4em; transform: rotate(-2deg); box-shadow: 3px 3px 0 #111; }
-    .bubble-pow { clip-path: polygon(50% 0%, 75% 10%, 95% 5%, 85% 30%, 100% 50%, 80% 60%, 95% 85%, 65% 75%, 50% 100%, 35% 75%, 5% 85%, 20% 60%, 0% 50%, 15% 30%, 5% 5%, 25% 10%); padding: 1.5em; border: none; }
-    .bubble-whisper { border-radius: 50%; border:2px dashed #999; padding: 1em; opacity: 0.85; font-style: italic; }
-    .bubble-thought-chain { border-radius: 50%; border:2px solid #111; padding: 0.8em; background: #fff; }
-    .bubble-scream { border-radius: 10% 90% 10% 90% / 90% 10% 90% 10%; border:3px solid #111; padding: 1em 1.5em; box-shadow: 4px 4px 0 #111; }
-    .bubble-narration { border-radius: 4px; border:2px solid #111; padding: 1em; background: #fdf6e3; font-style: italic; }
+    /* Shapes */
+    .bubble-oval-bc, .bubble-oval-bl, .bubble-oval-br, .bubble-oval-side-r, .bubble-oval-side-l, .bubble-double-oval { border-radius:50% / 52%; }
+    .bubble-round-bc, .bubble-round-bl, .bubble-round-br, .bubble-round-sharp { border-radius:50%; aspect-ratio:1/1; }
+    .bubble-rect-bc, .bubble-rect-bl, .bubble-rect-br { border-radius:12px; }
+    .bubble-rect-zap { border-radius:10px; }
+    .bubble-rect-arrow-r, .bubble-rect-arrow-l { border-radius:8px; }
+    .bubble-capsule-long, .bubble-capsule-bc { border-radius:999px; }
+    .bubble-cloud-triple, .bubble-cloud-fluffy, .bubble-thought-cloud { border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%; }
+    .bubble-thought-oval { border-radius:50% / 50%; }
 
-    .bd-bubble-tail { position:absolute; width:14px; height:14px; z-index:-1; }
-    .bd-bubble-tail.curve { width: 20px; height: 20px; border-left: 3px solid #111; border-bottom: 3px solid #111; border-radius: 0 0 0 20px; background: transparent; }
-    
-    .bubble-btn { flex:1; background:rgba(255,255,255,0.04); color:var(--text); border:1px solid var(--border); padding:8px; border-radius:8px; cursor:pointer; transition:.2s; font-size:11px; display:flex; align-items:center; justify-content:center; gap:4px; font-weight:600; white-space:nowrap; }
-    .bubble-btn:hover, .bubble-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(255,255,255,0.06); }
+    /* Double oval - second lobe */
+    .bubble-double-oval::after {
+        content:''; position:absolute; top:12%; left:52%; width:88%; height:78%;
+        background:inherit; border:inherit; border-radius:inherit; z-index:-1; box-sizing:border-box;
+    }
+    /* Triple cloud - extra lobes */
+    .bubble-cloud-triple::before, .bubble-cloud-triple::after {
+        content:''; position:absolute; background:inherit; border:inherit; border-radius:50%; z-index:-1; box-sizing:border-box;
+    }
+    .bubble-cloud-triple::before { width:62%; height:68%; top:-8%; left:-12%; }
+    .bubble-cloud-triple::after { width:72%; height:76%; top:-6%; right:-18%; }
+
+    /* Boom / Pow */
+    .bubble-boom-soft {
+        clip-path: polygon(15% 2%, 32% 0%, 48% 10%, 62% 0%, 80% 6%, 92% 0%, 100% 20%, 94% 38%, 100% 55%, 90% 70%, 100% 88%, 78% 92%, 62% 100%, 42% 92%, 22% 100%, 10% 90%, 0% 78%, 8% 60%, 0% 42%, 8% 22%);
+        padding:1.2em 1.5em; border:none; filter: drop-shadow(0 0 0 #111) drop-shadow(2px 2px 0 #111) drop-shadow(-2px -2px 0 #111);
+        background:#fff; border:2.8px solid #111;
+    }
+    .bubble-pow-hard {
+        clip-path: polygon(50% 0%, 62% 18%, 88% 0%, 72% 28%, 100% 18%, 86% 44%, 100% 58%, 80% 68%, 100% 100%, 62% 82%, 50% 100%, 38% 82%, 0% 100%, 20% 68%, 0% 58%, 14% 44%, 0% 18%, 28% 28%, 12% 0%, 38% 18%);
+        padding:1.4em 1.6em; background:#fff; border:2.8px solid #111;
+    }
+    .bubble-burst-shout {
+        clip-path: polygon(50% 0%, 66% 10%, 86% 2%, 76% 26%, 100% 22%, 84% 42%, 100% 62%, 82% 72%, 96% 96%, 68% 84%, 50% 100%, 32% 84%, 4% 96%, 18% 72%, 0% 62%, 16% 42%, 0% 22%, 24% 26%, 14% 2%, 34% 10%);
+        padding:1.3em 1.5em; background:#fff; border:2.8px solid #111;
+    }
+    .bubble-cloud-fluffy {
+        border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        background:#fff;
+    }
+
+    /* Tails */
+    .bd-bubble-tail { position:absolute; width:16px; height:16px; z-index:-1; background:#fff; border-right:2.8px solid #111; border-bottom:2.8px solid #111; box-sizing:border-box; }
+    .tail-bc { bottom:-9px; left:50%; transform:translateX(-50%) rotate(45deg); }
+    .tail-bl { bottom:-9px; left:18%; transform:translateX(-50%) rotate(45deg); }
+    .tail-br { bottom:-9px; left:82%; transform:translateX(-50%) rotate(45deg); }
+    .tail-bl-curved { bottom:-14px; left:14%; width:22px; height:14px; background:#fff; border-right:2.8px solid #111; border-bottom:2.8px solid #111; border-left:none; border-top:none; border-radius:0 0 80% 0; transform:rotate(-18deg); }
+    .tail-br-curved { bottom:-14px; right:14%; left:auto; width:22px; height:14px; background:#fff; border-left:2.8px solid #111; border-bottom:2.8px solid #111; border-right:none; border-top:none; border-radius:0 0 0 80%; transform:rotate(18deg); }
+    .tail-side-r { top:50%; right:-9px; left:auto; transform:translateY(-50%) rotate(-45deg); }
+    .tail-side-l { top:50%; left:-9px; right:auto; transform:translateY(-50%) rotate(135deg); }
+    .tail-side-r-curved { top:58%; right:-13px; left:auto; width:18px; height:18px; background:#fff; border-top:2.8px solid #111; border-right:2.8px solid #111; border-radius:0 90% 0 0; transform:translateY(-50%) rotate(12deg); border-bottom:none; border-left:none; }
+    .tail-zap { bottom:-20px; left:16%; width:24px; height:28px; background:#fff; border:none; clip-path:polygon(0 0, 68% 0, 32% 40%, 100% 40%, 0 100%, 36% 58%, 0 58%); filter: drop-shadow(1px 0 0 #111) drop-shadow(-1px 0 0 #111) drop-shadow(0 1px 0 #111) drop-shadow(0 -1px 0 #111); transform:none; }
+    .tail-arrow-r { top:50%; right:-16px; width:0; height:0; background:transparent; border:none; border-left:16px solid #fff; border-top:10px solid transparent; border-bottom:10px solid transparent; transform:translateY(-50%); filter: drop-shadow(2px 0 0 #111) drop-shadow(0 1px 0 #111) drop-shadow(0 -1px 0 #111); }
+    .tail-arrow-l { top:50%; left:-16px; right:auto; width:0; height:0; background:transparent; border:none; border-right:16px solid #fff; border-top:10px solid transparent; border-bottom:10px solid transparent; transform:translateY(-50%); filter: drop-shadow(-2px 0 0 #111) drop-shadow(0 1px 0 #111) drop-shadow(0 -1px 0 #111); }
+
+    /* Thought dots */
+    .thought-dots { position:absolute; pointer-events:none; }
+    .thought-dot { position:absolute; background:#fff; border:2.5px solid #111; border-radius:50%; box-sizing:border-box; }
+    .thought-dot-1 { width:18px; height:14px; }
+    .thought-dot-2 { width:12px; height:10px; }
+    .thought-dot-3 { width:8px; height:7px; }
+
+    /* Palette UI */
+    .bubble-palette { display:grid; grid-template-columns:repeat(auto-fill,minmax(78px,1fr)); gap:8px; max-height:320px; overflow-y:auto; padding:6px; background:rgba(0,0,0,0.2); border-radius:10px; border:1px solid var(--border); }
+    .bubble-palette-item { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:10px; padding:8px 4px 6px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:6px; transition:.2s; user-select:none; }
+    .bubble-palette-item:hover { border-color:var(--accent); background:rgba(255,255,255,0.08); transform:translateY(-1px); }
+    .bubble-palette-item.active { border-color:#ef4444; background:rgba(239,68,68,0.12); }
+    .mini-bubble { width:52px; height:36px; background:#fff; border:1.8px solid #111; position:relative; display:flex; align-items:center; justify-content:center; box-sizing:border-box; flex-shrink:0; }
+    .mini-bubble.oval { border-radius:50% / 55%; }
+    .mini-bubble.round { border-radius:50%; width:38px; height:38px; }
+    .mini-bubble.rect { border-radius:8px; }
+    .mini-bubble.capsule { border-radius:999px; width:60px; }
+    .mini-bubble.cloud { border-radius:40% 60% 60% 40% / 50% 60% 40% 50%; }
+    .mini-bubble.boom { clip-path: polygon(15% 2%, 32% 0%, 48% 10%, 62% 0%, 80% 6%, 92% 0%, 100% 20%, 94% 38%, 100% 55%, 90% 70%, 100% 88%, 78% 92%, 62% 100%, 42% 92%, 22% 100%, 10% 90%, 0% 78%, 8% 60%, 0% 42%, 8% 22%); }
+    .mini-bubble.pow { clip-path: polygon(50% 0%, 62% 18%, 88% 0%, 72% 28%, 100% 18%, 86% 44%, 100% 58%, 80% 68%, 100% 100%, 62% 82%, 50% 100%, 38% 82%, 0% 100%, 20% 68%, 0% 58%, 14% 44%, 0% 18%, 28% 28%, 12% 0%, 38% 18%); }
+    .mini-bubble.burst { clip-path: polygon(50% 0%, 66% 10%, 86% 2%, 76% 26%, 100% 22%, 84% 42%, 100% 62%, 82% 72%, 96% 96%, 68% 84%, 50% 100%, 32% 84%, 4% 96%, 18% 72%, 0% 62%, 16% 42%, 0% 22%, 24% 26%, 14% 2%, 34% 10%); }
+    .mini-bubble.double::after { content:''; position:absolute; top:18%; left:48%; width:70%; height:70%; background:#fff; border:1.8px solid #111; border-radius:50% / 55%; z-index:-1; }
+    .mini-bubble.triple::before, .mini-bubble.triple::after { content:''; position:absolute; background:#fff; border:1.8px solid #111; border-radius:50%; z-index:-1; }
+    .mini-bubble.triple::before { width:55%; height:60%; top:-6%; left:-10%; }
+    .mini-bubble.triple::after { width:65%; height:68%; top:-4%; right:-12%; }
+    .mini-tail { position:absolute; background:#fff; width:8px; height:8px; border-right:1.5px solid #111; border-bottom:1.5px solid #111; transform:rotate(45deg); }
+    .mini-tail.bc { bottom:-4px; left:50%; margin-left:-4px; }
+    .mini-tail.bl { bottom:-4px; left:18%; }
+    .mini-tail.br { bottom:-4px; right:18%; left:auto; }
+    .mini-tail.side-r { top:50%; right:-4px; margin-top:-4px; transform:rotate(-45deg); }
+    .mini-tail.zap { bottom:-8px; left:12%; width:10px; height:12px; clip-path:polygon(0 0, 68% 0, 32% 40%, 100% 40%, 0 100%, 36% 58%, 0 58%); border:none; background:#fff; filter: drop-shadow(0.5px 0 0 #111) drop-shadow(-0.5px 0 0 #111) drop-shadow(0 0.5px 0 #111); }
+    .bubble-label { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); text-align:center; line-height:1.1; }
+    .bubble-palette-item:hover .bubble-label { color:#fff; }
     
     .color-swatch { width:22px; height:22px; border-radius:4px; border:1px solid rgba(255,255,255,0.2); cursor:pointer; transition:0.2s; flex-shrink:0; }
     .color-swatch:hover { transform:scale(1.1); border-color:#fff; }
@@ -368,21 +437,85 @@
                 <div class="bd-toolbar">
                     <div class="bd-section-title"><i class="fas fa-comment-dots"></i> <span id="lblBubbles">Bulles de dialogue</span></div>
                     
-                    <div style="display:flex;gap:6px;flex-wrap:wrap">
-                        <button class="bubble-btn" onclick="addBDBubble('oval')"><i class="far fa-comment"></i> <span class="lblBOval">Ovale</span></button>
-                        <button class="bubble-btn" onclick="addBDBubble('round')"><i class="far fa-circle"></i> <span class="lblBRound">Ronde</span></button>
-                        <button class="bubble-btn" onclick="addBDBubble('rect')"><i class="far fa-comment-alt"></i> <span class="lblBRect">Rectangle</span></button>
-                        <button class="bubble-btn" onclick="addBDBubble('capsule')"><i class="fas fa-capsules"></i> <span class="lblBCapsule">Capsule</span></button>
-                        <button class="bubble-btn" onclick="addBDBubble('cloud')"><i class="fas fa-cloud"></i> <span class="lblBCloud">Pensée</span></button>
-                        <button class="bubble-btn" onclick="addBDBubble('spiky')"><i class="fas fa-certificate"></i> <span class="lblBSpiky">Cri</span></button>
-                        <button class="bubble-btn" onclick="addBDBubble('boom')"><i class="fas fa-bomb"></i> <span>BOOM</span></button>
-                        <button class="bubble-btn" onclick="addBDBubble('pow')"><i class="fas fa-fist-raised"></i> <span>POW</span></button>
-                        <button class="bubble-btn" onclick="addBDBubble('whisper')"><i class="fas fa-wind"></i> <span>Chuchote</span></button>
-                        <button class="bubble-btn" onclick="addBDBubble('scream')"><i class="fas fa-volume-up"></i> <span>Hurle</span></button>
-                        <button class="bubble-btn" onclick="addBDBubble('narration')"><i class="fas fa-scroll"></i> <span>Narration</span></button>
+                    
+                    <div class="bubble-palette" id="bubblePaletteGrid">
+                        <!-- Classic -->
+                        <div class="bubble-palette-item" onclick="addBDBubble('oval-bc')" title="Ovale classique bas centre - incurvé">
+                            <div class="mini-bubble oval"><div class="mini-tail bc"></div></div>
+                            <div class="bubble-label">Ovale BC</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('oval-bl')" title="Ovale bas gauche courbe">
+                            <div class="mini-bubble oval"><div class="mini-tail bl"></div></div>
+                            <div class="bubble-label">Ovale BL</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('oval-br')" title="Ovale bas droite">
+                            <div class="mini-bubble oval"><div class="mini-tail br"></div></div>
+                            <div class="bubble-label">Ovale BR</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('round-bc')" title="Rond bas centre">
+                            <div class="mini-bubble round"><div class="mini-tail bc"></div></div>
+                            <div class="bubble-label">Rond BC</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('round-bl-curved')" title="Rond courbe gauche - flèche incurvée">
+                            <div class="mini-bubble round"><div class="mini-tail bl" style="border-radius:0 0 80% 0; width:10px; height:7px;"></div></div>
+                            <div class="bubble-label">Rond courbe</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('round-br-sharp')" title="Rond pointu">
+                            <div class="mini-bubble round"><div class="mini-tail br"></div></div>
+                            <div class="bubble-label">Rond pointu</div>
+                        </div>
+                        <!-- Rect -->
+                        <div class="bubble-palette-item" onclick="addBDBubble('rect-bc')" title="Rectangle bas centre">
+                            <div class="mini-bubble rect"><div class="mini-tail bc"></div></div>
+                            <div class="bubble-label">Rect BC</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('rect-zap')" title="Rectangle éclair - queue zap">
+                            <div class="mini-bubble rect"><div class="mini-tail zap"></div></div>
+                            <div class="bubble-label">Rect Eclair</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('rect-arrow-r')" title="Rectangle flèche droite - comme photo">
+                            <div class="mini-bubble rect"><div class="mini-tail side-r"></div></div>
+                            <div class="bubble-label">Flèche →</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('capsule-long')" title="Capsule longue">
+                            <div class="mini-bubble capsule"><div class="mini-tail bl"></div></div>
+                            <div class="bubble-label">Capsule</div>
+                        </div>
+                        <!-- Double / Triple -->
+                        <div class="bubble-palette-item" onclick="addBDBubble('double-oval')" title="Double bulle - 2 queues">
+                            <div class="mini-bubble oval double"><div class="mini-tail bl"></div><div class="mini-tail br" style="left:68%"></div></div>
+                            <div class="bubble-label">Double</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('cloud-triple')" title="Triple nuage - 3 queues">
+                            <div class="mini-bubble cloud triple"><div class="mini-tail bc"></div><div class="mini-tail bl" style="bottom:-5px"></div><div class="mini-tail br" style="bottom:-5px"></div></div>
+                            <div class="bubble-label">Triple</div>
+                        </div>
+                        <!-- Thought -->
+                        <div class="bubble-palette-item" onclick="addBDBubble('thought-oval')" title="Pensée ovale avec trainée">
+                            <div class="mini-bubble oval" style="border-style:dashed"><div class="mini-tail bc" style="width:6px;height:6px;border-radius:50%"></div></div>
+                            <div class="bubble-label">Pensée ovale</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('thought-cloud')" title="Nuage pensée">
+                            <div class="mini-bubble cloud"><div class="mini-tail bc" style="width:6px;height:6px;border-radius:50%"></div></div>
+                            <div class="bubble-label">Nuage pensée</div>
+                        </div>
+                        <!-- Boom / Pow -->
+                        <div class="bubble-palette-item" onclick="addBDBubble('boom-soft')" title="BOOM doux - explosion">
+                            <div class="mini-bubble boom"></div>
+                            <div class="bubble-label">BOOM</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('pow-hard')" title="POW dur - cri fort">
+                            <div class="mini-bubble pow"></div>
+                            <div class="bubble-label">POW</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('burst-shout')" title="Burst cri - éclaté">
+                            <div class="mini-bubble burst"></div>
+                            <div class="bubble-label">CRI</div>
+                        </div>
                     </div>
 
-                    <div id="bdBubbleEdit" style="display:none;flex-direction:column;gap:12px;margin-top:12px;background:rgba(0,0,0,0.4);padding:14px;border-radius:8px;border:1px solid var(--border)">
+                    <div id="bdBubbleEdit"
+ style="display:none;flex-direction:column;gap:12px;margin-top:12px;background:rgba(0,0,0,0.4);padding:14px;border-radius:8px;border:1px solid var(--border)">
                         <div class="meta-row" style="align-items:flex-start">
                             <div class="input-group" style="flex:2">
                                 <label id="lblBubText">Texte de la bulle</label>
@@ -414,15 +547,9 @@
                                 <label id="lblBubBgColor">Fond</label>
                                 <input type="color" id="bdBubbleBg" class="meta-input" style="padding:0;height:38px" onchange="onBubbleBg(this.value)">
                             </div>
-                            <div class="input-group" style="width:100px; flex:none">
-                                <label id="lblBubTail">Flèche</label>
-                                <div style="display:flex;gap:4px;height:38px">
-                                    <button class="btn" id="btnTailInvert" onclick="toggleTailInvert()" title="Inverser Gauche/Droite" style="flex:1;justify-content:center;padding:0"><i class="fas fa-arrows-alt-h"></i></button>
-                                    <button class="btn" id="btnTailFlip" onclick="toggleTailFlip()" title="Tourner Haut/Bas" style="flex:1;justify-content:center;padding:0"><i class="fas fa-arrows-alt-v"></i></button>
-                                </div>
-                            </div>
-                        </div>
+                                                    </div>
                         
+                        <!-- Palettes de couleurs -->
                         <div style="display:flex;gap:6px;margin-top:2px;">
                             <button class="color-swatch" style="background:#ffffff" onclick="onBubbleBg('#ffffff')"></button>
                             <button class="color-swatch" style="background:#ffeb3b" onclick="onBubbleBg('#ffeb3b')"></button>
@@ -438,6 +565,7 @@
                         <div style="display:flex;gap:8px;margin-top:4px">
                             <button class="btn btn-danger" onclick="deleteSelectedBubble()"><i class="fas fa-trash"></i> <span id="lblBubDel">Supprimer</span></button>
                             <button class="btn" onclick="duplicateBubble()"><i class="fas fa-copy"></i> <span id="lblBubDup">Dupliquer</span></button>
+                            <!-- Bouton Apply -->
                             <button class="btn" onclick="selectedBubbleId=null;document.getElementById('bdBubbleEdit').style.display='none';renderBDCanvas()"><i class="fas fa-check"></i> <span id="lblBubApply">Appliquer</span></button>
                         </div>
                     </div>
@@ -529,1332 +657,5 @@
 </div>
 
 <div id="savedToast" class="saved-toast"><i class="fas fa-check-circle" style="color:var(--accent)"></i> Enregistré !</div>
-
-<script>
-let currentPageId=null, currentProjectId=null, projects=[], appConfig={fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}}, previewDevice='large';
-let currentActiveModule = 'book';
-let selectedPanelIndex=null, selectedBubbleId=null, dragState=null;
-const uid=()=> 'id_'+Date.now()+'_'+Math.random().toString(36).slice(2,5);
-const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-let db, customFonts=[];
-
-let fontMapping={
-    'EB Garamond':"'EB Garamond', serif",
-    'Playfair Display':"'Playfair Display', serif",
-    'Cormorant Garamond':"'Cormorant Garamond', serif",
-    'Crimson Text':"'Crimson Text', serif",
-    'Libre Baskerville':"'Libre Baskerville', serif",
-    'Lora':"'Lora', serif",
-    'Merriweather':"'Merriweather', serif",
-    'Spectral':"'Spectral', serif",
-    'PT Serif':"'PT Serif', serif",
-    'Source Serif Pro':"'Source Serif Pro', serif",
-    'Inter':"'Inter', sans-serif"
-};
-
-const i18n = {
-    fr: {
-        proj: "Projets", read: "Livre de poche", bd: "Bande Dessinée (BD)", mag: "Magazine", cur: "Projet Actuel",
-        projTitle: "Projets", lblCreate: "Créer", lblSave: "Enregistrer",
-        lblTitleProj: "Titre du projet - éditable uniquement dans la couverture", lblTitleOnCover: "Afficher le titre sur la couverture - ON/OFF",
-        lblAuthor: "Auteur", lblDate: "Date", lblPublisher: "Éditeur", lblGenre: "Genre",
-        lblPageName: "Nom de la page / section", lblLinkConfig: "Référence / Sommaire - Config liens",
-        lblLinkAll: "Lier toutes les pages", lblLinkSel: "Sélectionner les pages",
-        lblIllu: "Illustration (URL ou Fichier Local)", lblLocal: "Local",
-        lblLayout: "Disposition", lblAlign: "Alignement", lblImgSize: "Taille image", lblBgTransp: "Transparence",
-        lblTitleSize: "Taille Titre", lblBodySize: "Taille Corps", lblBodyText: "Corps du texte",
-        lblBdGridBg: "Grilles & Fond de page BD", lblBgOpt: "Image de fond (derrière la grille) - optionnel", lblBgZoom: "Zoom fond",
-        lblGridTmpl: "Modèles de grilles", lblCustomCases: "Cases perso 1-12", lblGen: "Générer", lblFull: "Plein",
-        lblPanelSel: "Case sélectionnée - Drag image | Molette zoom | Shift+Molette rotation", lblPanelImg: "Image de la case",
-        lblPLocal: "Local", lblPanelZoom: "Zoom", lblPanelRot: "Rotation", lblBubbles: "Bulles de dialogue",
-        lblBubText: "Texte de la bulle", lblBubFont: "Font BD", lblBubSize: "Taille texte", lblBubTail: "Flèche",
-        lblBubDel: "Supprimer", lblBubDup: "Dupliquer", lblBubApply: "Appliquer", lblPreviewBtn: "Aperçu",
-        lblBOval: "Ovale", lblBRound: "Ronde", lblBRect: "Rectangle", lblBCapsule: "Capsule", lblBCloud: "Pensée", lblBSpiky: "Cri"
-    },
-    en: {
-        proj: "Projects", read: "Paperback", bd: "Comic Book (BD)", mag: "Magazine", cur: "Current Project",
-        projTitle: "Projects", lblCreate: "Create", lblSave: "Save",
-        lblTitleProj: "Project Title - editable only on cover page", lblTitleOnCover: "Show title on cover - ON/OFF",
-        lblAuthor: "Author", lblDate: "Date", lblPublisher: "Publisher", lblGenre: "Genre",
-        lblPageName: "Page / Section Name", lblLinkConfig: "Reference / Summary - Link config",
-        lblLinkAll: "Link all pages", lblLinkSel: "Select pages",
-        lblIllu: "Illustration (URL or Local File)", lblLocal: "Local",
-        lblLayout: "Layout", lblAlign: "Alignment", lblImgSize: "Image Size", lblBgTransp: "Transparency",
-        lblTitleSize: "Title Size", lblBodySize: "Body Size", lblBodyText: "Body Text",
-        lblBdGridBg: "BD Grids & Background", lblBgOpt: "Background image (behind grid) - optional", lblBgZoom: "Background zoom",
-        lblGridTmpl: "Grid Templates", lblCustomCases: "Custom panels 1-12", lblGen: "Generate", lblFull: "Full",
-        lblPanelSel: "Selected Panel - Drag img | Scroll zoom | Shift+Scroll rotate", lblPanelImg: "Panel Image",
-        lblPLocal: "Local", lblPanelZoom: "Zoom", lblPanelRot: "Rotation", lblBubbles: "Speech Bubbles",
-        lblBubText: "Bubble Text", lblBubFont: "BD Font", lblBubSize: "Text Size", lblBubTail: "Tail Direction",
-        lblBubDel: "Delete", lblBubDup: "Duplicate", lblBubApply: "Apply", lblPreviewBtn: "Preview",
-        lblBOval: "Oval", lblBRound: "Round", lblBRect: "Rectangle", lblBCapsule: "Capsule", lblBCloud: "Thought", lblBSpiky: "Shout"
-    }
-};
-
-const titleSizes = [18,24,28,32,36,42,48,56,64,72];
-const bodySizes = [12,13,14,15,16,17,18,20,22,24,28,32];
-const BD_TEMPLATES = [
-    {id:'full', name:'Plein', rects:[{x:0,y:0,w:100,h:100}]},
-    {id:'2h', name:'2-H', rects:[{x:0,y:0,w:100,h:49},{x:0,y:51,w:100,h:49}]},
-    {id:'2v', name:'2-V', rects:[{x:0,y:0,w:49,h:100},{x:51,y:0,w:49,h:100}]},
-    {id:'3h', name:'3-H', rects:[{x:0,y:0,w:100,h:32},{x:0,y:34,w:100,h:32},{x:0,y:68,w:100,h:32}]},
-    {id:'3v', name:'3-V', rects:[{x:0,y:0,w:32,h:100},{x:34,y:0,w:32,h:100},{x:68,y:0,w:32,h:100}]},
-    {id:'4', name:'4', rects:[{x:0,y:0,w:49,h:49},{x:51,y:0,w:49,h:49},{x:0,y:51,w:49,h:49},{x:51,y:51,w:49,h:49}]},
-    {id:'3top', name:'3-Top', rects:[{x:0,y:0,w:100,h:58},{x:0,y:60,w:49,h:40},{x:51,y:60,w:49,h:40}]},
-    {id:'3bottom', name:'3-Btm', rects:[{x:0,y:0,w:49,h:40},{x:51,y:0,w:49,h:40},{x:0,y:42,w:100,h:58}]},
-    {id:'5mix', name:'5-Mix', rects:[{x:0,y:0,w:100,h:35},{x:0,y:37,w:49,h:29},{x:51,y:37,w:49,h:29},{x:0,y:68,w:49,h:32},{x:51,y:68,w:49,h:32}]},
-    {id:'6grid', name:'6-Grid', rects:[{x:0,y:0,w:32,h:49},{x:34,y:0,w:32,h:49},{x:68,y:0,w:32,h:49},{x:0,y:51,w:32,h:49},{x:34,y:51,w:32,h:49},{x:68,y:51,w:32,h:49}]},
-    {id:'blacksad', name:'Classique', rects:[{x:0,y:0,w:100,h:38},{x:0,y:40,w:100,h:14},{x:0,y:56,w:32,h:20},{x:34,y:56,w:32,h:20},{x:68,y:56,w:32,h:20},{x:0,y:78,w:100,h:22}]},
-    {id:'8', name:'8', rects:[{x:0,y:0,w:49,h:23.5},{x:51,y:0,w:49,h:23.5},{x:0,y:25.5,w:49,h:23.5},{x:51,y:25.5,w:49,h:23.5},{x:0,y:51,w:49,h:23.5},{x:51,y:51,w:49,h:23.5},{x:0,y:76.5,w:49,h:23.5},{x:51,y:76.5,w:49,h:23.5}]},
-    {id:'9', name:'9', rects:[{x:0,y:0,w:32,h:32},{x:34,y:0,w:32,h:32},{x:68,y:0,w:32,h:32},{x:0,y:34,w:32,h:32},{x:34,y:34,w:32,h:32},{x:68,y:34,w:32,h:32},{x:0,y:68,w:32,h:32},{x:34,y:68,w:32,h:32},{x:68,y:68,w:32,h:32}]},
-    {id:'10auto', name:'10', rects:[]},
-];
-
-function generateAutoRects(count){
-    const gap=2; const cols=Math.ceil(Math.sqrt(count)); const rows=Math.ceil(count/cols);
-    const cellW=(100-(cols-1)*gap)/cols; const cellH=(100-(rows-1)*gap)/rows;
-    let rects=[];
-    for(let i=0;i<count;i++){
-        let col=i%cols, row=Math.floor(i/cols);
-        rects.push({x:col*(cellW+gap), y:row*(cellH+gap), w:cellW, h:cellH});
-    }
-    return rects;
-}
-
-function getTemplateRects(id, customCount){
-    if(id==='10auto') return generateAutoRects(customCount||10);
-    let t=BD_TEMPLATES.find(x=>x.id===id);
-    if(t && t.rects && t.rects.length) return t.rects;
-    return generateAutoRects(customCount||4);
-}
-
-function ensureBDData(item){
-    if(!item) return;
-    if(!item.bdBg) item.bdBg={tx:0,ty:0,scale:1,rot:0};
-    if(item.bdBgImage===undefined) item.bdBgImage='';
-    if(!item.bdPanels){
-        if(item.image){ item.bdPanels=[{id:uid(), image:item.image, tx:0,ty:0,scale:1,rot:0}]; }
-        else { item.bdPanels=[{id:uid(), image:'', tx:0,ty:0,scale:1,rot:0}]; }
-    }
-    item.bdPanels.forEach(p=>{
-        if(p.tx===undefined) p.tx=0; if(p.ty===undefined) p.ty=0;
-        if(p.scale===undefined) p.scale=1; if(p.rot===undefined) p.rot=0;
-        if(!p.id) p.id=uid();
-    });
-    if(!item.bdTemplate) item.bdTemplate='full';
-    if(!item.bdTemplateRects || item.bdTemplateRects.length!==item.bdPanels.length){
-        let rects=getTemplateRects(item.bdTemplate, item.bdPanels.length);
-        if(item.bdTemplate!=='custom' && rects.length!==item.bdPanels.length){
-            let newPanels=[];
-            for(let i=0;i<rects.length;i++){
-                if(i<item.bdPanels.length) newPanels.push(item.bdPanels[i]);
-                else newPanels.push({id:uid(), image:'', tx:0,ty:0,scale:1,rot:0});
-            }
-            item.bdPanels=newPanels; item.bdTemplateRects=rects;
-        } else {
-            if(!item.bdTemplateRects) item.bdTemplateRects=rects;
-        }
-    }
-    if(!item.bdBubbles) item.bdBubbles=[];
-    item.bdBubbles.forEach(b=>{
-        if(b.x===undefined) b.x=50; if(b.y===undefined) b.y=50;
-        if(!b.w) b.w=30; if(!b.fontSize) b.fontSize=14;
-        if(!b.fontFamily) b.fontFamily="'Bangers', cursive";
-        if(!b.type) b.type='oval';
-        if(b.tailInvert===undefined) b.tailInvert = false;
-        if(b.tailFlip===undefined) b.tailFlip = false;
-        if(!b.bgColor) b.bgColor = '#ffffff';
-        if(b.panelIndex===undefined) b.panelIndex=null;
-    });
-}
-
-function initIDB(cb){
-    try {
-        const req=indexedDB.open("WriterFontsDB",2);
-        req.onupgradeneeded=e=>{
-            const d=e.target.result;
-            if(!d.objectStoreNames.contains("fonts")) d.createObjectStore("fonts",{keyPath:"name"});
-            if(!d.objectStoreNames.contains("images")) d.createObjectStore("images",{keyPath:"id"});
-        };
-        req.onsuccess=e=>{
-            db=e.target.result; loadFontsFromIDB(cb);
-        };
-        req.onerror=e=>{ if(cb) cb(); };
-    } catch(err) { if(cb) cb(); }
-}
-
-function loadFontsFromIDB(cb){
-    if(!db) return cb&&cb();
-    try {
-        const tx=db.transaction("fonts","readonly");
-        const r=tx.objectStore("fonts").getAll();
-        r.onsuccess=e=>{
-            customFonts=e.target.result||[];
-            customFonts.forEach(f=>{ fontMapping[f.name]=`'${f.name}'`; });
-            const css=customFonts.map(f=>`@font-face{font-family:'${f.name}';src:url('${f.dataUrl}');}`).join('\n');
-            document.getElementById('customFontsStyle').textContent=css;
-            refreshFontDropdown();
-            if(cb) cb();
-        };
-        r.onerror=()=> { if(cb) cb(); };
-    } catch(e) { if(cb) cb(); }
-}
-
-function handleFontUpload(e){
-    const file=e.target.files[0];
-    if(!file) return;
-    const r=new FileReader();
-    r.onload=ev=>{
-        const dataUrl=ev.target.result;
-        const name=file.name.replace(/\.[^/.]+$/,"").replace(/[^a-z0-9 _-]/g,'').trim()||'Custom';
-        if(fontMapping[name]) return alert('Cette police existe déjà');
-        try {
-            if(db) {
-                const tx=db.transaction("fonts","readwrite");
-                tx.objectStore("fonts").put({name,dataUrl});
-            }
-        } catch(err) {}
-        customFonts.push({name,dataUrl});
-        document.getElementById('customFontsStyle').textContent+=`@font-face{font-family:'${name}';src:url('${dataUrl}');}\n`;
-        fontMapping[name]=`'${name}'`;
-        refreshFontDropdown(); selectFont(name);
-    };
-    r.readAsDataURL(file); e.target.value='';
-}
-
-function uploadLocalImage(e) {
-    const file = e.target.files[0];
-    if(!file) return;
-    const r = new FileReader();
-    r.onload = ev => {
-        const b64 = ev.target.result;
-        try {
-            if(db) {
-                const tx = db.transaction("images","readwrite");
-                tx.objectStore("images").put({id: uid(), data: b64});
-            }
-        } catch(err) {}
-        document.getElementById('itemImage').value = b64;
-        autoSave();
-    };
-    r.readAsDataURL(file); e.target.value = '';
-}
-
-function applyFont(){
-    const fam=fontMapping[appConfig.fontFamily]||"'Playfair Display', serif";
-    const ta=document.getElementById('itemText'); if(ta) ta.style.fontFamily=fam;
-    const it=document.getElementById('itemTitle'); if(it) it.style.fontFamily=fam;
-    const gt=document.getElementById('globalTitle'); if(gt) gt.style.fontFamily=fam;
-}
-
-function toggleDropdown(id) {
-    const el = document.getElementById(id);
-    const isVis = el.style.display === 'flex';
-    closeMenus();
-    if(!isVis) el.style.display = 'flex';
-}
-
-function closeMenus() {
-    document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display='none');
-}
-
-document.addEventListener('click',e=>{
-    if(!e.target.closest('.gen-wrap')) closeMenus();
-});
-
-function refreshFontDropdown(){
-    const dd=document.getElementById('fontDropdown');
-    if(!dd) return;
-    dd.innerHTML='';
-    Object.keys(fontMapping).forEach(name=>{
-        const b=document.createElement('button');
-        b.className='dropdown-item'+(name===appConfig.fontFamily?' active':'');
-        b.style.fontFamily=fontMapping[name];
-        b.innerHTML=`<span style="font-weight:900;font-size:12px;opacity:.6">Tt</span> ${name}`;
-        b.onclick=()=>{ selectFont(name); closeMenus(); };
-        dd.appendChild(b);
-    });
-    const label=document.getElementById('fontSelectLabel');
-    if(label){ label.textContent=appConfig.fontFamily; label.style.fontFamily=fontMapping[appConfig.fontFamily]; }
-}
-
-function selectFont(name){
-    appConfig.fontFamily=name; saveProjects(); refreshFontDropdown(); applyFont(); autoSave();
-}
-
-function initSizeDropdowns() {
-    const tMenu = document.getElementById('titleSizeDropdown');
-    const bMenu = document.getElementById('bodySizeDropdown');
-    tMenu.innerHTML = ''; bMenu.innerHTML = '';
-    titleSizes.forEach(s => {
-        const btn = document.createElement('button');
-        btn.className = 'dropdown-item'; btn.textContent = s + 'px';
-        btn.onclick = () => {
-            document.getElementById('titleSizeLabel').dataset.value = s;
-            document.getElementById('titleSizeLabel').textContent = s + 'px';
-            closeMenus(); autoSave();
-        };
-        tMenu.appendChild(btn);
-    });
-    bodySizes.forEach(s => {
-        const btn = document.createElement('button');
-        btn.className = 'dropdown-item'; btn.textContent = s + 'px';
-        btn.onclick = () => {
-            document.getElementById('bodySizeLabel').dataset.value = s;
-            document.getElementById('bodySizeLabel').textContent = s + 'px';
-            closeMenus(); autoSave();
-        };
-        bMenu.appendChild(btn);
-    });
-}
-
-function refreshPageDropdown(){
-    const dd=document.getElementById('pageDropdown');
-    if(!dd) return;
-    dd.innerHTML='';
-    const proj=getCurrentProject();
-    if(!proj) return;
-    proj.data.book.items.forEach(it=>{
-        const b=document.createElement('button');
-        b.className='dropdown-item'+(it.id===currentPageId?' active':'');
-        b.innerHTML= it.type === 'chapter' ? esc(it.title) : getDisplayName(it);
-        b.onclick=()=>{ selectPage(it.id); closeMenus(); };
-        dd.appendChild(b);
-    });
-    const label=document.getElementById('pageSelectLabel');
-    const cur=proj.data.book.items.find(i=>i.id===currentPageId);
-    if(label&&cur) label.textContent = cur.type === 'chapter' ? cur.title : getDisplayName(cur);
-}
-
-function selectPage(id){
-    currentPageId=id; selectedPanelIndex=0; selectedBubbleId=null; loadPageData();
-}
-
-function loadProjects(){
-    try{
-        projects=JSON.parse(localStorage.getItem('writer_projects_v2')||'[]');
-        currentProjectId=localStorage.getItem('writer_current_project_id');
-        if(projects.length===0){
-            const p={id:uid(),title:'Mon projet',data:{book:{title:'Mon projet',items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()};
-            projects=[p]; currentProjectId=p.id; saveProjects();
-        }
-        if(!projects.find(p=>p.id===currentProjectId)) currentProjectId=projects[0].id;
-        appConfig=projects.find(p=>p.id===currentProjectId).config;
-    }catch(e){}
-}
-
-function saveProjects(){
-    try {
-        localStorage.setItem('writer_projects_v2',JSON.stringify(projects));
-        localStorage.setItem('writer_current_project_id',currentProjectId);
-        localStorage.setItem('writer_active_module', currentActiveModule || 'book');
-    } catch(e) {}
-}
-
-function getCurrentProject(){
-    return projects.find(p=>p.id===currentProjectId);
-}
-
-function openProjects(){
-    renderProjectsList(); document.getElementById('projectsModal').classList.add('active'); closeMenus();
-}
-
-function closeProjects(){
-    document.getElementById('projectsModal').classList.remove('active');
-}
-
-function renderProjectsList(){
-    const l=document.getElementById('projectsList');
-    l.innerHTML='';
-    projects.forEach(p=>{
-        const d=document.createElement('div');
-        d.className='project-item'+(p.id===currentProjectId?' active':'');
-        d.innerHTML=`<div style="font-weight:500">${esc(p.title)}</div><div style="display:flex;gap:6px"><button class="btn" onclick="switchProject('${p.id}')">OK</button><button class="btn btn-danger" onclick="deleteProject('${p.id}')"><i class="fas fa-times"></i></button></div>`;
-        l.appendChild(d);
-    });
-}
-
-function createNewProject(){
-    const t=document.getElementById('newProjectTitle').value.trim()||'Mon projet';
-    const p={id:uid(),title:t,data:{book:{title:t,items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()};
-    projects.unshift(p); currentProjectId=p.id; saveProjects(); loadProjectIntoUI();
-    document.getElementById('newProjectTitle').value='';
-}
-
-function switchProject(id){
-    currentProjectId=id; saveProjects(); loadProjectIntoUI(); closeProjects();
-}
-
-function deleteProject(id){
-    if(projects.length<=1) return;
-    if(!confirm('Supprimer ce projet ?')) return;
-    projects=projects.filter(p=>p.id!==id);
-    if(currentProjectId===id) currentProjectId=projects[0].id;
-    saveProjects(); loadProjectIntoUI(); renderProjectsList();
-}
-
-function loadProjectIntoUI(){
-    const proj=getCurrentProject();
-    if(!proj) return;
-    appConfig=proj.config;
-    document.getElementById('currentProjectName').textContent=proj.title;
-    document.getElementById('genCurrentProjectName').textContent=proj.title;
-    document.getElementById('globalTitle').value=proj.data.book.title||proj.title;
-    refreshFontDropdown(); refreshPageDropdown(); applyFont();
-    currentPageId = null; selectedPanelIndex=0; loadPageData();
-}
-
-function getDisplayName(it){
-    if(it.type==='cover') return currentActiveModule==='magazine'?'Mag Cover' : currentActiveModule==='comic'?'BD Cover':'Book Cover';
-    if(it.type==='author') return 'Informations';
-    if(it.type==='reference') return currentActiveModule==='comic'?'Content':'Summary';
-    return it.title||'Page';
-}
-
-function activateModule(mode) {
-    currentActiveModule = mode; saveProjects();
-    document.querySelectorAll('.sidebar .menu-item').forEach(e => e.classList.remove('active'));
-    const root = document.documentElement; const logoSub = document.getElementById('appLogoSub');
-    if(mode === 'comic') {
-        document.getElementById('tab-comic').classList.add('active'); root.style.setProperty('--accent', '#ef4444'); logoSub.textContent = 'BD Module';
-    } else if (mode === 'magazine') {
-        document.getElementById('tab-magazine').classList.add('active'); root.style.setProperty('--accent', '#f59e0b'); logoSub.textContent = 'Magazine';
-    } else {
-        currentActiveModule = 'book'; document.getElementById('tab-book').classList.add('active'); root.style.setProperty('--accent', '#22d3ee'); logoSub.textContent = 'sources';
-    }
-    const proj = getCurrentProject();
-    if(proj && (mode === 'comic' || mode === 'magazine')) {
-        const firstChap = proj.data.book.items.find(i => i.type === 'chapter');
-        if (firstChap) currentPageId = firstChap.id;
-    }
-    refreshPageDropdown(); loadPageData();
-}
-
-function loadPageData(){
-    const proj=getCurrentProject();
-    if(!proj || !proj.data.book.items.length) return;
-    if(!currentPageId) currentPageId = proj.data.book.items[0].id;
-    const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    if(!item) return;
-
-    document.getElementById('itemTitle').value=item.title||'';
-    document.getElementById('itemImage').value=item.image||'';
-    document.getElementById('itemText').value=item.text||'';
-    document.getElementById('imageSize').value=item.imageSize||70;
-    document.getElementById('imageSizeVal').textContent=(item.imageSize||70)+'%';
-    document.getElementById('bgOpacity').value=item.bgOpacity||15;
-    document.getElementById('bgOpacityVal').textContent=(item.bgOpacity||15)+'%';
-    document.getElementById('titleSizeLabel').dataset.value = item.titleSize||32;
-    document.getElementById('titleSizeLabel').textContent = (item.titleSize||32)+'px';
-    document.getElementById('bodySizeLabel').dataset.value = item.bodySize||17;
-    document.getElementById('bodySizeLabel').textContent = (item.bodySize||17)+'px';
-
-    const isCover=item.type==='cover', isAuthor=item.type==='author', isRef=item.type==='reference', isChapter=item.type==='chapter';
-    
-    document.getElementById('globalTitleGroup').style.display=isCover?'flex':'none';
-    document.getElementById('coverOptions').style.display=isCover?'flex':'none';
-    document.getElementById('itemTitleGroup').style.display=isCover?'none':'flex';
-    document.getElementById('authorMetaSection').style.display=isAuthor?'flex':'none';
-    document.getElementById('referenceConfigBlock').style.display=isRef?'flex':'none';
-
-    if(isCover) document.getElementById('showTitleOnCover').checked=item.showTitle!==false;
-    if(isAuthor){
-        document.getElementById('globalAuthor').value=item.author||''; document.getElementById('globalDate').value=item.date||'';
-        document.getElementById('globalPublisher').value=item.publisher||''; document.getElementById('globalGenre').value=item.genre||'';
-    }
-    if(isRef) renderRefBlock();
-
-    const isBDChapter = currentActiveModule==='comic' && isChapter;
-    document.getElementById('mediaUrlGroup').style.display = isBDChapter ? 'none' : 'flex';
-    document.getElementById('mediaSlidersGroup').style.display = isBDChapter ? 'none' : 'flex';
-    document.getElementById('fontOptionsGroup').style.display = isBDChapter ? 'none' : 'flex';
-    document.getElementById('textEditorGroup').style.display = isBDChapter ? 'none' : 'flex';
-    document.getElementById('bdFullEditor').style.display = isBDChapter ? 'flex' : 'none';
-    document.getElementById('magToolsGroup').style.display = (currentActiveModule==='magazine' && isChapter) ? 'flex' : 'none';
-
-    if(isBDChapter){
-        ensureBDData(item);
-        if(selectedPanelIndex===null) selectedPanelIndex=0;
-        renderBDTemplatesList(); renderBDCanvas();
-    }
-
-    document.getElementById('sheet').classList.toggle('is-cover', isCover);
-    setLayout(item.layout||'top',false); setImageAlign(item.imageAlign||'center',false);
-
-    const items=proj.data.book.items;
-    document.getElementById('navLeft').classList.toggle('disabled', items.findIndex(i=>i.id===currentPageId)<=0);
-    document.getElementById('navRight').classList.toggle('disabled', items.findIndex(i=>i.id===currentPageId)>=items.length-1);
-
-    refreshPageDropdown(); applyFont();
-}
-
-/* ===== BD PRO LOGIC ===== */
-function renderBDTemplatesList(){
-    const container=document.getElementById('bdTemplatesList'); if(!container) return;
-    container.innerHTML='';
-    const curItem=getCurrentProject()?.data.book.items.find(i=>i.id===currentPageId);
-    const curTmpl=curItem?.bdTemplate||'full';
-
-    BD_TEMPLATES.forEach(t=>{
-        let rects = t.id==='10auto' ? generateAutoRects(10) : t.rects;
-        if(!rects || !rects.length) rects=[{x:0,y:0,w:100,h:100}];
-        
-        let div=document.createElement('div');
-        div.className='template-thumb'+(curTmpl===t.id?' active':''); div.title=t.name;
-        
-        rects.forEach(r=>{
-            let p=document.createElement('div');
-            p.style.position='absolute'; p.style.left=r.x+'%'; p.style.top=r.y+'%'; p.style.width=r.w+'%'; p.style.height=r.h+'%';
-            p.style.background='rgba(255,255,255,0.9)'; p.style.border='1px solid #111'; p.style.boxSizing='border-box';
-            div.appendChild(p);
-        });
-
-        let label=document.createElement('div');
-        label.style.position='absolute'; label.style.bottom='0'; label.style.left='0'; label.style.right='0';
-        label.style.fontSize='7px'; label.style.textAlign='center'; label.style.color='#fff'; label.style.background='rgba(0,0,0,0.7)';
-        label.style.padding='2px 0'; label.textContent=t.name; div.appendChild(label);
-        
-        div.onclick=()=>setBDTemplate(t.id);
-        container.appendChild(div);
-    });
-}
-
-function setBDTemplate(id){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
-    ensureBDData(item);
-    let rects=getTemplateRects(id, item.bdPanels.length);
-    if(id==='10auto') rects=generateAutoRects(10);
-    
-    let newPanels=[];
-    for(let i=0;i<rects.length;i++){
-        if(i<item.bdPanels.length) newPanels.push(item.bdPanels[i]);
-        else newPanels.push({id:uid(), image:'', tx:0,ty:0,scale:1,rot:0});
-    }
-    item.bdPanels=newPanels; item.bdTemplate=id; item.bdTemplateRects=rects;
-    selectedPanelIndex=0; renderBDTemplatesList(); renderBDCanvas(); autoSave();
-}
-
-function applyCustomGrid(){
-    let cnt=parseInt(document.getElementById('bdCustomCount').value)||4; cnt=Math.min(12, Math.max(1,cnt));
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
-    let rects=generateAutoRects(cnt);
-    let newPanels=[];
-    for(let i=0;i<rects.length;i++){
-        if(i<item.bdPanels.length) newPanels.push(item.bdPanels[i]);
-        else newPanels.push({id:uid(), image:'', tx:0,ty:0,scale:1,rot:0});
-    }
-    item.bdPanels=newPanels; item.bdTemplate='custom'; item.bdTemplateRects=rects;
-    selectedPanelIndex=0; renderBDTemplatesList(); renderBDCanvas(); autoSave();
-}
-
-function createBubbleElement(b){
-    let div=document.createElement('div');
-    div.className='bd-bubble bubble-'+b.type+(selectedBubbleId===b.id?' selected':'');
-    div.dataset.bubbleId=b.id;
-    
-    div.style.left=b.x+'%'; 
-    div.style.top=b.y+'%';
-    div.style.width= (b.w === 'auto' ? 'auto' : b.w+'%');
-    div.style.fontFamily=b.fontFamily;
-    div.style.fontSize=b.fontSize+'px';
-    div.style.background = b.bgColor || '#ffffff';
-    div.textContent=b.text||'TEXTE';
-    div.style.transform='translate(-50%, -50%)';
-
-    // Application directionnelle de la flèche (Tail)
-    if(b.type !== 'spiky' && b.type !== 'cloud' && b.type !== 'pow' && b.type !== 'boom' && b.type !== 'narration'){
-        let tail=document.createElement('div');
-        tail.className='bd-bubble-tail';
-        tail.style.background = div.style.background;
-        
-        let yPos = b.tailFlip ? 'top' : 'bottom';
-        tail.style[yPos] = '-8px';
-        tail.style.borderRight = '2.5px solid #111';
-        
-        if(b.tailFlip) {
-            tail.style.borderTop = '2.5px solid #111';
-        } else {
-            tail.style.borderBottom = '2.5px solid #111';
-        }
-        
-        tail.style.left = '50%';
-        let scaleX = b.tailInvert ? -1 : 1;
-        tail.style.transform = `translateX(-50%) scaleX(${scaleX}) rotate(45deg)`;
-        
-        div.appendChild(tail);
-    }
-    
-    // Flèche incurvée pour certains types
-    if(b.type === 'whisper' || b.type === 'scream'){
-        let curveTail=document.createElement('div');
-        curveTail.className='bd-bubble-tail curve';
-        let yPos = b.tailFlip ? 'top' : 'bottom';
-        curveTail.style[yPos] = '-12px';
-        curveTail.style.left = '30%';
-        if(b.tailInvert) curveTail.style.transform = 'scaleX(-1)';
-        div.appendChild(curveTail);
-    }
-
-    div.addEventListener('mousedown', (e)=>onBubbleMouseDown(e, b.id));
-    div.addEventListener('click', (e)=>{ e.stopPropagation(); selectBubble(b.id); });
-    div.addEventListener('dblclick', (e)=>{ e.stopPropagation(); selectBubble(b.id); document.getElementById('bdBubbleText').focus(); });
-    
-    return div;
-}
-
-function renderBDCanvas(){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
-    ensureBDData(item);
-    const bgLayer=document.getElementById('bdBgLayer'); const gridContainer=document.getElementById('bdGridContainer'); const pageLayer=document.getElementById('bdBubblesPageLayer');
-    if(!bgLayer||!gridContainer) return;
-    bgLayer.innerHTML=''; gridContainer.innerHTML=''; if(pageLayer) pageLayer.innerHTML='';
-
-    if(item.bdBgImage){
-        let img=document.createElement('img');
-        img.src=item.bdBgImage; img.style.position='absolute'; img.style.top='0'; img.style.left='0'; img.style.width='100%'; img.style.height='100%';
-        img.style.objectFit='cover'; img.style.transform=`translate(${item.bdBg.tx||0}px, ${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1})`;
-        img.style.transformOrigin='center center'; img.style.pointerEvents='none';
-        bgLayer.appendChild(img);
-    }
-
-    item.bdTemplateRects.forEach((rect, idx)=>{
-        let panelData=item.bdPanels[idx]; if(!panelData) return;
-        let panelDiv=document.createElement('div');
-        panelDiv.className='bd-panel'+(selectedPanelIndex===idx?' selected':'');
-        panelDiv.style.left=rect.x+'%'; panelDiv.style.top=rect.y+'%'; panelDiv.style.width=rect.w+'%'; panelDiv.style.height=rect.h+'%';
-        panelDiv.dataset.index=idx;
-
-        if(panelData.image){
-            let img=document.createElement('img'); img.src=panelData.image;
-            img.style.transform=`translate(${panelData.tx||0}px, ${panelData.ty||0}px) scale(${panelData.scale||1}) rotate(${panelData.rot||0}deg)`;
-            panelDiv.appendChild(img);
-        } else {
-            let ph=document.createElement('div'); ph.className='bd-panel-placeholder';
-            ph.innerHTML=`<i class="fas fa-image" style="font-size:18px"></i><span>pix${idx+1}</span><button class="btn" style="margin-top:4px;font-size:10px;padding:4px 8px" onclick="event.stopPropagation(); triggerPanelUpload(${idx})"><i class="fas fa-upload"></i> Image</button>`;
-            panelDiv.appendChild(ph);
-        }
-
-        let bubblesInPanel=item.bdBubbles.filter(b=>b.panelIndex===idx);
-        bubblesInPanel.forEach(b=>{ panelDiv.appendChild(createBubbleElement(b)); });
-
-        panelDiv.addEventListener('mousedown', (e)=>onPanelMouseDown(e, idx));
-        panelDiv.addEventListener('wheel', (e)=>onPanelWheel(e, idx), {passive:false});
-        panelDiv.addEventListener('click', (e)=>{ if(e.target.closest('.bd-bubble')) return; selectPanel(idx); });
-        
-        gridContainer.appendChild(panelDiv);
-    });
-
-    if(pageLayer){
-        pageLayer.style.pointerEvents='none';
-        let pageBubbles=item.bdBubbles.filter(b=>b.panelIndex===null || b.panelIndex===undefined);
-        pageBubbles.forEach(b=>{ let el=createBubbleElement(b); el.style.pointerEvents='auto'; pageLayer.appendChild(el); });
-    }
-    updatePanelTools(); updateBubblesList();
-}
-
-function selectPanel(idx){
-    selectedPanelIndex=idx; selectedBubbleId=null; renderBDCanvas();
-    document.getElementById('bdPanelTools').style.display='flex';
-    document.getElementById('bdBubbleEdit').style.display='none';
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); const p=item.bdPanels[idx];
-    if(p){
-        document.getElementById('bdSelectedPanelLabel').textContent='pix'+(idx+1);
-        document.getElementById('bdPanelImageUrl').value=p.image||'';
-        document.getElementById('bdPanelScale').value=p.scale||1; document.getElementById('bdPanelScaleVal').textContent=Math.round((p.scale||1)*100)+'%';
-        document.getElementById('bdPanelRot').value=p.rot||0; document.getElementById('bdPanelRotVal').textContent=(p.rot||0)+'°';
-    }
-}
-
-function triggerPanelUpload(idx){ selectedPanelIndex=idx; document.getElementById('bdPanelUpload').click(); }
-
-function onPanelFile(e){
-    const file=e.target.files[0]; if(!file) return; const idx=selectedPanelIndex; const reader=new FileReader();
-    reader.onload=ev=>{
-        const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
-        if(idx!==null && item.bdPanels[idx]){ item.bdPanels[idx].image=ev.target.result; item.bdPanels[idx].tx=0; item.bdPanels[idx].ty=0; item.bdPanels[idx].scale=1; item.bdPanels[idx].rot=0; }
-        renderBDCanvas(); autoSave();
-    };
-    reader.readAsDataURL(file); e.target.value='';
-}
-
-function onPanelUrlChange(val){
-    if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    item.bdPanels[selectedPanelIndex].image=val; renderBDCanvas(); autoSave();
-}
-
-function onPanelScale(val){
-    if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    item.bdPanels[selectedPanelIndex].scale=parseFloat(val); document.getElementById('bdPanelScaleVal').textContent=Math.round(parseFloat(val)*100)+'%';
-    renderBDCanvas(); autoSave();
-}
-
-function onPanelRot(val){
-    if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    item.bdPanels[selectedPanelIndex].rot=parseInt(val); document.getElementById('bdPanelRotVal').textContent=val+'°';
-    renderBDCanvas(); autoSave();
-}
-
-function clearPanelImage(){
-    if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    item.bdPanels[selectedPanelIndex].image=''; renderBDCanvas(); autoSave();
-}
-
-function onBDBgFile(e){
-    const file=e.target.files[0]; if(!file) return; const reader=new FileReader();
-    reader.onload=ev=>{ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=ev.target.result; renderBDCanvas(); autoSave(); };
-    reader.readAsDataURL(file); e.target.value='';
-}
-
-function onBDBgUrlChange(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=val; renderBDCanvas(); autoSave();
-}
-
-function onBDBgScale(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBg.scale=parseFloat(val); document.getElementById('bdBgScaleVal').textContent=Math.round(parseFloat(val)*100)+'%'; renderBDCanvas(); autoSave();
-}
-
-function clearBGBg(){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
-    item.bdBgImage=''; item.bdBg={tx:0,ty:0,scale:1,rot:0}; document.getElementById('bdBgImageInput').value=''; renderBDCanvas(); autoSave();
-}
-
-function onPanelMouseDown(e, idx){
-    if(e.target.closest('.bd-bubble')) return;
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
-    const panel=item.bdPanels[idx]; if(!panel.image) return;
-    dragState={type:'panelImage', idx, startX:e.clientX, startY:e.clientY, origTx:panel.tx||0, origTy:panel.ty||0};
-    e.preventDefault();
-}
-
-function onPanelWheel(e, idx){
-    e.preventDefault(); const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
-    const panel=item.bdPanels[idx]; if(!panel.image) return;
-    if(e.shiftKey){
-        panel.rot=(panel.rot||0)+(e.deltaY>0?-3:3);
-        if(panel.rot>180) panel.rot-=360; if(panel.rot<-180) panel.rot+=360;
-        if(selectedPanelIndex===idx){ document.getElementById('bdPanelRot').value=panel.rot; document.getElementById('bdPanelRotVal').textContent=panel.rot+'°'; }
-    } else {
-        let delta=e.deltaY>0?-0.07:0.07; let newScale=Math.min(15,Math.max(0.1,(panel.scale||1)+delta)); panel.scale=newScale;
-        if(selectedPanelIndex===idx){ document.getElementById('bdPanelScale').value=newScale; document.getElementById('bdPanelScaleVal').textContent=Math.round(newScale*100)+'%'; }
-    }
-    renderBDCanvas(); autoSave();
-}
-
-function addBDBubble(type){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
-    let newBubble={
-        id:uid(), panelIndex:selectedPanelIndex, type:type, text:type.toUpperCase(),
-        x:50, y:30, w:30, fontFamily:"'Bangers', cursive", fontSize:14, tailInvert:false, tailFlip:false, bgColor:'#ffffff'
-    };
-    if(type==='whisper'){ newBubble.w=25; newBubble.fontSize=12; newBubble.fontFamily="'Caveat Brush', cursive"; }
-    if(type==='scream'){ newBubble.w=40; newBubble.fontSize=22; newBubble.fontFamily="'Bangers', cursive"; }
-    if(type==='boom'){ newBubble.w=35; newBubble.fontSize=24; newBubble.fontFamily="'Bangers', cursive"; }
-    if(type==='pow'){ newBubble.w=35; newBubble.fontSize=24; newBubble.fontFamily="'Bangers', cursive"; }
-    if(type==='narration'){ newBubble.w=40; newBubble.fontSize=13; newBubble.fontFamily="'Special Elite', cursive"; newBubble.bgColor='#fdf6e3'; }
-    item.bdBubbles.push(newBubble); selectedBubbleId=newBubble.id;
-    renderBDCanvas(); selectBubble(newBubble.id); autoSave();
-}
-
-function onBubbleMouseDown(e, bubbleId){
-    e.stopPropagation(); const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble=item.bdBubbles.find(b=>b.id===bubbleId); if(!bubble) return;
-    let panelEl=e.target.closest('.bd-panel'); let parentRect=panelEl?panelEl.getBoundingClientRect():document.getElementById('bdCanvasEnhancedWrap').getBoundingClientRect();
-    dragState={type:'bubble', bubbleId, startX:e.clientX, startY:e.clientY, origX:bubble.x, origY:bubble.y, parentRect};
-    selectBubble(bubbleId); e.preventDefault();
-}
-
-function selectBubble(id){
-    selectedBubbleId=id; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble=item.bdBubbles.find(b=>b.id===id); if(!bubble) return;
-    document.getElementById('bdBubbleEdit').style.display='flex';
-    document.getElementById('bdBubbleText').value=bubble.text;
-    document.getElementById('bdBubbleFont').value=bubble.fontFamily;
-    document.getElementById('bdBubbleSize').value=bubble.fontSize; document.getElementById('bdBubbleSizeVal').textContent=bubble.fontSize+'px';
-    document.getElementById('bdBubbleWidth').value=bubble.w || 30; document.getElementById('bdBubbleWidthVal').textContent=(bubble.w || 30)+'%';
-    document.getElementById('bdBubbleBg').value=bubble.bgColor || '#ffffff';
-    updateTailToggles();
-    renderBDCanvas();
-}
-
-function toggleTailInvert() {
-    const proj = getCurrentProject(); const item = proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble = item.bdBubbles.find(b=>b.id===selectedBubbleId);
-    if(bubble) { bubble.tailInvert = !bubble.tailInvert; updateTailToggles(); renderBDCanvas(); autoSave(); }
-}
-
-function toggleTailFlip() {
-    const proj = getCurrentProject(); const item = proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble = item.bdBubbles.find(b=>b.id===selectedBubbleId);
-    if(bubble) { bubble.tailFlip = !bubble.tailFlip; updateTailToggles(); renderBDCanvas(); autoSave(); }
-}
-
-function updateTailToggles() {
-    const proj = getCurrentProject(); const item = proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble = item.bdBubbles.find(b=>b.id===selectedBubbleId);
-    if(bubble) {
-        document.getElementById('btnTailInvert').style.color = bubble.tailInvert ? 'var(--accent)' : 'var(--text)';
-        document.getElementById('btnTailInvert').style.borderColor = bubble.tailInvert ? 'var(--accent)' : 'transparent';
-        document.getElementById('btnTailInvert').style.background = bubble.tailInvert ? 'rgba(255,255,255,0.1)' : 'transparent';
-        
-        document.getElementById('btnTailFlip').style.color = bubble.tailFlip ? 'var(--accent)' : 'var(--text)';
-        document.getElementById('btnTailFlip').style.borderColor = bubble.tailFlip ? 'var(--accent)' : 'transparent';
-        document.getElementById('btnTailFlip').style.background = bubble.tailFlip ? 'rgba(255,255,255,0.1)' : 'transparent';
-    }
-}
-
-function onBubbleTextChange(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId);
-    if(bubble){
-        bubble.text=val;
-        let el=document.querySelector(`[data-bubble-id="${bubble.id}"]`);
-        if(el){
-            let tail=el.querySelector('.bd-bubble-tail');
-            el.childNodes[0].textContent=val;
-            if(tail) el.appendChild(tail);
-        }
-        autoSave();
-    }
-}
-
-function onBubbleFontChange(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId);
-    if(bubble){ bubble.fontFamily=val; renderBDCanvas(); autoSave(); }
-}
-
-function onBubbleSize(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId);
-    if(bubble){ bubble.fontSize=parseInt(val); document.getElementById('bdBubbleSizeVal').textContent=val+'px'; renderBDCanvas(); autoSave(); }
-}
-
-function onBubbleWidth(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId);
-    if(bubble){ bubble.w=parseInt(val); document.getElementById('bdBubbleWidthVal').textContent=val+'%'; renderBDCanvas(); autoSave(); }
-}
-
-function onBubbleBg(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId);
-    if(bubble){ bubble.bgColor=val; document.getElementById('bdBubbleBg').value=val; renderBDCanvas(); autoSave(); }
-}
-
-function deleteSelectedBubble(){
-    if(!selectedBubbleId) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    item.bdBubbles=item.bdBubbles.filter(b=>b.id!==selectedBubbleId);
-    selectedBubbleId=null; document.getElementById('bdBubbleEdit').style.display='none'; renderBDCanvas(); autoSave();
-}
-
-function duplicateBubble(){
-    if(!selectedBubbleId) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    let orig=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(!orig) return;
-    let copy={...orig, id:uid(), x:Math.min(90,orig.x+5), y:Math.min(90,orig.y+5)};
-    item.bdBubbles.push(copy); selectedBubbleId=copy.id; renderBDCanvas(); selectBubble(copy.id); autoSave();
-}
-
-function updatePanelTools(){}
-function updateBubblesList(){
-    const container=document.getElementById('bdBubblesList'); if(!container) return;
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
-    container.innerHTML='';
-    item.bdBubbles.forEach(b=>{
-        let chip=document.createElement('div');
-        chip.style.padding='4px 10px'; chip.style.borderRadius='14px';
-        chip.style.background=b.id===selectedBubbleId?'#ef4444':'rgba(255,255,255,0.1)'; chip.style.fontSize='11px'; chip.style.cursor='pointer';
-        chip.textContent=(b.panelIndex!==null?'pix'+(b.panelIndex+1)+': ':'Page: ')+(b.text.slice(0,14)||'bulle');
-        chip.onclick=()=>selectBubble(b.id);
-        container.appendChild(chip);
-    });
-}
-
-document.addEventListener('mousemove', (e)=>{
-    if(!dragState) return;
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
-    if(dragState.type==='panelImage'){
-        let dx=e.clientX-dragState.startX, dy=e.clientY-dragState.startY;
-        let panel=item.bdPanels[dragState.idx]; panel.tx=dragState.origTx+dx; panel.ty=dragState.origTy+dy;
-        let img=document.querySelector(`.bd-panel[data-index="${dragState.idx}"] img`);
-        if(img) img.style.transform=`translate(${panel.tx}px,${panel.ty}px) scale(${panel.scale}) rotate(${panel.rot}deg)`;
-    } else if(dragState.type==='bubble'){
-        let dx=e.clientX-dragState.startX, dy=e.clientY-dragState.startY;
-        let newLeft=dragState.origX+(dx/dragState.parentRect.width)*100;
-        let newTop=dragState.origY+(dy/dragState.parentRect.height)*100;
-        let bubble=item.bdBubbles.find(b=>b.id===dragState.bubbleId);
-        if(bubble){
-            bubble.x=Math.max(5,Math.min(95,newLeft)); bubble.y=Math.max(5,Math.min(95,newTop));
-            let el=document.querySelector(`[data-bubble-id="${bubble.id}"]`);
-            if(el){ el.style.left=bubble.x+'%'; el.style.top=bubble.y+'%'; }
-        }
-    }
-});
-
-document.addEventListener('mouseup', ()=>{
-    if(dragState){
-        if(dragState.type==='bubble' || dragState.type==='panelImage'){ renderBDCanvas(); autoSave(); }
-        dragState=null;
-    }
-});
-
-/* ===== CORE BOOK LOGIC ===== */
-function setLayout(l,s=true){
-    document.querySelectorAll('[id^="lay-"]').forEach(b=>b.classList.remove('active'));
-    const btn = document.getElementById('lay-'+l); if(btn) btn.classList.add('active');
-    document.getElementById('bgOpacityGroup').style.display=l==='bg'?'flex':'none';
-    document.getElementById('alignContainer').style.display=l==='bg'?'none':'flex';
-    if(s) autoSave();
-}
-
-function setImageAlign(a,s=true){
-    document.querySelectorAll('[id^="align-"]').forEach(b=>b.classList.remove('active'));
-    const btn = document.getElementById('align-'+a); if(btn) btn.classList.add('active');
-    if(s) autoSave();
-}
-
-function updateImageSize(v){
-    document.getElementById('imageSizeVal').textContent=v+'%';
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    if(item) { item.imageSize = parseInt(v); }
-    updateLivePreviewFast(); autoSave();
-}
-
-function updateBgOpacity(v){
-    document.getElementById('bgOpacityVal').textContent=v+'%';
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    if(item) { item.bgOpacity = parseInt(v); }
-    updateLivePreviewFast(); autoSave();
-}
-
-function updateLivePreviewFast() {
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    if(document.getElementById('previewModal').classList.contains('active')) {
-        document.getElementById('prvContent').innerHTML=buildPageHTML(item, proj.title);
-    }
-}
-
-function renderRefBlock(){
-    const cfg=appConfig.reference||{mode:'all',selected:[]};
-    document.querySelectorAll('input[name="refModePage"]').forEach(r=>r.checked=r.value===cfg.mode);
-    const list=document.getElementById('refPageListInPage');
-    if(cfg.mode==='select'){
-        list.style.display='flex'; list.innerHTML='';
-        getCurrentProject().data.book.items.filter(i=>i.type==='chapter').forEach(it=>{
-            const checked=cfg.selected.includes(it.id);
-            const label=document.createElement('label'); label.style.cssText='display:flex;gap:8px;font-size:12px;align-items:center';
-            label.innerHTML=`<input type="checkbox" value="${it.id}" ${checked?'checked':''} onchange="updateRefSelectionPage()"> ${esc(it.title)}`;
-            list.appendChild(label);
-        });
-    } else { list.style.display='none'; }
-}
-
-function updateRefConfigPage(){
-    const mode=document.querySelector('input[name="refModePage"]:checked')?.value||'all';
-    appConfig.reference.mode=mode; if(mode==='all') appConfig.reference.selected=[];
-    saveProjects(); renderRefBlock();
-}
-
-function updateRefSelectionPage(){
-    const sel=Array.from(document.querySelectorAll('#refPageListInPage input:checked')).map(i=>i.value);
-    appConfig.reference.selected=sel; saveProjects();
-}
-
-function prevPage(){
-    const items=getCurrentProject().data.book.items; const idx=items.findIndex(i=>i.id===currentPageId);
-    if(idx>0){ selectPage(items[idx-1].id); }
-}
-
-function nextPage(){
-    const items=getCurrentProject().data.book.items; const idx=items.findIndex(i=>i.id===currentPageId);
-    if(idx<items.length-1){ selectPage(items[idx+1].id); }
-}
-
-function _doSaveCore() {
-    const proj=getCurrentProject(); if(!proj) return;
-    const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
-    
-    if(item.type==='cover'){
-        const nt=document.getElementById('globalTitle').value.trim()||'Mon projet';
-        proj.title=nt; proj.data.book.title=nt;
-        document.getElementById('currentProjectName').textContent=nt; document.getElementById('genCurrentProjectName').textContent=nt;
-        item.showTitle=document.getElementById('showTitleOnCover').checked;
-    }
-    
-    item.title=document.getElementById('itemTitle').value.trim()||'Page';
-    
-    if(currentActiveModule!=='comic' || item.type!=='chapter'){
-        item.image=document.getElementById('itemImage').value;
-        item.text=document.getElementById('itemText').value;
-        item.layout=document.querySelector('[id^="lay-"].active')?.id.replace('lay-','')||'top';
-        item.imageAlign=document.querySelector('[id^="align-"].active')?.id.replace('align-','')||'center';
-        item.imageSize=parseInt(document.getElementById('imageSize').value)||70;
-        item.bgOpacity=parseInt(document.getElementById('bgOpacity').value)||15;
-        item.titleSize=parseInt(document.getElementById('titleSizeLabel').dataset.value)||32;
-        item.bodySize=parseInt(document.getElementById('bodySizeLabel').dataset.value)||17;
-    }
-    
-    if(item.type==='author'){
-        item.author=document.getElementById('globalAuthor').value; item.date=document.getElementById('globalDate').value;
-        item.publisher=document.getElementById('globalPublisher').value; item.genre=document.getElementById('globalGenre').value;
-    }
-    
-    proj.config=appConfig; proj.updatedAt=Date.now(); saveProjects();
-    const ind=document.getElementById('syncIndicator'); if(ind) ind.innerHTML='<i class="fas fa-check-circle"></i> sync';
-    document.getElementById('savedToast').classList.add('show'); setTimeout(()=>document.getElementById('savedToast').classList.remove('show'),1500);
-    refreshPageDropdown(); updateLivePreviewFast();
-}
-
-function autoSave(){
-    const ind=document.getElementById('syncIndicator'); if(ind) ind.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> sync';
-    clearTimeout(window._t); window._t=setTimeout(_doSaveCore, 500);
-}
-
-function manualSave(){ clearTimeout(window._t); _doSaveCore(); }
-
-function addPage(){
-    const proj=getCurrentProject(); const nid='ch_'+Date.now();
-    const refIdx=proj.data.book.items.findIndex(i=>i.type==='reference');
-    const newItem={id:nid,type:'chapter',title:`Page ${proj.data.book.items.filter(i=>i.type==='chapter').length+1}`,titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]};
-    if(refIdx>-1) proj.data.book.items.splice(refIdx+1,0,newItem); else proj.data.book.items.push(newItem);
-    currentPageId=nid; selectedPanelIndex=0; saveProjects(); loadProjectIntoUI(); autoSave();
-}
-
-function deletePage(){
-    const it=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);
-    if(it.type==='cover'||it.type==='author'||it.type==='reference') return alert('Page système non supprimable');
-    if(!confirm('Supprimer cette page ?')) return;
-    getCurrentProject().data.book.items=getCurrentProject().data.book.items.filter(i=>i.id!==currentPageId);
-    currentPageId=getCurrentProject().data.book.items[0].id;
-    saveProjects(); loadProjectIntoUI();
-}
-
-function generateImgHtml(item, customStyle=''){
-    if(!item.image) return '';
-    if(item.layout==='bg' && !customStyle){
-        return `<img src="${item.image}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:${(item.bgOpacity||20)/100};z-index:0" />`;
-    }
-    let style=`width:${item.imageSize||70}%;${customStyle}`;
-    const isFull=(item.imageSize||70)>=100;
-    if(isFull && !customStyle){
-        return `<div class="img-wrapper full-bleed" style="width:calc(100% + 90px); margin-left:-45px; margin-right:-45px; overflow:hidden;"><img src="${item.image}" style="width:${item.imageSize}%;height:auto;border-radius:0;display:block;margin:0 auto;" /></div>`;
-    } else if(!customStyle){
-        if(item.imageAlign==='left') style+=`float:left;margin:0 14px 8px 0;`;
-        else if(item.imageAlign==='right') style+=`float:right;margin:0 0 8px 14px;`;
-        else style+=`display:block;margin:12px auto;`;
-    }
-    return `<div class="img-wrapper" style="${style}"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover;border-radius:${customStyle?'0':'8px'};display:block" /></div>`;
-}
-
-function buildBDHTML(item){
-    ensureBDData(item);
-    let rects=item.bdTemplateRects||[{x:0,y:0,w:100,h:100}];
-    let html=`<div style="position:relative;width:100%;max-width:800px;margin:0 auto;aspect-ratio:1/1.414;background:#fff;border:3.5px solid #111;overflow:hidden;box-sizing:border-box">`;
-    if(item.bdBgImage){
-        html+=`<img src="${item.bdBgImage}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translate(${item.bdBg.tx||0}px,${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1});transform-origin:center" />`;
-    }
-    
-    rects.forEach((r,i)=>{
-        let p=item.bdPanels[i]; if(!p) return;
-        html+=`<div style="position:absolute;left:${r.x}%;top:${r.y}%;width:${r.w}%;height:${r.h}%;border:2.5px solid #111;overflow:hidden;background:#fff;box-sizing:border-box">`;
-        if(p.image){
-            html+=`<img src="${p.image}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transform:translate(${p.tx||0}px,${p.ty||0}px) scale(${p.scale||1}) rotate(${p.rot||0}deg);transform-origin:center" />`;
-        }
-        let bubbles=item.bdBubbles.filter(b=>b.panelIndex===i);
-        bubbles.forEach(b=>{
-            let bg = b.bgColor || '#ffffff';
-            let bShapeCss = '';
-            let tailHtml = '';
-
-            if(b.type === 'oval') bShapeCss = `border-radius:50% / 50%; border:2.5px solid #111; padding:0.8em 1.2em;`;
-            else if(b.type === 'round') bShapeCss = `border-radius:50%; padding:1.2em; aspect-ratio:1/1;`;
-            else if(b.type === 'rect') bShapeCss = `border-radius:12px; border:2.5px solid #111; padding:0.6em 1em;`;
-            else if(b.type === 'capsule') bShapeCss = `border-radius:50px; border:2.5px solid #111; padding:0.6em 1.2em;`;
-            else if(b.type === 'cloud') bShapeCss = `border-radius:50% 50% 50% 50% / 60% 60% 40% 40%; border:2.5px dashed #111; padding:1em 1.5em;`;
-            else if(b.type === 'spiky') bShapeCss = `clip-path: polygon(50% 0%, 65% 20%, 100% 20%, 75% 45%, 100% 80%, 60% 70%, 50% 100%, 40% 70%, 0% 80%, 25% 45%, 0% 20%, 35% 20%); padding:1.5em; filter: drop-shadow(2px 2px 0px #111) drop-shadow(-2px -2px 0px #111) drop-shadow(2px -2px 0px #111) drop-shadow(-2px 2px 0px #111);`;
-            else if(b.type === 'boom') bShapeCss = `border-radius:50% 50% 50% 50% / 40% 40% 60% 60%; border:3px solid #111; padding:1em 1.4em; box-shadow:3px 3px 0 #111;`;
-            else if(b.type === 'pow') bShapeCss = `clip-path:polygon(50% 0%, 75% 10%, 95% 5%, 85% 30%, 100% 50%, 80% 60%, 95% 85%, 65% 75%, 50% 100%, 35% 75%, 5% 85%, 20% 60%, 0% 50%, 15% 30%, 5% 5%, 25% 10%); padding:1.5em; border:none;`;
-            else if(b.type === 'whisper') bShapeCss = `border-radius:50%; border:2px dashed #999; padding:1em; opacity:0.85; font-style:italic;`;
-            else if(b.type === 'scream') bShapeCss = `border-radius:10% 90% 10% 90% / 90% 10% 90% 10%; border:3px solid #111; padding:1em 1.5em; box-shadow:4px 4px 0 #111;`;
-            else if(b.type === 'narration') bShapeCss = `border-radius:4px; border:2px solid #111; padding:1em; background:#fdf6e3; font-style:italic;`;
-
-            if(b.type !== 'spiky' && b.type !== 'cloud' && b.type !== 'pow' && b.type !== 'boom' && b.type !== 'narration') {
-                let yPos = b.tailFlip ? 'top:-8px;' : 'bottom:-8px;';
-                let bTop = b.tailFlip ? '2.5px' : '0';
-                let bBot = b.tailFlip ? '0' : '2.5px';
-                let scaleX = b.tailInvert ? -1 : 1;
-                tailHtml = `<div style="position:absolute; width:14px; height:14px; background:${bg}; border-right:2.5px solid #111; border-top:${bTop} solid #111; border-bottom:${bBot} solid #111; ${yPos} left:50%; transform:translateX(-50%) scaleX(${scaleX}) rotate(45deg); z-index:-1;"></div>`;
-            } else if (b.type === 'whisper' || b.type === 'scream') {
-                let yPos = b.tailFlip ? 'top:-12px;' : 'bottom:-12px;';
-                let scaleX = b.tailInvert ? -1 : 1;
-                tailHtml = `<div style="position:absolute; ${yPos} left:30%; width:20px; height:20px; border-left:3px solid #111; border-bottom:3px solid #111; border-radius:0 0 0 20px; background:transparent; transform:scaleX(${scaleX}) rotate(45deg); z-index:-1;"></div>`;
-            }
-
-            html+=`<div style="position:absolute; left:${b.x}%; top:${b.y}%; width:${b.w}%; transform:translate(-50%,-50%); background:${bg}; ${bShapeCss} font-family:${b.fontFamily}; font-size:${b.fontSize}px; font-weight:700; color:#111; white-space:pre-wrap; overflow-wrap:break-word; text-align:center; box-sizing:border-box; display:flex; align-items:center; justify-content:center; z-index:10; line-height:1.2;">${esc(b.text)}${tailHtml}</div>`;
-        });
-        html+=`</div>`;
-    });
-
-    let pageBubbles=item.bdBubbles.filter(b=>b.panelIndex===null || b.panelIndex===undefined);
-    pageBubbles.forEach(b=>{
-        let bg = b.bgColor || '#ffffff';
-        let bShapeCss = '';
-        let tailHtml = '';
-
-        if(b.type === 'oval') bShapeCss = `border-radius:50% / 50%; border:2.5px solid #111; padding:0.8em 1.2em;`;
-        else if(b.type === 'round') bShapeCss = `border-radius:50%; padding:1.2em; aspect-ratio:1/1;`;
-        else if(b.type === 'rect') bShapeCss = `border-radius:12px; border:2.5px solid #111; padding:0.6em 1em;`;
-        else if(b.type === 'capsule') bShapeCss = `border-radius:50px; border:2.5px solid #111; padding:0.6em 1.2em;`;
-        else if(b.type === 'cloud') bShapeCss = `border-radius:50% 50% 50% 50% / 60% 60% 40% 40%; border:2.5px dashed #111; padding:1em 1.5em;`;
-        else if(b.type === 'spiky') bShapeCss = `clip-path: polygon(50% 0%, 65% 20%, 100% 20%, 75% 45%, 100% 80%, 60% 70%, 50% 100%, 40% 70%, 0% 80%, 25% 45%, 0% 20%, 35% 20%); padding:1.5em; filter: drop-shadow(2px 2px 0px #111) drop-shadow(-2px -2px 0px #111) drop-shadow(2px -2px 0px #111) drop-shadow(-2px 2px 0px #111);`;
-        else if(b.type === 'boom') bShapeCss = `border-radius:50% 50% 50% 50% / 40% 40% 60% 60%; border:3px solid #111; padding:1em 1.4em; box-shadow:3px 3px 0 #111;`;
-        else if(b.type === 'pow') bShapeCss = `clip-path:polygon(50% 0%, 75% 10%, 95% 5%, 85% 30%, 100% 50%, 80% 60%, 95% 85%, 65% 75%, 50% 100%, 35% 75%, 5% 85%, 20% 60%, 0% 50%, 15% 30%, 5% 5%, 25% 10%); padding:1.5em; border:none;`;
-        else if(b.type === 'whisper') bShapeCss = `border-radius:50%; border:2px dashed #999; padding:1em; opacity:0.85; font-style:italic;`;
-        else if(b.type === 'scream') bShapeCss = `border-radius:10% 90% 10% 90% / 90% 10% 90% 10%; border:3px solid #111; padding:1em 1.5em; box-shadow:4px 4px 0 #111;`;
-        else if(b.type === 'narration') bShapeCss = `border-radius:4px; border:2px solid #111; padding:1em; background:#fdf6e3; font-style:italic;`;
-
-        if(b.type !== 'spiky' && b.type !== 'cloud' && b.type !== 'pow' && b.type !== 'boom' && b.type !== 'narration') {
-            let yPos = b.tailFlip ? 'top:-8px;' : 'bottom:-8px;';
-            let bTop = b.tailFlip ? '2.5px' : '0';
-            let bBot = b.tailFlip ? '0' : '2.5px';
-            let scaleX = b.tailInvert ? -1 : 1;
-            tailHtml = `<div style="position:absolute; width:14px; height:14px; background:${bg}; border-right:2.5px solid #111; border-top:${bTop} solid #111; border-bottom:${bBot} solid #111; ${yPos} left:50%; transform:translateX(-50%) scaleX(${scaleX}) rotate(45deg); z-index:-1;"></div>`;
-        } else if (b.type === 'whisper' || b.type === 'scream') {
-            let yPos = b.tailFlip ? 'top:-12px;' : 'bottom:-12px;';
-            let scaleX = b.tailInvert ? -1 : 1;
-            tailHtml = `<div style="position:absolute; ${yPos} left:30%; width:20px; height:20px; border-left:3px solid #111; border-bottom:3px solid #111; border-radius:0 0 0 20px; background:transparent; transform:scaleX(${scaleX}) rotate(45deg); z-index:-1;"></div>`;
-        }
-
-        html+=`<div style="position:absolute; left:${b.x}%; top:${b.y}%; width:${b.w}%; transform:translate(-50%,-50%); background:${bg}; ${bShapeCss} font-family:${b.fontFamily}; font-size:${b.fontSize}px; font-weight:700; color:#111; white-space:pre-wrap; overflow-wrap:break-word; text-align:center; box-sizing:border-box; display:flex; align-items:center; justify-content:center; z-index:15; line-height:1.2;">${esc(b.text)}${tailHtml}</div>`;
-    });
-    
-    html+=`</div>`;
-    return html;
-}
-
-function buildPageHTML(item, projectTitle){
-    const fontSty = fontMapping[appConfig.fontFamily]||'serif';
-    if(currentActiveModule === 'comic' && item.type === 'chapter') { return buildBDHTML(item); }
-    if(item.type==='reference'){
-        return `<div class="clearfix"><h1 style="font-size:${item.titleSize||28}px;text-align:center;font-family:${fontSty}">${esc(item.title||'Summary')}</h1><div style="font-size:${item.bodySize||16}px;white-space:pre-wrap;margin:10px 0;font-family:${fontSty}">${esc(item.text||'Sommaire...')}</div></div>`;
-    }
-    if(item.type==='cover'){
-        const showTitle=item.showTitle!==false;
-        const titleHTML=showTitle?`<h1 style="font-size:${item.titleSize||48}px;text-align:center;color:#fff;text-shadow:0 2px 30px rgba(0,0,0,.9);margin:0;font-family:${fontSty}">${esc(projectTitle||'Mon projet')}</h1>`:'';
-        if(item.layout==='bg'){
-            if((item.imageSize||100)>=100){
-                return `<div style="position:absolute;top:-40px;left:-40px;right:-40px;bottom:-40px;width:calc(100% + 80px);height:calc(100% + 80px);overflow:hidden"><img src="${item.image}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:${(item.bgOpacity||20)/100}" /><div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,.7), transparent);display:flex;align-items:flex-end;justify-content:center;padding:70px 30px;z-index:1">${titleHTML}</div></div>`;
-            } else{
-                return `<div style="min-height:500px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:40px;text-align:center"><img src="${item.image}" style="width:${item.imageSize}%;border-radius:12px;opacity:${(item.bgOpacity||20)/100};margin-bottom:20px" />${titleHTML}</div>`;
-            }
-        }
-        return `<div style="min-height:400px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:60px;text-align:center">${titleHTML}</div>`;
-    }
-    const titleHTML=`<h1 style="font-size:${item.titleSize||32}px;font-weight:700;text-align:center;margin-bottom:10px;font-family:${fontSty}">${esc(item.title||'Chapitre 1')}</h1>`;
-    let meta='';
-    if(item.type==='author'){
-        const m=[item.author,item.date,item.publisher,item.genre].filter(Boolean).map(esc).join(' · ');
-        if(m) meta=`<div style="text-align:center;opacity:.6;font-size:.9em;margin-bottom:12px">${m}</div>`;
-    }
-    const img=generateImgHtml(item);
-    const bodyStyle=`font-size:${item.bodySize||17}px;white-space:pre-wrap;text-align:justify;font-family:${fontSty}`;
-    if(item.layout==='bg'){
-        return `<div style="position:relative;min-height:360px;overflow:hidden;border-radius:10px;padding:20px">${img}<div style="position:relative;z-index:1" class="clearfix">${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div></div></div>`;
-    }
-    if(item.layout==='top'){ return `<div class="clearfix">${img}${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div></div>`; }
-    if(item.layout==='bottom'){ return `<div class="clearfix">${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div>${img}<div style="clear:both"></div></div>`; }
-    return `<div class="clearfix">${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div>${img}</div>`;
-}
-
-function openPreview(){
-    autoSave();
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    const box=document.getElementById('prvContent'); box.innerHTML=buildPageHTML(item, proj.title);
-    document.getElementById('previewModal').classList.add('active'); setPreviewDevice(previewDevice);
-}
-
-function closePreview(){ document.getElementById('previewModal').classList.remove('active'); }
-
-function setPreviewDevice(d){
-    previewDevice=d; const s=document.getElementById('previewScreen'); s.className='preview-screen '+d;
-    ['mobile','tablet','large','epub','pdf'].forEach(x=>{
-        const el=document.getElementById('btn'+x.charAt(0).toUpperCase()+x.slice(1));
-        if(el){ el.classList.remove('active'); if(d===x) el.classList.add('active'); }
-    });
-}
-
-function factoryReset(){
-    if(!confirm('Tout effacer ?')) return; localStorage.clear();
-    try { indexedDB.deleteDatabase("WriterFontsDB"); } catch(e){}
-    location.reload();
-}
-
-async function exportWorkflow(){
-    const fonts=await new Promise(res=>{
-        if(!db) return res([]);
-        try { const tx=db.transaction("fonts","readonly"); const r=tx.objectStore("fonts").getAll(); r.onsuccess=e=>res(e.target.result||[]); r.onerror=()=>res([]); } catch(e){ res([]); }
-    });
-    const blob=new Blob([JSON.stringify({project:getCurrentProject(),fonts},null,2)],{type:"application/json"});
-    const url=URL.createObjectURL(blob); const a=document.createElement('a');
-    a.href=url; a.download=(getCurrentProject().title||'Mon projet')+'.writerwork'; a.click(); URL.revokeObjectURL(url);
-}
-
-function importWorkflow(e){
-    const file=e.target.files[0]; if(!file) return; const r=new FileReader();
-    r.onload=ev=>{
-        try{
-            const data=JSON.parse(ev.target.result); const proj=data.project||data;
-            if(data.fonts&&db){
-                const tx=db.transaction("fonts","readwrite"); data.fonts.forEach(f=>tx.objectStore("fonts").put(f)); tx.oncomplete=()=>loadFontsFromIDB();
-            }
-            if(proj.data){
-                proj.id=uid(); proj.updatedAt=Date.now(); projects.unshift(proj); currentProjectId=proj.id; saveProjects(); loadProjectIntoUI();
-            }
-        }catch(err){ alert('Fichier invalide'); }
-    };
-    r.readAsText(file); e.target.value='';
-}
-
-async function exportPagesData(){
-    autoSave(); const proj=getCurrentProject(); const cfg=appConfig.reference||{mode:'all',selected:[]};
-    let items=proj.data.book.items.map(it=>({id:it.id,type:it.type,title:it.title,image:it.image,layout:it.layout,imageAlign:it.imageAlign,imageSize:it.imageSize,bgOpacity:it.bgOpacity,showTitle:it.showTitle,titleSize:it.titleSize,bodySize:it.bodySize,author:it.author||'',date:it.date||'',publisher:it.publisher||'',genre:it.genre||'',text:it.text,bdTemplate:it.bdTemplate,bdTemplateRects:it.bdTemplateRects,bdBgImage:it.bdBgImage,bdBg:it.bdBg,bdPanels:it.bdPanels,bdBubbles:it.bdBubbles}));
-    const ref=items.find(i=>i.type==='reference');
-    if(ref){
-        let linked=items.filter(i=>i.type==='chapter'); if(cfg.mode==='select'&&cfg.selected.length>0) linked=linked.filter(i=>cfg.selected.includes(i.id)); ref.links=linked;
-    }
-    const fonts=await new Promise(res=>{
-        if(!db) return res([]);
-        try { const tx=db.transaction("fonts","readonly"); const r=tx.objectStore("fonts").getAll(); r.onsuccess=e=>res(e.target.result||[]); r.onerror=()=>res([]); } catch(e) { res([]); }
-    });
-    const obj={projectTitle:proj.title,format:'book',config:{fontFamily:appConfig.fontFamily,reference:cfg},items,customFonts:fonts,copyright:"created by Base Essentielle (BE Studio, Paris - France)"};
-    const blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"});
-    const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='pages.data'; a.click(); URL.revokeObjectURL(url);
-}
-
-async function exportEPUB3(){
-    autoSave(); const proj=getCurrentProject();
-    try{
-        const zip=new JSZip(); const title=proj.title||'Mon projet';
-        zip.file("mimetype","application/epub+zip",{compression:"STORE"});
-        zip.folder("META-INF").file("container.xml",`<?xml version="1.0"?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>`);
-        const oebps=zip.folder("OEBPS"); oebps.folder("css").file("style.css",`body{font-family:${fontMapping[appConfig.fontFamily]||'serif'};line-height:1.7}`);
-        let manifest=`<item id="css" href="css/style.css" media-type="text/css"/>\n<item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>`;
-        let spine=``; let navOl=``; const files=[];
-        proj.data.book.items.forEach((it,i)=>{
-            const id=`c${i}`; const fn=`chapter-${i}.xhtml`;
-            manifest+=`\n<item id="${id}" href="${fn}" media-type="application/xhtml+xml"/>`; spine+=`\n<itemref idref="${id}"/>`;
-            let html;
-            if(it.type==='reference'){
-                const cfg=appConfig.reference; let linked=proj.data.book.items.filter(x=>x.type==='chapter');
-                if(cfg.mode==='select'&&cfg.selected.length>0) linked=linked.filter(x=>cfg.selected.includes(x.id));
-                let refHtml=`<h1>${esc(it.title)}</h1><p>${esc(it.text||'Sommaire...')}</p><ul>`; linked.forEach(l=>{ refHtml+=`<li>${esc(l.title)}</li>`; }); refHtml+=`</ul>`; html=refHtml;
-            } else { html=buildPageHTML(it, proj.title); }
-            const xhtml=`<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><head><script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};<\/script><meta charset="utf-8"/><title>${esc(it.title)}</title><link rel="stylesheet" href="css/style.css"/></head><body>${html}</body></html>`;
-            files.push({fn,c:xhtml}); navOl+=`<li><a href="${fn}">${esc(it.title)}</a></li>`;
-        });
-        const opf=`<?xml version="1.0"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="bookid">${Date.now()}</dc:identifier><dc:title>${esc(title)}</dc:title><dc:language>fr</dc:language></metadata><manifest>${manifest}</manifest><spine><itemref idref="nav"/>${spine}</spine></package>`;
-        oebps.file("content.opf",opf); oebps.file("nav.xhtml",`<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><body><nav epub:type="toc"><ol>${navOl}</ol></nav></body></html>`);
-        files.forEach(f=>oebps.file(f.fn,f.c));
-        const blob=await zip.generateAsync({type:"blob",mimeType:"application/epub+zip"}); const url=URL.createObjectURL(blob);
-        const a=document.createElement('a'); a.href=url; a.download=(title.replace(/[^a-z0-9]/gi,'_')+'.epub'); a.click(); URL.revokeObjectURL(url);
-    }catch(e){ alert(e.message); }
-}
-
-async function exportPDFBook(){
-    autoSave(); const proj=getCurrentProject();
-    const container=document.createElement('div'); container.style.background='#fff'; container.style.color='#111'; container.style.padding='20px'; container.style.fontFamily=fontMapping[appConfig.fontFamily]||'serif';
-    let html='';
-    proj.data.book.items.forEach(it=>{ html+=`<div style="page-break-after:always;padding:20px 0">${buildPageHTML(it, proj.title)}</div>`; });
-    container.innerHTML=html; document.body.appendChild(container);
-    try{
-        const opt={margin:10,filename:(proj.title||'Mon projet')+'.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a5',orientation:'portrait'}};
-        await html2pdf().set(opt).from(container).save();
-    }catch(e){ alert(e.message); }finally{ container.remove(); }
-}
-
-function updateLangUI(){
-    try {
-        const l = localStorage.getItem('writer_lang') || 'fr';
-        document.getElementById('lang-fr').classList.toggle('lang-active', l==='fr');
-        document.getElementById('lang-en').classList.toggle('lang-active', l==='en');
-        if(i18n[l]) {
-            if(document.getElementById('lblProjBtn')) document.getElementById('lblProjBtn').textContent = i18n[l].proj;
-            if(document.getElementById('lblBookTab')) document.getElementById('lblBookTab').textContent = i18n[l].read;
-            if(document.getElementById('lblComicTab')) document.getElementById('lblComicTab').textContent = i18n[l].bd;
-            if(document.getElementById('lblMagTab')) document.getElementById('lblMagTab').textContent = i18n[l].mag;
-            if(document.getElementById('lblCurProj')) document.getElementById('lblCurProj').textContent = i18n[l].cur;
-            if(document.getElementById('lblProjTitle')) document.getElementById('lblProjTitle').textContent = i18n[l].projTitle;
-            if(document.getElementById('lblCreate')) document.getElementById('lblCreate').textContent = i18n[l].lblCreate;
-            if(document.getElementById('lblSave')) document.getElementById('lblSave').textContent = i18n[l].lblSave;
-            if(document.getElementById('lblTitleProj')) document.getElementById('lblTitleProj').textContent = i18n[l].lblTitleProj;
-            if(document.getElementById('lblTitleOnCover')) document.getElementById('lblTitleOnCover').textContent = i18n[l].lblTitleOnCover;
-            if(document.getElementById('lblAuthor')) document.getElementById('lblAuthor').textContent = i18n[l].lblAuthor;
-            if(document.getElementById('lblDate')) document.getElementById('lblDate').textContent = i18n[l].lblDate;
-            if(document.getElementById('lblPublisher')) document.getElementById('lblPublisher').textContent = i18n[l].lblPublisher;
-            if(document.getElementById('lblGenre')) document.getElementById('lblGenre').textContent = i18n[l].lblGenre;
-            if(document.getElementById('lblPageName')) document.getElementById('lblPageName').textContent = i18n[l].lblPageName;
-            if(document.getElementById('lblLinkConfig')) document.getElementById('lblLinkConfig').textContent = i18n[l].lblLinkConfig;
-            if(document.getElementById('lblLinkAll')) document.getElementById('lblLinkAll').textContent = i18n[l].lblLinkAll;
-            if(document.getElementById('lblLinkSel')) document.getElementById('lblLinkSel').textContent = i18n[l].lblLinkSel;
-            if(document.getElementById('lblIllu')) document.getElementById('lblIllu').textContent = i18n[l].lblIllu;
-            if(document.getElementById('lblLocal')) document.getElementById('lblLocal').textContent = i18n[l].lblLocal;
-            if(document.getElementById('lblLayout')) document.getElementById('lblLayout').textContent = i18n[l].lblLayout;
-            if(document.getElementById('lblAlign')) document.getElementById('lblAlign').textContent = i18n[l].lblAlign;
-            if(document.getElementById('lblImgSize')) document.getElementById('lblImgSize').textContent = i18n[l].lblImgSize;
-            if(document.getElementById('lblBgTransp')) document.getElementById('lblBgTransp').textContent = i18n[l].lblBgTransp;
-            if(document.getElementById('lblTitleSize')) document.getElementById('lblTitleSize').textContent = i18n[l].lblTitleSize;
-            if(document.getElementById('lblBodySize')) document.getElementById('lblBodySize').textContent = i18n[l].lblBodySize;
-            if(document.getElementById('lblBodyText')) document.getElementById('lblBodyText').textContent = i18n[l].lblBodyText;
-            if(document.getElementById('lblBdGridBg')) document.getElementById('lblBdGridBg').textContent = i18n[l].lblBdGridBg;
-            if(document.getElementById('lblBgOpt')) document.getElementById('lblBgOpt').textContent = i18n[l].lblBgOpt;
-            if(document.getElementById('lblBgZoom')) document.getElementById('lblBgZoom').textContent = i18n[l].lblBgZoom;
-            if(document.getElementById('lblGridTmpl')) document.getElementById('lblGridTmpl').textContent = i18n[l].lblGridTmpl;
-            if(document.getElementById('lblCustomCases')) document.getElementById('lblCustomCases').textContent = i18n[l].lblCustomCases;
-            if(document.getElementById('lblGen')) document.getElementById('lblGen').textContent = i18n[l].lblGen;
-            if(document.getElementById('lblFull')) document.getElementById('lblFull').textContent = i18n[l].lblFull;
-            if(document.getElementById('lblPanelSel')) document.getElementById('lblPanelSel').textContent = i18n[l].lblPanelSel;
-            if(document.getElementById('lblPanelImg')) document.getElementById('lblPanelImg').textContent = i18n[l].lblPanelImg;
-            if(document.getElementById('lblPLocal')) document.getElementById('lblPLocal').textContent = i18n[l].lblPLocal;
-            if(document.getElementById('lblPanelZoom')) document.getElementById('lblPanelZoom').textContent = i18n[l].lblPanelZoom;
-            if(document.getElementById('lblPanelRot')) document.getElementById('lblPanelRot').textContent = i18n[l].lblPanelRot;
-            if(document.getElementById('lblBubbles')) document.getElementById('lblBubbles').textContent = i18n[l].lblBubbles;
-            if(document.getElementById('lblBubText')) document.getElementById('lblBubText').textContent = i18n[l].lblBubText;
-            if(document.getElementById('lblBubFont')) document.getElementById('lblBubFont').textContent = i18n[l].lblBubFont;
-            if(document.getElementById('lblBubSize')) document.getElementById('lblBubSize').textContent = i18n[l].lblBubSize;
-            if(document.getElementById('lblBubTail')) document.getElementById('lblBubTail').textContent = i18n[l].lblBubTail;
-            if(document.getElementById('lblBubDel')) document.getElementById('lblBubDel').textContent = i18n[l].lblBubDel;
-            if(document.getElementById('lblBubDup')) document.getElementById('lblBubDup').textContent = i18n[l].lblBubDup;
-            if(document.getElementById('lblBubApply')) document.getElementById('lblBubApply').textContent = i18n[l].lblBubApply;
-            if(document.getElementById('lblPreviewBtn')) document.getElementById('lblPreviewBtn').textContent = i18n[l].lblPreviewBtn;
-            document.querySelectorAll('.lblBOval').forEach(el => el.textContent = i18n[l].lblBOval);
-            document.querySelectorAll('.lblBRound').forEach(el => el.textContent = i18n[l].lblBRound);
-            document.querySelectorAll('.lblBRect').forEach(el => el.textContent = i18n[l].lblBRect);
-            document.querySelectorAll('.lblBCapsule').forEach(el => el.textContent = i18n[l].lblBCapsule);
-            document.querySelectorAll('.lblBCloud').forEach(el => el.textContent = i18n[l].lblBCloud);
-            document.querySelectorAll('.lblBSpiky').forEach(el => el.textContent = i18n[l].lblBSpiky);
-        }
-    } catch(e) {}
-}
-
-function setLang(l){ localStorage.setItem('writer_lang',l); updateLangUI(); }
-
-function bootstrapApp() {
-    try {
-        loadProjects(); const proj=getCurrentProject(); if(!proj) return;
-        document.getElementById('currentProjectName').textContent=proj.title;
-        document.getElementById('genCurrentProjectName').textContent=proj.title;
-        const activeMod = localStorage.getItem('writer_active_module');
-        if (activeMod && (activeMod === 'comic' || activeMod === 'magazine')) { activateModule(activeMod); return; }
-        refreshFontDropdown(); refreshPageDropdown(); applyFont(); loadPageData();
-    } catch(e) {}
-}
-
-function openSettings(){ document.getElementById('settingsModal').classList.add('active'); closeMenus(); }
-function closeSettings(){ document.getElementById('settingsModal').classList.remove('active'); }
-
-window.onload=()=>{
-    try { initSizeDropdowns(); updateLangUI(); } catch(e) {}
-    initIDB(bootstrapApp);
-};
-</script>
 </body>
 </html>
