@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head><!-- PLAYABLE_TOUCH_PATCH_V1 --><script>
+<head>
+<script>
 (function() { if (window.__playableTouchPatchInstalled) return; window.__playableTouchPatchInstalled = true; var origAdd = EventTarget.prototype.addEventListener; var blockedTypes = { touchstart: 1, touchmove: 1 }; EventTarget.prototype.addEventListener = function(type, listener, options) { if (blockedTypes[type]) { if (options === undefined || options === null) { options = { passive: true }; } else if (typeof options === 'boolean') { options = { capture: options, passive: true }; } else { options = Object.assign({}, options, { passive: true }); } } return origAdd.call(this, type, listener, options); }; })();
 </script><script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Writer. · The Pages. BD PRO</title>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat+Brush&family=Comic+Neue:wght@400;700&family=Cormorant+Garamond:wght@400;600;700&family=Crimson+Text:wght@400;600;700&family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Libre+Baskerville:wght@400;700&family=Lora:wght@400;500;600;700&family=Merriweather:wght@400;700&family=PT+Serif:wght@400;700&family=Patrick+Hand&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Source+Serif+Pro:wght@400;600;700&family=Special+Elite&family=Spectral:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Writer. · The Pages. BD PRO (Fast Engine)</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat+Brush&family=Comic+Neue:wght@400;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -17,7 +18,6 @@
     ::-webkit-scrollbar { width:8px; height:8px; }
     ::-webkit-scrollbar-track { background:transparent; }
     ::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.12); border-radius:100px; border:2px solid transparent; background-clip:padding-box; }
-    ::-webkit-scrollbar-thumb:hover { background:rgba(255,255,255,0.22); background-clip:padding-box; }
     body { font-family: 'Inter', sans-serif; background: radial-gradient(circle at 50% -20%, #1a1a24 0%, #050505 100%); color: var(--text); display: flex; flex-direction: column; height: 100vh; overflow: hidden; -webkit-font-smoothing: antialiased; }
     .glass { background:var(--glass-bg); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
     .ribbon { height:68px; display:flex; justify-content:space-between; align-items:center; padding:0 20px; z-index:30; }
@@ -26,10 +26,9 @@
     .logo-main { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; color:#fff; }
     .logo-sub { font-size:9px; letter-spacing:4px; text-transform:uppercase; color:var(--accent); font-weight:600; margin-left:4px; transition: color 0.4s; }
     .sync { font-size:10px; color:var(--muted); text-transform:uppercase; display:flex; gap:6px; align-items:center; letter-spacing:1px; flex-shrink:0; }
-    .btn { background: rgba(20,20,25,0.6); backdrop-filter: blur(12px); color: var(--text); border: 1px solid rgba(255,255,255,0.08); padding: 9px 16px; border-radius: 10px; font-size: 12px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; outline: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 20px rgba(0,0,0,0.3); transition: all .25s ease; flex-shrink:0; }
+    .btn { background: rgba(20,20,25,0.6); backdrop-filter: blur(12px); color: var(--text); border: 1px solid rgba(255,255,255,0.08); padding: 9px 16px; border-radius: 10px; font-size: 12px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; outline: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 20px rgba(0,0,0,0.3); transition: all .2s ease; flex-shrink:0; }
     .btn:hover { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.14); transform:translateY(-1px); }
     .btn-danger { color:#ef4444; border-color:rgba(239,68,68,0.2); }
-    .btn.lang-active { background:rgba(34,211,238,0.15); color:var(--accent); border-color:var(--accent); }
     .main-body { display:flex; flex:1; overflow:hidden; }
     .sidebar { width:240px; background:rgba(10,10,12,0.4); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; }
     .sidebar-scroll { flex:1; overflow-y:auto; padding-top:10px; }
@@ -54,14 +53,12 @@
     .meta-row { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; }
     .segment-group { display:flex; background:rgba(0,0,0,0.4); border-radius:10px; padding:4px; border:1px solid var(--border); }
     .segment-btn { flex:1; background:transparent; color:var(--muted); border:none; padding:7px; border-radius:8px; font-size:11px; cursor:pointer; display:flex; justify-content:center; align-items:center; transition:.2s; }
-    .segment-btn:hover { background:rgba(255,255,255,0.05); color:#fff; }
     .segment-btn.active { background:rgba(255,255,255,0.1); color:#fff; font-weight:600; }
     textarea.main { width:100%; min-height:280px; background:transparent; border:none; color:inherit; font-size:16px; line-height:1.8; resize:vertical; outline:none; }
     input[type=range] { -webkit-appearance:none; width:100%; background:transparent; }
     input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; height:14px; width:14px; border-radius:50%; background:var(--accent); cursor:pointer; margin-top:-5px; }
     input[type=range]::-webkit-slider-runnable-track { width:100%; height:4px; cursor:pointer; background:rgba(255,255,255,0.15); border-radius:2px; }
     .btn-preview { position:fixed; bottom:30px; right:30px; background:rgba(20,20,25,0.8); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.08); color:var(--text); padding:14px 24px; border-radius:30px; font-size:14px; font-weight:500; cursor:pointer; z-index:30; display:flex; gap:10px; box-shadow:0 10px 30px rgba(0,0,0,0.5); transition:.2s; }
-    .btn-preview:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-1px); }
     
     .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.92); backdrop-filter:blur(15px); display:none; justify-content:center; align-items:center; z-index:1000; padding:0; }
     .overlay.active { display:flex; }
@@ -71,15 +68,12 @@
     
     .preview-shell { display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; height:100%; justify-content:flex-start; padding-top: 10px; }
     .preview-top { display:flex; gap:8px; background:rgba(20,20,25,0.8); border:1px solid rgba(255,255,255,0.08); padding:10px 14px; border-radius:40px; align-items:center; flex-wrap:wrap; backdrop-filter:blur(12px); flex-shrink: 0; z-index: 1010; }
-    .preview-top .btn { border-radius:20px; background:transparent; border-color:transparent; box-shadow:none; padding:7px 14px; }
     .preview-top .btn.active { background:rgba(255,255,255,0.15); color:var(--accent); border-color:var(--accent); font-weight:600; }
     .btn-close-round { background:transparent; border:none; color:var(--muted); font-size:22px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:.2s; margin-left:6px; flex-shrink:0; padding:0; }
     .btn-close-round:hover { color:var(--accent); transform:scale(1.1); }
     
     .preview-screen { background:#faf8f5; border-radius:14px; overflow:auto; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.8); border:8px solid #222; transition:.3s ease; }
-    .preview-screen.mobile { width:393px; height:852px; }
-    .preview-screen.tablet { width:834px; height:1112px; }
-    .preview-screen.large, .preview-screen.epub, .preview-screen.pdf { width:100%; height:calc(100vh - 70px); max-width:100%; border-width:0; border-radius:0; flex:1; }
+    .preview-screen.large { width:100%; height:calc(100vh - 70px); max-width:100%; border-width:0; border-radius:0; flex:1; }
     .prv-content { padding:40px; color:#111; font-size:16px; line-height:1.7; position:relative; min-height:100%; word-wrap:break-word; }
     
     .clearfix::after { content:""; clear:both; display:table; }
@@ -91,18 +85,15 @@
     .dropdown-item:hover { background:rgba(255,255,255,0.08); color:var(--accent); }
     .project-item { display:flex; justify-content:space-between; align-items:center; padding:14px; border:1px solid var(--border); border-radius:10px; background:rgba(255,255,255,0.02); transition:.2s; }
     .project-item.active { border-color:var(--accent); background:rgba(255,255,255,0.05); }
-    .upload-box { margin-top:10px; border:1px dashed var(--border); padding:12px; border-radius:8px; text-align:center; cursor:pointer; font-size:12px; opacity:0.8; transition:.2s; background:rgba(0,0,0,0.2); }
-    .upload-box:hover { opacity:1; border-color:var(--accent); color:var(--accent); background:rgba(255,255,255,0.05); }
     .saved-toast { position:fixed; bottom:40px; left:50%; transform:translateX(-50%) translateY(100px); background:rgba(20,20,25,0.95); border:1px solid var(--accent); color:#fff; padding:10px 24px; border-radius:30px; z-index:3000; opacity:0; transition:.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display:flex; gap:10px; align-items:center; font-weight:500; box-shadow:0 10px 30px rgba(0,0,0,0.5); }
     .saved-toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
     
-    /* ===== BD PRO STYLES ===== */
+    /* ===== BD PRO FAST ENGINE STYLES ===== */
     .bd-toolbar { background:rgba(18,18,22,0.98); border:1px solid var(--border); border-radius:12px; padding:14px; display:flex; flex-direction:column; gap:12px; }
     .bd-section-title { font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#fff; display:flex; align-items:center; gap:8px; }
     .bd-section-title i { color:var(--accent); }
     .bd-templates { display:flex; gap:8px; overflow-x:auto; padding:8px 0; scrollbar-width: thin; }
     .template-thumb { width:60px; height:84px; background:#0e0e10; border:2px solid var(--border); border-radius:8px; cursor:pointer; position:relative; overflow:hidden; flex-shrink:0; transition:.2s; }
-    .template-thumb:hover { border-color:rgba(255,255,255,0.25); transform:translateY(-1px); }
     .template-thumb.active { border-color:#ef4444; box-shadow:0 0 0 2px rgba(239,68,68,0.3); }
     .bd-canvas-wrap { width:100%; max-width:620px; aspect-ratio:1/1.414; background:#fff; border:4px solid #111; margin:0 auto; position:relative; overflow:hidden; border-radius:4px; box-shadow:0 20px 50px rgba(0,0,0,0.5); }
     .bd-bg-layer { position:absolute; inset:0; overflow:hidden; z-index:0; background:#fff; }
@@ -112,158 +103,75 @@
     .bd-panel img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transform-origin:center center; pointer-events:none; will-change:transform; }
     .bd-panel-placeholder { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; color:#777; background:#f5f5f0; font-size:10px; text-transform:uppercase; font-weight:700; text-align:center; padding:10px; }
     
-    /* Bulles - NEW PALETTE PRO */
+    /* ===== NEW FAST BUBBLE SYSTEM (No Filters, Vector Tails) ===== */
     .bd-bubble {
         position:absolute; min-width:14%; background:#fff; font-weight:700; color:#111; cursor:move; user-select:none; z-index:10; 
         line-height:1.15; display:flex; align-items:center; justify-content:center; text-align:center; box-sizing:border-box; 
-        white-space:pre-wrap; overflow-wrap:break-word; padding:0.75em 1.1em; border:2.8px solid #111;
+        white-space:pre-wrap; overflow-wrap:break-word; padding:0.8em 1.2em; border:2.5px solid #111;
+        /* Comic book harsh drop-shadow. ULTRA fast to render vs CSS filter */
+        box-shadow: 4px 4px 0px rgba(17,17,17,1);
     }
-    .bd-bubble.selected { outline:2px solid #ef4444; outline-offset:2px; z-index:15; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25)); }
+    .bd-bubble.selected { outline:3px solid #ef4444; outline-offset:4px; z-index:15; }
     
-    /* Shapes */
-    .bubble-oval-bc, .bubble-oval-bl, .bubble-oval-br, .bubble-oval-side-r, .bubble-oval-side-l, .bubble-double-oval { border-radius:50% / 52%; }
-    .bubble-round-bc, .bubble-round-bl, .bubble-round-br, .bubble-round-sharp { border-radius:50%; aspect-ratio:1/1; }
-    .bubble-rect-bc, .bubble-rect-bl, .bubble-rect-br { border-radius:12px; }
-    .bubble-rect-zap { border-radius:10px; }
-    .bubble-rect-arrow-r, .bubble-rect-arrow-l { border-radius:8px; }
-    .bubble-capsule-long, .bubble-capsule-bc { border-radius:999px; }
-    .bubble-cloud-triple, .bubble-cloud-fluffy, .bubble-thought-cloud { border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%; }
-    .bubble-thought-oval { border-radius:50% / 50%; }
-
-    /* Double oval - second lobe */
-    .bubble-double-oval::after {
-        content:''; position:absolute; top:12%; left:52%; width:88%; height:78%;
-        background:inherit; border:inherit; border-radius:inherit; z-index:-1; box-sizing:border-box;
-    }
-    /* Triple cloud - extra lobes */
-    .bubble-cloud-triple::before, .bubble-cloud-triple::after {
-        content:''; position:absolute; background:inherit; border:inherit; border-radius:50%; z-index:-1; box-sizing:border-box;
-    }
-    .bubble-cloud-triple::before { width:62%; height:68%; top:-8%; left:-12%; }
-    .bubble-cloud-triple::after { width:72%; height:76%; top:-6%; right:-18%; }
-
-    /* Boom / Pow */
-    .bubble-boom-soft {
-        clip-path: polygon(15% 2%, 32% 0%, 48% 10%, 62% 0%, 80% 6%, 92% 0%, 100% 20%, 94% 38%, 100% 55%, 90% 70%, 100% 88%, 78% 92%, 62% 100%, 42% 92%, 22% 100%, 10% 90%, 0% 78%, 8% 60%, 0% 42%, 8% 22%);
-        padding:1.2em 1.5em; border:none; filter: drop-shadow(0 0 0 #111) drop-shadow(2px 2px 0 #111) drop-shadow(-2px -2px 0 #111);
-        background:#fff; border:2.8px solid #111;
-    }
-    .bubble-pow-hard {
-        clip-path: polygon(50% 0%, 62% 18%, 88% 0%, 72% 28%, 100% 18%, 86% 44%, 100% 58%, 80% 68%, 100% 100%, 62% 82%, 50% 100%, 38% 82%, 0% 100%, 20% 68%, 0% 58%, 14% 44%, 0% 18%, 28% 28%, 12% 0%, 38% 18%);
-        padding:1.4em 1.6em; background:#fff; border:2.8px solid #111;
-    }
-    .bubble-burst-shout {
+    /* Pure Geometry for the bubble bodies */
+    .shape-oval { border-radius: 50% / 50%; }
+    .shape-round { border-radius: 50%; aspect-ratio: 1/1; }
+    .shape-rect { border-radius: 8px; }
+    .shape-capsule { border-radius: 999px; }
+    .shape-cloud { border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%; }
+    
+    /* For bursts, we remove the main border and box-shadow, and rely entirely on clip-path */
+    .shape-burst {
         clip-path: polygon(50% 0%, 66% 10%, 86% 2%, 76% 26%, 100% 22%, 84% 42%, 100% 62%, 82% 72%, 96% 96%, 68% 84%, 50% 100%, 32% 84%, 4% 96%, 18% 72%, 0% 62%, 16% 42%, 0% 22%, 24% 26%, 14% 2%, 34% 10%);
-        padding:1.3em 1.5em; background:#fff; border:2.8px solid #111;
+        border: none; box-shadow: none; padding: 1.5em; background: #fff;
     }
-    .bubble-cloud-fluffy {
-        border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-        background:#fff;
-    }
-
-    /* Tails */
-    .bd-bubble-tail { position:absolute; width:16px; height:16px; z-index:-1; background:#fff; border-right:2.8px solid #111; border-bottom:2.8px solid #111; box-sizing:border-box; }
-    .tail-bc { bottom:-9px; left:50%; transform:translateX(-50%) rotate(45deg); }
-    .tail-bl { bottom:-9px; left:18%; transform:translateX(-50%) rotate(45deg); }
-    .tail-br { bottom:-9px; left:82%; transform:translateX(-50%) rotate(45deg); }
-    .tail-bl-curved { bottom:-14px; left:14%; width:22px; height:14px; background:#fff; border-right:2.8px solid #111; border-bottom:2.8px solid #111; border-left:none; border-top:none; border-radius:0 0 80% 0; transform:rotate(-18deg); }
-    .tail-br-curved { bottom:-14px; right:14%; left:auto; width:22px; height:14px; background:#fff; border-left:2.8px solid #111; border-bottom:2.8px solid #111; border-right:none; border-top:none; border-radius:0 0 0 80%; transform:rotate(18deg); }
-    .tail-side-r { top:50%; right:-9px; left:auto; transform:translateY(-50%) rotate(-45deg); }
-    .tail-side-l { top:50%; left:-9px; right:auto; transform:translateY(-50%) rotate(135deg); }
-    .tail-side-r-curved { top:58%; right:-13px; left:auto; width:18px; height:18px; background:#fff; border-top:2.8px solid #111; border-right:2.8px solid #111; border-radius:0 90% 0 0; transform:translateY(-50%) rotate(12deg); border-bottom:none; border-left:none; }
-    .tail-zap { bottom:-20px; left:16%; width:24px; height:28px; background:#fff; border:none; clip-path:polygon(0 0, 68% 0, 32% 40%, 100% 40%, 0 100%, 36% 58%, 0 58%); filter: drop-shadow(1px 0 0 #111) drop-shadow(-1px 0 0 #111) drop-shadow(0 1px 0 #111) drop-shadow(0 -1px 0 #111); transform:none; }
-    .tail-arrow-r { top:50%; right:-16px; width:0; height:0; background:transparent; border:none; border-left:16px solid #fff; border-top:10px solid transparent; border-bottom:10px solid transparent; transform:translateY(-50%); filter: drop-shadow(2px 0 0 #111) drop-shadow(0 1px 0 #111) drop-shadow(0 -1px 0 #111); }
-    .tail-arrow-l { top:50%; left:-16px; right:auto; width:0; height:0; background:transparent; border:none; border-right:16px solid #fff; border-top:10px solid transparent; border-bottom:10px solid transparent; transform:translateY(-50%); filter: drop-shadow(-2px 0 0 #111) drop-shadow(0 1px 0 #111) drop-shadow(0 -1px 0 #111); }
-
-    /* Thought dots */
-    .thought-dots { position:absolute; pointer-events:none; }
-    .thought-dot { position:absolute; background:#fff; border:2.5px solid #111; border-radius:50%; box-sizing:border-box; }
-    .thought-dot-1 { width:18px; height:14px; }
-    .thought-dot-2 { width:12px; height:10px; }
-    .thought-dot-3 { width:8px; height:7px; }
 
     /* Palette UI */
-    .bubble-palette { display:grid; grid-template-columns:repeat(auto-fill,minmax(78px,1fr)); gap:8px; max-height:320px; overflow-y:auto; padding:6px; background:rgba(0,0,0,0.2); border-radius:10px; border:1px solid var(--border); }
+    .bubble-palette { display:grid; grid-template-columns:repeat(auto-fill,minmax(78px,1fr)); gap:8px; max-height:200px; overflow-y:auto; padding:6px; background:rgba(0,0,0,0.2); border-radius:10px; border:1px solid var(--border); }
     .bubble-palette-item { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:10px; padding:8px 4px 6px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:6px; transition:.2s; user-select:none; }
-    .bubble-palette-item:hover { border-color:var(--accent); background:rgba(255,255,255,0.08); transform:translateY(-1px); }
-    .bubble-palette-item.active { border-color:#ef4444; background:rgba(239,68,68,0.12); }
-    .mini-bubble { width:52px; height:36px; background:#fff; border:1.8px solid #111; position:relative; display:flex; align-items:center; justify-content:center; box-sizing:border-box; flex-shrink:0; }
-    .mini-bubble.oval { border-radius:50% / 55%; }
+    .bubble-palette-item:hover, .bubble-palette-item.active { border-color:var(--accent); background:rgba(255,255,255,0.08); }
+    .mini-bubble { width:52px; height:36px; background:#fff; border:2px solid #111; position:relative; display:flex; align-items:center; justify-content:center; box-sizing:border-box; flex-shrink:0; }
+    .mini-bubble.oval { border-radius:50% / 50%; }
     .mini-bubble.round { border-radius:50%; width:38px; height:38px; }
-    .mini-bubble.rect { border-radius:8px; }
+    .mini-bubble.rect { border-radius:6px; }
     .mini-bubble.capsule { border-radius:999px; width:60px; }
-    .mini-bubble.cloud { border-radius:40% 60% 60% 40% / 50% 60% 40% 50%; }
-    .mini-bubble.boom { clip-path: polygon(15% 2%, 32% 0%, 48% 10%, 62% 0%, 80% 6%, 92% 0%, 100% 20%, 94% 38%, 100% 55%, 90% 70%, 100% 88%, 78% 92%, 62% 100%, 42% 92%, 22% 100%, 10% 90%, 0% 78%, 8% 60%, 0% 42%, 8% 22%); }
-    .mini-bubble.pow { clip-path: polygon(50% 0%, 62% 18%, 88% 0%, 72% 28%, 100% 18%, 86% 44%, 100% 58%, 80% 68%, 100% 100%, 62% 82%, 50% 100%, 38% 82%, 0% 100%, 20% 68%, 0% 58%, 14% 44%, 0% 18%, 28% 28%, 12% 0%, 38% 18%); }
-    .mini-bubble.burst { clip-path: polygon(50% 0%, 66% 10%, 86% 2%, 76% 26%, 100% 22%, 84% 42%, 100% 62%, 82% 72%, 96% 96%, 68% 84%, 50% 100%, 32% 84%, 4% 96%, 18% 72%, 0% 62%, 16% 42%, 0% 22%, 24% 26%, 14% 2%, 34% 10%); }
-    .mini-bubble.double::after { content:''; position:absolute; top:18%; left:48%; width:70%; height:70%; background:#fff; border:1.8px solid #111; border-radius:50% / 55%; z-index:-1; }
-    .mini-bubble.triple::before, .mini-bubble.triple::after { content:''; position:absolute; background:#fff; border:1.8px solid #111; border-radius:50%; z-index:-1; }
-    .mini-bubble.triple::before { width:55%; height:60%; top:-6%; left:-10%; }
-    .mini-bubble.triple::after { width:65%; height:68%; top:-4%; right:-12%; }
-    .mini-tail { position:absolute; background:#fff; width:8px; height:8px; border-right:1.5px solid #111; border-bottom:1.5px solid #111; transform:rotate(45deg); }
-    .mini-tail.bc { bottom:-4px; left:50%; margin-left:-4px; }
-    .mini-tail.bl { bottom:-4px; left:18%; }
-    .mini-tail.br { bottom:-4px; right:18%; left:auto; }
-    .mini-tail.side-r { top:50%; right:-4px; margin-top:-4px; transform:rotate(-45deg); }
-    .mini-tail.zap { bottom:-8px; left:12%; width:10px; height:12px; clip-path:polygon(0 0, 68% 0, 32% 40%, 100% 40%, 0 100%, 36% 58%, 0 58%); border:none; background:#fff; filter: drop-shadow(0.5px 0 0 #111) drop-shadow(-0.5px 0 0 #111) drop-shadow(0 0.5px 0 #111); }
-    .bubble-label { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); text-align:center; line-height:1.1; }
-    .bubble-palette-item:hover .bubble-label { color:#fff; }
+    .mini-bubble.cloud { border-radius:42% 58% 55% 45% / 48% 42% 58% 52%; }
+    .mini-bubble.burst { clip-path: polygon(50% 0%, 66% 10%, 86% 2%, 76% 26%, 100% 22%, 84% 42%, 100% 62%, 82% 72%, 96% 96%, 68% 84%, 50% 100%, 32% 84%, 4% 96%, 18% 72%, 0% 62%, 16% 42%, 0% 22%, 24% 26%, 14% 2%, 34% 10%); border:none; background:#fff; }
     
     .color-swatch { width:22px; height:22px; border-radius:4px; border:1px solid rgba(255,255,255,0.2); cursor:pointer; transition:0.2s; flex-shrink:0; }
     .color-swatch:hover { transform:scale(1.1); border-color:#fff; }
-
-    .module-tools { display:none; flex-direction:column; gap:16px; margin-top:20px; padding-top:20px; border-top:1px solid var(--border); }
 </style>
 </head>
 <body>
 <div class="ribbon glass">
     <div class="ribbon-group">
-        <div class="logo-txt"><div class="logo-main">The Pages.</div><div class="logo-sub" id="appLogoSub">sources</div></div>
+        <div class="logo-txt"><div class="logo-main">The Pages.</div><div class="logo-sub">BD PRO</div></div>
         <div class="sync" id="syncIndicator"><i class="fas fa-check-circle"></i> sync</div>
-        <button class="btn" id="btnProj" onclick="openProjects()"><i class="fas fa-folder"></i> <span id="lblProjBtn">Projets</span></button>
+        <button class="btn" onclick="openProjects()"><i class="fas fa-folder"></i> Projets</button>
         <div class="gen-wrap" style="width:200px;">
-            <button class="btn" onclick="toggleDropdown('pageDropdown')"><span id="pageSelectLabel">Book Cover</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i></button>
+            <button class="btn" onclick="toggleDropdown('pageDropdown')"><span id="pageSelectLabel">Cover</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i></button>
             <div id="pageDropdown" class="dropdown-menu"></div>
         </div>
         <button class="btn" onclick="addPage()"><i class="fas fa-plus"></i></button>
         <button class="btn btn-danger" onclick="deletePage()"><i class="fas fa-trash"></i></button>
     </div>
     <div class="ribbon-group">
-        <div class="gen-wrap" style="width:220px;">
-            <button class="btn" onclick="toggleDropdown('fontDropdown')"><span style="font-weight:900;font-family:'Times New Roman',serif;font-size:13px">Tt</span> <span id="fontSelectLabel">Playfair Display</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i></button>
-            <div id="fontDropdown" class="dropdown-menu right"></div>
-        </div>
-        <button class="btn" onclick="openSettings()"><i class="fas fa-cog"></i></button>
+        <button class="btn" onclick="manualSave()"><i class="fas fa-save"></i> Save</button>
         <div class="gen-wrap" style="width:auto;">
-            <button class="btn" onclick="toggleDropdown('generateDropdown')"><i class="fas fa-layer-group"></i> <span id="lblCreate">Create</span></button>
+            <button class="btn" onclick="toggleDropdown('generateDropdown')"><i class="fas fa-layer-group"></i> Create</button>
             <div id="generateDropdown" class="dropdown-menu right">
-                <div id="genCurrentProjectName" style="font-weight:700;color:#fff;padding:6px 8px;font-size:14px;">-</div>
-                <div style="height:1px;background:var(--border);margin:8px 0"></div>
-                <button class="dropdown-item" onclick="openProjects();closeMenus()"><i class="fas fa-folder-open"></i> Choisir autre projet</button>
-                <button class="dropdown-item" onclick="exportPagesData();closeMenus()"><i class="fas fa-code"></i> Fichier pages.data</button>
-                <button class="dropdown-item" onclick="exportEPUB3();closeMenus()"><i class="fas fa-book-open"></i> Livre EPUB3</button>
-                <button class="dropdown-item" onclick="exportPDFBook();closeMenus()"><i class="fas fa-file-pdf"></i> Document PDF</button>
+                <button class="dropdown-item" onclick="exportPagesData();closeMenus()">Fichier pages.data</button>
+                <button class="dropdown-item" onclick="exportEPUB3();closeMenus()">Livre EPUB3</button>
             </div>
         </div>
-        <button class="btn" onclick="manualSave()"><i class="fas fa-save"></i> <span id="lblSave">Save</span></button>
     </div>
 </div>
 
 <div class="main-body">
     <div class="sidebar">
         <div class="sidebar-scroll">
-            <div class="cat" id="lblModulesCat">Modules (Licences)</div>
-            <div class="menu-item active" id="tab-book" onclick="activateModule('book')">
-                <i class="fas fa-book"></i> <span id="lblBookTab">Livre de poche</span>
-            </div>
-            <div class="menu-item" id="tab-comic" onclick="activateModule('comic')">
-                <i class="fas fa-layer-group"></i> <span id="lblComicTab">Bande Dessinée (BD)</span>
-            </div>
-            <div class="menu-item" id="tab-magazine" onclick="activateModule('magazine')">
-                <i class="fas fa-newspaper"></i> <span id="lblMagTab">Magazine</span>
-            </div>
-            <div class="cat" id="lblCurProj" style="margin-top:20px;">Projet Actuel</div>
-            <div style="padding:0 20px 10px;font-size:12px;color:var(--accent);font-weight:500;" id="currentProjectName">-</div>
+            <div class="cat">Modules</div>
+            <div class="menu-item active" onclick="activateModule('comic')"><i class="fas fa-layer-group"></i> Bande Dessinée</div>
         </div>
     </div>
     
@@ -272,136 +180,34 @@
         <div class="page-nav right" id="navRight" onclick="nextPage()"><i class="fas fa-chevron-right"></i></div>
         
         <div class="sheet" id="sheet">
+            <!-- Cover Settings -->
             <div class="input-group" id="globalTitleGroup">
-                <label id="lblTitleProj">Titre du projet - editable uniquement dans la couverture</label>
+                <label>Titre du projet</label>
                 <input id="globalTitle" class="text-input" placeholder="Titre..." oninput="autoSave()">
-                <div id="coverOptions" style="display:none;flex-direction:column;gap:6px;margin-top:5px">
-                    <label style="font-size:12px;display:flex;gap:8px;align-items:center;text-transform:none;opacity:.8"><input type="checkbox" id="showTitleOnCover" checked onchange="autoSave()"> <span id="lblTitleOnCover">Afficher le titre sur la couverture - ON/OFF</span></label>
-                </div>
             </div>
             
-            <div id="authorMetaSection" style="display:none;flex-direction:column;gap:12px">
-                <div class="meta-row">
-                    <div class="input-group"><label id="lblAuthor">Auteur</label><input id="globalAuthor" class="meta-input" oninput="autoSave()"></div>
-                    <div class="input-group"><label id="lblDate">Date</label><input id="globalDate" type="date" class="meta-input" oninput="autoSave()"></div>
-                </div>
-                <div class="meta-row">
-                    <div class="input-group"><label id="lblPublisher">Éditeur</label><input id="globalPublisher" class="meta-input" oninput="autoSave()"></div>
-                    <div class="input-group"><label id="lblGenre">Genre</label><input id="globalGenre" class="meta-input" oninput="autoSave()"></div>
-                </div>
-            </div>
-
             <div class="input-group" id="itemTitleGroup" style="display:none;">
-                <label id="lblPageName">Nom de la page / section</label>
-                <input id="itemTitle" class="meta-input" style="font-weight:700" placeholder="Ex: Chapitre 1" oninput="autoSave()">
-            </div>
-            
-            <div id="referenceConfigBlock" style="display:none;flex-direction:column;gap:12px;background:rgba(18,18,22,0.98);border:1px solid var(--border);border-radius:12px;padding:14px">
-                <div style="font-weight:600;font-size:13px;color:#fff"><i class="fas fa-link"></i> <span id="lblLinkConfig">Référence / Summary - Config liens</span></div>
-                <div style="display:flex;gap:16px">
-                    <label style="font-size:12px;display:flex;gap:6px;align-items:center;text-transform:none;opacity:.8"><input type="radio" name="refModePage" value="all" checked onchange="updateRefConfigPage()"> <span id="lblLinkAll">Link all pages</span></label>
-                    <label style="font-size:12px;display:flex;gap:6px;align-items:center;text-transform:none;opacity:.8"><input type="radio" name="refModePage" value="select" onchange="updateRefConfigPage()"> <span id="lblLinkSel">Select pages</span></label>
-                </div>
-                <div id="refPageListInPage" style="display:none;flex-direction:column;gap:8px;max-height:120px;overflow-y:auto;background:rgba(255,255,255,0.04);padding:10px;border-radius:8px;border:1px solid var(--border)"></div>
-            </div>
-
-            <div class="meta-row" id="mediaUrlGroup">
-                <div class="input-group" style="flex:2">
-                    <label id="lblIllu">Illustration (URL ou Fichier Local)</label>
-                    <div style="display:flex;gap:8px">
-                        <input id="itemImage" class="meta-input" style="flex:1" placeholder="https://..." oninput="autoSave()">
-                        <button class="btn" onclick="document.getElementById('localImgUpload').click()"><i class="fas fa-upload"></i> <span id="lblLocal">Local</span></button>
-                        <input type="file" id="localImgUpload" accept="image/*" style="display:none" onchange="uploadLocalImage(event)">
-                    </div>
-                </div>
-                <div class="input-group" style="flex:1" id="layoutGroup">
-                    <label id="lblLayout">Disposition</label>
-                    <div class="segment-group">
-                        <button class="segment-btn active" id="lay-top" onclick="setLayout('top')">Haut</button>
-                        <button class="segment-btn" id="lay-center" onclick="setLayout('center')">Centre</button>
-                        <button class="segment-btn" id="lay-bottom" onclick="setLayout('bottom')">Bas</button>
-                        <button class="segment-btn" id="lay-bg" onclick="setLayout('bg')">Fond</button>
-                    </div>
-                </div>
-                <div class="input-group" id="alignContainer" style="flex:1">
-                    <label id="lblAlign">Alignement</label>
-                    <div class="segment-group">
-                        <button class="segment-btn" id="align-left" onclick="setImageAlign('left')">Gauche</button>
-                        <button class="segment-btn active" id="align-center" onclick="setImageAlign('center')">Centre</button>
-                        <button class="segment-btn" id="align-right" onclick="setImageAlign('right')">Droite</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="meta-row" id="mediaSlidersGroup">
-                <div class="input-group">
-                    <label><span id="lblImgSize">Taille image</span> <span id="imageSizeVal">70%</span></label>
-                    <input type="range" id="imageSize" min="20" max="300" value="70" oninput="updateImageSize(this.value)">
-                </div>
-                <div class="input-group" id="bgOpacityGroup" style="display:none">
-                    <label><span id="lblBgTransp">Transparence</span> <span id="bgOpacityVal">15%</span></label>
-                    <input type="range" id="bgOpacity" min="5" max="100" value="15" oninput="updateBgOpacity(this.value)">
-                </div>
-            </div>
-
-            <div class="meta-row" id="fontOptionsGroup">
-                <div class="input-group">
-                    <label id="lblTitleSize">Taille Titre</label>
-                    <div class="gen-wrap">
-                        <button class="meta-input" onclick="toggleDropdown('titleSizeDropdown')">
-                            <span id="titleSizeLabel" data-value="32">32px</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i>
-                        </button>
-                        <div id="titleSizeDropdown" class="dropdown-menu"></div>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label id="lblBodySize">Taille Corps</label>
-                    <div class="gen-wrap">
-                        <button class="meta-input" onclick="toggleDropdown('bodySizeDropdown')">
-                            <span id="bodySizeLabel" data-value="17">17px</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i>
-                        </button>
-                        <div id="bodySizeDropdown" class="dropdown-menu"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="input-group" style="flex:1" id="textEditorGroup">
-                <label id="lblBodyText">Corps du texte</label>
-                <textarea id="itemText" class="main" placeholder="Commencez à écrire..." oninput="autoSave()"></textarea>
+                <label>Nom de la page</label>
+                <input id="itemTitle" class="meta-input" style="font-weight:700" placeholder="Ex: Page 1" oninput="autoSave()">
             </div>
 
             <!-- ===== BD FULL EDITOR PRO ===== -->
             <div id="bdFullEditor" style="display:none;flex-direction:column;gap:18px;width:100%">
                 <div class="bd-toolbar">
-                    <div class="bd-section-title"><i class="fas fa-layer-group"></i> <span id="lblBdGridBg">Grilles & Fond de page BD</span></div>
+                    <div class="bd-section-title"><i class="fas fa-layer-group"></i> Grilles & Fond</div>
                     <div class="meta-row">
                         <div class="input-group" style="flex:2">
-                            <label id="lblBgOpt">Image de fond (derrière la grille) - optionnel</label>
-                            <div style="display:flex;gap:8px">
-                                <input id="bdBgImageInput" class="meta-input" placeholder="URL..." oninput="onBDBgUrlChange(this.value)">
-                                <button class="btn" onclick="document.getElementById('bdBgUpload').click()"><i class="fas fa-upload"></i></button>
-                                <input type="file" id="bdBgUpload" accept="image/*" style="display:none" onchange="onBDBgFile(event)">
-                                <button class="btn btn-danger" onclick="clearBGBg()"><i class="fas fa-times"></i></button>
-                            </div>
+                            <label>Image de fond (URL uniquement)</label>
+                            <input id="bdBgImageInput" class="meta-input" placeholder="https://..." oninput="onBDBgUrlChange(this.value)">
                         </div>
                         <div class="input-group" style="width:150px">
-                            <label><span id="lblBgZoom">Zoom fond</span> <span id="bdBgScaleVal">100%</span></label>
+                            <label>Zoom fond <span id="bdBgScaleVal">100%</span></label>
                             <input type="range" id="bdBgScale" min="0.2" max="15" step="0.05" value="1" oninput="onBDBgScale(this.value)">
                         </div>
                     </div>
                     <div class="input-group">
-                        <label id="lblGridTmpl">Modèles de grilles</label>
+                        <label>Modèles de grilles</label>
                         <div id="bdTemplatesList" class="bd-templates"></div>
-                    </div>
-                    <div class="meta-row">
-                        <div class="input-group" style="width:160px">
-                            <label id="lblCustomCases">Cases perso 1-12</label>
-                            <div style="display:flex;gap:8px">
-                                <input type="number" id="bdCustomCount" class="meta-input" min="1" max="12" value="4" style="width:70px">
-                                <button class="btn" onclick="applyCustomGrid()"><i class="fas fa-th"></i> <span id="lblGen">Générer</span></button>
-                                <button class="btn" onclick="setBDTemplate('full')"><i class="fas fa-expand"></i> <span id="lblFull">Plein</span></button>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -412,187 +218,112 @@
                 </div>
 
                 <div id="bdPanelTools" class="bd-toolbar" style="display:none">
-                    <div class="bd-section-title"><i class="fas fa-crop"></i> <span id="lblPanelSel">Case sélectionnée - Drag image | Molette zoom | Shift+Molette rotation</span> <span id="bdSelectedPanelLabel" style="margin-left:8px;color:var(--accent)">-</span></div>
+                    <div class="bd-section-title"><i class="fas fa-crop"></i> Case sélectionnée <span id="bdSelectedPanelLabel" style="margin-left:8px;color:var(--accent)">-</span></div>
                     <div class="meta-row">
+                        <!-- URL ONLY FOR OPTION A -->
                         <div class="input-group" style="flex:2">
-                            <label id="lblPanelImg">Image de la case</label>
+                            <label>Image de la case (URL web uniquement)</label>
                             <div style="display:flex;gap:8px">
                                 <input id="bdPanelImageUrl" class="meta-input" placeholder="https://..." oninput="onPanelUrlChange(this.value)">
-                                <button class="btn" onclick="document.getElementById('bdPanelUpload').click()"><i class="fas fa-upload"></i> <span id="lblPLocal">Local</span></button>
-                                <input type="file" id="bdPanelUpload" accept="image/*" style="display:none" onchange="onPanelFile(event)">
                                 <button class="btn btn-danger" onclick="clearPanelImage()"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
                         <div class="input-group" style="flex:1">
-                            <label><span id="lblPanelZoom">Zoom</span> <span id="bdPanelScaleVal">100%</span></label>
+                            <label>Zoom <span id="bdPanelScaleVal">100%</span></label>
                             <input type="range" id="bdPanelScale" min="0.1" max="15" step="0.05" value="1" oninput="onPanelScale(this.value)">
-                        </div>
-                        <div class="input-group" style="flex:1">
-                            <label><span id="lblPanelRot">Rotation</span> <span id="bdPanelRotVal">0°</span></label>
-                            <input type="range" id="bdPanelRot" min="-180" max="180" step="1" value="0" oninput="onPanelRot(this.value)">
                         </div>
                     </div>
                 </div>
 
                 <div class="bd-toolbar">
-                    <div class="bd-section-title"><i class="fas fa-comment-dots"></i> <span id="lblBubbles">Bulles de dialogue</span></div>
-                    
+                    <div class="bd-section-title"><i class="fas fa-comment-dots"></i> Bulles (Vectorielles & Rapides)</div>
                     
                     <div class="bubble-palette" id="bubblePaletteGrid">
-                        <!-- Classic -->
-                        <div class="bubble-palette-item" onclick="addBDBubble('oval-bc')" title="Ovale classique bas centre - incurvé">
-                            <div class="mini-bubble oval"><div class="mini-tail bc"></div></div>
-                            <div class="bubble-label">Ovale BC</div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('oval', 'bc')" title="Ovale bas centre">
+                            <div class="mini-bubble oval"></div><div class="bubble-label">Ovale BC</div>
                         </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('oval-bl')" title="Ovale bas gauche courbe">
-                            <div class="mini-bubble oval"><div class="mini-tail bl"></div></div>
-                            <div class="bubble-label">Ovale BL</div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('oval', 'bl')" title="Ovale bas gauche">
+                            <div class="mini-bubble oval"></div><div class="bubble-label">Ovale BL</div>
                         </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('oval-br')" title="Ovale bas droite">
-                            <div class="mini-bubble oval"><div class="mini-tail br"></div></div>
-                            <div class="bubble-label">Ovale BR</div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('oval', 'br')" title="Ovale bas droite">
+                            <div class="mini-bubble oval"></div><div class="bubble-label">Ovale BR</div>
                         </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('round-bc')" title="Rond bas centre">
-                            <div class="mini-bubble round"><div class="mini-tail bc"></div></div>
-                            <div class="bubble-label">Rond BC</div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('round', 'bc')" title="Rond">
+                            <div class="mini-bubble round"></div><div class="bubble-label">Rond</div>
                         </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('round-bl-curved')" title="Rond courbe gauche - flèche incurvée">
-                            <div class="mini-bubble round"><div class="mini-tail bl" style="border-radius:0 0 80% 0; width:10px; height:7px;"></div></div>
-                            <div class="bubble-label">Rond courbe</div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('rect', 'bc')" title="Rectangle">
+                            <div class="mini-bubble rect"></div><div class="bubble-label">Rectangle</div>
                         </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('round-br-sharp')" title="Rond pointu">
-                            <div class="mini-bubble round"><div class="mini-tail br"></div></div>
-                            <div class="bubble-label">Rond pointu</div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('rect', 'zap')" title="Rectangle Eclair">
+                            <div class="mini-bubble rect"></div><div class="bubble-label">Radio/Zap</div>
                         </div>
-                        <!-- Rect -->
-                        <div class="bubble-palette-item" onclick="addBDBubble('rect-bc')" title="Rectangle bas centre">
-                            <div class="mini-bubble rect"><div class="mini-tail bc"></div></div>
-                            <div class="bubble-label">Rect BC</div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('capsule', 'bl')" title="Capsule">
+                            <div class="mini-bubble capsule"></div><div class="bubble-label">Capsule</div>
                         </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('rect-zap')" title="Rectangle éclair - queue zap">
-                            <div class="mini-bubble rect"><div class="mini-tail zap"></div></div>
-                            <div class="bubble-label">Rect Eclair</div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('cloud', 'thought')" title="Pensée">
+                            <div class="mini-bubble cloud"></div><div class="bubble-label">Pensée</div>
                         </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('rect-arrow-r')" title="Rectangle flèche droite - comme photo">
-                            <div class="mini-bubble rect"><div class="mini-tail side-r"></div></div>
-                            <div class="bubble-label">Flèche →</div>
-                        </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('capsule-long')" title="Capsule longue">
-                            <div class="mini-bubble capsule"><div class="mini-tail bl"></div></div>
-                            <div class="bubble-label">Capsule</div>
-                        </div>
-                        <!-- Double / Triple -->
-                        <div class="bubble-palette-item" onclick="addBDBubble('double-oval')" title="Double bulle - 2 queues">
-                            <div class="mini-bubble oval double"><div class="mini-tail bl"></div><div class="mini-tail br" style="left:68%"></div></div>
-                            <div class="bubble-label">Double</div>
-                        </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('cloud-triple')" title="Triple nuage - 3 queues">
-                            <div class="mini-bubble cloud triple"><div class="mini-tail bc"></div><div class="mini-tail bl" style="bottom:-5px"></div><div class="mini-tail br" style="bottom:-5px"></div></div>
-                            <div class="bubble-label">Triple</div>
-                        </div>
-                        <!-- Thought -->
-                        <div class="bubble-palette-item" onclick="addBDBubble('thought-oval')" title="Pensée ovale avec trainée">
-                            <div class="mini-bubble oval" style="border-style:dashed"><div class="mini-tail bc" style="width:6px;height:6px;border-radius:50%"></div></div>
-                            <div class="bubble-label">Pensée ovale</div>
-                        </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('thought-cloud')" title="Nuage pensée">
-                            <div class="mini-bubble cloud"><div class="mini-tail bc" style="width:6px;height:6px;border-radius:50%"></div></div>
-                            <div class="bubble-label">Nuage pensée</div>
-                        </div>
-                        <!-- Boom / Pow -->
-                        <div class="bubble-palette-item" onclick="addBDBubble('boom-soft')" title="BOOM doux - explosion">
-                            <div class="mini-bubble boom"></div>
-                            <div class="bubble-label">BOOM</div>
-                        </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('pow-hard')" title="POW dur - cri fort">
-                            <div class="mini-bubble pow"></div>
-                            <div class="bubble-label">POW</div>
-                        </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('burst-shout')" title="Burst cri - éclaté">
-                            <div class="mini-bubble burst"></div>
-                            <div class="bubble-label">CRI</div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('burst', 'none')" title="Cri / Burst">
+                            <div class="mini-bubble burst" style="border:1.5px solid #111"></div><div class="bubble-label">Cri / POW</div>
                         </div>
                     </div>
 
                     <div id="bdBubbleEdit" style="display:none;flex-direction:column;gap:12px;margin-top:12px;background:rgba(0,0,0,0.4);padding:14px;border-radius:8px;border:1px solid var(--border)">
                         <div class="meta-row" style="align-items:flex-start">
                             <div class="input-group" style="flex:2">
-                                <label id="lblBubText">Texte de la bulle</label>
+                                <label>Texte de la bulle</label>
                                 <textarea id="bdBubbleText" class="meta-input" style="height:42px" oninput="onBubbleTextChange(this.value)"></textarea>
                             </div>
                             <div class="input-group" style="flex:1; min-width:140px">
-                                <label id="lblBubFont">Font BD</label>
+                                <label>Police BD</label>
                                 <select id="bdBubbleFont" class="meta-input" style="height:42px" onchange="onBubbleFontChange(this.value)">
-                                    <option value="'Bangers', cursive">BANGERS - Impact BD</option>
-                                    <option value="'Comic Neue', cursive">Comic Neue - Classique</option>
-                                    <option value="'Patrick Hand', cursive">Patrick Hand - Manuscrit</option>
-                                    <option value="'Caveat Brush', cursive">Caveat Brush - Pinceau</option>
-                                    <option value="'Special Elite', cursive">Special Elite - Machine</option>
-                                    <option value="'Permanent Marker', cursive">Permanent Marker</option>
-                                    <option value="'Inter', sans-serif">Inter - Neutre</option>
+                                    <option value="'Bangers', cursive">Bangers (Impact)</option>
+                                    <option value="'Comic Neue', cursive">Comic Neue</option>
+                                    <option value="'Caveat Brush', cursive">Caveat Brush</option>
+                                    <option value="'Inter', sans-serif">Inter (Neutre)</option>
                                 </select>
                             </div>
                         </div>
                         <div class="meta-row">
                             <div class="input-group" style="width:120px">
-                                <label><span id="lblBubWidth">Largeur %</span> <span id="bdBubbleWidthVal" style="color:var(--accent)">30%</span></label>
+                                <label>Largeur <span id="bdBubbleWidthVal" style="color:var(--accent)">30%</span></label>
                                 <input type="range" id="bdBubbleWidth" min="10" max="100" value="30" oninput="onBubbleWidth(this.value)">
                             </div>
                             <div class="input-group" style="width:120px">
-                                <label><span id="lblBubSize">Taille texte</span> <span id="bdBubbleSizeVal" style="color:var(--accent)">14px</span></label>
+                                <label>Taille texte <span id="bdBubbleSizeVal" style="color:var(--accent)">14px</span></label>
                                 <input type="range" id="bdBubbleSize" min="8" max="48" value="14" oninput="onBubbleSize(this.value)">
                             </div>
                             <div class="input-group" style="width:80px">
-                                <label id="lblBubBgColor">Fond</label>
+                                <label>Fond</label>
                                 <input type="color" id="bdBubbleBg" class="meta-input" style="padding:0;height:38px" onchange="onBubbleBg(this.value)">
                             </div>
                         </div>
                         
-                        <!-- Palettes de couleurs -->
                         <div style="display:flex;gap:6px;margin-top:2px;">
                             <button class="color-swatch" style="background:#ffffff" onclick="onBubbleBg('#ffffff')"></button>
                             <button class="color-swatch" style="background:#ffeb3b" onclick="onBubbleBg('#ffeb3b')"></button>
                             <button class="color-swatch" style="background:#ff9800" onclick="onBubbleBg('#ff9800')"></button>
                             <button class="color-swatch" style="background:#f44336" onclick="onBubbleBg('#f44336')"></button>
-                            <button class="color-swatch" style="background:#4caf50" onclick="onBubbleBg('#4caf50')"></button>
                             <button class="color-swatch" style="background:#00bcd4" onclick="onBubbleBg('#00bcd4')"></button>
-                            <button class="color-swatch" style="background:#2196f3" onclick="onBubbleBg('#2196f3')"></button>
-                            <button class="color-swatch" style="background:#e91e63" onclick="onBubbleBg('#e91e63')"></button>
-                            <button class="color-swatch" style="background:#111111; border-color:#555" onclick="onBubbleBg('#111111')"></button>
                         </div>
 
                         <div style="display:flex;gap:8px;margin-top:4px">
-                            <button class="btn btn-danger" onclick="deleteSelectedBubble()"><i class="fas fa-trash"></i> <span id="lblBubDel">Supprimer</span></button>
-                            <button class="btn" onclick="duplicateBubble()"><i class="fas fa-copy"></i> <span id="lblBubDup">Dupliquer</span></button>
-                            <!-- Bouton Apply -->
-                            <button class="btn" onclick="selectedBubbleId=null;document.getElementById('bdBubbleEdit').style.display='none';renderBDCanvas()"><i class="fas fa-check"></i> <span id="lblBubApply">Appliquer</span></button>
+                            <button class="btn btn-danger" onclick="deleteSelectedBubble()"><i class="fas fa-trash"></i> Supprimer</button>
+                            <button class="btn" onclick="duplicateBubble()"><i class="fas fa-copy"></i> Dupliquer</button>
+                            <button class="btn" onclick="selectedBubbleId=null;document.getElementById('bdBubbleEdit').style.display='none';renderBDCanvas()"><i class="fas fa-check"></i> Appliquer</button>
                         </div>
                     </div>
-                    <div id="bdBubblesList" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
-                </div>
-            </div>
-            
-            <div id="magToolsGroup" class="module-tools">
-                <div class="input-group">
-                    <label><i class="fas fa-newspaper"></i> Magazine Layout</label>
-                    <p style="font-size:11px;opacity:0.7;margin-bottom:8px">Mode image + Texte en dessous activé automatiquement.</p>
                 </div>
             </div>
         </div>
 
-        <button class="btn-preview" onclick="openPreview()"><i class="fas fa-book-reader"></i> <span id="lblPreviewBtn">Preview</span></button>
+        <button class="btn-preview" onclick="openPreview()"><i class="fas fa-book-reader"></i> Aperçu HD</button>
     </div>
 </div>
 
-<!-- Modal Aperçu / Preview -->
 <div class="overlay" id="previewModal" onclick="if(event.target===this)closePreview()">
     <div class="preview-shell" onclick="event.stopPropagation()">
         <div class="preview-top">
-            <button class="btn" id="btnLarge" onclick="setPreviewDevice('large')"><i class="fas fa-desktop"></i> Plein écran</button>
-            <button class="btn" id="btnMobile" onclick="setPreviewDevice('mobile')"><i class="fas fa-mobile-alt"></i> Mobile</button>
-            <button class="btn" id="btnTablet" onclick="setPreviewDevice('tablet')"><i class="fas fa-tablet-alt"></i> Tablette</button>
-            <button class="btn" id="btnEpub" onclick="setPreviewDevice('epub')"><i class="fas fa-book"></i> EPUB</button>
-            <button class="btn" id="btnPdf" onclick="setPreviewDevice('pdf')"><i class="fas fa-file-pdf"></i> PDF</button>
             <button class="btn-close-round" onclick="closePreview()"><i class="fas fa-times-circle"></i></button>
         </div>
         <div class="preview-screen large" id="previewScreen">
@@ -601,332 +332,79 @@
     </div>
 </div>
 
-<div class="overlay" id="projectsModal">
-    <div class="modal">
-        <div class="modal-head">
-            <h3><i class="fas fa-folder-open"></i> <span id="lblProjTitle">Projects</span></h3>
-            <button class="btn-close-round" onclick="closeProjects()"><i class="fas fa-times-circle"></i></button>
-        </div>
-        <div class="modal-body">
-            <div style="display:flex;gap:10px">
-                <input id="newProjectTitle" class="meta-input" placeholder="Titre..." style="flex:1">
-                <button class="btn btn-primary" onclick="createNewProject()">Nouveau</button>
-            </div>
-            <div id="projectsList" style="display:flex;flex-direction:column;gap:10px;margin-top:10px"></div>
-        </div>
-    </div>
-</div>
-
-<div class="overlay" id="settingsModal">
-    <div class="modal">
-        <div class="modal-head">
-            <h3><i class="fas fa-cog"></i> Paramètres</h3>
-            <button class="btn-close-round" onclick="closeSettings()"><i class="fas fa-times-circle"></i></button>
-        </div>
-        <div class="modal-body">
-            <div>
-                <label style="font-size:11px;opacity:.6;text-transform:uppercase;font-weight:600">Langue</label>
-                <div style="display:flex;gap:10px;margin-top:8px">
-                    <button class="btn" id="lang-fr" onclick="setLang('fr')" style="flex:1;justify-content:center">🇫🇷 Français</button>
-                    <button class="btn" id="lang-en" onclick="setLang('en')" style="flex:1;justify-content:center">🇬🇧 English</button>
-                </div>
-            </div>
-            <div>
-                <label style="font-size:11px;opacity:.6;text-transform:uppercase;font-weight:600;display:block;margin-top:10px">Polices Personnalisées</label>
-                <div class="upload-box" onclick="document.getElementById('fontFileInput').click()">
-                    <i class="fas fa-font"></i> Importer un fichier Font (.ttf, .otf, .woff)
-                    <input type="file" id="fontFileInput" accept=".ttf,.otf,.woff,.woff2" style="display:none" onchange="handleFontUpload(event)">
-                </div>
-            </div>
-            <div>
-                <label style="font-size:11px;opacity:.6;text-transform:uppercase;font-weight:600;display:block;margin-top:10px">Sauvegarde Globale</label>
-                <p style="font-size:11px;opacity:.6;margin:6px 0">Sauvegarde complète du projet avec polices.</p>
-                <div style="display:flex;gap:10px">
-                    <button class="btn" onclick="exportWorkflow()"><i class="fas fa-download"></i> Backup complet</button>
-                    <button class="btn" onclick="document.getElementById('importWorkInput').click()"><i class="fas fa-upload"></i> Importer</button>
-                    <input type="file" id="importWorkInput" accept=".writerwork,.json" style="display:none" onchange="importWorkflow(event)">
-                </div>
-            </div>
-            <div style="border-top:1px solid var(--border);padding-top:15px;margin-top:10px">
-                <label style="font-size:11px;color:#ef4444;text-transform:uppercase;font-weight:600">Zone Dangereuse</label>
-                <button class="btn btn-danger" style="width:100%;justify-content:center" onclick="factoryReset()">Factory Reset</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="savedToast" class="saved-toast"><i class="fas fa-check-circle" style="color:var(--accent)"></i> Enregistré !</div>
 
-<!-- RESTAURATION DU SCRIPT JAVASCRIPT COMPLET -->
 <script>
-let currentPageId=null, currentProjectId=null, projects=[], appConfig={fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}}, previewDevice='large';
-let currentActiveModule = 'book';
+let currentPageId=null, currentProjectId=null, projects=[], appConfig={fontFamily:'Playfair Display'};
+let currentActiveModule = 'comic'; // Forcé en mode comic
 let selectedPanelIndex=null, selectedBubbleId=null, dragState=null;
 const uid=()=> 'id_'+Date.now()+'_'+Math.random().toString(36).slice(2,5);
 const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-let db, customFonts=[];
 
-let fontMapping={
-    'EB Garamond':"'EB Garamond', serif",
-    'Playfair Display':"'Playfair Display', serif",
-    'Cormorant Garamond':"'Cormorant Garamond', serif",
-    'Crimson Text':"'Crimson Text', serif",
-    'Libre Baskerville':"'Libre Baskerville', serif",
-    'Lora':"'Lora', serif",
-    'Merriweather':"'Merriweather', serif",
-    'Spectral':"'Spectral', serif",
-    'PT Serif':"'PT Serif', serif",
-    'Source Serif Pro':"'Source Serif Pro', serif",
-    'Inter':"'Inter', sans-serif"
-};
-
-const titleSizes = [18,24,28,32,36,42,48,56,64,72];
-const bodySizes = [12,13,14,15,16,17,18,20,22,24,28,32];
 const BD_TEMPLATES = [
     {id:'full', name:'Plein', rects:[{x:0,y:0,w:100,h:100}]},
     {id:'2h', name:'2-H', rects:[{x:0,y:0,w:100,h:49},{x:0,y:51,w:100,h:49}]},
-    {id:'2v', name:'2-V', rects:[{x:0,y:0,w:49,h:100},{x:51,y:0,w:49,h:100}]},
-    {id:'3h', name:'3-H', rects:[{x:0,y:0,w:100,h:32},{x:0,y:34,w:100,h:32},{x:0,y:68,w:100,h:32}]},
     {id:'3v', name:'3-V', rects:[{x:0,y:0,w:32,h:100},{x:34,y:0,w:32,h:100},{x:68,y:0,w:32,h:100}]},
     {id:'4', name:'4', rects:[{x:0,y:0,w:49,h:49},{x:51,y:0,w:49,h:49},{x:0,y:51,w:49,h:49},{x:51,y:51,w:49,h:49}]},
-    {id:'3top', name:'3-Top', rects:[{x:0,y:0,w:100,h:58},{x:0,y:60,w:49,h:40},{x:51,y:60,w:49,h:40}]},
-    {id:'3bottom', name:'3-Btm', rects:[{x:0,y:0,w:49,h:40},{x:51,y:0,w:49,h:40},{x:0,y:42,w:100,h:58}]},
-    {id:'5mix', name:'5-Mix', rects:[{x:0,y:0,w:100,h:35},{x:0,y:37,w:49,h:29},{x:51,y:37,w:49,h:29},{x:0,y:68,w:49,h:32},{x:51,y:68,w:49,h:32}]},
-    {id:'6grid', name:'6-Grid', rects:[{x:0,y:0,w:32,h:49},{x:34,y:0,w:32,h:49},{x:68,y:0,w:32,h:49},{x:0,y:51,w:32,h:49},{x:34,y:51,w:32,h:49},{x:68,y:51,w:32,h:49}]},
-    {id:'blacksad', name:'Classique', rects:[{x:0,y:0,w:100,h:38},{x:0,y:40,w:100,h:14},{x:0,y:56,w:32,h:20},{x:34,y:56,w:32,h:20},{x:68,y:56,w:32,h:20},{x:0,y:78,w:100,h:22}]},
-    {id:'8', name:'8', rects:[{x:0,y:0,w:49,h:23.5},{x:51,y:0,w:49,h:23.5},{x:0,y:25.5,w:49,h:23.5},{x:51,y:25.5,w:49,h:23.5},{x:0,y:51,w:49,h:23.5},{x:51,y:51,w:49,h:23.5},{x:0,y:76.5,w:49,h:23.5},{x:51,y:76.5,w:49,h:23.5}]},
-    {id:'9', name:'9', rects:[{x:0,y:0,w:32,h:32},{x:34,y:0,w:32,h:32},{x:68,y:0,w:32,h:32},{x:0,y:34,w:32,h:32},{x:34,y:34,w:32,h:32},{x:68,y:34,w:32,h:32},{x:0,y:68,w:32,h:32},{x:34,y:68,w:32,h:32},{x:68,y:68,w:32,h:32}]},
-    {id:'10auto', name:'10', rects:[]},
+    {id:'blacksad', name:'Classique', rects:[{x:0,y:0,w:100,h:38},{x:0,y:40,w:100,h:14},{x:0,y:56,w:32,h:20},{x:34,y:56,w:32,h:20},{x:68,y:56,w:32,h:20},{x:0,y:78,w:100,h:22}]}
 ];
 
-function generateAutoRects(count){
-    const gap=2; const cols=Math.ceil(Math.sqrt(count)); const rows=Math.ceil(count/cols);
-    const cellW=(100-(cols-1)*gap)/cols; const cellH=(100-(rows-1)*gap)/rows;
-    let rects=[];
-    for(let i=0;i<count;i++){
-        let col=i%cols, row=Math.floor(i/cols);
-        rects.push({x:col*(cellW+gap), y:row*(cellH+gap), w:cellW, h:cellH});
-    }
-    return rects;
-}
-
-function getTemplateRects(id, customCount){
-    if(id==='10auto') return generateAutoRects(customCount||10);
-    let t=BD_TEMPLATES.find(x=>x.id===id);
-    if(t && t.rects && t.rects.length) return t.rects;
-    return generateAutoRects(customCount||4);
+function getTemplateRects(id){
+    let t=BD_TEMPLATES.find(x=>x.id===id); return t?t.rects:[{x:0,y:0,w:100,h:100}];
 }
 
 function ensureBDData(item){
     if(!item) return;
     if(!item.bdBg) item.bdBg={tx:0,ty:0,scale:1,rot:0};
     if(item.bdBgImage===undefined) item.bdBgImage='';
-    if(!item.bdPanels){
-        if(item.image){ item.bdPanels=[{id:uid(), image:item.image, tx:0,ty:0,scale:1,rot:0}]; }
-        else { item.bdPanels=[{id:uid(), image:'', tx:0,ty:0,scale:1,rot:0}]; }
-    }
-    item.bdPanels.forEach(p=>{
-        if(p.tx===undefined) p.tx=0; if(p.ty===undefined) p.ty=0;
-        if(p.scale===undefined) p.scale=1; if(p.rot===undefined) p.rot=0;
-        if(!p.id) p.id=uid();
-    });
-    if(!item.bdTemplate) item.bdTemplate='full';
-    if(!item.bdTemplateRects || item.bdTemplateRects.length!==item.bdPanels.length){
-        let rects=getTemplateRects(item.bdTemplate, item.bdPanels.length);
-        if(item.bdTemplate!=='custom' && rects.length!==item.bdPanels.length){
-            let newPanels=[];
-            for(let i=0;i<rects.length;i++){
-                if(i<item.bdPanels.length) newPanels.push(item.bdPanels[i]);
-                else newPanels.push({id:uid(), image:'', tx:0,ty:0,scale:1,rot:0});
-            }
-            item.bdPanels=newPanels; item.bdTemplateRects=rects;
-        } else {
-            if(!item.bdTemplateRects) item.bdTemplateRects=rects;
-        }
-    }
+    if(!item.bdPanels) item.bdPanels=[{id:uid(), image:'', tx:0,ty:0,scale:1,rot:0}];
+    item.bdPanels.forEach(p=>{ if(!p.id) p.id=uid(); });
+    if(!item.bdTemplateRects) item.bdTemplateRects=getTemplateRects('full');
     if(!item.bdBubbles) item.bdBubbles=[];
     item.bdBubbles.forEach(b=>{
         if(b.x===undefined) b.x=50; if(b.y===undefined) b.y=50;
         if(!b.w) b.w=30; if(!b.fontSize) b.fontSize=14;
         if(!b.fontFamily) b.fontFamily="'Bangers', cursive";
-        if(!b.type) b.type='oval-bc';
+        if(!b.shape) b.shape='oval'; // Nouvelle logique de shape
+        if(!b.tail) b.tail='bc';     // Nouvelle logique de tail SVG
         if(!b.bgColor) b.bgColor = '#ffffff';
-        if(b.panelIndex===undefined) b.panelIndex=null;
     });
-}
-
-function initIDB(cb){
-    try {
-        const req=indexedDB.open("WriterFontsDB",2);
-        req.onupgradeneeded=e=>{
-            const d=e.target.result;
-            if(!d.objectStoreNames.contains("fonts")) d.createObjectStore("fonts",{keyPath:"name"});
-            if(!d.objectStoreNames.contains("images")) d.createObjectStore("images",{keyPath:"id"});
-        };
-        req.onsuccess=e=>{
-            db=e.target.result; loadFontsFromIDB(cb);
-        };
-        req.onerror=e=>{ if(cb) cb(); };
-    } catch(err) { if(cb) cb(); }
-}
-
-function loadFontsFromIDB(cb){
-    if(!db) return cb&&cb();
-    try {
-        const tx=db.transaction("fonts","readonly");
-        const r=tx.objectStore("fonts").getAll();
-        r.onsuccess=e=>{
-            customFonts=e.target.result||[];
-            customFonts.forEach(f=>{ fontMapping[f.name]=`'${f.name}'`; });
-            const css=customFonts.map(f=>`@font-face{font-family:'${f.name}';src:url('${f.dataUrl}');}`).join('\n');
-            document.getElementById('customFontsStyle').textContent=css;
-            refreshFontDropdown();
-            if(cb) cb();
-        };
-        r.onerror=()=> { if(cb) cb(); };
-    } catch(e) { if(cb) cb(); }
-}
-
-function handleFontUpload(e){
-    const file=e.target.files[0];
-    if(!file) return;
-    const r=new FileReader();
-    r.onload=ev=>{
-        const dataUrl=ev.target.result;
-        const name=file.name.replace(/\.[^/.]+$/,"").replace(/[^a-z0-9 _-]/g,'').trim()||'Custom';
-        if(fontMapping[name]) return alert('Cette police existe déjà');
-        try {
-            if(db) {
-                const tx=db.transaction("fonts","readwrite");
-                tx.objectStore("fonts").put({name,dataUrl});
-            }
-        } catch(err) {}
-        customFonts.push({name,dataUrl});
-        document.getElementById('customFontsStyle').textContent+=`@font-face{font-family:'${name}';src:url('${dataUrl}');}\n`;
-        fontMapping[name]=`'${name}'`;
-        refreshFontDropdown(); selectFont(name);
-    };
-    r.readAsDataURL(file); e.target.value='';
-}
-
-function uploadLocalImage(e) {
-    const file = e.target.files[0];
-    if(!file) return;
-    const r = new FileReader();
-    r.onload = ev => {
-        const b64 = ev.target.result;
-        try {
-            if(db) {
-                const tx = db.transaction("images","readwrite");
-                tx.objectStore("images").put({id: uid(), data: b64});
-            }
-        } catch(err) {}
-        document.getElementById('itemImage').value = b64;
-        autoSave();
-    };
-    r.readAsDataURL(file); e.target.value = '';
-}
-
-function applyFont(){
-    const fam=fontMapping[appConfig.fontFamily]||"'Playfair Display', serif";
-    const ta=document.getElementById('itemText'); if(ta) ta.style.fontFamily=fam;
-    const it=document.getElementById('itemTitle'); if(it) it.style.fontFamily=fam;
-    const gt=document.getElementById('globalTitle'); if(gt) gt.style.fontFamily=fam;
 }
 
 function toggleDropdown(id) {
     const el = document.getElementById(id);
     const isVis = el.style.display === 'flex';
-    closeMenus();
-    if(!isVis) el.style.display = 'flex';
+    closeMenus(); if(!isVis) el.style.display = 'flex';
 }
-
-function closeMenus() {
-    document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display='none');
-}
-
-document.addEventListener('click',e=>{
-    if(!e.target.closest('.gen-wrap')) closeMenus();
-});
-
-function refreshFontDropdown(){
-    const dd=document.getElementById('fontDropdown');
-    if(!dd) return;
-    dd.innerHTML='';
-    Object.keys(fontMapping).forEach(name=>{
-        const b=document.createElement('button');
-        b.className='dropdown-item'+(name===appConfig.fontFamily?' active':'');
-        b.style.fontFamily=fontMapping[name];
-        b.innerHTML=`<span style="font-weight:900;font-size:12px;opacity:.6">Tt</span> ${name}`;
-        b.onclick=()=>{ selectFont(name); closeMenus(); };
-        dd.appendChild(b);
-    });
-    const label=document.getElementById('fontSelectLabel');
-    if(label){ label.textContent=appConfig.fontFamily; label.style.fontFamily=fontMapping[appConfig.fontFamily]; }
-}
-
-function selectFont(name){
-    appConfig.fontFamily=name; saveProjects(); refreshFontDropdown(); applyFont(); autoSave();
-}
-
-function initSizeDropdowns() {
-    const tMenu = document.getElementById('titleSizeDropdown');
-    const bMenu = document.getElementById('bodySizeDropdown');
-    tMenu.innerHTML = ''; bMenu.innerHTML = '';
-    titleSizes.forEach(s => {
-        const btn = document.createElement('button');
-        btn.className = 'dropdown-item'; btn.textContent = s + 'px';
-        btn.onclick = () => {
-            document.getElementById('titleSizeLabel').dataset.value = s;
-            document.getElementById('titleSizeLabel').textContent = s + 'px';
-            closeMenus(); autoSave();
-        };
-        tMenu.appendChild(btn);
-    });
-    bodySizes.forEach(s => {
-        const btn = document.createElement('button');
-        btn.className = 'dropdown-item'; btn.textContent = s + 'px';
-        btn.onclick = () => {
-            document.getElementById('bodySizeLabel').dataset.value = s;
-            document.getElementById('bodySizeLabel').textContent = s + 'px';
-            closeMenus(); autoSave();
-        };
-        bMenu.appendChild(btn);
-    });
-}
+function closeMenus() { document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display='none'); }
+document.addEventListener('click',e=>{ if(!e.target.closest('.gen-wrap')) closeMenus(); });
 
 function refreshPageDropdown(){
-    const dd=document.getElementById('pageDropdown');
-    if(!dd) return;
-    dd.innerHTML='';
-    const proj=getCurrentProject();
-    if(!proj) return;
+    const dd=document.getElementById('pageDropdown'); if(!dd) return;
+    dd.innerHTML=''; const proj=getCurrentProject(); if(!proj) return;
     proj.data.book.items.forEach(it=>{
         const b=document.createElement('button');
         b.className='dropdown-item'+(it.id===currentPageId?' active':'');
-        b.innerHTML= it.type === 'chapter' ? esc(it.title) : getDisplayName(it);
+        b.innerHTML= esc(it.title);
         b.onclick=()=>{ selectPage(it.id); closeMenus(); };
         dd.appendChild(b);
     });
     const label=document.getElementById('pageSelectLabel');
     const cur=proj.data.book.items.find(i=>i.id===currentPageId);
-    if(label&&cur) label.textContent = cur.type === 'chapter' ? cur.title : getDisplayName(cur);
+    if(label&&cur) label.textContent = cur.title;
 }
 
-function selectPage(id){
-    currentPageId=id; selectedPanelIndex=0; selectedBubbleId=null; loadPageData();
-}
+function selectPage(id){ currentPageId=id; selectedPanelIndex=0; selectedBubbleId=null; loadPageData(); }
 
 function loadProjects(){
     try{
         projects=JSON.parse(localStorage.getItem('writer_projects_v2')||'[]');
         currentProjectId=localStorage.getItem('writer_current_project_id');
         if(projects.length===0){
-            const p={id:uid(),title:'Mon projet',data:{book:{title:'Mon projet',items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()};
+            const p={id:uid(),title:'Mon Comic',data:{book:{title:'Mon Comic',items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,image:'',bdPanels:[],bdBubbles:[]},{id:'ch1',type:'chapter',title:'Page 1',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]}]}},config:{},mode:'comic',updatedAt:Date.now()};
             projects=[p]; currentProjectId=p.id; saveProjects();
         }
         if(!projects.find(p=>p.id===currentProjectId)) currentProjectId=projects[0].id;
-        appConfig=projects.find(p=>p.id===currentProjectId).config;
     }catch(e){}
 }
 
@@ -934,185 +412,63 @@ function saveProjects(){
     try {
         localStorage.setItem('writer_projects_v2',JSON.stringify(projects));
         localStorage.setItem('writer_current_project_id',currentProjectId);
-        localStorage.setItem('writer_active_module', currentActiveModule || 'book');
-    } catch(e) {}
+    } catch(e) {
+        if (e.name === 'QuotaExceededError') {
+            alert("⚠️ Stockage plein ! Supprimez d'anciens projets.");
+        }
+    }
 }
 
-function getCurrentProject(){
-    return projects.find(p=>p.id===currentProjectId);
-}
-
-function openProjects(){
-    renderProjectsList(); document.getElementById('projectsModal').classList.add('active'); closeMenus();
-}
-
-function closeProjects(){
-    document.getElementById('projectsModal').classList.remove('active');
-}
-
-function renderProjectsList(){
-    const l=document.getElementById('projectsList');
-    l.innerHTML='';
-    projects.forEach(p=>{
-        const d=document.createElement('div');
-        d.className='project-item'+(p.id===currentProjectId?' active':'');
-        d.innerHTML=`<div style="font-weight:500">${esc(p.title)}</div><div style="display:flex;gap:6px"><button class="btn" onclick="switchProject('${p.id}')">OK</button><button class="btn btn-danger" onclick="deleteProject('${p.id}')"><i class="fas fa-times"></i></button></div>`;
-        l.appendChild(d);
-    });
-}
-
-function createNewProject(){
-    const t=document.getElementById('newProjectTitle').value.trim()||'Mon projet';
-    const p={id:uid(),title:t,data:{book:{title:t,items:[{id:'cover',type:'cover',title:'Couverture',showTitle:true,titleSize:48,bodySize:17,image:'',layout:'bg',imageAlign:'center',imageSize:100,bgOpacity:20,text:''},{id:'author',type:'author',title:'Page Auteur',titleSize:28,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:60,bgOpacity:15,author:'',date:'',publisher:'',genre:'',text:''},{id:'ref',type:'reference',title:'Summary',titleSize:28,bodySize:16,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'Sommaire...'},{id:'ch1',type:'chapter',title:'Page 1',titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]}]}},config:{fontFamily:'Playfair Display',reference:{mode:'all',selected:[]}},mode:'book',pageId:'cover',updatedAt:Date.now()};
-    projects.unshift(p); currentProjectId=p.id; saveProjects(); loadProjectIntoUI();
-    document.getElementById('newProjectTitle').value='';
-}
-
-function switchProject(id){
-    currentProjectId=id; saveProjects(); loadProjectIntoUI(); closeProjects();
-}
-
-function deleteProject(id){
-    if(projects.length<=1) return;
-    if(!confirm('Supprimer ce projet ?')) return;
-    projects=projects.filter(p=>p.id!==id);
-    if(currentProjectId===id) currentProjectId=projects[0].id;
-    saveProjects(); loadProjectIntoUI(); renderProjectsList();
-}
+function getCurrentProject(){ return projects.find(p=>p.id===currentProjectId); }
 
 function loadProjectIntoUI(){
-    const proj=getCurrentProject();
-    if(!proj) return;
-    appConfig=proj.config;
-    document.getElementById('currentProjectName').textContent=proj.title;
-    document.getElementById('genCurrentProjectName').textContent=proj.title;
+    const proj=getCurrentProject(); if(!proj) return;
     document.getElementById('globalTitle').value=proj.data.book.title||proj.title;
-    refreshFontDropdown(); refreshPageDropdown(); applyFont();
-    currentPageId = null; selectedPanelIndex=0; loadPageData();
+    refreshPageDropdown(); currentPageId = null; selectedPanelIndex=0; loadPageData();
 }
 
-function getDisplayName(it){
-    if(it.type==='cover') return currentActiveModule==='magazine'?'Mag Cover' : currentActiveModule==='comic'?'BD Cover':'Book Cover';
-    if(it.type==='author') return 'Informations';
-    if(it.type==='reference') return currentActiveModule==='comic'?'Content':'Summary';
-    return it.title||'Page';
-}
-
-function activateModule(mode) {
-    currentActiveModule = mode; saveProjects();
-    document.querySelectorAll('.sidebar .menu-item').forEach(e => e.classList.remove('active'));
-    const root = document.documentElement; const logoSub = document.getElementById('appLogoSub');
-    if(mode === 'comic') {
-        document.getElementById('tab-comic').classList.add('active'); root.style.setProperty('--accent', '#ef4444'); logoSub.textContent = 'BD Module';
-    } else if (mode === 'magazine') {
-        document.getElementById('tab-magazine').classList.add('active'); root.style.setProperty('--accent', '#f59e0b'); logoSub.textContent = 'Magazine';
-    } else {
-        currentActiveModule = 'book'; document.getElementById('tab-book').classList.add('active'); root.style.setProperty('--accent', '#22d3ee'); logoSub.textContent = 'sources';
-    }
-    const proj = getCurrentProject();
-    if(proj && (mode === 'comic' || mode === 'magazine')) {
-        const firstChap = proj.data.book.items.find(i => i.type === 'chapter');
-        if (firstChap) currentPageId = firstChap.id;
-    }
-    refreshPageDropdown(); loadPageData();
-}
+function activateModule(mode) { currentActiveModule = mode; }
 
 function loadPageData(){
-    const proj=getCurrentProject();
-    if(!proj || !proj.data.book.items.length) return;
+    const proj=getCurrentProject(); if(!proj || !proj.data.book.items.length) return;
     if(!currentPageId) currentPageId = proj.data.book.items[0].id;
-    const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    if(!item) return;
+    const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
 
-    document.getElementById('itemTitle').value=item.title||'';
-    document.getElementById('itemImage').value=item.image||'';
-    document.getElementById('itemText').value=item.text||'';
-    document.getElementById('imageSize').value=item.imageSize||70;
-    document.getElementById('imageSizeVal').textContent=(item.imageSize||70)+'%';
-    document.getElementById('bgOpacity').value=item.bgOpacity||15;
-    document.getElementById('bgOpacityVal').textContent=(item.bgOpacity||15)+'%';
-    document.getElementById('titleSizeLabel').dataset.value = item.titleSize||32;
-    document.getElementById('titleSizeLabel').textContent = (item.titleSize||32)+'px';
-    document.getElementById('bodySizeLabel').dataset.value = item.bodySize||17;
-    document.getElementById('bodySizeLabel').textContent = (item.bodySize||17)+'px';
-
-    const isCover=item.type==='cover', isAuthor=item.type==='author', isRef=item.type==='reference', isChapter=item.type==='chapter';
-    
-    document.getElementById('globalTitleGroup').style.display=isCover?'flex':'none';
-    document.getElementById('coverOptions').style.display=isCover?'flex':'none';
-    document.getElementById('itemTitleGroup').style.display=isCover?'none':'flex';
-    document.getElementById('authorMetaSection').style.display=isAuthor?'flex':'none';
-    document.getElementById('referenceConfigBlock').style.display=isRef?'flex':'none';
-
-    if(isCover) document.getElementById('showTitleOnCover').checked=item.showTitle!==false;
-    if(isAuthor){
-        document.getElementById('globalAuthor').value=item.author||''; document.getElementById('globalDate').value=item.date||'';
-        document.getElementById('globalPublisher').value=item.publisher||''; document.getElementById('globalGenre').value=item.genre||'';
-    }
-    if(isRef) renderRefBlock();
-
-    const isBDChapter = currentActiveModule==='comic' && isChapter;
-    document.getElementById('mediaUrlGroup').style.display = isBDChapter ? 'none' : 'flex';
-    document.getElementById('mediaSlidersGroup').style.display = isBDChapter ? 'none' : 'flex';
-    document.getElementById('fontOptionsGroup').style.display = isBDChapter ? 'none' : 'flex';
-    document.getElementById('textEditorGroup').style.display = isBDChapter ? 'none' : 'flex';
-    document.getElementById('bdFullEditor').style.display = isBDChapter ? 'flex' : 'none';
-    document.getElementById('magToolsGroup').style.display = (currentActiveModule==='magazine' && isChapter) ? 'flex' : 'none';
-
-    if(isBDChapter){
+    if(item.type==='cover'){
+        document.getElementById('globalTitleGroup').style.display='flex';
+        document.getElementById('itemTitleGroup').style.display='none';
+        document.getElementById('bdFullEditor').style.display='none';
+    } else {
+        document.getElementById('globalTitleGroup').style.display='none';
+        document.getElementById('itemTitleGroup').style.display='flex';
+        document.getElementById('itemTitle').value=item.title||'';
+        document.getElementById('bdFullEditor').style.display='flex';
         ensureBDData(item);
         if(selectedPanelIndex===null) selectedPanelIndex=0;
         renderBDTemplatesList(); renderBDCanvas();
     }
-
-    document.getElementById('sheet').classList.toggle('is-cover', isCover);
-    setLayout(item.layout||'top',false); setImageAlign(item.imageAlign||'center',false);
-
-    const items=proj.data.book.items;
-    document.getElementById('navLeft').classList.toggle('disabled', items.findIndex(i=>i.id===currentPageId)<=0);
-    document.getElementById('navRight').classList.toggle('disabled', items.findIndex(i=>i.id===currentPageId)>=items.length-1);
-
-    refreshPageDropdown(); applyFont();
+    refreshPageDropdown();
 }
 
-/* ===== BD PRO LOGIC - AVEC NOUVELLE PALETTE ===== */
 function renderBDTemplatesList(){
     const container=document.getElementById('bdTemplatesList'); if(!container) return;
-    container.innerHTML='';
-    const curItem=getCurrentProject()?.data.book.items.find(i=>i.id===currentPageId);
+    container.innerHTML=''; const curItem=getCurrentProject()?.data.book.items.find(i=>i.id===currentPageId);
     const curTmpl=curItem?.bdTemplate||'full';
 
     BD_TEMPLATES.forEach(t=>{
-        let rects = t.id==='10auto' ? generateAutoRects(10) : t.rects;
-        if(!rects || !rects.length) rects=[{x:0,y:0,w:100,h:100}];
-        
-        let div=document.createElement('div');
-        div.className='template-thumb'+(curTmpl===t.id?' active':''); div.title=t.name;
-        
-        rects.forEach(r=>{
+        let div=document.createElement('div'); div.className='template-thumb'+(curTmpl===t.id?' active':''); div.title=t.name;
+        t.rects.forEach(r=>{
             let p=document.createElement('div');
-            p.style.position='absolute'; p.style.left=r.x+'%'; p.style.top=r.y+'%'; p.style.width=r.w+'%'; p.style.height=r.h+'%';
-            p.style.background='rgba(255,255,255,0.9)'; p.style.border='1px solid #111'; p.style.boxSizing='border-box';
+            p.style.cssText=`position:absolute;left:${r.x}%;top:${r.y}%;width:${r.w}%;height:${r.h}%;background:rgba(255,255,255,0.9);border:1px solid #111;box-sizing:border-box`;
             div.appendChild(p);
         });
-
-        let label=document.createElement('div');
-        label.style.position='absolute'; label.style.bottom='0'; label.style.left='0'; label.style.right='0';
-        label.style.fontSize='7px'; label.style.textAlign='center'; label.style.color='#fff'; label.style.background='rgba(0,0,0,0.7)';
-        label.style.padding='2px 0'; label.textContent=t.name; div.appendChild(label);
-        
-        div.onclick=()=>setBDTemplate(t.id);
-        container.appendChild(div);
+        div.onclick=()=>setBDTemplate(t.id); container.appendChild(div);
     });
 }
 
 function setBDTemplate(id){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
-    ensureBDData(item);
-    let rects=getTemplateRects(id, item.bdPanels.length);
-    if(id==='10auto') rects=generateAutoRects(10);
-    
-    let newPanels=[];
+    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return; ensureBDData(item);
+    let rects=getTemplateRects(id); let newPanels=[];
     for(let i=0;i<rects.length;i++){
         if(i<item.bdPanels.length) newPanels.push(item.bdPanels[i]);
         else newPanels.push({id:uid(), image:'', tx:0,ty:0,scale:1,rot:0});
@@ -1121,60 +477,57 @@ function setBDTemplate(id){
     selectedPanelIndex=0; renderBDTemplatesList(); renderBDCanvas(); autoSave();
 }
 
-function applyCustomGrid(){
-    let cnt=parseInt(document.getElementById('bdCustomCount').value)||4; cnt=Math.min(12, Math.max(1,cnt));
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
-    let rects=generateAutoRects(cnt);
-    let newPanels=[];
-    for(let i=0;i<rects.length;i++){
-        if(i<item.bdPanels.length) newPanels.push(item.bdPanels[i]);
-        else newPanels.push({id:uid(), image:'', tx:0,ty:0,scale:1,rot:0});
+// ===== MOTEUR SVG DES FLÈCHES =====
+// Retourne une chaine SVG pure pour une flèche ultra-nette
+function getTailSVG(tailType, bgColor) {
+    if(tailType === 'none') return '';
+    
+    let path = ''; let extraStyles = '';
+    const strokeW = 2.5;
+
+    if(tailType === 'bc') {
+        // Courbe parfaite pointant vers le bas centre
+        path = `M 2 0 Q 12 10 12 24 Q 16 10 22 0`;
+        extraStyles = `bottom:-23px; left:50%; transform:translateX(-50%); width:24px; height:24px;`;
+    } else if(tailType === 'bl') {
+        path = `M 0 0 Q 0 15 15 24 Q 8 10 12 0`;
+        extraStyles = `bottom:-23px; left:20%; width:24px; height:24px;`;
+    } else if(tailType === 'br') {
+        path = `M 24 0 Q 24 15 9 24 Q 16 10 12 0`;
+        extraStyles = `bottom:-23px; right:20%; width:24px; height:24px;`;
+    } else if(tailType === 'thought') {
+        // Ronds de pensée sans outline sur le haut pour la fusion, dessiné manuellement
+        return `<svg width="20" height="28" viewBox="0 0 20 28" style="position:absolute; bottom:-26px; left:20%; z-index:-1; overflow:visible;">
+            <circle cx="10" cy="5" r="5" fill="${bgColor}" stroke="#111" stroke-width="${strokeW}"/>
+            <circle cx="6" cy="16" r="3.5" fill="${bgColor}" stroke="#111" stroke-width="${strokeW}"/>
+            <circle cx="2" cy="24" r="2" fill="${bgColor}" stroke="#111" stroke-width="${strokeW}"/>
+        </svg>`;
+    } else if(tailType === 'zap') {
+        // Queue style radio / éclair (chemin ouvert pour ne pas fermer le haut)
+        path = `M 6 0 L 14 12 L 6 12 L 12 24`;
+        extraStyles = `bottom:-23px; left:25%; width:20px; height:24px;`;
     }
-    item.bdPanels=newPanels; item.bdTemplate='custom'; item.bdTemplateRects=rects;
-    selectedPanelIndex=0; renderBDTemplatesList(); renderBDCanvas(); autoSave();
+
+    return `<svg viewBox="0 0 24 24" style="position:absolute; z-index:-1; overflow:visible; ${extraStyles}">
+        <path d="${path}" fill="${bgColor}" stroke="#111" stroke-width="${strokeW}" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
 }
 
-// ADAPTATION POUR LA NOUVELLE PALETTE CSS
 function createBubbleElement(b) {
     let div = document.createElement('div');
-    // On utilise la classe css spécifique au type (par défaut oval-bc)
-    div.className = 'bd-bubble bubble-' + (b.type || 'oval-bc') + (selectedBubbleId === b.id ? ' selected' : '');
+    div.className = 'bd-bubble shape-' + b.shape + (selectedBubbleId === b.id ? ' selected' : '');
     div.dataset.bubbleId = b.id;
+    
     div.style.left = b.x + '%';
     div.style.top = b.y + '%';
     div.style.width = b.w + '%';
     div.style.fontFamily = b.fontFamily;
     div.style.fontSize = b.fontSize + 'px';
-    div.style.background = b.bgColor || '#ffffff';
-    div.textContent = b.text || 'TEXTE';
+    div.style.background = b.bgColor;
     div.style.transform = 'translate(-50%, -50%)';
 
-    let typeStr = b.type || 'oval-bc';
-    let tails = [];
-    
-    // Détermination dynamique des queues selon le nom de la classe
-    if (typeStr.includes('-bc') || typeStr === 'cloud-triple' || typeStr.includes('thought-')) tails.push('tail-bc');
-    if (typeStr.includes('-bl-curved')) tails.push('tail-bl-curved');
-    else if (typeStr.includes('-bl') || typeStr.includes('capsule-long') || typeStr === 'double-oval') tails.push('tail-bl');
-    if (typeStr.includes('-br-sharp') || typeStr.includes('-br') || typeStr === 'double-oval') tails.push('tail-br');
-    if (typeStr.includes('-zap')) tails.push('tail-zap');
-    if (typeStr.includes('-arrow-r')) tails.push('tail-arrow-r');
-
-    // Override manuel pour certains composés
-    if (typeStr === 'cloud-triple') tails = ['tail-bc', 'tail-bl', 'tail-br'];
-
-    // Ajout des div de queue à l'intérieur
-    tails.forEach(tClass => {
-        let tail = document.createElement('div');
-        tail.className = 'bd-bubble-tail ' + tClass;
-        tail.style.background = div.style.background;
-        
-        // Ajustements inline pour les bulles multiples (suivant vos css)
-        if (typeStr === 'double-oval' && tClass === 'tail-br') tail.style.left = '68%';
-        if (typeStr === 'cloud-triple' && (tClass === 'tail-bl' || tClass === 'tail-br')) tail.style.bottom = '-5px';
-        
-        div.appendChild(tail);
-    });
+    // Injection du SVG de la queue
+    div.innerHTML = `<span>${esc(b.text)}</span>` + getTailSVG(b.tail, b.bgColor);
 
     div.addEventListener('mousedown', (e) => onBubbleMouseDown(e, b.id));
     div.addEventListener('click', (e) => { e.stopPropagation(); selectBubble(b.id); });
@@ -1184,7 +537,7 @@ function createBubbleElement(b) {
 }
 
 function renderBDCanvas(){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
+    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item || item.type!=='chapter') return;
     ensureBDData(item);
     const bgLayer=document.getElementById('bdBgLayer'); const gridContainer=document.getElementById('bdGridContainer'); const pageLayer=document.getElementById('bdBubblesPageLayer');
     if(!bgLayer||!gridContainer) return;
@@ -1192,9 +545,7 @@ function renderBDCanvas(){
 
     if(item.bdBgImage){
         let img=document.createElement('img');
-        img.src=item.bdBgImage; img.style.position='absolute'; img.style.top='0'; img.style.left='0'; img.style.width='100%'; img.style.height='100%';
-        img.style.objectFit='cover'; img.style.transform=`translate(${item.bdBg.tx||0}px, ${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1})`;
-        img.style.transformOrigin='center center'; img.style.pointerEvents='none';
+        img.src=item.bdBgImage; img.style.cssText=`position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transform:translate(${item.bdBg.tx||0}px, ${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1});transform-origin:center center;pointer-events:none;`;
         bgLayer.appendChild(img);
     }
 
@@ -1202,7 +553,7 @@ function renderBDCanvas(){
         let panelData=item.bdPanels[idx]; if(!panelData) return;
         let panelDiv=document.createElement('div');
         panelDiv.className='bd-panel'+(selectedPanelIndex===idx?' selected':'');
-        panelDiv.style.left=rect.x+'%'; panelDiv.style.top=rect.y+'%'; panelDiv.style.width=rect.w+'%'; panelDiv.style.height=rect.h+'%';
+        panelDiv.style.cssText=`left:${rect.x}%; top:${rect.y}%; width:${rect.w}%; height:${rect.h}%;`;
         panelDiv.dataset.index=idx;
 
         if(panelData.image){
@@ -1210,9 +561,7 @@ function renderBDCanvas(){
             img.style.transform=`translate(${panelData.tx||0}px, ${panelData.ty||0}px) scale(${panelData.scale||1}) rotate(${panelData.rot||0}deg)`;
             panelDiv.appendChild(img);
         } else {
-            let ph=document.createElement('div'); ph.className='bd-panel-placeholder';
-            ph.innerHTML=`<i class="fas fa-image" style="font-size:18px"></i><span>pix${idx+1}</span><button class="btn" style="margin-top:4px;font-size:10px;padding:4px 8px" onclick="event.stopPropagation(); triggerPanelUpload(${idx})"><i class="fas fa-upload"></i> Image</button>`;
-            panelDiv.appendChild(ph);
+            panelDiv.innerHTML=`<div class="bd-panel-placeholder"><span>URL Image =></span></div>`;
         }
 
         let bubblesInPanel=item.bdBubbles.filter(b=>b.panelIndex===idx);
@@ -1230,7 +579,6 @@ function renderBDCanvas(){
         let pageBubbles=item.bdBubbles.filter(b=>b.panelIndex===null || b.panelIndex===undefined);
         pageBubbles.forEach(b=>{ let el=createBubbleElement(b); el.style.pointerEvents='auto'; pageLayer.appendChild(el); });
     }
-    updateBubblesList();
 }
 
 function selectPanel(idx){
@@ -1239,65 +587,27 @@ function selectPanel(idx){
     document.getElementById('bdBubbleEdit').style.display='none';
     const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); const p=item.bdPanels[idx];
     if(p){
-        document.getElementById('bdSelectedPanelLabel').textContent='pix'+(idx+1);
+        document.getElementById('bdSelectedPanelLabel').textContent='Case '+(idx+1);
         document.getElementById('bdPanelImageUrl').value=p.image||'';
         document.getElementById('bdPanelScale').value=p.scale||1; document.getElementById('bdPanelScaleVal').textContent=Math.round((p.scale||1)*100)+'%';
-        document.getElementById('bdPanelRot').value=p.rot||0; document.getElementById('bdPanelRotVal').textContent=(p.rot||0)+'°';
     }
-}
-
-function triggerPanelUpload(idx){ selectedPanelIndex=idx; document.getElementById('bdPanelUpload').click(); }
-
-function onPanelFile(e){
-    const file=e.target.files[0]; if(!file) return; const idx=selectedPanelIndex; const reader=new FileReader();
-    reader.onload=ev=>{
-        const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
-        if(idx!==null && item.bdPanels[idx]){ item.bdPanels[idx].image=ev.target.result; item.bdPanels[idx].tx=0; item.bdPanels[idx].ty=0; item.bdPanels[idx].scale=1; item.bdPanels[idx].rot=0; }
-        renderBDCanvas(); autoSave();
-    };
-    reader.readAsDataURL(file); e.target.value='';
 }
 
 function onPanelUrlChange(val){
     if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
     item.bdPanels[selectedPanelIndex].image=val; renderBDCanvas(); autoSave();
 }
-
 function onPanelScale(val){
     if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    item.bdPanels[selectedPanelIndex].scale=parseFloat(val); document.getElementById('bdPanelScaleVal').textContent=Math.round(parseFloat(val)*100)+'%';
-    renderBDCanvas(); autoSave();
+    item.bdPanels[selectedPanelIndex].scale=parseFloat(val); document.getElementById('bdPanelScaleVal').textContent=Math.round(parseFloat(val)*100)+'%'; renderBDCanvas(); autoSave();
 }
-
-function onPanelRot(val){
-    if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    item.bdPanels[selectedPanelIndex].rot=parseInt(val); document.getElementById('bdPanelRotVal').textContent=val+'°';
-    renderBDCanvas(); autoSave();
-}
-
 function clearPanelImage(){
     if(selectedPanelIndex===null) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
     item.bdPanels[selectedPanelIndex].image=''; renderBDCanvas(); autoSave();
 }
 
-function onBDBgFile(e){
-    const file=e.target.files[0]; if(!file) return; const reader=new FileReader();
-    reader.onload=ev=>{ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=ev.target.result; renderBDCanvas(); autoSave(); };
-    reader.readAsDataURL(file); e.target.value='';
-}
-
-function onBDBgUrlChange(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=val; renderBDCanvas(); autoSave();
-}
-
-function onBDBgScale(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBg.scale=parseFloat(val); document.getElementById('bdBgScaleVal').textContent=Math.round(parseFloat(val)*100)+'%'; renderBDCanvas(); autoSave();
-}
-
-function clearBGBg(){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
-    item.bdBgImage=''; item.bdBg={tx:0,ty:0,scale:1,rot:0}; document.getElementById('bdBgImageInput').value=''; renderBDCanvas(); autoSave();
-}
+function onBDBgUrlChange(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBgImage=val; renderBDCanvas(); autoSave(); }
+function onBDBgScale(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item); item.bdBg.scale=parseFloat(val); document.getElementById('bdBgScaleVal').textContent=Math.round(parseFloat(val)*100)+'%'; renderBDCanvas(); autoSave(); }
 
 function onPanelMouseDown(e, idx){
     if(e.target.closest('.bd-bubble')) return;
@@ -1306,27 +616,21 @@ function onPanelMouseDown(e, idx){
     dragState={type:'panelImage', idx, startX:e.clientX, startY:e.clientY, origTx:panel.tx||0, origTy:panel.ty||0};
     e.preventDefault();
 }
-
 function onPanelWheel(e, idx){
     e.preventDefault(); const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
     const panel=item.bdPanels[idx]; if(!panel.image) return;
     if(e.shiftKey){
         panel.rot=(panel.rot||0)+(e.deltaY>0?-3:3);
-        if(panel.rot>180) panel.rot-=360; if(panel.rot<-180) panel.rot+=360;
-        if(selectedPanelIndex===idx){ document.getElementById('bdPanelRot').value=panel.rot; document.getElementById('bdPanelRotVal').textContent=panel.rot+'°'; }
     } else {
-        let delta=e.deltaY>0?-0.07:0.07; let newScale=Math.min(15,Math.max(0.1,(panel.scale||1)+delta)); panel.scale=newScale;
-        if(selectedPanelIndex===idx){ document.getElementById('bdPanelScale').value=newScale; document.getElementById('bdPanelScaleVal').textContent=Math.round(newScale*100)+'%'; }
+        panel.scale=Math.min(15,Math.max(0.1,(panel.scale||1)+(e.deltaY>0?-0.07:0.07)));
+        if(selectedPanelIndex===idx){ document.getElementById('bdPanelScale').value=panel.scale; document.getElementById('bdPanelScaleVal').textContent=Math.round(panel.scale*100)+'%'; }
     }
     renderBDCanvas(); autoSave();
 }
 
-function addBDBubble(type){
+function addBDBubble(shape, tail){
     const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
-    let newBubble={
-        id:uid(), panelIndex:selectedPanelIndex, type:type, text:'TEXTE',
-        x:50, y:30, w:30, fontFamily:"'Bangers', cursive", fontSize:14, bgColor:'#ffffff'
-    };
+    let newBubble={ id:uid(), panelIndex:selectedPanelIndex, shape:shape, tail:tail, text:'TEXTE', x:50, y:30, w:30, fontFamily:"'Bangers', cursive", fontSize:14, bgColor:'#ffffff' };
     item.bdBubbles.push(newBubble); selectedBubbleId=newBubble.id;
     renderBDCanvas(); selectBubble(newBubble.id); autoSave();
 }
@@ -1342,12 +646,6 @@ function onBubbleMouseDown(e, bubbleId){
 function selectBubble(id){
     selectedBubbleId=id; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
     let bubble=item.bdBubbles.find(b=>b.id===id); if(!bubble) return;
-    
-    // Highlight the palette icon
-    document.querySelectorAll('.bubble-palette-item').forEach(el => el.classList.remove('active'));
-    let paletteItem = document.querySelector(`.bubble-palette-item[onclick="addBDBubble('${bubble.type}')"]`);
-    if(paletteItem) paletteItem.classList.add('active');
-
     document.getElementById('bdBubbleEdit').style.display='flex';
     document.getElementById('bdBubbleText').value=bubble.text;
     document.getElementById('bdBubbleFont').value=bubble.fontFamily;
@@ -1362,61 +660,26 @@ function onBubbleTextChange(val){
     let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId);
     if(bubble){
         bubble.text=val;
-        let el=document.querySelector(`[data-bubble-id="${bubble.id}"]`);
-        if(el){ el.childNodes[0].nodeValue=val; } // update text node directly to preserve tails
+        let el=document.querySelector(`[data-bubble-id="${bubble.id}"] span`); // Update text without killing the SVG tail
+        if(el) el.textContent=val; 
         autoSave();
     }
 }
-
-function onBubbleFontChange(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId);
-    if(bubble){ bubble.fontFamily=val; renderBDCanvas(); autoSave(); }
-}
-
-function onBubbleSize(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId);
-    if(bubble){ bubble.fontSize=parseInt(val); document.getElementById('bdBubbleSizeVal').textContent=val+'px'; renderBDCanvas(); autoSave(); }
-}
-
-function onBubbleWidth(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId);
-    if(bubble){ bubble.w=parseInt(val); document.getElementById('bdBubbleWidthVal').textContent=val+'%'; renderBDCanvas(); autoSave(); }
-}
-
-function onBubbleBg(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId);
-    if(bubble){ bubble.bgColor=val; document.getElementById('bdBubbleBg').value=val; renderBDCanvas(); autoSave(); }
-}
+function onBubbleFontChange(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.fontFamily=val; renderBDCanvas(); autoSave(); } }
+function onBubbleSize(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.fontSize=parseInt(val); document.getElementById('bdBubbleSizeVal').textContent=val+'px'; renderBDCanvas(); autoSave(); } }
+function onBubbleWidth(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.w=parseInt(val); document.getElementById('bdBubbleWidthVal').textContent=val+'%'; renderBDCanvas(); autoSave(); } }
+function onBubbleBg(val){ const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(bubble){ bubble.bgColor=val; document.getElementById('bdBubbleBg').value=val; renderBDCanvas(); autoSave(); } }
 
 function deleteSelectedBubble(){
     if(!selectedBubbleId) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
     item.bdBubbles=item.bdBubbles.filter(b=>b.id!==selectedBubbleId);
     selectedBubbleId=null; document.getElementById('bdBubbleEdit').style.display='none'; renderBDCanvas(); autoSave();
 }
-
 function duplicateBubble(){
     if(!selectedBubbleId) return; const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
     let orig=item.bdBubbles.find(b=>b.id===selectedBubbleId); if(!orig) return;
     let copy={...orig, id:uid(), x:Math.min(90,orig.x+5), y:Math.min(90,orig.y+5)};
     item.bdBubbles.push(copy); selectedBubbleId=copy.id; renderBDCanvas(); selectBubble(copy.id); autoSave();
-}
-
-function updateBubblesList(){
-    const container=document.getElementById('bdBubblesList'); if(!container) return;
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
-    container.innerHTML='';
-    item.bdBubbles.forEach(b=>{
-        let chip=document.createElement('div');
-        chip.style.padding='4px 10px'; chip.style.borderRadius='14px';
-        chip.style.background=b.id===selectedBubbleId?'#ef4444':'rgba(255,255,255,0.1)'; chip.style.fontSize='11px'; chip.style.cursor='pointer';
-        chip.textContent=(b.panelIndex!==null?'pix'+(b.panelIndex+1)+': ':'Page: ')+(b.text.slice(0,14)||'bulle');
-        chip.onclick=()=>selectBubble(b.id);
-        container.appendChild(chip);
-    });
 }
 
 document.addEventListener('mousemove', (e)=>{
@@ -1439,7 +702,6 @@ document.addEventListener('mousemove', (e)=>{
         }
     }
 });
-
 document.addEventListener('mouseup', ()=>{
     if(dragState){
         if(dragState.type==='bubble' || dragState.type==='panelImage'){ renderBDCanvas(); autoSave(); }
@@ -1447,73 +709,10 @@ document.addEventListener('mouseup', ()=>{
     }
 });
 
-/* ===== CORE BOOK LOGIC ===== */
-function setLayout(l,s=true){
-    document.querySelectorAll('[id^="lay-"]').forEach(b=>b.classList.remove('active'));
-    const btn = document.getElementById('lay-'+l); if(btn) btn.classList.add('active');
-    document.getElementById('bgOpacityGroup').style.display=l==='bg'?'flex':'none';
-    document.getElementById('alignContainer').style.display=l==='bg'?'none':'flex';
-    if(s) autoSave();
-}
-
-function setImageAlign(a,s=true){
-    document.querySelectorAll('[id^="align-"]').forEach(b=>b.classList.remove('active'));
-    const btn = document.getElementById('align-'+a); if(btn) btn.classList.add('active');
-    if(s) autoSave();
-}
-
-function updateImageSize(v){
-    document.getElementById('imageSizeVal').textContent=v+'%';
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    if(item) { item.imageSize = parseInt(v); }
-    updateLivePreviewFast(); autoSave();
-}
-
-function updateBgOpacity(v){
-    document.getElementById('bgOpacityVal').textContent=v+'%';
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    if(item) { item.bgOpacity = parseInt(v); }
-    updateLivePreviewFast(); autoSave();
-}
-
-function updateLivePreviewFast() {
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    if(document.getElementById('previewModal').classList.contains('active')) {
-        document.getElementById('prvContent').innerHTML=buildPageHTML(item, proj.title);
-    }
-}
-
-function renderRefBlock(){
-    const cfg=appConfig.reference||{mode:'all',selected:[]};
-    document.querySelectorAll('input[name="refModePage"]').forEach(r=>r.checked=r.value===cfg.mode);
-    const list=document.getElementById('refPageListInPage');
-    if(cfg.mode==='select'){
-        list.style.display='flex'; list.innerHTML='';
-        getCurrentProject().data.book.items.filter(i=>i.type==='chapter').forEach(it=>{
-            const checked=cfg.selected.includes(it.id);
-            const label=document.createElement('label'); label.style.cssText='display:flex;gap:8px;font-size:12px;align-items:center';
-            label.innerHTML=`<input type="checkbox" value="${it.id}" ${checked?'checked':''} onchange="updateRefSelectionPage()"> ${esc(it.title)}`;
-            list.appendChild(label);
-        });
-    } else { list.style.display='none'; }
-}
-
-function updateRefConfigPage(){
-    const mode=document.querySelector('input[name="refModePage"]:checked')?.value||'all';
-    appConfig.reference.mode=mode; if(mode==='all') appConfig.reference.selected=[];
-    saveProjects(); renderRefBlock();
-}
-
-function updateRefSelectionPage(){
-    const sel=Array.from(document.querySelectorAll('#refPageListInPage input:checked')).map(i=>i.value);
-    appConfig.reference.selected=sel; saveProjects();
-}
-
 function prevPage(){
     const items=getCurrentProject().data.book.items; const idx=items.findIndex(i=>i.id===currentPageId);
     if(idx>0){ selectPage(items[idx-1].id); }
 }
-
 function nextPage(){
     const items=getCurrentProject().data.book.items; const idx=items.findIndex(i=>i.id===currentPageId);
     if(idx<items.length-1){ selectPage(items[idx+1].id); }
@@ -1522,300 +721,82 @@ function nextPage(){
 function _doSaveCore() {
     const proj=getCurrentProject(); if(!proj) return;
     const item=proj.data.book.items.find(i=>i.id===currentPageId); if(!item) return;
-    
     if(item.type==='cover'){
-        const nt=document.getElementById('globalTitle').value.trim()||'Mon projet';
-        proj.title=nt; proj.data.book.title=nt;
-        document.getElementById('currentProjectName').textContent=nt; document.getElementById('genCurrentProjectName').textContent=nt;
-        item.showTitle=document.getElementById('showTitleOnCover').checked;
+        const nt=document.getElementById('globalTitle').value.trim()||'Mon Comic';
+        proj.title=nt; proj.data.book.title=nt; item.showTitle=true;
     }
+    if(document.getElementById('itemTitle')) item.title=document.getElementById('itemTitle').value.trim()||'Page';
     
-    item.title=document.getElementById('itemTitle').value.trim()||'Page';
-    
-    if(currentActiveModule!=='comic' || item.type!=='chapter'){
-        item.image=document.getElementById('itemImage').value;
-        item.text=document.getElementById('itemText').value;
-        item.layout=document.querySelector('[id^="lay-"].active')?.id.replace('lay-','')||'top';
-        item.imageAlign=document.querySelector('[id^="align-"].active')?.id.replace('align-','')||'center';
-        item.imageSize=parseInt(document.getElementById('imageSize').value)||70;
-        item.bgOpacity=parseInt(document.getElementById('bgOpacity').value)||15;
-        item.titleSize=parseInt(document.getElementById('titleSizeLabel').dataset.value)||32;
-        item.bodySize=parseInt(document.getElementById('bodySizeLabel').dataset.value)||17;
-    }
-    
-    if(item.type==='author'){
-        item.author=document.getElementById('globalAuthor').value; item.date=document.getElementById('globalDate').value;
-        item.publisher=document.getElementById('globalPublisher').value; item.genre=document.getElementById('globalGenre').value;
-    }
-    
-    proj.config=appConfig; proj.updatedAt=Date.now(); saveProjects();
+    proj.updatedAt=Date.now(); saveProjects();
     const ind=document.getElementById('syncIndicator'); if(ind) ind.innerHTML='<i class="fas fa-check-circle"></i> sync';
     document.getElementById('savedToast').classList.add('show'); setTimeout(()=>document.getElementById('savedToast').classList.remove('show'),1500);
-    refreshPageDropdown(); updateLivePreviewFast();
 }
 
 function autoSave(){
     const ind=document.getElementById('syncIndicator'); if(ind) ind.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> sync';
-    clearTimeout(window._t); window._t=setTimeout(_doSaveCore, 500);
+    clearTimeout(window._t); window._t=setTimeout(_doSaveCore, 1500); // 1.5s delay to prevent lag while dragging
 }
-
 function manualSave(){ clearTimeout(window._t); _doSaveCore(); }
 
 function addPage(){
     const proj=getCurrentProject(); const nid='ch_'+Date.now();
-    const refIdx=proj.data.book.items.findIndex(i=>i.type==='reference');
-    const newItem={id:nid,type:'chapter',title:`Page ${proj.data.book.items.filter(i=>i.type==='chapter').length+1}`,titleSize:32,bodySize:17,image:'',layout:'top',imageAlign:'center',imageSize:70,bgOpacity:15,text:'',bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]};
-    if(refIdx>-1) proj.data.book.items.splice(refIdx+1,0,newItem); else proj.data.book.items.push(newItem);
+    const newItem={id:nid,type:'chapter',title:`Page ${proj.data.book.items.length}`,bdTemplate:'blacksad',bdTemplateRects:getTemplateRects('blacksad'),bdBgImage:'',bdBg:{tx:0,ty:0,scale:1,rot:0},bdPanels:[{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0},{id:uid(),image:'',tx:0,ty:0,scale:1,rot:0}],bdBubbles:[]};
+    proj.data.book.items.push(newItem);
     currentPageId=nid; selectedPanelIndex=0; saveProjects(); loadProjectIntoUI(); autoSave();
 }
-
 function deletePage(){
     const it=getCurrentProject().data.book.items.find(i=>i.id===currentPageId);
-    if(it.type==='cover'||it.type==='author'||it.type==='reference') return alert('Page système non supprimable');
+    if(it.type==='cover') return alert('Page cover non supprimable');
     if(!confirm('Supprimer cette page ?')) return;
     getCurrentProject().data.book.items=getCurrentProject().data.book.items.filter(i=>i.id!==currentPageId);
     currentPageId=getCurrentProject().data.book.items[0].id;
     saveProjects(); loadProjectIntoUI();
 }
 
-function generateImgHtml(item, customStyle=''){
-    if(!item.image) return '';
-    if(item.layout==='bg' && !customStyle){
-        return `<img src="${item.image}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:${(item.bgOpacity||20)/100};z-index:0" />`;
-    }
-    let style=`width:${item.imageSize||70}%;${customStyle}`;
-    const isFull=(item.imageSize||70)>=100;
-    if(isFull && !customStyle){
-        return `<div class="img-wrapper full-bleed" style="width:calc(100% + 90px); margin-left:-45px; margin-right:-45px; overflow:hidden;"><img src="${item.image}" style="width:${item.imageSize}%;height:auto;border-radius:0;display:block;margin:0 auto;" /></div>`;
-    } else if(!customStyle){
-        if(item.imageAlign==='left') style+=`float:left;margin:0 14px 8px 0;`;
-        else if(item.imageAlign==='right') style+=`float:right;margin:0 0 8px 14px;`;
-        else style+=`display:block;margin:12px auto;`;
-    }
-    return `<div class="img-wrapper" style="${style}"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover;border-radius:${customStyle?'0':'8px'};display:block" /></div>`;
-}
-
 function buildBDHTML(item){
     ensureBDData(item);
     let rects=item.bdTemplateRects||[{x:0,y:0,w:100,h:100}];
     let html=`<div style="position:relative;width:100%;max-width:800px;margin:0 auto;aspect-ratio:1/1.414;background:#fff;border:3.5px solid #111;overflow:hidden;box-sizing:border-box">`;
-    if(item.bdBgImage){
-        html+=`<img src="${item.bdBgImage}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translate(${item.bdBg.tx||0}px,${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1});transform-origin:center" />`;
-    }
+    if(item.bdBgImage) html+=`<img src="${item.bdBgImage}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translate(${item.bdBg.tx||0}px,${item.bdBg.ty||0}px) scale(${item.bdBg.scale||1});" />`;
     
-    // Pour l'export HTML/PDF on s'appuie sur le CSS global inclus dans <style>
-    function generateBubbleHTML(b, zIndex){
-        let bg = b.bgColor || '#ffffff';
-        let typeStr = b.type || 'oval-bc';
-        let tails = [];
-        if (typeStr.includes('-bc') || typeStr === 'cloud-triple' || typeStr.includes('thought-')) tails.push('tail-bc');
-        if (typeStr.includes('-bl-curved')) tails.push('tail-bl-curved');
-        else if (typeStr.includes('-bl') || typeStr.includes('capsule-long') || typeStr === 'double-oval') tails.push('tail-bl');
-        if (typeStr.includes('-br-sharp') || typeStr.includes('-br') || typeStr === 'double-oval') tails.push('tail-br');
-        if (typeStr.includes('-zap')) tails.push('tail-zap');
-        if (typeStr.includes('-arrow-r')) tails.push('tail-arrow-r');
-        if (typeStr === 'cloud-triple') tails = ['tail-bc', 'tail-bl', 'tail-br'];
-
-        let tailHtml = '';
-        tails.forEach(tClass => {
-            let extra = '';
-            if (typeStr === 'double-oval' && tClass === 'tail-br') extra = 'left:68%;';
-            if (typeStr === 'cloud-triple' && (tClass === 'tail-bl' || tClass === 'tail-br')) extra = 'bottom:-5px;';
-            tailHtml += `<div class="bd-bubble-tail ${tClass}" style="background:${bg}; ${extra}"></div>`;
-        });
-
-        return `<div class="bd-bubble bubble-${typeStr}" style="left:${b.x}%; top:${b.y}%; width:${b.w}%; transform:translate(-50%,-50%); background:${bg}; font-family:${b.fontFamily}; font-size:${b.fontSize}px; z-index:${zIndex}; color:#111;">${esc(b.text)}${tailHtml}</div>`;
+    function genBubble(b, z){
+        let sType = b.shape||'oval';
+        let bShape = '';
+        if(sType==='oval') bShape='border-radius:50%/50%;';
+        else if(sType==='round') bShape='border-radius:50%; aspect-ratio:1/1;';
+        else if(sType==='rect') bShape='border-radius:8px;';
+        else if(sType==='capsule') bShape='border-radius:999px;';
+        else if(sType==='cloud') bShape='border-radius:42% 58% 55% 45% / 48% 42% 58% 52%;';
+        
+        let shadow = (sType==='burst') ? 'border:none; box-shadow:none;' : 'border:2.5px solid #111; box-shadow: 4px 4px 0px rgba(17,17,17,1);';
+        if(sType==='burst') bShape='clip-path: polygon(50% 0%, 66% 10%, 86% 2%, 76% 26%, 100% 22%, 84% 42%, 100% 62%, 82% 72%, 96% 96%, 68% 84%, 50% 100%, 32% 84%, 4% 96%, 18% 72%, 0% 62%, 16% 42%, 0% 22%, 24% 26%, 14% 2%, 34% 10%); padding:1.5em;';
+        
+        let tailStr = getTailSVG(b.tail, b.bgColor);
+        return `<div style="position:absolute; left:${b.x}%; top:${b.y}%; width:${b.w}%; transform:translate(-50%,-50%); background:${b.bgColor}; font-family:${b.fontFamily}; font-size:${b.fontSize}px; font-weight:700; color:#111; white-space:pre-wrap; overflow-wrap:break-word; text-align:center; box-sizing:border-box; display:flex; align-items:center; justify-content:center; z-index:${z}; line-height:1.15; padding:0.8em 1.2em; ${bShape} ${shadow}"><span>${esc(b.text)}</span>${tailStr}</div>`;
     }
 
     rects.forEach((r,i)=>{
         let p=item.bdPanels[i]; if(!p) return;
         html+=`<div style="position:absolute;left:${r.x}%;top:${r.y}%;width:${r.w}%;height:${r.h}%;border:2.5px solid #111;overflow:hidden;background:#fff;box-sizing:border-box">`;
-        if(p.image){
-            html+=`<img src="${p.image}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transform:translate(${p.tx||0}px,${p.ty||0}px) scale(${p.scale||1}) rotate(${p.rot||0}deg);transform-origin:center" />`;
-        }
-        let bubbles=item.bdBubbles.filter(b=>b.panelIndex===i);
-        bubbles.forEach(b=> { html+=generateBubbleHTML(b, 10); });
+        if(p.image) html+=`<img src="${p.image}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transform:translate(${p.tx||0}px,${p.ty||0}px) scale(${p.scale||1}) rotate(${p.rot||0}deg);" />`;
+        item.bdBubbles.filter(b=>b.panelIndex===i).forEach(b=>{ html+=genBubble(b, 10); });
         html+=`</div>`;
     });
-
-    let pageBubbles=item.bdBubbles.filter(b=>b.panelIndex===null || b.panelIndex===undefined);
-    pageBubbles.forEach(b=>{ html+=generateBubbleHTML(b, 15); });
+    item.bdBubbles.filter(b=>b.panelIndex===null || b.panelIndex===undefined).forEach(b=>{ html+=genBubble(b, 15); });
     
-    html+=`</div>`;
-    return html;
-}
-
-function buildPageHTML(item, projectTitle){
-    const fontSty = fontMapping[appConfig.fontFamily]||'serif';
-    if(currentActiveModule === 'comic' && item.type === 'chapter') { return buildBDHTML(item); }
-    if(item.type==='reference'){
-        return `<div class="clearfix"><h1 style="font-size:${item.titleSize||28}px;text-align:center;font-family:${fontSty}">${esc(item.title||'Summary')}</h1><div style="font-size:${item.bodySize||16}px;white-space:pre-wrap;margin:10px 0;font-family:${fontSty}">${esc(item.text||'Sommaire...')}</div></div>`;
-    }
-    if(item.type==='cover'){
-        const showTitle=item.showTitle!==false;
-        const titleHTML=showTitle?`<h1 style="font-size:${item.titleSize||48}px;text-align:center;color:#fff;text-shadow:0 2px 30px rgba(0,0,0,.9);margin:0;font-family:${fontSty}">${esc(projectTitle||'Mon projet')}</h1>`:'';
-        if(item.layout==='bg'){
-            if((item.imageSize||100)>=100){
-                return `<div style="position:absolute;top:-40px;left:-40px;right:-40px;bottom:-40px;width:calc(100% + 80px);height:calc(100% + 80px);overflow:hidden"><img src="${item.image}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:${(item.bgOpacity||20)/100}" /><div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,.7), transparent);display:flex;align-items:flex-end;justify-content:center;padding:70px 30px;z-index:1">${titleHTML}</div></div>`;
-            } else{
-                return `<div style="min-height:500px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:40px;text-align:center"><img src="${item.image}" style="width:${item.imageSize}%;border-radius:12px;opacity:${(item.bgOpacity||20)/100};margin-bottom:20px" />${titleHTML}</div>`;
-            }
-        }
-        return `<div style="min-height:400px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:60px;text-align:center">${titleHTML}</div>`;
-    }
-    const titleHTML=`<h1 style="font-size:${item.titleSize||32}px;font-weight:700;text-align:center;margin-bottom:10px;font-family:${fontSty}">${esc(item.title||'Chapitre 1')}</h1>`;
-    let meta='';
-    if(item.type==='author'){
-        const m=[item.author,item.date,item.publisher,item.genre].filter(Boolean).map(esc).join(' · ');
-        if(m) meta=`<div style="text-align:center;opacity:.6;font-size:.9em;margin-bottom:12px">${m}</div>`;
-    }
-    const img=generateImgHtml(item);
-    const bodyStyle=`font-size:${item.bodySize||17}px;white-space:pre-wrap;text-align:justify;font-family:${fontSty}`;
-    if(item.layout==='bg'){
-        return `<div style="position:relative;min-height:360px;overflow:hidden;border-radius:10px;padding:20px">${img}<div style="position:relative;z-index:1" class="clearfix">${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div></div></div>`;
-    }
-    if(item.layout==='top'){ return `<div class="clearfix">${img}${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div></div>`; }
-    if(item.layout==='bottom'){ return `<div class="clearfix">${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div>${img}<div style="clear:both"></div></div>`; }
-    return `<div class="clearfix">${titleHTML}${meta}<div style="${bodyStyle}">${esc(item.text||'')}</div>${img}</div>`;
+    html+=`</div>`; return html;
 }
 
 function openPreview(){
-    autoSave();
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    const box=document.getElementById('prvContent'); box.innerHTML=buildPageHTML(item, proj.title);
-    document.getElementById('previewModal').classList.add('active'); setPreviewDevice(previewDevice);
+    autoSave(); const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
+    if(item.type!=='chapter') return alert("Aperçu disponible pour les pages BD uniquement.");
+    document.getElementById('prvContent').innerHTML=buildBDHTML(item);
+    document.getElementById('previewModal').classList.add('active');
 }
-
 function closePreview(){ document.getElementById('previewModal').classList.remove('active'); }
 
-function setPreviewDevice(d){
-    previewDevice=d; const s=document.getElementById('previewScreen'); s.className='preview-screen '+d;
-    ['mobile','tablet','large','epub','pdf'].forEach(x=>{
-        const el=document.getElementById('btn'+x.charAt(0).toUpperCase()+x.slice(1));
-        if(el){ el.classList.remove('active'); if(d===x) el.classList.add('active'); }
-    });
-}
-
-function factoryReset(){
-    if(!confirm('Tout effacer ?')) return; localStorage.clear();
-    try { indexedDB.deleteDatabase("WriterFontsDB"); } catch(e){}
-    location.reload();
-}
-
-async function exportWorkflow(){
-    const fonts=await new Promise(res=>{
-        if(!db) return res([]);
-        try { const tx=db.transaction("fonts","readonly"); const r=tx.objectStore("fonts").getAll(); r.onsuccess=e=>res(e.target.result||[]); r.onerror=()=>res([]); } catch(e){ res([]); }
-    });
-    const blob=new Blob([JSON.stringify({project:getCurrentProject(),fonts},null,2)],{type:"application/json"});
-    const url=URL.createObjectURL(blob); const a=document.createElement('a');
-    a.href=url; a.download=(getCurrentProject().title||'Mon projet')+'.writerwork'; a.click(); URL.revokeObjectURL(url);
-}
-
-function importWorkflow(e){
-    const file=e.target.files[0]; if(!file) return; const r=new FileReader();
-    r.onload=ev=>{
-        try{
-            const data=JSON.parse(ev.target.result); const proj=data.project||data;
-            if(data.fonts&&db){
-                const tx=db.transaction("fonts","readwrite"); data.fonts.forEach(f=>tx.objectStore("fonts").put(f)); tx.oncomplete=()=>loadFontsFromIDB();
-            }
-            if(proj.data){
-                proj.id=uid(); proj.updatedAt=Date.now(); projects.unshift(proj); currentProjectId=proj.id; saveProjects(); loadProjectIntoUI();
-            }
-        }catch(err){ alert('Fichier invalide'); }
-    };
-    r.readAsText(file); e.target.value='';
-}
-
-async function exportPagesData(){
-    autoSave(); const proj=getCurrentProject(); const cfg=appConfig.reference||{mode:'all',selected:[]};
-    let items=proj.data.book.items.map(it=>({id:it.id,type:it.type,title:it.title,image:it.image,layout:it.layout,imageAlign:it.imageAlign,imageSize:it.imageSize,bgOpacity:it.bgOpacity,showTitle:it.showTitle,titleSize:it.titleSize,bodySize:it.bodySize,author:it.author||'',date:it.date||'',publisher:it.publisher||'',genre:it.genre||'',text:it.text,bdTemplate:it.bdTemplate,bdTemplateRects:it.bdTemplateRects,bdBgImage:it.bdBgImage,bdBg:it.bdBg,bdPanels:it.bdPanels,bdBubbles:it.bdBubbles}));
-    const ref=items.find(i=>i.type==='reference');
-    if(ref){
-        let linked=items.filter(i=>i.type==='chapter'); if(cfg.mode==='select'&&cfg.selected.length>0) linked=linked.filter(i=>cfg.selected.includes(i.id)); ref.links=linked;
-    }
-    const fonts=await new Promise(res=>{
-        if(!db) return res([]);
-        try { const tx=db.transaction("fonts","readonly"); const r=tx.objectStore("fonts").getAll(); r.onsuccess=e=>res(e.target.result||[]); r.onerror=()=>res([]); } catch(e) { res([]); }
-    });
-    const obj={projectTitle:proj.title,format:'book',config:{fontFamily:appConfig.fontFamily,reference:cfg},items,customFonts:fonts,copyright:"created by Base Essentielle (BE Studio, Paris - France)"};
-    const blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"});
-    const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='pages.data'; a.click(); URL.revokeObjectURL(url);
-}
-
-async function exportEPUB3(){
-    autoSave(); const proj=getCurrentProject();
-    try{
-        const zip=new JSZip(); const title=proj.title||'Mon projet';
-        zip.file("mimetype","application/epub+zip",{compression:"STORE"});
-        zip.folder("META-INF").file("container.xml",`<?xml version="1.0"?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>`);
-        
-        // Inclure le CSS de la page pour les bulles BD
-        const pageCss = Array.from(document.querySelectorAll('style')).map(s => s.innerHTML).join('\n');
-        const oebps=zip.folder("OEBPS"); oebps.folder("css").file("style.css",`body{font-family:${fontMapping[appConfig.fontFamily]||'serif'};line-height:1.7}\n${pageCss}`);
-        
-        let manifest=`<item id="css" href="css/style.css" media-type="text/css"/>\n<item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>`;
-        let spine=``; let navOl=``; const files=[];
-        proj.data.book.items.forEach((it,i)=>{
-            const id=`c${i}`; const fn=`chapter-${i}.xhtml`;
-            manifest+=`\n<item id="${id}" href="${fn}" media-type="application/xhtml+xml"/>`; spine+=`\n<itemref idref="${id}"/>`;
-            let html;
-            if(it.type==='reference'){
-                const cfg=appConfig.reference; let linked=proj.data.book.items.filter(x=>x.type==='chapter');
-                if(cfg.mode==='select'&&cfg.selected.length>0) linked=linked.filter(x=>cfg.selected.includes(x.id));
-                let refHtml=`<h1>${esc(it.title)}</h1><p>${esc(it.text||'Sommaire...')}</p><ul>`; linked.forEach(l=>{ refHtml+=`<li>${esc(l.title)}</li>`; }); refHtml+=`</ul>`; html=refHtml;
-            } else { html=buildPageHTML(it, proj.title); }
-            const xhtml=`<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><head><script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};<\/script><meta charset="utf-8"/><title>${esc(it.title)}</title><link rel="stylesheet" href="css/style.css"/></head><body>${html}</body></html>`;
-            files.push({fn,c:xhtml}); navOl+=`<li><a href="${fn}">${esc(it.title)}</a></li>`;
-        });
-        const opf=`<?xml version="1.0"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="bookid">${Date.now()}</dc:identifier><dc:title>${esc(title)}</dc:title><dc:language>fr</dc:language></metadata><manifest>${manifest}</manifest><spine><itemref idref="nav"/>${spine}</spine></package>`;
-        oebps.file("content.opf",opf); oebps.file("nav.xhtml",`<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><body><nav epub:type="toc"><ol>${navOl}</ol></nav></body></html>`);
-        files.forEach(f=>oebps.file(f.fn,f.c));
-        const blob=await zip.generateAsync({type:"blob",mimeType:"application/epub+zip"}); const url=URL.createObjectURL(blob);
-        const a=document.createElement('a'); a.href=url; a.download=(title.replace(/[^a-z0-9]/gi,'_')+'.epub'); a.click(); URL.revokeObjectURL(url);
-    }catch(e){ alert(e.message); }
-}
-
-async function exportPDFBook(){
-    autoSave(); const proj=getCurrentProject();
-    const container=document.createElement('div'); container.style.background='#fff'; container.style.color='#111'; container.style.padding='20px'; container.style.fontFamily=fontMapping[appConfig.fontFamily]||'serif';
-    let html='';
-    proj.data.book.items.forEach(it=>{ html+=`<div style="page-break-after:always;padding:20px 0">${buildPageHTML(it, proj.title)}</div>`; });
-    container.innerHTML=html; document.body.appendChild(container);
-    try{
-        const opt={margin:10,filename:(proj.title||'Mon projet')+'.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a5',orientation:'portrait'}};
-        await html2pdf().set(opt).from(container).save();
-    }catch(e){ alert(e.message); }finally{ container.remove(); }
-}
-
-function updateLangUI(){
-    try {
-        const l = localStorage.getItem('writer_lang') || 'fr';
-        document.getElementById('lang-fr').classList.toggle('lang-active', l==='fr');
-        document.getElementById('lang-en').classList.toggle('lang-active', l==='en');
-    } catch(e) {}
-}
-
-function setLang(l){ localStorage.setItem('writer_lang',l); updateLangUI(); }
-
-function bootstrapApp() {
-    try {
-        loadProjects(); const proj=getCurrentProject(); if(!proj) return;
-        document.getElementById('currentProjectName').textContent=proj.title;
-        document.getElementById('genCurrentProjectName').textContent=proj.title;
-        const activeMod = localStorage.getItem('writer_active_module');
-        if (activeMod && (activeMod === 'comic' || activeMod === 'magazine')) { activateModule(activeMod); return; }
-        refreshFontDropdown(); refreshPageDropdown(); applyFont(); loadPageData();
-    } catch(e) {}
-}
-
-function openSettings(){ document.getElementById('settingsModal').classList.add('active'); closeMenus(); }
-function closeSettings(){ document.getElementById('settingsModal').classList.remove('active'); }
-
 window.onload=()=>{
-    try { initSizeDropdowns(); updateLangUI(); } catch(e) {}
-    initIDB(bootstrapApp);
+    try { loadProjects(); bootstrapApp(); } catch(e) {}
 };
 </script>
 </body>
