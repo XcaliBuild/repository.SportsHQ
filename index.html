@@ -67,6 +67,54 @@
                 <input id="itemTitle" class="meta-input" style="font-weight:700" placeholder="Ex: Page 1" oninput="autoSave()">
             </div>
 
+            <!-- ===== ÉDITEUR LIVRE DE POCHE ===== -->
+            <div id="pocketFullEditor" style="display:none;flex-direction:column;gap:18px;width:100%">
+                <div class="bd-toolbar">
+                    <div class="bd-section-title"><i class="fas fa-book"></i> Typographie & Format</div>
+                    <div class="meta-row">
+                        <div class="input-group">
+                            <label>Police de caractère</label>
+                            <select id="pocketFont" class="meta-input" onchange="autoSave()">
+                                <option value="'Playfair Display', serif">Playfair Display (Classique)</option>
+                                <option value="'Inter', sans-serif">Inter (Moderne)</option>
+                            </select>
+                        </div>
+                        <div class="input-group" style="width:120px">
+                            <label>Taille <span id="pocketSizeVal" style="color:var(--accent)">16px</span></label>
+                            <input type="range" id="pocketSize" min="12" max="24" value="16" oninput="document.getElementById('pocketSizeVal').textContent=this.value+'px'; document.getElementById('pocketText').style.fontSize=this.value+'px'; autoSave()">
+                        </div>
+                        <div class="input-group" style="width:120px">
+                            <label>Interligne <span id="pocketLineHeightVal" style="color:var(--accent)">1.6</span></label>
+                            <input type="range" id="pocketLineHeight" min="1.1" max="2.5" step="0.1" value="1.6" oninput="document.getElementById('pocketLineHeightVal').textContent=this.value; document.getElementById('pocketText').style.lineHeight=this.value; autoSave()">
+                        </div>
+                    </div>
+                </div>
+                <textarea id="pocketText" class="main" style="background:#faf8f5; color:#111; padding:40px; border-radius:8px; font-family:'Playfair Display', serif; font-size:16px; line-height:1.6; box-shadow:inset 0 2px 10px rgba(0,0,0,0.1);" placeholder="Écrivez votre chapitre ici..." oninput="autoSave()"></textarea>
+            </div>
+
+            <!-- ===== ÉDITEUR MAGAZINE ===== -->
+            <div id="magFullEditor" style="display:none;flex-direction:column;gap:18px;width:100%">
+                <div class="bd-toolbar">
+                    <div class="bd-section-title"><i class="fas fa-newspaper"></i> Mise en page Article</div>
+                    <div class="meta-row">
+                        <div class="input-group" style="flex:2">
+                            <label>Image d'en-tête (URL)</label>
+                            <input id="magHeaderImage" class="meta-input" placeholder="https://..." oninput="autoSave()">
+                        </div>
+                        <div class="input-group" style="width:150px">
+                            <label>Colonnes <span id="magColVal" style="color:var(--accent)">2</span></label>
+                            <input type="range" id="magColumns" min="1" max="4" value="2" oninput="document.getElementById('magColVal').textContent=this.value; document.getElementById('magText').style.columnCount=this.value; autoSave()">
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Gros Titre (Headline)</label>
+                    <input id="magHeadline" class="text-input" style="font-family:'Playfair Display', serif; font-size:38px; text-align:center; padding:20px 0;" placeholder="Titre de l'article..." oninput="autoSave()">
+                </div>
+                <textarea id="magText" class="main" style="background:#fff; color:#222; padding:30px; border-radius:4px; font-family:'Inter', sans-serif; font-size:14px; column-count:2; column-gap:30px; text-align:justify;" placeholder="Corps de l'article..." oninput="autoSave()"></textarea>
+            </div>
+
+            <!-- ===== BD FULL EDITOR PRO ===== -->
             <div id="bdFullEditor" style="display:none;flex-direction:column;gap:18px;width:100%">
                 <div class="bd-toolbar">
                     <div class="bd-section-title"><i class="fas fa-layer-group"></i> Grilles & Fond</div>
