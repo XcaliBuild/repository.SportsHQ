@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writer. · The Pages. BD PRO (Fast Engine)</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat+Brush&family=Comic+Neue:wght@400;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link rel="stylesheet" href="style.css">
+<style id="customFontsStyle"></style>
+</head>
+<body>
+<div class="ribbon glass">
+    <div class="ribbon-group">
+        <div class="logo-txt"><div class="logo-main">The Pages.</div><div class="logo-sub">BD PRO</div></div>
+        <div class="sync" id="syncIndicator"><i class="fas fa-check-circle"></i> sync</div>
+        <button class="btn" onclick="openProjects()"><i class="fas fa-folder"></i> Projets</button>
+        <div class="gen-wrap" style="width:200px;">
+            <button class="btn" onclick="toggleDropdown('pageDropdown')"><span id="pageSelectLabel">Cover</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i></button>
+            <div id="pageDropdown" class="dropdown-menu"></div>
+        </div>
+        <button class="btn" onclick="addPage()"><i class="fas fa-plus"></i></button>
+        <button class="btn btn-danger" onclick="deletePage()"><i class="fas fa-trash"></i></button>
+    </div>
+    <div class="ribbon-group">
+        <button class="btn" onclick="manualSave()"><i class="fas fa-save"></i> Save</button>
+        <div class="gen-wrap" style="width:auto;">
+            <button class="btn" onclick="toggleDropdown('generateDropdown')"><i class="fas fa-layer-group"></i> Create</button>
+            <div id="generateDropdown" class="dropdown-menu right">
+                <button class="dropdown-item" onclick="exportPagesData();closeMenus()">Fichier pages.data</button>
+                <button class="dropdown-item" onclick="exportEPUB3();closeMenus()">Livre EPUB3</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-body">
+    <div class="sidebar">
+        <div class="sidebar-scroll">
+            <div class="cat">Modules</div>
+            <div class="menu-item" id="tab-pocket" onclick="activateModule('pocket')"><i class="fas fa-book"></i> Livre de poche</div>
+            <div class="menu-item active" id="tab-comic" onclick="activateModule('comic')"><i class="fas fa-layer-group"></i> Bande Dessinée</div>
+            <div class="menu-item" id="tab-magazine" onclick="activateModule('magazine')"><i class="fas fa-newspaper"></i> Magazine</div>
+            <div class="menu-item" id="tab-recipe" onclick="activateModule('recipe')"><i class="fas fa-utensils"></i> Livre Recette</div>
+            <div class="menu-item" id="tab-children" onclick="activateModule('children')"><i class="fas fa-child"></i> Livre pour enfants</div>
+            <div class="menu-item" id="tab-news" onclick="activateModule('news')"><i class="fas fa-bullhorn"></i> Le Journal</div>
+            <div class="menu-item" id="tab-post" onclick="activateModule('post')"><i class="fas fa-envelope-open-text"></i> Post</div>
+            <div class="menu-item" id="tab-presenta" onclick="activateModule('presenta')"><i class="fas fa-chalkboard"></i> Présenta</div>
+            <div class="menu-item" id="tab-teaching" onclick="activateModule('teaching')"><i class="fas fa-graduation-cap"></i> School Teaching</div>
+        </div>
+    </div>
+    
+    <div class="workspace" id="workspace">
+        <div class="page-nav left" id="navLeft" onclick="prevPage()"><i class="fas fa-chevron-left"></i></div>
+        <div class="page-nav right" id="navRight" onclick="nextPage()"><i class="fas fa-chevron-right"></i></div>
+        
+        <div class="sheet" id="sheet">
+            <div class="input-group" id="globalTitleGroup">
+                <label>Titre du projet</label>
+                <input id="globalTitle" class="text-input" placeholder="Titre..." oninput="autoSave()">
+            </div>
+            
+            <div class="input-group" id="itemTitleGroup" style="display:none;">
+                <label>Nom de la page</label>
+                <input id="itemTitle" class="meta-input" style="font-weight:700" placeholder="Ex: Page 1" oninput="autoSave()">
+            </div>
+
+            <div id="bdFullEditor" style="display:none;flex-direction:column;gap:18px;width:100%">
+                <div class="bd-toolbar">
+                    <div class="bd-section-title"><i class="fas fa-layer-group"></i> Grilles & Fond</div>
+                    <div class="meta-row">
+                        <div class="input-group" style="flex:2">
+                            <label>Image de fond (URL uniquement)</label>
+                            <input id="bdBgImageInput" class="meta-input" placeholder="https://..." oninput="onBDBgUrlChange(this.value)">
+                        </div>
+                        <div class="input-group" style="width:150px">
+                            <label>Zoom fond <span id="bdBgScaleVal">100%</span></label>
+                            <input type="range" id="bdBgScale" min="0.2" max="15" step="0.05" value="1" oninput="onBDBgScale(this.value)">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Modèles de grilles</label>
+                        <div id="bdTemplatesList" class="bd-templates"></div>
+                    </div>
+                </div>
+
+                <div id="bdCanvasEnhancedWrap" class="bd-canvas-wrap">
+                    <div id="bdBgLayer" class="bd-bg-layer"></div>
+                    <div id="bdGridContainer" class="bd-grid-container"></div>
+                    <div id="bdBubblesPageLayer" style="position:absolute;inset:0;z-index:5;pointer-events:none"></div>
+                </div>
+
+                <div id="bdPanelTools" class="bd-toolbar" style="display:none">
+                    <div class="bd-section-title"><i class="fas fa-crop"></i> Case sélectionnée <span id="bdSelectedPanelLabel" style="margin-left:8px;color:var(--accent)">-</span></div>
+                    <div class="meta-row">
+                        <div class="input-group" style="flex:2">
+                            <label>Image de la case (URL web uniquement)</label>
+                            <div style="display:flex;gap:8px">
+                                <input id="bdPanelImageUrl" class="meta-input" placeholder="https://..." oninput="onPanelUrlChange(this.value)">
+                                <button class="btn btn-danger" onclick="clearPanelImage()"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="input-group" style="flex:1">
+                            <label>Zoom <span id="bdPanelScaleVal">100%</span></label>
+                            <input type="range" id="bdPanelScale" min="0.1" max="15" step="0.05" value="1" oninput="onPanelScale(this.value)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bd-toolbar">
+                    <div class="bd-section-title"><i class="fas fa-comment-dots"></i> Bulles (Vectorielles & Rapides)</div>
+                    
+                    <div class="bubble-palette" id="bubblePaletteGrid">
+                        <div class="bubble-palette-item" onclick="addBDBubble('oval', 'bc')" title="Ovale bas centre">
+                            <div class="mini-bubble oval"></div><div class="bubble-label">Ovale BC</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('oval', 'bl')" title="Ovale bas gauche">
+                            <div class="mini-bubble oval"></div><div class="bubble-label">Ovale BL</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('oval', 'br')" title="Ovale bas droite">
+                            <div class="mini-bubble oval"></div><div class="bubble-label">Ovale BR</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('round', 'bc')" title="Rond">
+                            <div class="mini-bubble round"></div><div class="bubble-label">Rond</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('rect', 'bc')" title="Rectangle">
+                            <div class="mini-bubble rect"></div><div class="bubble-label">Rectangle</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('rect', 'zap')" title="Rectangle Eclair">
+                            <div class="mini-bubble rect"></div><div class="bubble-label">Radio/Zap</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('capsule', 'bl')" title="Capsule">
+                            <div class="mini-bubble capsule"></div><div class="bubble-label">Capsule</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('cloud', 'thought')" title="Pensée">
+                            <div class="mini-bubble cloud"></div><div class="bubble-label">Pensée</div>
+                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('burst', 'none')" title="Cri / Burst">
+                            <div class="mini-bubble burst" style="border:1.5px solid #111"></div><div class="bubble-label">Cri / POW</div>
+                        </div>
+                    </div>
+
+                    <div id="bdBubbleEdit" style="display:none;flex-direction:column;gap:12px;margin-top:12px;background:rgba(0,0,0,0.4);padding:14px;border-radius:8px;border:1px solid var(--border)">
+                        <div class="meta-row" style="align-items:flex-start">
+                            <div class="input-group" style="flex:2">
+                                <label>Texte de la bulle</label>
+                                <textarea id="bdBubbleText" class="meta-input" style="height:42px" oninput="onBubbleTextChange(this.value)"></textarea>
+                            </div>
+                            <div class="input-group" style="flex:1; min-width:140px">
+                                <label>Police BD</label>
+                                <select id="bdBubbleFont" class="meta-input" style="height:42px" onchange="onBubbleFontChange(this.value)">
+                                    <option value="'Bangers', cursive">Bangers (Impact)</option>
+                                    <option value="'Comic Neue', cursive">Comic Neue</option>
+                                    <option value="'Caveat Brush', cursive">Caveat Brush</option>
+                                    <option value="'Inter', sans-serif">Inter (Neutre)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="meta-row">
+                            <div class="input-group" style="width:120px">
+                                <label>Largeur <span id="bdBubbleWidthVal" style="color:var(--accent)">30%</span></label>
+                                <input type="range" id="bdBubbleWidth" min="10" max="100" value="30" oninput="onBubbleWidth(this.value)">
+                            </div>
+                            <div class="input-group" style="width:120px">
+                                <label>Taille texte <span id="bdBubbleSizeVal" style="color:var(--accent)">14px</span></label>
+                                <input type="range" id="bdBubbleSize" min="8" max="48" value="14" oninput="onBubbleSize(this.value)">
+                            </div>
+                            <div class="input-group" style="width:80px">
+                                <label>Fond</label>
+                                <input type="color" id="bdBubbleBg" class="meta-input" style="padding:0;height:38px" onchange="onBubbleBg(this.value)">
+                            </div>
+                        </div>
+                        
+                        <div style="display:flex;gap:6px;margin-top:2px;">
+                            <button class="color-swatch" style="background:#ffffff" onclick="onBubbleBg('#ffffff')"></button>
+                            <button class="color-swatch" style="background:#ffeb3b" onclick="onBubbleBg('#ffeb3b')"></button>
+                            <button class="color-swatch" style="background:#ff9800" onclick="onBubbleBg('#ff9800')"></button>
+                            <button class="color-swatch" style="background:#f44336" onclick="onBubbleBg('#f44336')"></button>
+                            <button class="color-swatch" style="background:#00bcd4" onclick="onBubbleBg('#00bcd4')"></button>
+                        </div>
+
+                        <div style="display:flex;gap:8px;margin-top:4px">
+                            <button class="btn btn-danger" onclick="deleteSelectedBubble()"><i class="fas fa-trash"></i> Supprimer</button>
+                            <button class="btn" onclick="duplicateBubble()"><i class="fas fa-copy"></i> Dupliquer</button>
+                            <button class="btn" onclick="selectedBubbleId=null;document.getElementById('bdBubbleEdit').style.display='none';renderBDCanvas()"><i class="fas fa-check"></i> Appliquer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-preview" onclick="openPreview()"><i class="fas fa-book-reader"></i> Aperçu HD</button>
+    </div>
+</div>
+
+<div class="overlay" id="previewModal" onclick="if(event.target===this)closePreview()">
+    <div class="preview-shell" onclick="event.stopPropagation()">
+        <div class="preview-top">
+            <button class="btn-close-round" onclick="closePreview()"><i class="fas fa-times-circle"></i></button>
+        </div>
+        <div class="preview-screen large" id="previewScreen">
+            <div class="prv-content" id="prvContent"></div>
+        </div>
+    </div>
+</div>
+
+<div id="savedToast" class="saved-toast"><i class="fas fa-check-circle" style="color:var(--accent)"></i> Enregistré !</div>
+
+<script src="script.js"></script>
+</body>
+</html>
