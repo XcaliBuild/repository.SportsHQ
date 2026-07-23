@@ -79,7 +79,6 @@
     .preview-screen { background:#faf8f5; border-radius:14px; overflow:auto; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.8); border:8px solid #222; transition:.3s ease; }
     .preview-screen.mobile { width:393px; height:852px; }
     .preview-screen.tablet { width:834px; height:1112px; }
-    /* Mode plein écran mis à jour */
     .preview-screen.large, .preview-screen.epub, .preview-screen.pdf { width:100%; height:calc(100vh - 70px); max-width:100%; border-width:0; border-radius:0; flex:1; }
     .prv-content { padding:40px; color:#111; font-size:16px; line-height:1.7; position:relative; min-height:100%; word-wrap:break-word; }
     
@@ -113,53 +112,30 @@
     .bd-panel img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transform-origin:center center; pointer-events:none; will-change:transform; }
     .bd-panel-placeholder { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; color:#777; background:#f5f5f0; font-size:10px; text-transform:uppercase; font-weight:700; text-align:center; padding:10px; }
     
-    /* Contention du texte et styles mis à jour */
+    /* Bulles */
     .bd-bubble {
-        position:absolute; 
-        min-width:10%; 
-        background:#fff; 
-        font-weight:700; 
-        color:#111; 
-        cursor:move; 
-        user-select:none; 
-        z-index:10; 
-        line-height:1.2; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        text-align: center; 
-        box-sizing: border-box; 
-        white-space: pre-wrap; /* Maintient les sauts de ligne manuels, wrap naturellement */
-        overflow-wrap: break-word; /* Remplace word-wrap */
+        position:absolute; min-width:10%; background:#fff; font-weight:700; color:#111; cursor:move; user-select:none; z-index:10; 
+        line-height:1.2; display: flex; align-items: center; justify-content: center; text-align: center; box-sizing: border-box; 
+        white-space: pre-wrap; overflow-wrap: break-word;
     }
     .bd-bubble.selected { filter: drop-shadow(0 0 0 2px rgba(239,68,68,0.8)); z-index: 15; }
     
-    /* Formes BD Mises à Jour */
-    .bubble-oval { 
-        border-radius: 50% / 50%; 
-        border:2.5px solid #111; 
-        padding: 0.8em 1.2em; /* Padding réduit pour laisser plus de place au texte */
-    }
-    .bubble-rect { 
-        border-radius:12px; 
-        border:2.5px solid #111; 
-        padding: 0.6em 1em; 
-    }
-    .bubble-cloud { 
-        border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-        border:2.5px dashed #111; 
-        padding: 1em 1.5em; 
-    }
-    .bubble-spiky { 
-        clip-path: polygon(50% 0%, 65% 20%, 100% 20%, 75% 45%, 100% 80%, 60% 70%, 50% 100%, 40% 70%, 0% 80%, 25% 45%, 0% 20%, 35% 20%);
-        padding: 1.5em;
-        filter: drop-shadow(2px 2px 0px #111) drop-shadow(-2px -2px 0px #111) drop-shadow(2px -2px 0px #111) drop-shadow(-2px 2px 0px #111);
-    }
+    /* Formes Palette */
+    .bubble-oval { border-radius: 50% / 50%; border:2.5px solid #111; padding: 0.8em 1.2em; }
+    .bubble-round { border-radius: 50%; padding: 1.2em; aspect-ratio: 1/1; } 
+    .bubble-rect { border-radius:12px; border:2.5px solid #111; padding: 0.6em 1em; }
+    .bubble-capsule { border-radius:50px; border:2.5px solid #111; padding: 0.6em 1.2em; }
+    .bubble-cloud { border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; border:2.5px dashed #111; padding: 1em 1.5em; }
+    .bubble-spiky { clip-path: polygon(50% 0%, 65% 20%, 100% 20%, 75% 45%, 100% 80%, 60% 70%, 50% 100%, 40% 70%, 0% 80%, 25% 45%, 0% 20%, 35% 20%); padding: 1.5em; filter: drop-shadow(2px 2px 0px #111) drop-shadow(-2px -2px 0px #111) drop-shadow(2px -2px 0px #111) drop-shadow(-2px 2px 0px #111); }
+    .bubble-boom { border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; border:3px solid #111; padding: 1em 1.4em; transform: rotate(-2deg); box-shadow: 3px 3px 0 #111; }
+    .bubble-pow { clip-path: polygon(50% 0%, 75% 10%, 95% 5%, 85% 30%, 100% 50%, 80% 60%, 95% 85%, 65% 75%, 50% 100%, 35% 75%, 5% 85%, 20% 60%, 0% 50%, 15% 30%, 5% 5%, 25% 10%); padding: 1.5em; border: none; }
+    .bubble-whisper { border-radius: 50%; border:2px dashed #999; padding: 1em; opacity: 0.85; font-style: italic; }
+    .bubble-thought-chain { border-radius: 50%; border:2px solid #111; padding: 0.8em; background: #fff; }
+    .bubble-scream { border-radius: 10% 90% 10% 90% / 90% 10% 90% 10%; border:3px solid #111; padding: 1em 1.5em; box-shadow: 4px 4px 0 #111; }
+    .bubble-narration { border-radius: 4px; border:2px solid #111; padding: 1em; background: #fdf6e3; font-style: italic; }
 
-    .bd-bubble-tail { position:absolute; width:14px; height:14px; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; z-index:-1; }
-    .bd-bubble-tail.left { left: 20%; transform: translateX(-50%) rotate(45deg); }
-    .bd-bubble-tail.center { left: 50%; transform: translateX(-50%) rotate(45deg); }
-    .bd-bubble-tail.right { left: 80%; transform: translateX(-50%) rotate(45deg); }
+    .bd-bubble-tail { position:absolute; width:14px; height:14px; z-index:-1; }
+    .bd-bubble-tail.curve { width: 20px; height: 20px; border-left: 3px solid #111; border-bottom: 3px solid #111; border-radius: 0 0 0 20px; background: transparent; }
     
     .bubble-btn { flex:1; background:rgba(255,255,255,0.04); color:var(--text); border:1px solid var(--border); padding:8px; border-radius:8px; cursor:pointer; transition:.2s; font-size:11px; display:flex; align-items:center; justify-content:center; gap:4px; font-weight:600; white-space:nowrap; }
     .bubble-btn:hover, .bubble-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(255,255,255,0.06); }
@@ -393,10 +369,17 @@
                     <div class="bd-section-title"><i class="fas fa-comment-dots"></i> <span id="lblBubbles">Bulles de dialogue</span></div>
                     
                     <div style="display:flex;gap:6px;flex-wrap:wrap">
-                        <button class="bubble-btn" onclick="addBDBubble('oval')"><i class="fas fa-comment"></i> <span class="lblBOval">Ovale</span></button>
-                        <button class="bubble-btn" onclick="addBDBubble('rect')"><i class="fas fa-comment-alt"></i> <span class="lblBRect">Rectangle</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('oval')"><i class="far fa-comment"></i> <span class="lblBOval">Ovale</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('round')"><i class="far fa-circle"></i> <span class="lblBRound">Ronde</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('rect')"><i class="far fa-comment-alt"></i> <span class="lblBRect">Rectangle</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('capsule')"><i class="fas fa-capsules"></i> <span class="lblBCapsule">Capsule</span></button>
                         <button class="bubble-btn" onclick="addBDBubble('cloud')"><i class="fas fa-cloud"></i> <span class="lblBCloud">Pensée</span></button>
-                        <button class="bubble-btn" onclick="addBDBubble('spiky')"><i class="fas fa-bolt"></i> <span class="lblBSpiky">Cri / Action</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('spiky')"><i class="fas fa-certificate"></i> <span class="lblBSpiky">Cri</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('boom')"><i class="fas fa-bomb"></i> <span>BOOM</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('pow')"><i class="fas fa-fist-raised"></i> <span>POW</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('whisper')"><i class="fas fa-wind"></i> <span>Chuchote</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('scream')"><i class="fas fa-volume-up"></i> <span>Hurle</span></button>
+                        <button class="bubble-btn" onclick="addBDBubble('narration')"><i class="fas fa-scroll"></i> <span>Narration</span></button>
                     </div>
 
                     <div id="bdBubbleEdit" style="display:none;flex-direction:column;gap:12px;margin-top:12px;background:rgba(0,0,0,0.4);padding:14px;border-radius:8px;border:1px solid var(--border)">
@@ -433,15 +416,13 @@
                             </div>
                             <div class="input-group" style="width:100px; flex:none">
                                 <label id="lblBubTail">Flèche</label>
-                                <select id="bdBubbleTail" class="meta-input" style="padding:6px 10px" onchange="onBubbleTailChange(this.value)">
-                                    <option value="left">Gauche</option>
-                                    <option value="center">Milieu</option>
-                                    <option value="right">Droite</option>
-                                </select>
+                                <div style="display:flex;gap:4px;height:38px">
+                                    <button class="btn" id="btnTailInvert" onclick="toggleTailInvert()" title="Inverser Gauche/Droite" style="flex:1;justify-content:center;padding:0"><i class="fas fa-arrows-alt-h"></i></button>
+                                    <button class="btn" id="btnTailFlip" onclick="toggleTailFlip()" title="Tourner Haut/Bas" style="flex:1;justify-content:center;padding:0"><i class="fas fa-arrows-alt-v"></i></button>
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- Palettes de couleurs -->
                         <div style="display:flex;gap:6px;margin-top:2px;">
                             <button class="color-swatch" style="background:#ffffff" onclick="onBubbleBg('#ffffff')"></button>
                             <button class="color-swatch" style="background:#ffeb3b" onclick="onBubbleBg('#ffeb3b')"></button>
@@ -457,7 +438,7 @@
                         <div style="display:flex;gap:8px;margin-top:4px">
                             <button class="btn btn-danger" onclick="deleteSelectedBubble()"><i class="fas fa-trash"></i> <span id="lblBubDel">Supprimer</span></button>
                             <button class="btn" onclick="duplicateBubble()"><i class="fas fa-copy"></i> <span id="lblBubDup">Dupliquer</span></button>
-                            <button class="btn" onclick="selectedBubbleId=null;document.getElementById('bdBubbleEdit').style.display='none';renderBDCanvas()"><i class="fas fa-times"></i> <span id="lblBubClose">Fermer</span></button>
+                            <button class="btn" onclick="selectedBubbleId=null;document.getElementById('bdBubbleEdit').style.display='none';renderBDCanvas()"><i class="fas fa-check"></i> <span id="lblBubApply">Appliquer</span></button>
                         </div>
                     </div>
                     <div id="bdBubblesList" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
@@ -587,8 +568,8 @@ const i18n = {
         lblPanelSel: "Case sélectionnée - Drag image | Molette zoom | Shift+Molette rotation", lblPanelImg: "Image de la case",
         lblPLocal: "Local", lblPanelZoom: "Zoom", lblPanelRot: "Rotation", lblBubbles: "Bulles de dialogue",
         lblBubText: "Texte de la bulle", lblBubFont: "Font BD", lblBubSize: "Taille texte", lblBubTail: "Flèche",
-        lblBubDel: "Supprimer", lblBubDup: "Dupliquer", lblBubClose: "Fermer", lblPreviewBtn: "Aperçu",
-        lblBOval: "Ovale", lblBRect: "Rectangle", lblBCloud: "Pensée", lblBSpiky: "Cri"
+        lblBubDel: "Supprimer", lblBubDup: "Dupliquer", lblBubApply: "Appliquer", lblPreviewBtn: "Aperçu",
+        lblBOval: "Ovale", lblBRound: "Ronde", lblBRect: "Rectangle", lblBCapsule: "Capsule", lblBCloud: "Pensée", lblBSpiky: "Cri"
     },
     en: {
         proj: "Projects", read: "Paperback", bd: "Comic Book (BD)", mag: "Magazine", cur: "Current Project",
@@ -605,8 +586,8 @@ const i18n = {
         lblPanelSel: "Selected Panel - Drag img | Scroll zoom | Shift+Scroll rotate", lblPanelImg: "Panel Image",
         lblPLocal: "Local", lblPanelZoom: "Zoom", lblPanelRot: "Rotation", lblBubbles: "Speech Bubbles",
         lblBubText: "Bubble Text", lblBubFont: "BD Font", lblBubSize: "Text Size", lblBubTail: "Tail Direction",
-        lblBubDel: "Delete", lblBubDup: "Duplicate", lblBubClose: "Close", lblPreviewBtn: "Preview",
-        lblBOval: "Oval", lblBRect: "Rectangle", lblBCloud: "Thought", lblBSpiky: "Shout"
+        lblBubDel: "Delete", lblBubDup: "Duplicate", lblBubApply: "Apply", lblPreviewBtn: "Preview",
+        lblBOval: "Oval", lblBRound: "Round", lblBRect: "Rectangle", lblBCapsule: "Capsule", lblBCloud: "Thought", lblBSpiky: "Shout"
     }
 };
 
@@ -680,7 +661,8 @@ function ensureBDData(item){
         if(!b.w) b.w=30; if(!b.fontSize) b.fontSize=14;
         if(!b.fontFamily) b.fontFamily="'Bangers', cursive";
         if(!b.type) b.type='oval';
-        if(!b.tailPos) b.tailPos='center';
+        if(b.tailInvert===undefined) b.tailInvert = false;
+        if(b.tailFlip===undefined) b.tailFlip = false;
         if(!b.bgColor) b.bgColor = '#ffffff';
         if(b.panelIndex===undefined) b.panelIndex=null;
     });
@@ -1070,26 +1052,47 @@ function createBubbleElement(b){
     div.className='bd-bubble bubble-'+b.type+(selectedBubbleId===b.id?' selected':'');
     div.dataset.bubbleId=b.id;
     
-    // Position
     div.style.left=b.x+'%'; 
     div.style.top=b.y+'%';
-    // Width with percentage, it will expand vertically if text wraps
     div.style.width= (b.w === 'auto' ? 'auto' : b.w+'%');
-    
     div.style.fontFamily=b.fontFamily;
     div.style.fontSize=b.fontSize+'px';
     div.style.background = b.bgColor || '#ffffff';
     div.textContent=b.text||'TEXTE';
-    
-    // Centrage des bulles standard autour de leur coordonnée
     div.style.transform='translate(-50%, -50%)';
 
-    // Tail seulement pour Oval, Rect et Nuage
-    if(b.type!=='spiky'){
+    // Application directionnelle de la flèche (Tail)
+    if(b.type !== 'spiky' && b.type !== 'cloud' && b.type !== 'pow' && b.type !== 'boom' && b.type !== 'narration'){
         let tail=document.createElement('div');
-        tail.className='bd-bubble-tail '+(b.tailPos||'center');
+        tail.className='bd-bubble-tail';
         tail.style.background = div.style.background;
+        
+        let yPos = b.tailFlip ? 'top' : 'bottom';
+        tail.style[yPos] = '-8px';
+        tail.style.borderRight = '2.5px solid #111';
+        
+        if(b.tailFlip) {
+            tail.style.borderTop = '2.5px solid #111';
+        } else {
+            tail.style.borderBottom = '2.5px solid #111';
+        }
+        
+        tail.style.left = '50%';
+        let scaleX = b.tailInvert ? -1 : 1;
+        tail.style.transform = `translateX(-50%) scaleX(${scaleX}) rotate(45deg)`;
+        
         div.appendChild(tail);
+    }
+    
+    // Flèche incurvée pour certains types
+    if(b.type === 'whisper' || b.type === 'scream'){
+        let curveTail=document.createElement('div');
+        curveTail.className='bd-bubble-tail curve';
+        let yPos = b.tailFlip ? 'top' : 'bottom';
+        curveTail.style[yPos] = '-12px';
+        curveTail.style.left = '30%';
+        if(b.tailInvert) curveTail.style.transform = 'scaleX(-1)';
+        div.appendChild(curveTail);
     }
 
     div.addEventListener('mousedown', (e)=>onBubbleMouseDown(e, b.id));
@@ -1240,9 +1243,14 @@ function onPanelWheel(e, idx){
 function addBDBubble(type){
     const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId); ensureBDData(item);
     let newBubble={
-        id:uid(), panelIndex:selectedPanelIndex, type:type, text:'TEXTE',
-        x:50, y:30, w:30, fontFamily:"'Bangers', cursive", fontSize:14, tailPos:'center', bgColor:'#ffffff'
+        id:uid(), panelIndex:selectedPanelIndex, type:type, text:type.toUpperCase(),
+        x:50, y:30, w:30, fontFamily:"'Bangers', cursive", fontSize:14, tailInvert:false, tailFlip:false, bgColor:'#ffffff'
     };
+    if(type==='whisper'){ newBubble.w=25; newBubble.fontSize=12; newBubble.fontFamily="'Caveat Brush', cursive"; }
+    if(type==='scream'){ newBubble.w=40; newBubble.fontSize=22; newBubble.fontFamily="'Bangers', cursive"; }
+    if(type==='boom'){ newBubble.w=35; newBubble.fontSize=24; newBubble.fontFamily="'Bangers', cursive"; }
+    if(type==='pow'){ newBubble.w=35; newBubble.fontSize=24; newBubble.fontFamily="'Bangers', cursive"; }
+    if(type==='narration'){ newBubble.w=40; newBubble.fontSize=13; newBubble.fontFamily="'Special Elite', cursive"; newBubble.bgColor='#fdf6e3'; }
     item.bdBubbles.push(newBubble); selectedBubbleId=newBubble.id;
     renderBDCanvas(); selectBubble(newBubble.id); autoSave();
 }
@@ -1264,8 +1272,34 @@ function selectBubble(id){
     document.getElementById('bdBubbleSize').value=bubble.fontSize; document.getElementById('bdBubbleSizeVal').textContent=bubble.fontSize+'px';
     document.getElementById('bdBubbleWidth').value=bubble.w || 30; document.getElementById('bdBubbleWidthVal').textContent=(bubble.w || 30)+'%';
     document.getElementById('bdBubbleBg').value=bubble.bgColor || '#ffffff';
-    document.getElementById('bdBubbleTail').value=bubble.tailPos||'center';
+    updateTailToggles();
     renderBDCanvas();
+}
+
+function toggleTailInvert() {
+    const proj = getCurrentProject(); const item = proj.data.book.items.find(i=>i.id===currentPageId);
+    let bubble = item.bdBubbles.find(b=>b.id===selectedBubbleId);
+    if(bubble) { bubble.tailInvert = !bubble.tailInvert; updateTailToggles(); renderBDCanvas(); autoSave(); }
+}
+
+function toggleTailFlip() {
+    const proj = getCurrentProject(); const item = proj.data.book.items.find(i=>i.id===currentPageId);
+    let bubble = item.bdBubbles.find(b=>b.id===selectedBubbleId);
+    if(bubble) { bubble.tailFlip = !bubble.tailFlip; updateTailToggles(); renderBDCanvas(); autoSave(); }
+}
+
+function updateTailToggles() {
+    const proj = getCurrentProject(); const item = proj.data.book.items.find(i=>i.id===currentPageId);
+    let bubble = item.bdBubbles.find(b=>b.id===selectedBubbleId);
+    if(bubble) {
+        document.getElementById('btnTailInvert').style.color = bubble.tailInvert ? 'var(--accent)' : 'var(--text)';
+        document.getElementById('btnTailInvert').style.borderColor = bubble.tailInvert ? 'var(--accent)' : 'transparent';
+        document.getElementById('btnTailInvert').style.background = bubble.tailInvert ? 'rgba(255,255,255,0.1)' : 'transparent';
+        
+        document.getElementById('btnTailFlip').style.color = bubble.tailFlip ? 'var(--accent)' : 'var(--text)';
+        document.getElementById('btnTailFlip').style.borderColor = bubble.tailFlip ? 'var(--accent)' : 'transparent';
+        document.getElementById('btnTailFlip').style.background = bubble.tailFlip ? 'rgba(255,255,255,0.1)' : 'transparent';
+    }
 }
 
 function onBubbleTextChange(val){
@@ -1305,12 +1339,6 @@ function onBubbleBg(val){
     const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
     let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId);
     if(bubble){ bubble.bgColor=val; document.getElementById('bdBubbleBg').value=val; renderBDCanvas(); autoSave(); }
-}
-
-function onBubbleTailChange(val){
-    const proj=getCurrentProject(); const item=proj.data.book.items.find(i=>i.id===currentPageId);
-    let bubble=item.bdBubbles.find(b=>b.id===selectedBubbleId);
-    if(bubble){ bubble.tailPos=val; renderBDCanvas(); autoSave(); }
 }
 
 function deleteSelectedBubble(){
@@ -1538,13 +1566,27 @@ function buildBDHTML(item){
             let tailHtml = '';
 
             if(b.type === 'oval') bShapeCss = `border-radius:50% / 50%; border:2.5px solid #111; padding:0.8em 1.2em;`;
+            else if(b.type === 'round') bShapeCss = `border-radius:50%; padding:1.2em; aspect-ratio:1/1;`;
             else if(b.type === 'rect') bShapeCss = `border-radius:12px; border:2.5px solid #111; padding:0.6em 1em;`;
+            else if(b.type === 'capsule') bShapeCss = `border-radius:50px; border:2.5px solid #111; padding:0.6em 1.2em;`;
             else if(b.type === 'cloud') bShapeCss = `border-radius:50% 50% 50% 50% / 60% 60% 40% 40%; border:2.5px dashed #111; padding:1em 1.5em;`;
             else if(b.type === 'spiky') bShapeCss = `clip-path: polygon(50% 0%, 65% 20%, 100% 20%, 75% 45%, 100% 80%, 60% 70%, 50% 100%, 40% 70%, 0% 80%, 25% 45%, 0% 20%, 35% 20%); padding:1.5em; filter: drop-shadow(2px 2px 0px #111) drop-shadow(-2px -2px 0px #111) drop-shadow(2px -2px 0px #111) drop-shadow(-2px 2px 0px #111);`;
+            else if(b.type === 'boom') bShapeCss = `border-radius:50% 50% 50% 50% / 40% 40% 60% 60%; border:3px solid #111; padding:1em 1.4em; box-shadow:3px 3px 0 #111;`;
+            else if(b.type === 'pow') bShapeCss = `clip-path:polygon(50% 0%, 75% 10%, 95% 5%, 85% 30%, 100% 50%, 80% 60%, 95% 85%, 65% 75%, 50% 100%, 35% 75%, 5% 85%, 20% 60%, 0% 50%, 15% 30%, 5% 5%, 25% 10%); padding:1.5em; border:none;`;
+            else if(b.type === 'whisper') bShapeCss = `border-radius:50%; border:2px dashed #999; padding:1em; opacity:0.85; font-style:italic;`;
+            else if(b.type === 'scream') bShapeCss = `border-radius:10% 90% 10% 90% / 90% 10% 90% 10%; border:3px solid #111; padding:1em 1.5em; box-shadow:4px 4px 0 #111;`;
+            else if(b.type === 'narration') bShapeCss = `border-radius:4px; border:2px solid #111; padding:1em; background:#fdf6e3; font-style:italic;`;
 
-            if(b.type !== 'spiky') {
-                let tLeft = b.tailPos==='left'?'20%':(b.tailPos==='right'?'80%':'50%');
-                tailHtml = `<div style="position:absolute; width:14px; height:14px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; left:${tLeft}; transform:translateX(-50%) rotate(45deg); z-index:-1;"></div>`;
+            if(b.type !== 'spiky' && b.type !== 'cloud' && b.type !== 'pow' && b.type !== 'boom' && b.type !== 'narration') {
+                let yPos = b.tailFlip ? 'top:-8px;' : 'bottom:-8px;';
+                let bTop = b.tailFlip ? '2.5px' : '0';
+                let bBot = b.tailFlip ? '0' : '2.5px';
+                let scaleX = b.tailInvert ? -1 : 1;
+                tailHtml = `<div style="position:absolute; width:14px; height:14px; background:${bg}; border-right:2.5px solid #111; border-top:${bTop} solid #111; border-bottom:${bBot} solid #111; ${yPos} left:50%; transform:translateX(-50%) scaleX(${scaleX}) rotate(45deg); z-index:-1;"></div>`;
+            } else if (b.type === 'whisper' || b.type === 'scream') {
+                let yPos = b.tailFlip ? 'top:-12px;' : 'bottom:-12px;';
+                let scaleX = b.tailInvert ? -1 : 1;
+                tailHtml = `<div style="position:absolute; ${yPos} left:30%; width:20px; height:20px; border-left:3px solid #111; border-bottom:3px solid #111; border-radius:0 0 0 20px; background:transparent; transform:scaleX(${scaleX}) rotate(45deg); z-index:-1;"></div>`;
             }
 
             html+=`<div style="position:absolute; left:${b.x}%; top:${b.y}%; width:${b.w}%; transform:translate(-50%,-50%); background:${bg}; ${bShapeCss} font-family:${b.fontFamily}; font-size:${b.fontSize}px; font-weight:700; color:#111; white-space:pre-wrap; overflow-wrap:break-word; text-align:center; box-sizing:border-box; display:flex; align-items:center; justify-content:center; z-index:10; line-height:1.2;">${esc(b.text)}${tailHtml}</div>`;
@@ -1559,13 +1601,27 @@ function buildBDHTML(item){
         let tailHtml = '';
 
         if(b.type === 'oval') bShapeCss = `border-radius:50% / 50%; border:2.5px solid #111; padding:0.8em 1.2em;`;
+        else if(b.type === 'round') bShapeCss = `border-radius:50%; padding:1.2em; aspect-ratio:1/1;`;
         else if(b.type === 'rect') bShapeCss = `border-radius:12px; border:2.5px solid #111; padding:0.6em 1em;`;
+        else if(b.type === 'capsule') bShapeCss = `border-radius:50px; border:2.5px solid #111; padding:0.6em 1.2em;`;
         else if(b.type === 'cloud') bShapeCss = `border-radius:50% 50% 50% 50% / 60% 60% 40% 40%; border:2.5px dashed #111; padding:1em 1.5em;`;
         else if(b.type === 'spiky') bShapeCss = `clip-path: polygon(50% 0%, 65% 20%, 100% 20%, 75% 45%, 100% 80%, 60% 70%, 50% 100%, 40% 70%, 0% 80%, 25% 45%, 0% 20%, 35% 20%); padding:1.5em; filter: drop-shadow(2px 2px 0px #111) drop-shadow(-2px -2px 0px #111) drop-shadow(2px -2px 0px #111) drop-shadow(-2px 2px 0px #111);`;
+        else if(b.type === 'boom') bShapeCss = `border-radius:50% 50% 50% 50% / 40% 40% 60% 60%; border:3px solid #111; padding:1em 1.4em; box-shadow:3px 3px 0 #111;`;
+        else if(b.type === 'pow') bShapeCss = `clip-path:polygon(50% 0%, 75% 10%, 95% 5%, 85% 30%, 100% 50%, 80% 60%, 95% 85%, 65% 75%, 50% 100%, 35% 75%, 5% 85%, 20% 60%, 0% 50%, 15% 30%, 5% 5%, 25% 10%); padding:1.5em; border:none;`;
+        else if(b.type === 'whisper') bShapeCss = `border-radius:50%; border:2px dashed #999; padding:1em; opacity:0.85; font-style:italic;`;
+        else if(b.type === 'scream') bShapeCss = `border-radius:10% 90% 10% 90% / 90% 10% 90% 10%; border:3px solid #111; padding:1em 1.5em; box-shadow:4px 4px 0 #111;`;
+        else if(b.type === 'narration') bShapeCss = `border-radius:4px; border:2px solid #111; padding:1em; background:#fdf6e3; font-style:italic;`;
 
-        if(b.type !== 'spiky') {
-            let tLeft = b.tailPos==='left'?'20%':(b.tailPos==='right'?'80%':'50%');
-            tailHtml = `<div style="position:absolute; width:14px; height:14px; background:${bg}; border-right:2.5px solid #111; border-bottom:2.5px solid #111; bottom:-8px; left:${tLeft}; transform:translateX(-50%) rotate(45deg); z-index:-1;"></div>`;
+        if(b.type !== 'spiky' && b.type !== 'cloud' && b.type !== 'pow' && b.type !== 'boom' && b.type !== 'narration') {
+            let yPos = b.tailFlip ? 'top:-8px;' : 'bottom:-8px;';
+            let bTop = b.tailFlip ? '2.5px' : '0';
+            let bBot = b.tailFlip ? '0' : '2.5px';
+            let scaleX = b.tailInvert ? -1 : 1;
+            tailHtml = `<div style="position:absolute; width:14px; height:14px; background:${bg}; border-right:2.5px solid #111; border-top:${bTop} solid #111; border-bottom:${bBot} solid #111; ${yPos} left:50%; transform:translateX(-50%) scaleX(${scaleX}) rotate(45deg); z-index:-1;"></div>`;
+        } else if (b.type === 'whisper' || b.type === 'scream') {
+            let yPos = b.tailFlip ? 'top:-12px;' : 'bottom:-12px;';
+            let scaleX = b.tailInvert ? -1 : 1;
+            tailHtml = `<div style="position:absolute; ${yPos} left:30%; width:20px; height:20px; border-left:3px solid #111; border-bottom:3px solid #111; border-radius:0 0 0 20px; background:transparent; transform:scaleX(${scaleX}) rotate(45deg); z-index:-1;"></div>`;
         }
 
         html+=`<div style="position:absolute; left:${b.x}%; top:${b.y}%; width:${b.w}%; transform:translate(-50%,-50%); background:${bg}; ${bShapeCss} font-family:${b.fontFamily}; font-size:${b.fontSize}px; font-weight:700; color:#111; white-space:pre-wrap; overflow-wrap:break-word; text-align:center; box-sizing:border-box; display:flex; align-items:center; justify-content:center; z-index:15; line-height:1.2;">${esc(b.text)}${tailHtml}</div>`;
@@ -1767,10 +1823,12 @@ function updateLangUI(){
             if(document.getElementById('lblBubTail')) document.getElementById('lblBubTail').textContent = i18n[l].lblBubTail;
             if(document.getElementById('lblBubDel')) document.getElementById('lblBubDel').textContent = i18n[l].lblBubDel;
             if(document.getElementById('lblBubDup')) document.getElementById('lblBubDup').textContent = i18n[l].lblBubDup;
-            if(document.getElementById('lblBubClose')) document.getElementById('lblBubClose').textContent = i18n[l].lblBubClose;
+            if(document.getElementById('lblBubApply')) document.getElementById('lblBubApply').textContent = i18n[l].lblBubApply;
             if(document.getElementById('lblPreviewBtn')) document.getElementById('lblPreviewBtn').textContent = i18n[l].lblPreviewBtn;
             document.querySelectorAll('.lblBOval').forEach(el => el.textContent = i18n[l].lblBOval);
+            document.querySelectorAll('.lblBRound').forEach(el => el.textContent = i18n[l].lblBRound);
             document.querySelectorAll('.lblBRect').forEach(el => el.textContent = i18n[l].lblBRect);
+            document.querySelectorAll('.lblBCapsule').forEach(el => el.textContent = i18n[l].lblBCapsule);
             document.querySelectorAll('.lblBCloud').forEach(el => el.textContent = i18n[l].lblBCloud);
             document.querySelectorAll('.lblBSpiky').forEach(el => el.textContent = i18n[l].lblBSpiky);
         }
