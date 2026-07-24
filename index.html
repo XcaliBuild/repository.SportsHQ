@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Writer. · The Pages. BD PRO (Fast Engine)</title>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat+Brush&family=Comic+Neue:wght@400;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<title>Writer. · The Pages PRO</title>
+<!-- Beaucoup plus de polices incluses -->
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat+Brush&family=Comic+Neue:wght@400;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Merriweather:wght@300;400;700&family=Montserrat:wght@400;600&family=Open+Sans:wght@400;600&family=Roboto:wght@400;500&family=Lora:wght@400;600&family=Oswald:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -14,23 +15,45 @@
 <body>
 <div class="ribbon glass">
     <div class="ribbon-group">
-        <div class="logo-txt"><div class="logo-main">The Pages.</div><div class="logo-sub">BD PRO</div></div>
+        <div class="logo-txt"><div class="logo-main">The Pages.</div><div class="logo-sub">PRO</div></div>
         <div class="sync" id="syncIndicator"><i class="fas fa-check-circle"></i> sync</div>
-        <button class="btn" onclick="openProjects()"><i class="fas fa-folder"></i> Projets</button>
+        
+        <!-- Menu Projets complet -->
+        <div class="gen-wrap" style="width:140px;">
+            <button class="btn" onclick="toggleDropdown('projectDropdown')"><i class="fas fa-folder"></i> Projets <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6;margin-left:auto"></i></button>
+            <div id="projectDropdown" class="dropdown-menu">
+                <button class="dropdown-item" onclick="createNewProject();closeMenus()"><i class="fas fa-plus"></i> Nouveau Projet</button>
+                <button class="dropdown-item" onclick="openProjectsList();closeMenus()"><i class="fas fa-folder-open"></i> Ouvrir un projet</button>
+                <hr style="border:none;border-top:1px solid var(--border);margin:4px 0">
+                <button class="dropdown-item" onclick="document.getElementById('importFile').click();closeMenus()"><i class="fas fa-file-import"></i> Importer (.json)</button>
+                <input type="file" id="importFile" style="display:none" accept=".json" onchange="importProject(event)">
+                <button class="dropdown-item" onclick="deleteAllProjects();closeMenus()" style="color:#ef4444"><i class="fas fa-trash-alt"></i> Tout effacer</button>
+            </div>
+        </div>
+
+        <!-- Menu Pages -->
         <div class="gen-wrap" style="width:200px;">
-            <button class="btn" onclick="toggleDropdown('pageDropdown')"><span id="pageSelectLabel">Cover</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6"></i></button>
+            <button class="btn" onclick="toggleDropdown('pageDropdown')"><span id="pageSelectLabel">Cover</span> <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.6;margin-left:auto"></i></button>
             <div id="pageDropdown" class="dropdown-menu"></div>
         </div>
-        <button class="btn" onclick="addPage()"><i class="fas fa-plus"></i></button>
-        <button class="btn btn-danger" onclick="deletePage()"><i class="fas fa-trash"></i></button>
+        <button class="btn" onclick="addPage()" title="Nouvelle Page"><i class="fas fa-plus"></i></button>
+        <button class="btn btn-danger" onclick="deletePage()" title="Supprimer la page"><i class="fas fa-trash"></i></button>
     </div>
+
     <div class="ribbon-group">
+        <!-- Paramètres, Langue et Polices rétablis -->
+        <button class="btn" onclick="openSettingsModal()" title="Paramètres Généraux"><i class="fas fa-cog"></i></button>
+        <button class="btn" onclick="openFontsModal()" title="Importer des Polices"><i class="fas fa-font"></i></button>
+        
         <button class="btn" onclick="manualSave()"><i class="fas fa-save"></i> Save</button>
+        
+        <!-- Menu Create complet -->
         <div class="gen-wrap" style="width:auto;">
             <button class="btn" onclick="toggleDropdown('generateDropdown')"><i class="fas fa-layer-group"></i> Create</button>
             <div id="generateDropdown" class="dropdown-menu right">
-                <button class="dropdown-item" onclick="exportPagesData();closeMenus()">Fichier pages.data</button>
-                <button class="dropdown-item" onclick="exportEPUB3();closeMenus()">Livre EPUB3</button>
+                <button class="dropdown-item" onclick="exportPDF();closeMenus()"><i class="fas fa-file-pdf"></i> Exporter en PDF</button>
+                <button class="dropdown-item" onclick="exportPagesData();closeMenus()"><i class="fas fa-file-code"></i> Sauvegarder Projet (.json)</button>
+                <button class="dropdown-item" onclick="exportEPUB3();closeMenus()"><i class="fas fa-book"></i> Livre EPUB3</button>
             </div>
         </div>
     </div>
@@ -67,29 +90,58 @@
                 <input id="itemTitle" class="meta-input" style="font-weight:700" placeholder="Ex: Page 1" oninput="autoSave()">
             </div>
 
-            <!-- ===== ÉDITEUR LIVRE DE POCHE ===== -->
+            <!-- ===== ÉDITEUR LIVRE DE POCHE (AVEC IMAGES ET FONTS) ===== -->
             <div id="pocketFullEditor" style="display:none;flex-direction:column;gap:18px;width:100%">
                 <div class="bd-toolbar">
-                    <div class="bd-section-title"><i class="fas fa-book"></i> Typographie & Format</div>
+                    <div class="bd-section-title"><i class="fas fa-book"></i> Typographie & Format du chapitre</div>
                     <div class="meta-row">
                         <div class="input-group">
                             <label>Police de caractère</label>
                             <select id="pocketFont" class="meta-input" onchange="autoSave()">
-                                <option value="'Playfair Display', serif">Playfair Display (Classique)</option>
-                                <option value="'Inter', sans-serif">Inter (Moderne)</option>
+                                <optgroup label="Serif (Classiques)">
+                                    <option value="'Playfair Display', serif">Playfair Display</option>
+                                    <option value="'Merriweather', serif">Merriweather</option>
+                                    <option value="'Lora', serif">Lora</option>
+                                </optgroup>
+                                <optgroup label="Sans-Serif (Modernes)">
+                                    <option value="'Inter', sans-serif">Inter</option>
+                                    <option value="'Montserrat', sans-serif">Montserrat</option>
+                                    <option value="'Open Sans', sans-serif">Open Sans</option>
+                                    <option value="'Roboto', sans-serif">Roboto</option>
+                                </optgroup>
                             </select>
                         </div>
                         <div class="input-group" style="width:120px">
                             <label>Taille <span id="pocketSizeVal" style="color:var(--accent)">16px</span></label>
-                            <input type="range" id="pocketSize" min="12" max="24" value="16" oninput="document.getElementById('pocketSizeVal').textContent=this.value+'px'; document.getElementById('pocketText').style.fontSize=this.value+'px'; autoSave()">
+                            <input type="range" id="pocketSize" min="12" max="28" value="16" oninput="document.getElementById('pocketSizeVal').textContent=this.value+'px'; document.getElementById('pocketText').style.fontSize=this.value+'px'; autoSave()">
                         </div>
                         <div class="input-group" style="width:120px">
                             <label>Interligne <span id="pocketLineHeightVal" style="color:var(--accent)">1.6</span></label>
                             <input type="range" id="pocketLineHeight" min="1.1" max="2.5" step="0.1" value="1.6" oninput="document.getElementById('pocketLineHeightVal').textContent=this.value; document.getElementById('pocketText').style.lineHeight=this.value; autoSave()">
                         </div>
                     </div>
+                    <!-- Gestion d'image Pocket -->
+                    <div class="meta-row" style="margin-top:4px;">
+                        <div class="input-group" style="flex:2">
+                            <label>Image d'illustration (URL optionnelle)</label>
+                            <input id="pocketImage" class="meta-input" placeholder="https://..." oninput="autoSave()">
+                        </div>
+                        <div class="input-group" style="width:120px">
+                            <label>Taille Img <span id="pocketImgSizeVal" style="color:var(--accent)">50%</span></label>
+                            <input type="range" id="pocketImgSize" min="10" max="100" value="50" oninput="document.getElementById('pocketImgSizeVal').textContent=this.value+'%'; autoSave()">
+                        </div>
+                        <div class="input-group" style="width:120px">
+                            <label>Alignement</label>
+                            <select id="pocketImgAlign" class="meta-input" onchange="autoSave()">
+                                <option value="center">Centré</option>
+                                <option value="left">Gauche (Habillage)</option>
+                                <option value="right">Droite (Habillage)</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <textarea id="pocketText" class="main" style="background:#faf8f5; color:#111; padding:40px; border-radius:8px; font-family:'Playfair Display', serif; font-size:16px; line-height:1.6; box-shadow:inset 0 2px 10px rgba(0,0,0,0.1);" placeholder="Écrivez votre chapitre ici..." oninput="autoSave()"></textarea>
+                <!-- Zone d'écriture directe (Le style que tu aimes) -->
+                <textarea id="pocketText" class="main" style="background:#faf8f5; color:#111; padding:40px; border-radius:8px; font-family:'Playfair Display', serif; font-size:16px; line-height:1.6; box-shadow:inset 0 2px 10px rgba(0,0,0,0.1);" placeholder="Écrivez votre chapitre directement ici..." oninput="autoSave()"></textarea>
             </div>
 
             <!-- ===== ÉDITEUR MAGAZINE ===== -->
@@ -109,15 +161,15 @@
                 </div>
                 <div class="input-group">
                     <label>Gros Titre (Headline)</label>
-                    <input id="magHeadline" class="text-input" style="font-family:'Playfair Display', serif; font-size:38px; text-align:center; padding:20px 0;" placeholder="Titre de l'article..." oninput="autoSave()">
+                    <input id="magHeadline" class="text-input" style="font-family:'Oswald', sans-serif; font-size:38px; text-align:center; padding:20px 0;" placeholder="Titre de l'article..." oninput="autoSave()">
                 </div>
                 <textarea id="magText" class="main" style="background:#fff; color:#222; padding:30px; border-radius:4px; font-family:'Inter', sans-serif; font-size:14px; column-count:2; column-gap:30px; text-align:justify;" placeholder="Corps de l'article..." oninput="autoSave()"></textarea>
             </div>
 
-            <!-- ===== BD FULL EDITOR PRO ===== -->
+            <!-- ===== BD FULL EDITOR PRO (INTEGRALITE DES OPTIONS CONSERVEE) ===== -->
             <div id="bdFullEditor" style="display:none;flex-direction:column;gap:18px;width:100%">
                 <div class="bd-toolbar">
-                    <div class="bd-section-title"><i class="fas fa-layer-group"></i> Grilles & Fond</div>
+                    <div class="bd-section-title"><i class="fas fa-layer-group"></i> Grilles & Fond BD</div>
                     <div class="meta-row">
                         <div class="input-group" style="flex:2">
                             <label>Image de fond (URL uniquement)</label>
@@ -159,35 +211,16 @@
 
                 <div class="bd-toolbar">
                     <div class="bd-section-title"><i class="fas fa-comment-dots"></i> Bulles (Vectorielles & Rapides)</div>
-                    
                     <div class="bubble-palette" id="bubblePaletteGrid">
-                        <div class="bubble-palette-item" onclick="addBDBubble('oval', 'bc')" title="Ovale bas centre">
-                            <div class="mini-bubble oval"></div><div class="bubble-label">Ovale BC</div>
-                        </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('oval', 'bl')" title="Ovale bas gauche">
-                            <div class="mini-bubble oval"></div><div class="bubble-label">Ovale BL</div>
-                        </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('oval', 'br')" title="Ovale bas droite">
-                            <div class="mini-bubble oval"></div><div class="bubble-label">Ovale BR</div>
-                        </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('round', 'bc')" title="Rond">
-                            <div class="mini-bubble round"></div><div class="bubble-label">Rond</div>
-                        </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('rect', 'bc')" title="Rectangle">
-                            <div class="mini-bubble rect"></div><div class="bubble-label">Rectangle</div>
-                        </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('rect', 'zap')" title="Rectangle Eclair">
-                            <div class="mini-bubble rect"></div><div class="bubble-label">Radio/Zap</div>
-                        </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('capsule', 'bl')" title="Capsule">
-                            <div class="mini-bubble capsule"></div><div class="bubble-label">Capsule</div>
-                        </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('cloud', 'thought')" title="Pensée">
-                            <div class="mini-bubble cloud"></div><div class="bubble-label">Pensée</div>
-                        </div>
-                        <div class="bubble-palette-item" onclick="addBDBubble('burst', 'none')" title="Cri / Burst">
-                            <div class="mini-bubble burst" style="border:1.5px solid #111"></div><div class="bubble-label">Cri / POW</div>
-                        </div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('oval', 'bc')" title="Ovale bas centre"><div class="mini-bubble oval"></div><div class="bubble-label">Ovale BC</div></div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('oval', 'bl')" title="Ovale bas gauche"><div class="mini-bubble oval"></div><div class="bubble-label">Ovale BL</div></div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('oval', 'br')" title="Ovale bas droite"><div class="mini-bubble oval"></div><div class="bubble-label">Ovale BR</div></div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('round', 'bc')" title="Rond"><div class="mini-bubble round"></div><div class="bubble-label">Rond</div></div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('rect', 'bc')" title="Rectangle"><div class="mini-bubble rect"></div><div class="bubble-label">Rectangle</div></div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('rect', 'zap')" title="Rectangle Eclair"><div class="mini-bubble rect"></div><div class="bubble-label">Radio/Zap</div></div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('capsule', 'bl')" title="Capsule"><div class="mini-bubble capsule"></div><div class="bubble-label">Capsule</div></div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('cloud', 'thought')" title="Pensée"><div class="mini-bubble cloud"></div><div class="bubble-label">Pensée</div></div>
+                        <div class="bubble-palette-item" onclick="addBDBubble('burst', 'none')" title="Cri / Burst"><div class="mini-bubble burst" style="border:1.5px solid #111"></div><div class="bubble-label">Cri / POW</div></div>
                     </div>
 
                     <div id="bdBubbleEdit" style="display:none;flex-direction:column;gap:12px;margin-top:12px;background:rgba(0,0,0,0.4);padding:14px;border-radius:8px;border:1px solid var(--border)">
@@ -203,6 +236,7 @@
                                     <option value="'Comic Neue', cursive">Comic Neue</option>
                                     <option value="'Caveat Brush', cursive">Caveat Brush</option>
                                     <option value="'Inter', sans-serif">Inter (Neutre)</option>
+                                    <option value="'Oswald', sans-serif">Oswald (Titres)</option>
                                 </select>
                             </div>
                         </div>
@@ -220,7 +254,6 @@
                                 <input type="color" id="bdBubbleBg" class="meta-input" style="padding:0;height:38px" onchange="onBubbleBg(this.value)">
                             </div>
                         </div>
-                        
                         <div style="display:flex;gap:6px;margin-top:2px;">
                             <button class="color-swatch" style="background:#ffffff" onclick="onBubbleBg('#ffffff')"></button>
                             <button class="color-swatch" style="background:#ffeb3b" onclick="onBubbleBg('#ffeb3b')"></button>
@@ -228,7 +261,6 @@
                             <button class="color-swatch" style="background:#f44336" onclick="onBubbleBg('#f44336')"></button>
                             <button class="color-swatch" style="background:#00bcd4" onclick="onBubbleBg('#00bcd4')"></button>
                         </div>
-
                         <div style="display:flex;gap:8px;margin-top:4px">
                             <button class="btn btn-danger" onclick="deleteSelectedBubble()"><i class="fas fa-trash"></i> Supprimer</button>
                             <button class="btn" onclick="duplicateBubble()"><i class="fas fa-copy"></i> Dupliquer</button>
@@ -239,17 +271,45 @@
             </div>
         </div>
 
-        <button class="btn-preview" onclick="openPreview()"><i class="fas fa-book-reader"></i> Aperçu HD</button>
+        <button class="btn-preview" onclick="openPreview()"><i class="fas fa-book-reader"></i> Aperçu HD / Impression</button>
     </div>
 </div>
 
-<div class="overlay" id="previewModal" onclick="if(event.target===this)closePreview()">
+<!-- Modals pour Paramètres, Polices et Preview -->
+<div class="overlay" id="previewModal" onclick="if(event.target===this)closeModal('previewModal')">
     <div class="preview-shell" onclick="event.stopPropagation()">
         <div class="preview-top">
-            <button class="btn-close-round" onclick="closePreview()"><i class="fas fa-times-circle"></i></button>
+            <button class="btn" onclick="triggerPrint()"><i class="fas fa-print"></i> Imprimer / PDF Natif</button>
+            <button class="btn-close-round" onclick="closeModal('previewModal')"><i class="fas fa-times-circle"></i></button>
         </div>
         <div class="preview-screen large" id="previewScreen">
             <div class="prv-content" id="prvContent"></div>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="settingsModal" onclick="if(event.target===this)closeModal('settingsModal')">
+    <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-head"><h3>Paramètres</h3><button class="btn-close-round" onclick="closeModal('settingsModal')"><i class="fas fa-times-circle"></i></button></div>
+        <div class="modal-body">
+            <div class="input-group"><label>Langue de l'interface</label><select class="meta-input"><option>Français</option><option>English</option></select></div>
+            <div class="input-group"><label>Thème</label><select class="meta-input"><option>Mode Sombre (Défaut)</option><option>Mode Clair</option></select></div>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="fontsModal" onclick="if(event.target===this)closeModal('fontsModal')">
+    <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-head"><h3>Importer des Polices (Google Fonts)</h3><button class="btn-close-round" onclick="closeModal('fontsModal')"><i class="fas fa-times-circle"></i></button></div>
+        <div class="modal-body">
+            <p style="font-size:12px;color:var(--muted)">Copiez-collez le nom exact d'une police Google Fonts (ex: <i>Lobster</i> ou <i>Dancing Script</i>).</p>
+            <div class="input-group">
+                <label>Nom de la police</label>
+                <div style="display:flex;gap:10px">
+                    <input type="text" id="customFontName" class="meta-input" placeholder="Ex: Bebas Neue">
+                    <button class="btn" onclick="importCustomFont()">Importer</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
